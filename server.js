@@ -4,9 +4,6 @@ const routes = require("./routes/index");
 const errorHandler = require("./middlewares/errorHandler");
 const { connectToDb } = require("./configs/mongodb");
 
-// wrap routes in try catch block
-require("express-async-errors");
-
 // dotenv config
 require("dotenv").config();
 
@@ -22,23 +19,18 @@ app.use(express.static(path.resolve(__dirname, "./public")));
 app.use("/api", routes);
 
 // connect the react app
-app.use(express.static(path.resolve(__dirname, "./client/build")));
-app.get("*", (req, res) => {
-    return res.sendFile(path.resolve(__dirname, "./client/build/index.html"));
-});
+// app.use(express.static(path.resolve(__dirname, "./client/build")));
+// app.get("*", (req, res) => {
+//     return res.sendFile(path.resolve(__dirname, "./client/build/index.html"));
+// });
 
 // default error handler
 app.use(errorHandler);
 
 // connect to mongodb
-const uri = process.env.MONGODB_URI;
-const dbName = process.env.DB_NAME;
-
-try {
-    connectToDb(uri, dbName);
-} catch (err) {
-    console.log("unable to connect to mongodb!", err);
-}
+connectToDb()
+    .then(() => console.log("Connected to mongodb..."))
+    .catch((err) => console.log("Unable to connect to mongodb!"));
 
 // listen for requests
 const port = process.env.PORT || "5000";

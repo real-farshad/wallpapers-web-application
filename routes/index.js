@@ -1,8 +1,8 @@
 const express = require("express");
+const postsRoutes = require("./postsRoutes");
+
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-    res.send("API/");
-});
+router.use("/posts", postsRoutes);
 
 module.exports = router;
