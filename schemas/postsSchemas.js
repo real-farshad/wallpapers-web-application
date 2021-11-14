@@ -6,13 +6,7 @@ const postSchema = Joi.object({
         large: Joi.ref("thumbnail"),
     }),
     title: Joi.string().min(3).max(64).required(),
-    category: Joi.string().min().max().required(),
-    views: Joi.number().min(0).required(),
-    likes_count: Joi.number().min(0).required(),
-    comments_count: Joi.number().min(0).required(),
-    downloads_count: Joi.number().min(0).required(),
-    publish_date: Joi.date().required(),
-    publisher: Joi.string().min().max().required(),
+    category_id: Joi.string().min().max().required(),
 });
 
 const postQuerySchema = Joi.object({
