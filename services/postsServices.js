@@ -3,10 +3,10 @@ const { database } = require("../configs/mongodb");
 
 const postsCollection = () => database().collection("posts");
 
-async function getPostsList({ search, category, sort, skip, limit }) {
+async function getPostsList({ search, category_id, sort, skip, limit }) {
     const find = {};
     if (search !== "") find.$text = { $search: search };
-    if (category !== "") find.category = category;
+    if (category_id !== "") find.category_id = { category_id };
 
     const cursor = await postsCollection().find(find).sort(sort).skip(skip).limit(limit);
     const result = await cursor.toArray();

@@ -14,43 +14,41 @@ async function getPostsList(req, res, next, database) {
 
     try {
         // validate query
-        query = await postQuerySchema.validateAsync(query);
+        await postQuerySchema.validateAsync(query);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
     // validate category
     if (query.category !== "") {
-        if (!ObjectId.isValid(query.category)) {
-            return res.status(403).json({ error: "invalid category id!" });
-        }
-
         try {
-            const result = await database.findCategoryById(query.category);
-            if (!result) {
-                return res
-                    .status(404)
-                    .json({ error: "no category with this id was found!" });
+            const category = await database.findCategoryByTitle(query.category);
+
+            if (!category) {
+                return res.status(404).json({ error: "this category does not exist" });
             }
+
+            delete query.category;
+            query.category_id = category._id;
         } catch (err) {
             next(err);
         }
     }
 
     // translate sort order to it's related post document field
-    let sort = query.sort === "new" ? "publish_date" : "views";
+    let sort = query.sort === "new" ? "publish_date" : "like_count";
 
     // reverse sort order to show newest and most popular first
     sort = { [sort]: -1 };
 
-    const { search, category, page, limit } = query;
+    const { search, category_id, page, limit } = query;
     const skip = (page - 1) * 4;
 
     try {
         // search for related documents in db and return list of related posts
         const postsList = await database.getPostsList({
             search,
-            category,
+            category_id,
             sort,
             skip,
             limit,
@@ -72,17 +70,16 @@ async function createNewPost(req, res, next, database) {
         return res.status(403).json({ error: err.message });
     }
 
-    // validate category_id
-    if (!ObjectId.isValid(req.body.category_id)) {
-        return res.status(403).json({ error: "invalid category id!" });
-    }
-
     try {
         // make sure the category exists in the database
-        const result = await database.findCategoryById(req.body.category_id);
-        if (!result) {
-            return res.status(404).json({ error: "no category with this id was found!" });
+        const category = await database.findCategoryByTitle(req.body.category);
+
+        if (!category) {
+            return res.status(404).json({ error: "this category does not exist" });
         }
+
+        delete req.body.category;
+        req.body.category_id = category._id;
     } catch (err) {
         next(err);
     }
@@ -102,7 +99,7 @@ async function createNewPost(req, res, next, database) {
         const newPostId = await database.addNewPost(newPost);
 
         // return number of inserted documents
-        return res.json({ new_post_id: newPostId });
+        return res.json({ newPostId });
     } catch (err) {
         next(err);
     }
@@ -111,11 +108,6 @@ async function createNewPost(req, res, next, database) {
 // PUT /:id
 // body.request => image_url, title, category_id
 async function updatePost(req, res, next, database) {
-    // validate post id
-    if (!ObjectId.isValid(req.params.id)) {
-        return res.status(403).json({ error: "invalid post id!" });
-    }
-
     try {
         // validate request's body
         await postSchema.validateAsync(req.body);
@@ -123,17 +115,21 @@ async function updatePost(req, res, next, database) {
         return res.status(403).json({ error: err.message });
     }
 
-    // validate category_id
-    if (!ObjectId.isValid(req.body.category_id)) {
-        return res.status(403).json({ error: "invalid category id!" });
+    // validate post id
+    if (!ObjectId.isValid(req.params.id)) {
+        return res.status(403).json({ error: "invalid post id!" });
     }
 
     try {
         // make sure the category exists in the database
-        const result = await database.findCategoryById(req.body.category_id);
-        if (!result) {
-            return res.status(404).json({ error: "no category with this id was found!" });
+        const category = await database.findCategoryByTitle(req.body.category);
+
+        if (!category) {
+            return res.status(404).json({ error: "this category does not exist" });
         }
+
+        delete req.body.category;
+        req.body.category_id = category._id;
     } catch (err) {
         next(err);
     }

@@ -6,7 +6,7 @@ const postSchema = Joi.object({
         large: Joi.ref("thumbnail"),
     }),
     title: Joi.string().min(3).max(64).required(),
-    category_id: Joi.string().min().max().required(),
+    category: Joi.string().min(3).max(64).required(),
 });
 
 const postQuerySchema = Joi.object({

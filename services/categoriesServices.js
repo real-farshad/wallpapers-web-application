@@ -2,11 +2,11 @@ const { database } = require("../configs/mongodb");
 
 const categoriesCollection = () => database().collection("categories");
 
-async function findCategoryById(id) {
-    const result = await categoriesCollection.findOne({ _id: id });
+async function findCategoryByTitle(title) {
+    const result = await categoriesCollection.findOne({ title });
     return result;
 }
 
 module.exports = {
-    findCategoryById,
+    findCategoryByTitle,
 };
