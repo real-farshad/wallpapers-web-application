@@ -46,7 +46,7 @@ async function getPostsList(req, res, next, database) {
 
     try {
         // search for related documents in db and return list of related posts
-        const postsList = await database.getPostsList({
+        const postsList = await database.searchPostsList({
             search,
             category_id,
             sort,
@@ -98,7 +98,7 @@ async function createNewPost(req, res, next, database) {
         // insert new document into the database
         const newPostId = await database.addNewPost(newPost);
 
-        // return number of inserted documents
+        // return number of inserted posts
         return res.json({ newPostId });
     } catch (err) {
         next(err);
@@ -146,7 +146,7 @@ async function updatePost(req, res, next, database) {
         }
 
         // return modified posts count
-        return res.json({ modifiedCount: modifiedCount });
+        return res.json({ modifiedPostsCount: modifiedCount });
     } catch (err) {
         next(err);
     }

@@ -3,7 +3,7 @@ const { database } = require("../configs/mongodb");
 
 const postsCollection = () => database().collection("posts");
 
-async function getPostsList({ search, category_id, sort, skip, limit }) {
+async function searchPostsList({ search, category_id, sort, skip, limit }) {
     const find = {};
     if (search !== "") find.$text = { $search: search };
     if (category_id !== "") find.category_id = { category_id };
@@ -33,7 +33,7 @@ async function deletePostById(id) {
 }
 
 module.exports = {
-    getPostsList,
+    searchPostsList,
     addNewPost,
     updatePostById,
     deletePostById,
