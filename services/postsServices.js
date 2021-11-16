@@ -32,9 +32,25 @@ async function deletePostById(id) {
     return deletedCount;
 }
 
+async function incrementPostLikeCount(id) {
+    await postsCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { like_count: 1 } }
+    );
+}
+
+async function decrementPostLikeCount(id) {
+    await postsCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { like_count: -1 } }
+    );
+}
+
 module.exports = {
     searchPostsList,
     addNewPost,
     updatePostById,
     deletePostById,
+    incrementPostLikeCount,
+    decrementPostLikeCount,
 };
