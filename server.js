@@ -1,8 +1,10 @@
 const path = require("path");
 const express = require("express");
+const session = require("express-session");
 const routes = require("./routes/index");
 const errorHandler = require("./middlewares/errorHandler");
 const { connectToDb } = require("./configs/mongodb");
+const { passportConfig } = require("./configs/passport");
 
 // dotenv config
 require("dotenv").config();
@@ -11,6 +13,18 @@ const app = express();
 
 // parse incoming request bodies
 app.use(express.json());
+
+// express session config
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true,
+    })
+);
+
+// passport config
+passportConfig(app);
 
 // serve static files
 app.use(express.static(path.resolve(__dirname, "./public")));
