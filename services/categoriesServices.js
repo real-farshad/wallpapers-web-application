@@ -9,37 +9,38 @@ async function getCategoriesList() {
     return result;
 }
 
-async function addNewCategory(newCategory) {
-    const { insertedId } = await categoriesCollection().insertOne(newCategory);
-    return insertedId;
+async function findCategoryByTitle(title) {
+    const result = await categoriesCollection().findOne({ title });
+    return result;
 }
 
-async function updateCategoryById(id, newCategory) {
-    const { matchedCount, modifiedCount } = await categoriesCollection().updateOne(
+async function addNewCategory(newCategory) {
+    await categoriesCollection().insertOne(newCategory);
+}
+
+async function findAndUpdateCategoryById(id, newCategory) {
+    const result = await categoriesCollection().updateOne(
         { _id: new ObjectId(id) },
         { $set: newCategory }
     );
 
-    return [matchedCount, modifiedCount];
-}
-
-async function findCategoryByTitle(title) {
-    const result = await categoriesCollection.findOne({ title });
+    if (result.matchedCount !== 1) return null;
     return result;
 }
 
-async function deleteCategoryById(id) {
-    const { deletedCount } = await categoriesCollection.deleteOne({
+async function findAndDeleteCategoryById(id) {
+    const result = await categoriesCollection().deleteOne({
         _id: new ObjectId(id),
     });
 
-    return deletedCount;
+    if (result.deletedCount !== 1) return null;
+    return result;
 }
 
 module.exports = {
     getCategoriesList,
-    addNewCategory,
-    updateCategoryById,
     findCategoryByTitle,
-    deleteCategoryById,
+    addNewCategory,
+    findAndUpdateCategoryById,
+    findAndDeleteCategoryById,
 };

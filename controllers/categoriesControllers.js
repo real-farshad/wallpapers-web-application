@@ -24,10 +24,10 @@ async function createNewCategory(req, res, next, database) {
 
     try {
         // insert new category in to the database
-        const newCategoryId = await database.addNewCategory(req.body);
+        await database.addNewCategory(req.body);
 
-        // return number of inserted categories
-        return res.json({ newCategoryId });
+        // return success
+        return res.json({ newCategoryCreated: true });
     } catch (err) {
         next(err);
     }
@@ -45,22 +45,23 @@ async function updateCategory(req, res, next, database) {
 
     // validate category id
     if (!ObjectId.isValid(req.params.id)) {
-        return res.status(403).json({ error: "invalid category id!" });
+        return res.status(403).json({
+            error: "invalid category id!",
+        });
     }
 
     try {
-        // update category with this id in database
-        const [matchedCount, modifiedCount] = await database.updateCategoryById(
-            req.params.id,
-            req.body
-        );
+        // find and update category
+        const result = await database.findAndUpdateCategoryById(req.params.id, req.body);
 
-        if (matchedCount !== 1) {
-            return res.status(404).json({ error: "no post with this id was found!" });
+        if (!result) {
+            return res.status(404).json({
+                error: "no post with this id was found!",
+            });
         }
 
-        // return number of updated categories
-        return res.json({ modifiedCategoriesCount: modifiedCount });
+        // return success
+        return res.json({ categoryUpdated: true });
     } catch (err) {
         next(err);
     }
@@ -70,19 +71,23 @@ async function updateCategory(req, res, next, database) {
 async function deleteCategory(req, res, next, database) {
     // validate category id
     if (!ObjectId.isValid(req.params.id)) {
-        return res.status(403).json({ error: "invalid category id!" });
+        return res.status(403).json({
+            error: "invalid category id!",
+        });
     }
 
     try {
-        // delete category with this id in database
-        const deletedCount = await database.deleteCategoryById(req.params.id);
+        // find and delete category
+        const result = await database.findAndDeleteCategoryById(req.params.id);
 
-        if (deletedCount !== 1) {
-            return res.status(404).json({ error: "no category with this id was found!" });
+        if (!result) {
+            return res.status(404).json({
+                error: "no category with this id was found!",
+            });
         }
 
-        // return deleted categories count
-        return res.json({ deletedCount });
+        // return success
+        return res.json({ categoryDeleted: true });
     } catch (err) {
         next(err);
     }

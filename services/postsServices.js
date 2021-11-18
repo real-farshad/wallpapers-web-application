@@ -14,33 +14,35 @@ async function searchPostsList({ search, category_id, sort, skip, limit }) {
 }
 
 async function addNewPost(newPost) {
-    const { insertedId } = await postsCollection.insertOne(newPost);
-    return insertedId;
+    await postsCollection().insertOne(newPost);
 }
 
-async function updatePostById(id, newPost) {
-    const { matchedCount, modifiedCount } = await postsCollection().updateOne(
+async function findAndUpdatePostById(id, newPost) {
+    const result = await postsCollection().updateOne(
         { _id: new ObjectId(id) },
         { $set: newPost }
     );
 
-    return [matchedCount, modifiedCount];
+    if (result.matchedCount !== 1) return null;
+    return result;
 }
 
-async function deletePostById(id) {
-    const { deletedCount } = await postsCollection().deleteOne({ _id: new ObjectId(id) });
-    return deletedCount;
+async function findAndDeletePostById(id) {
+    const result = await postsCollection().deleteOne({ _id: new ObjectId(id) });
+
+    if (result.deletedCount !== 1) return null;
+    return result;
 }
 
 async function incrementPostLikeCount(id) {
-    await postsCollection.updateOne(
+    await postsCollection().updateOne(
         { _id: new ObjectId(id) },
         { $inc: { like_count: 1 } }
     );
 }
 
 async function decrementPostLikeCount(id) {
-    await postsCollection.updateOne(
+    await postsCollection().updateOne(
         { _id: new ObjectId(id) },
         { $inc: { like_count: -1 } }
     );
@@ -49,8 +51,8 @@ async function decrementPostLikeCount(id) {
 module.exports = {
     searchPostsList,
     addNewPost,
-    updatePostById,
-    deletePostById,
+    findAndUpdatePostById,
+    findAndDeletePostById,
     incrementPostLikeCount,
     decrementPostLikeCount,
 };

@@ -3,21 +3,27 @@ const { database } = require("../configs/mongodb");
 
 const postsLikesCollection = () => database().collection("posts-likes");
 
-async function addNewPostLike(newPostLike) {
-    const { insertedId } = await postsLikesCollection().insertOne(newPostLike);
-    return insertedId;
+async function findOnePostLike(query) {
+    const result = await postsLikesCollection().findOne(query);
+    return result;
 }
 
-async function deletePostLikeById(post_id, user_id) {
-    const { deletedCount } = await postsLikesCollection().deleteOne({
+async function addNewPostLike(newPostLike) {
+    await postsLikesCollection().insertOne(newPostLike);
+}
+
+async function findAndDeletePostLike(post_id, user_id) {
+    const result = await postsLikesCollection().deleteOne({
         post_id: new ObjectId(post_id),
         user_id: new ObjectId(user_id),
     });
 
-    return deletedCount;
+    if (result.deletedCount !== 1) return null;
+    return result;
 }
 
 module.exports = {
+    findOnePostLike,
     addNewPostLike,
-    deletePostLikeById,
+    findAndDeletePostLike,
 };

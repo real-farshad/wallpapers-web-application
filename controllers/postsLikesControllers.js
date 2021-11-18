@@ -13,24 +13,32 @@ async function createNewPostLike(req, res, next, database) {
 
     // validate post's id
     if (!ObjectId.isValid(req.body.post_id)) {
-        return res.status(403).json({ error: "invalid post id!" });
+        return res.status(403).json({
+            error: "invalid post id!",
+        });
     }
 
     // create like object
     const like = {
         ...req.body,
-        // user_id: -- current user's id here ---
+        user_id: req.user._id,
     };
 
     try {
+        // check if post has already been liked
+        const postLike = await database.findOnePostLike(like);
+        if (postLike) {
+            return res.status(403).json({ error: "post has already been liked!" });
+        }
+
         // add like to post likes collection
-        const likeId = await database.addNewPostLike(like);
+        await database.addNewPostLike(like);
 
         // increment post's like count
         await database.incrementPostLikeCount(req.body.post_id);
 
-        // return new post like's id
-        return res.json({ likeId });
+        // return success
+        return res.json({ postLiked: true });
     } catch (err) {
         next(err);
     }
@@ -40,25 +48,26 @@ async function createNewPostLike(req, res, next, database) {
 async function deletePostLike(req, res, next, database) {
     // validate post's id
     if (!ObjectId.isValid(req.params.id)) {
-        return res.status(403).json({ error: "invalid post id!" });
+        return res.status(403).json({
+            error: "invalid post id!",
+        });
     }
 
-    // delete like from post likes collection
     try {
-        const deletedLikesCount = await database.deletePostLikeById({
-            post_id: req.params.id,
-            // user_id: -- current user's id
-        });
+        // find and delete like from post likes collection
+        const result = await database.findAndDeletePostLike(req.params.id, req.user._id);
 
-        if (deletedLikesCount !== 1) {
-            return res.status(404).json({ err: "no post like with this id was found!" });
+        if (!result) {
+            return res.status(404).json({
+                error: "no post like with this id was found!",
+            });
         }
 
         // decrement post's like count
         await database.decrementPostLikeCount(req.params.id);
 
-        // return deleted post like count
-        return res.json({ deletedLikesCount });
+        // return success
+        return res.json({ postLikeDeleted: true });
     } catch (err) {
         next(err);
     }

@@ -3,7 +3,7 @@ const Joi = require("joi");
 const postSchema = Joi.object({
     image_url: Joi.object({
         thumbnail: Joi.string().min(3).max(256).required(),
-        large: Joi.ref("thumbnail"),
+        large: Joi.string().min(3).max(256).required(),
     }),
     title: Joi.string().min(3).max(64).required(),
     category: Joi.string().min(3).max(64).required(),

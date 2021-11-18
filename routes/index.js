@@ -10,7 +10,7 @@ const router = express.Router();
 router.use("/posts", postsRoutes);
 router.use("/categories", categoriesRoutes);
 router.use("/posts-likes", postsLikesRoutes);
-// router.use("/users", usersRoutes);
+router.use("/users", usersRoutes);
 router.use("/auth", authRoutes);
 
 module.exports = router;

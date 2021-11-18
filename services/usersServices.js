@@ -13,7 +13,11 @@ async function findUserByEmail(email) {
     return user;
 }
 
-async function findAndUpdateOneUser(query, update) {
+async function addNewUser(newUser) {
+    await usersCollection().insertOne(newUser);
+}
+
+async function insertOrUpdateUser(query, update) {
     const result = await usersCollection().findOneAndUpdate(
         query,
         { $set: update },
@@ -25,32 +29,29 @@ async function findAndUpdateOneUser(query, update) {
 }
 
 async function findAndUpdateUserById(id, newUser) {
-    const { matchedCount, modifiedCount } = await usersCollection().updateOne(
+    const result = await usersCollection().updateOne(
         { _id: new ObjectId(id) },
         { $set: newUser }
     );
 
-    return [matchedCount, modifiedCount];
+    if (result.matchedCount !== 1) return null;
+    return result;
 }
 
-async function addNewUser(newUser) {
-    const { insertedId } = await usersCollection().insertOne(newUser);
-    return insertedId;
-}
-
-async function deleteUserById(id) {
-    const { deletedCount } = await usersCollection().deleteOne({
+async function findAndDeleteUserById(id) {
+    const result = await usersCollection().deleteOne({
         _id: new ObjectId(id),
     });
 
-    return deletedCount;
+    if (result.deletedCount !== 1) return null;
+    return result;
 }
 
 module.exports = {
     findUserById,
     findUserByEmail,
-    findAndUpdateOneUser,
-    findAndUpdateUserById,
     addNewUser,
-    deleteUserById,
+    insertOrUpdateUser,
+    findAndUpdateUserById,
+    findAndDeleteUserById,
 };

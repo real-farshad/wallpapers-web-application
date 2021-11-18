@@ -46,7 +46,7 @@ module.exports.passportConfig = function (app) {
             },
             async (accessToken, refreshToken, profile, done) => {
                 try {
-                    const user = await database.findAndUpdateOneUser(
+                    const user = await database.insertOrUpdateUser(
                         { googleId: profile.id },
                         { ...profile }
                     );
