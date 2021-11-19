@@ -12,7 +12,7 @@ async function connectToDb() {
     await client.connect();
 }
 
-function database() {
+function getDatabase() {
     connectToDb();
 
     const { MONGODB_DB } = process.env;
@@ -20,6 +20,6 @@ function database() {
 }
 
 module.exports = {
-    database,
+    getDatabase,
     connectToDb,
 };

@@ -1,25 +1,25 @@
 const { ObjectId } = require("mongodb");
-const { database } = require("../configs/mongodb");
+const { getDatabase } = require("../configs/mongodb");
 
-const categoriesCollection = () => database().collection("categories");
+const getCategoriesCollection = () => getDatabase().collection("categories");
 
 async function getCategoriesList() {
-    const cursor = await categoriesCollection().find();
+    const cursor = await getCategoriesCollection().find();
     const result = await cursor.toArray();
     return result;
 }
 
 async function findCategoryByTitle(title) {
-    const result = await categoriesCollection().findOne({ title });
+    const result = await getCategoriesCollection().findOne({ title });
     return result;
 }
 
 async function addNewCategory(newCategory) {
-    await categoriesCollection().insertOne(newCategory);
+    await getCategoriesCollection().insertOne(newCategory);
 }
 
 async function findAndUpdateCategoryById(id, newCategory) {
-    const result = await categoriesCollection().updateOne(
+    const result = await getCategoriesCollection().updateOne(
         { _id: new ObjectId(id) },
         { $set: newCategory }
     );
@@ -29,7 +29,7 @@ async function findAndUpdateCategoryById(id, newCategory) {
 }
 
 async function findAndDeleteCategoryById(id) {
-    const result = await categoriesCollection().deleteOne({
+    const result = await getCategoriesCollection().deleteOne({
         _id: new ObjectId(id),
     });
 

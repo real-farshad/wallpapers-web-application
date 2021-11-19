@@ -4,38 +4,43 @@ const { postLikeSchema } = require("../schemas/postsLikesSchemas");
 // POST /
 // req.body => post_id
 async function createNewPostLike(req, res, next, database) {
+    let newLike = req.body;
+
     // validate request's body
     try {
-        await postLikeSchema.validateAsync(req.body);
+        newLike = await postLikeSchema.validateAsync(newLike);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
     // validate post's id
-    if (!ObjectId.isValid(req.body.post_id)) {
+    if (!ObjectId.isValid(newLike.post_id)) {
         return res.status(403).json({
             error: "invalid post id!",
         });
     }
 
-    // create like object
-    const like = {
-        ...req.body,
-        user_id: req.user._id,
-    };
+    // add user's id
+    newLike.user_id = req.user._id;
 
     try {
         // check if post has already been liked
-        const postLike = await database.findOnePostLike(like);
-        if (postLike) {
-            return res.status(403).json({ error: "post has already been liked!" });
+        const previousPostLike = await database.findOnePostLike(
+            newLike.post_id,
+            newLike.user_id
+        );
+
+        if (previousPostLike) {
+            return res.status(403).json({
+                error: "post has already been liked!",
+            });
         }
 
         // add like to post likes collection
-        await database.addNewPostLike(like);
+        await database.addNewPostLike(newLike);
 
         // increment post's like count
-        await database.incrementPostLikeCount(req.body.post_id);
+        await database.incrementPostLikeCount(newLike.post_id);
 
         // return success
         return res.json({ postLiked: true });
@@ -46,8 +51,10 @@ async function createNewPostLike(req, res, next, database) {
 
 // DELETE /:id
 async function deletePostLike(req, res, next, database) {
+    const postId = req.params.id;
+
     // validate post's id
-    if (!ObjectId.isValid(req.params.id)) {
+    if (!ObjectId.isValid(postId)) {
         return res.status(403).json({
             error: "invalid post id!",
         });
@@ -55,7 +62,7 @@ async function deletePostLike(req, res, next, database) {
 
     try {
         // find and delete like from post likes collection
-        const result = await database.findAndDeletePostLike(req.params.id, req.user._id);
+        const result = await database.findAndDeletePostLike(postId, req.user._id);
 
         if (!result) {
             return res.status(404).json({
@@ -64,7 +71,7 @@ async function deletePostLike(req, res, next, database) {
         }
 
         // decrement post's like count
-        await database.decrementPostLikeCount(req.params.id);
+        await database.decrementPostLikeCount(postId);
 
         // return success
         return res.json({ postLikeDeleted: true });

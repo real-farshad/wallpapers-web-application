@@ -1,24 +1,24 @@
 const { ObjectId } = require("mongodb");
-const { database } = require("../configs/mongodb");
+const { getDatabase } = require("../configs/mongodb");
 
-const usersCollection = () => database().collection("users");
+const getUsersCollection = () => getDatabase().collection("users");
 
 async function findUserById(id) {
-    const user = await usersCollection().findOne({ _id: new ObjectId(id) });
+    const user = await getUsersCollection().findOne({ _id: new ObjectId(id) });
     return user;
 }
 
 async function findUserByEmail(email) {
-    const user = await usersCollection().findOne({ email });
+    const user = await getUsersCollection().findOne({ email });
     return user;
 }
 
 async function addNewUser(newUser) {
-    await usersCollection().insertOne(newUser);
+    await getUsersCollection().insertOne(newUser);
 }
 
 async function insertOrUpdateUser(query, update) {
-    const result = await usersCollection().findOneAndUpdate(
+    const result = await getUsersCollection().findOneAndUpdate(
         query,
         { $set: update },
         { upsert: true, returnOriginal: false }
@@ -29,7 +29,7 @@ async function insertOrUpdateUser(query, update) {
 }
 
 async function findAndUpdateUserById(id, newUser) {
-    const result = await usersCollection().updateOne(
+    const result = await getUsersCollection().updateOne(
         { _id: new ObjectId(id) },
         { $set: newUser }
     );
@@ -39,7 +39,7 @@ async function findAndUpdateUserById(id, newUser) {
 }
 
 async function findAndDeleteUserById(id) {
-    const result = await usersCollection().deleteOne({
+    const result = await getUsersCollection().deleteOne({
         _id: new ObjectId(id),
     });
 

@@ -4,6 +4,7 @@ const validateAuthorization = require("../middlewares/validateAuthorization");
 
 const {
     getPostsList,
+    getSinglePost,
     createNewPost,
     updatePost,
     deletePost,
@@ -12,6 +13,8 @@ const {
 const router = express.Router();
 
 router.get("/", (req, res, next) => getPostsList(req, res, next, database));
+
+router.get("/:id", (req, res, next) => getSinglePost(req, res, next, database));
 
 router.post("/", validateAuthorization, (req, res, next) =>
     createNewPost(req, res, next, database)

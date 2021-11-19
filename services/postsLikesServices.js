@@ -1,19 +1,23 @@
 const { ObjectId } = require("mongodb");
-const { database } = require("../configs/mongodb");
+const { getDatabase } = require("../configs/mongodb");
 
-const postsLikesCollection = () => database().collection("posts-likes");
+const getPostsLikesCollection = () => getDatabase().collection("posts-likes");
 
-async function findOnePostLike(query) {
-    const result = await postsLikesCollection().findOne(query);
+async function findOnePostLike(post_id, user_id) {
+    const result = await getPostsLikesCollection().findOne({
+        post_id: new ObjectId(post_id),
+        user_id: new ObjectId(user_id),
+    });
+
     return result;
 }
 
 async function addNewPostLike(newPostLike) {
-    await postsLikesCollection().insertOne(newPostLike);
+    await getPostsLikesCollection().insertOne(newPostLike);
 }
 
 async function findAndDeletePostLike(post_id, user_id) {
-    const result = await postsLikesCollection().deleteOne({
+    const result = await getPostsLikesCollection().deleteOne({
         post_id: new ObjectId(post_id),
         user_id: new ObjectId(user_id),
     });

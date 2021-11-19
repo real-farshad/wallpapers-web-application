@@ -15,16 +15,18 @@ async function getCategoriesList(req, res, next, database) {
 // POST /
 // req.body => title
 async function createNewCategory(req, res, next, database) {
+    let newCategory = req.body;
+
     // validate request's body
     try {
-        await categorySchema.validateAsync(req.body);
+        newCategory = await categorySchema.validateAsync(newCategory);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
     try {
         // insert new category in to the database
-        await database.addNewCategory(req.body);
+        await database.addNewCategory(newCategory);
 
         // return success
         return res.json({ newCategoryCreated: true });
@@ -36,15 +38,18 @@ async function createNewCategory(req, res, next, database) {
 // PUT /:id
 // req.body => title
 async function updateCategory(req, res, next, database) {
+    const categoryId = req.params.id;
+    let updatedCategory = req.body;
+
     // validate request's body
     try {
-        await categorySchema.validateAsync(req.body);
+        updatedCategory = await categorySchema.validateAsync(updatedCategory);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
     // validate category id
-    if (!ObjectId.isValid(req.params.id)) {
+    if (!ObjectId.isValid(categoryId)) {
         return res.status(403).json({
             error: "invalid category id!",
         });
@@ -52,7 +57,10 @@ async function updateCategory(req, res, next, database) {
 
     try {
         // find and update category
-        const result = await database.findAndUpdateCategoryById(req.params.id, req.body);
+        const result = await database.findAndUpdateCategoryById(
+            categoryId,
+            updatedCategory
+        );
 
         if (!result) {
             return res.status(404).json({
@@ -69,8 +77,10 @@ async function updateCategory(req, res, next, database) {
 
 // DELETE /:id
 async function deleteCategory(req, res, next, database) {
+    const categoryId = req.params.id;
+
     // validate category id
-    if (!ObjectId.isValid(req.params.id)) {
+    if (!ObjectId.isValid(categoryId)) {
         return res.status(403).json({
             error: "invalid category id!",
         });
@@ -78,7 +88,7 @@ async function deleteCategory(req, res, next, database) {
 
     try {
         // find and delete category
-        const result = await database.findAndDeleteCategoryById(req.params.id);
+        const result = await database.findAndDeleteCategoryById(categoryId);
 
         if (!result) {
             return res.status(404).json({

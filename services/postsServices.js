@@ -1,24 +1,55 @@
 const { ObjectId } = require("mongodb");
-const { database } = require("../configs/mongodb");
+const { getDatabase } = require("../configs/mongodb");
 
-const postsCollection = () => database().collection("posts");
+const getPostsCollection = () => getDatabase().collection("posts");
 
-async function searchPostsList({ search, category_id, sort, skip, limit }) {
+async function searchPostsList(search, category, sort, skip, limit) {
     const find = {};
     if (search !== "") find.$text = { $search: search };
-    if (category_id !== "") find.category_id = { category_id };
+    if (category !== "") find.category = { category };
 
-    const cursor = await postsCollection().find(find).sort(sort).skip(skip).limit(limit);
+    const cursor = await getPostsCollection().aggregate([
+        { $match: find },
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category",
+                foreignField: "_id",
+                as: "category",
+            },
+        },
+        { $sort: sort },
+        { $skip: skip },
+        { $limit: limit },
+    ]);
+
     const result = await cursor.toArray();
     return result;
 }
 
+async function findPostById(id) {
+    const cursor = await getPostsCollection().aggregate([
+        { $match: { _id: new ObjectId(id) } },
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category",
+                foreignField: "_id",
+                as: "category",
+            },
+        },
+    ]);
+
+    const result = await cursor.toArray();
+    return result[0];
+}
+
 async function addNewPost(newPost) {
-    await postsCollection().insertOne(newPost);
+    await getPostsCollection().insertOne(newPost);
 }
 
 async function findAndUpdatePostById(id, newPost) {
-    const result = await postsCollection().updateOne(
+    const result = await getPostsCollection().updateOne(
         { _id: new ObjectId(id) },
         { $set: newPost }
     );
@@ -28,21 +59,20 @@ async function findAndUpdatePostById(id, newPost) {
 }
 
 async function findAndDeletePostById(id) {
-    const result = await postsCollection().deleteOne({ _id: new ObjectId(id) });
-
+    const result = await getPostsCollection().deleteOne({ _id: new ObjectId(id) });
     if (result.deletedCount !== 1) return null;
     return result;
 }
 
 async function incrementPostLikeCount(id) {
-    await postsCollection().updateOne(
+    await getPostsCollection().updateOne(
         { _id: new ObjectId(id) },
         { $inc: { like_count: 1 } }
     );
 }
 
 async function decrementPostLikeCount(id) {
-    await postsCollection().updateOne(
+    await getPostsCollection().updateOne(
         { _id: new ObjectId(id) },
         { $inc: { like_count: -1 } }
     );
@@ -50,6 +80,7 @@ async function decrementPostLikeCount(id) {
 
 module.exports = {
     searchPostsList,
+    findPostById,
     addNewPost,
     findAndUpdatePostById,
     findAndDeletePostById,

@@ -14,10 +14,11 @@ async function getPostsList(req, res, next, database) {
 
     try {
         // validate query
-        await postQuerySchema.validateAsync(query);
+        query = await postQuerySchema.validateAsync(query);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
+
     // validate category
     if (query.category !== "") {
         try {
@@ -29,12 +30,10 @@ async function getPostsList(req, res, next, database) {
                 });
             }
 
-            query.category_id = category._id;
+            query.category = category._id;
         } catch (err) {
             next(err);
         }
-    } else {
-        query.category_id = "";
     }
 
     // translate sort order to it's related post document field
@@ -43,18 +42,18 @@ async function getPostsList(req, res, next, database) {
     // reverse sort order to show newest and most popular first
     sort = { [sort]: -1 };
 
-    const { search, category_id, page, limit } = query;
+    const { search, category, page, limit } = query;
     const skip = (page - 1) * 4;
 
     try {
         // search for related documents in database
-        const postsList = await database.searchPostsList({
+        const postsList = await database.searchPostsList(
             search,
-            category_id,
+            category,
             sort,
             skip,
-            limit,
-        });
+            limit
+        );
 
         // return list of related posts
         return res.json(postsList);
@@ -63,19 +62,49 @@ async function getPostsList(req, res, next, database) {
     }
 }
 
+// GET /:id
+async function getSinglePost(req, res, next, database) {
+    const postId = req.params.id;
+
+    // validate post id
+    if (!ObjectId.isValid(postId)) {
+        return res.status(403).json({
+            error: "invalid post id!",
+        });
+    }
+
+    try {
+        // find post
+        const post = await database.findPostById(postId);
+
+        if (!post) {
+            return res.status(404).json({
+                error: "no post with this id was found!",
+            });
+        }
+
+        // return post
+        return res.json(post);
+    } catch (err) {
+        next(err);
+    }
+}
+
 // POST /
 // body.request => image_url, title, category_id
 async function createNewPost(req, res, next, database) {
+    let newPost = req.body;
+
     // validate request's body
     try {
-        await postSchema.validateAsync(req.body);
+        newPost = await postSchema.validateAsync(newPost);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
     try {
         // make sure the category exists in the database
-        const category = await database.findCategoryByTitle(req.body.category);
+        const category = await database.findCategoryByTitle(newPost.category);
 
         if (!category) {
             return res.status(404).json({
@@ -83,21 +112,18 @@ async function createNewPost(req, res, next, database) {
             });
         }
 
-        delete req.body.category;
-        req.body.category_id = category._id;
+        delete newPost.category;
+        newPost.category = category._id;
     } catch (err) {
         next(err);
     }
 
     // add extra properties
-    const newPost = {
-        ...req.body,
-        like_count: 0,
-        comment_count: 0,
-        download_count: 0,
-        publish_date: Date.now(),
-        publisher_id: req.user._id,
-    };
+    newPost.like_count = 0;
+    newPost.comment_count = 0;
+    newPost.download_count = 0;
+    newPost.publish_date = Date.now();
+    newPost.publisher_id = req.user._id;
 
     try {
         // insert new document into the database
@@ -113,15 +139,18 @@ async function createNewPost(req, res, next, database) {
 // PUT /:id
 // body.request => image_url, title, category_id
 async function updatePost(req, res, next, database) {
+    const postId = req.params.id;
+    let updatedPost = req.body;
+
     try {
         // validate request's body
-        await postSchema.validateAsync(req.body);
+        updatedPost = await postSchema.validateAsync(updatedPost);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
     // validate post id
-    if (!ObjectId.isValid(req.params.id)) {
+    if (!ObjectId.isValid(postId)) {
         return res.status(403).json({
             error: "invalid post id!",
         });
@@ -129,7 +158,7 @@ async function updatePost(req, res, next, database) {
 
     try {
         // make sure the category exists in the database
-        const category = await database.findCategoryByTitle(req.body.category);
+        const category = await database.findCategoryByTitle(updatedPost.category);
 
         if (!category) {
             return res.status(404).json({
@@ -137,15 +166,15 @@ async function updatePost(req, res, next, database) {
             });
         }
 
-        delete req.body.category;
-        req.body.category_id = category._id;
+        delete updatedPost.category;
+        updatedPost.category = category._id;
     } catch (err) {
         next(err);
     }
 
     try {
         // find and update the post
-        const result = await database.findAndUpdatePostById(req.params.id, req.body);
+        const result = await database.findAndUpdatePostById(postId, updatedPost);
 
         if (!result) {
             return res.status(404).json({
@@ -162,8 +191,10 @@ async function updatePost(req, res, next, database) {
 
 // DELETE /:id
 async function deletePost(req, res, next, database) {
+    const postId = req.params.id;
+
     // validate post id
-    if (!ObjectId.isValid(req.params.id)) {
+    if (!ObjectId.isValid(postId)) {
         return res.status(403).json({
             error: "invalid post id!",
         });
@@ -174,7 +205,7 @@ async function deletePost(req, res, next, database) {
 
     try {
         // find and delete the post
-        const result = await database.findAndDeletePostById(req.params.id);
+        const result = await database.findAndDeletePostById(postId);
 
         if (!result) {
             return res.status(404).json({
@@ -191,6 +222,7 @@ async function deletePost(req, res, next, database) {
 
 module.exports = {
     getPostsList,
+    getSinglePost,
     createNewPost,
     updatePost,
     deletePost,

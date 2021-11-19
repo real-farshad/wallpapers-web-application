@@ -27,19 +27,20 @@ async function getUserInfo(req, res) {
 // POST /
 // req.body => username, email, password
 async function createNewUser(req, res, next, database) {
+    let newUser = req.body;
+
     // validate request's body
     try {
-        await userSchema.validateAsync(req.body);
+        newUser = await userSchema.validateAsync(newUser);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
-    const user = req.body;
-
     try {
         // check if an user with this email already exists
-        const searchResult = await database.findUserByEmail(user.email);
-        if (searchResult) {
+        const userWithSameEmail = await database.findUserByEmail(newUser.email);
+
+        if (userWithSameEmail) {
             return res.status(403).json({
                 error: "an user with this email address already exists!",
             });
@@ -47,11 +48,11 @@ async function createNewUser(req, res, next, database) {
 
         // hash the password
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(user.password, salt);
-        user.password = hashedPassword;
+        const hashedPassword = await bcrypt.hash(newUser.password, salt);
+        newUser.password = hashedPassword;
 
         // add new user to the database
-        await database.addNewUser(user);
+        await database.addNewUser(newUser);
 
         // return success
         return res.json({ newUserCreated: true });
@@ -70,18 +71,22 @@ async function updateUser(req, res, next, database) {
         });
     }
 
+    let updatedUser = req.body;
+
     // validate request's body
     try {
-        await userSchema.validateAsync(req.body);
+        updatedUser = await userSchema.validateAsync(updatedUser);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
-    const newUser = req.body;
-
     // validate password
-    const isCorrectPassword = await bcrypt.compare(newUser.password, req.user.password);
-    if (!isCorrectPassword) {
+    const hasCorrectPassword = await bcrypt.compare(
+        updatedUser.password,
+        req.user.password
+    );
+
+    if (!hasCorrectPassword) {
         return res.status(401).json({
             error: "incorrect password!",
         });
@@ -89,10 +94,11 @@ async function updateUser(req, res, next, database) {
 
     try {
         // check if email has changed
-        if (req.user.email !== req.body.email) {
+        if (req.user.email !== updatedUser.email) {
             // check if an user with new email already exists
-            const searchResult = await database.findUserByEmail(newUser.email);
-            if (searchResult) {
+            const userWithSameEmail = await database.findUserByEmail(updatedUser.email);
+
+            if (userWithSameEmail) {
                 return res.status(403).json({
                     error: "an user with this email address already exists!",
                 });
@@ -101,11 +107,11 @@ async function updateUser(req, res, next, database) {
 
         // hash the password
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(newUser.password, salt);
-        newUser.password = hashedPassword;
+        const hashedPassword = await bcrypt.hash(updatedUser.password, salt);
+        updateUser.password = hashedPassword;
 
         // find and update user info
-        const result = await database.findAndUpdateUserById(req.user._id, newUser);
+        const result = await database.findAndUpdateUserById(req.user._id, updatedUser);
 
         if (!result) {
             return res.status(404).json({
@@ -124,25 +130,23 @@ async function updateUser(req, res, next, database) {
 // req.body => password
 async function deleteUser(req, res, next, database) {
     // check for local account
-    if (!req.user.local) {
-        return res.status(400).json({
-            error: "invalid operation!",
-        });
-    }
+    if (req.user.username) {
+        let userPassword = req.body.password;
 
-    // validate request's body
-    try {
-        await userPasswordSchema.validateAsync(req.body);
-    } catch (err) {
-        return res.status(403).json({ error: err.message });
-    }
+        // validate request's body
+        try {
+            userPassword = await userPasswordSchema.validateAsync(userPassword);
+        } catch (err) {
+            return res.status(403).json({ error: err.message });
+        }
 
-    // validate password
-    const isCorrectPassword = await bcrypt.compare(req.body.password, req.user.password);
-    if (!isCorrectPassword) {
-        return res.status(401).json({
-            error: "incorrect password!",
-        });
+        // validate password
+        const hasCorrectPassword = await bcrypt.compare(userPassword, req.user.password);
+        if (!hasCorrectPassword) {
+            return res.status(401).json({
+                error: "incorrect password!",
+            });
+        }
     }
 
     try {
