@@ -5,8 +5,8 @@ const postLikeSchema = Joi.object({
 });
 
 const likedPostsQuery = Joi.object({
-    page: Joi.number().min(0),
-    limit: Joi.number().max(20),
+    page: Joi.number().min(1),
+    limit: Joi.number().min(1).max(20),
 });
 
 module.exports = {

@@ -7,23 +7,22 @@ async function getLikedPostsList(req, res, next, database) {
         page: req.query.page || 1,
         limit: req.query.limit || 20,
     };
+
     const userId = req.user._id;
 
     // validate query
     try {
         query = await likedPostsQuery.validateAsync(query);
     } catch (err) {
-        return next(err);
+        return res.status(403).json({ error: err.message });
     }
 
     const { page, limit } = query;
     const skip = (page - 1) * 20;
 
     try {
-        // get user's liked posts
+        // find and return user's liked posts
         const userLikedPosts = await database.getUserLikedPosts(userId, skip, limit);
-
-        // return liked posts
         return res.json(userLikedPosts);
     } catch (err) {
         next(err);
@@ -61,16 +60,16 @@ async function getPostLike(req, res, next, database) {
 async function createNewPostLike(req, res, next, database) {
     let newPostLike = req.body;
 
-    // validate post's id
-    const isValidId = validateId(newPostLike.postId);
-    if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
-
     // validate request's body
     try {
         newPostLike = await postLikeSchema.validateAsync(newPostLike);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
+
+    // validate post's id
+    const isValidId = validateId(newPostLike.postId);
+    if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
     // add user's id to post like
     newPostLike.userId = req.user._id;
@@ -92,7 +91,7 @@ async function createNewPostLike(req, res, next, database) {
         await database.addNewPostLike(newPostLike);
 
         // increment post's like count
-        await database.incrementPostLikeCount(postId);
+        await database.incrementPostLikeCount(newPostLike.postId);
 
         // return success
         return res.json({ postLiked: true });
@@ -116,7 +115,7 @@ async function deletePostLike(req, res, next, database) {
 
         if (!result) {
             return res.status(404).json({
-                error: "no post like with this id was found!",
+                error: "no post like with this id, for this user, was found!",
             });
         }
 

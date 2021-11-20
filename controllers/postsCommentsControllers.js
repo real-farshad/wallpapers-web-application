@@ -1,0 +1,135 @@
+const validateId = require("../utils/validateId");
+const {
+    postCommentSchema,
+    postCommentQuerySchema,
+} = require("../schemas/postsCommentsSchemas");
+
+// GET /
+async function getUserPostComments(req, res, next, database) {
+    let query = {
+        page: req.query.page || 1,
+        limit: req.query.limit || 10,
+    };
+
+    const userId = req.user._id;
+
+    // validate query
+    try {
+        query = await postCommentQuerySchema.validateAsync(query);
+    } catch (err) {
+        return res.status(403).json({ error: err.message });
+    }
+
+    const { page, limit } = query;
+    const skip = (page - 1) * 20;
+
+    try {
+        // find and return user comments
+        const userLikedPosts = await database.getUserLikedPosts(userId, skip, limit);
+        return res.json(userLikedPosts);
+    } catch (err) {
+        next(err);
+    }
+}
+
+// GET /:id
+async function getPostComments(req, res, next, database) {
+    let query = {
+        page: req.query.page || 1,
+        limit: req.query.limit || 10,
+    };
+
+    const postId = req.params.id;
+
+    // validate post's id
+    const isValidId = validateId(postId);
+    if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
+
+    // validate query
+    try {
+        query = await postCommentQuerySchema.validateAsync(query);
+    } catch (err) {
+        return res.status(403).json({ error: err.message });
+    }
+
+    const { page, limit } = query;
+    const skip = (page - 1) * 10;
+
+    try {
+        // find and return post comments list
+        const postComments = await database.getPostCommentsList(postId, skip, limit);
+        return res.json(postComments);
+    } catch (err) {
+        next(err);
+    }
+}
+
+// POST /
+// req.body => description, postId
+async function createNewPostComment(req, res, next, database) {
+    let newPostComment = req.body;
+
+    // validate request's body
+    try {
+        newPostComment = await postCommentSchema.validateAsync(newPostComment);
+    } catch (err) {
+        return res.status(403).json({ error: err.message });
+    }
+
+    // validate post's id
+    const isValidId = validateId(newPostComment.postId);
+    if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
+
+    // add comment's extra properties
+    newPostComment.userId = req.user._id;
+    newPostComment.publish_date = Date.now();
+
+    try {
+        // add new comment to database
+        await database.addNewPostComment(newPostComment);
+
+        // increment post's comment_count by 1
+        await database.incrementPostCommentCount();
+
+        // return success
+        return res.json({ postCommendAdded: true });
+    } catch (err) {
+        next(err);
+    }
+}
+
+// DELETE /:id
+async function deletePostComment(req, res, next, database) {
+    const postId = req.params.id;
+    const userId = req.user._id;
+
+    // validate post comment's id
+    const isValidId = validateId(postCommentId);
+    if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
+
+    try {
+        // find and delete post comment
+        const result = await database.findAndDeletePostComment(postId, userId);
+
+        if (!result) {
+            return res.status(404).json({
+                error: "no post comment with this id, for this user, was found!",
+            });
+        }
+
+        // decrement post's comment count
+        await database.decrementPostCommentCount(postId);
+
+        // return success
+        return res.json({ postLikeDeleted: true });
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = {
+    getUserPostComments,
+    getPostComments,
+    createNewPostComment,
+    deletePostComment,
+};

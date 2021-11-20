@@ -5,7 +5,7 @@ const getPostsLikesCollection = () => getDatabase().collection("posts-likes");
 
 async function getUserLikedPosts(userId, skip, limit) {
     const cursor = await getPostsLikesCollection().aggregate([
-        { $match: { user_id: new ObjectId(userId) } },
+        { $match: { userId: new ObjectId(userId) } },
         {
             $lookup: {
                 from: "posts",
@@ -17,7 +17,7 @@ async function getUserLikedPosts(userId, skip, limit) {
         { $sort: { "post.publish_date": -1 } },
         { $skip: skip },
         { $limit: limit },
-        { $project: { postId: 0 } },
+        { $project: { _id: 0, post: 1 } },
     ]);
 
     const result = await cursor.toArray();
@@ -26,8 +26,8 @@ async function getUserLikedPosts(userId, skip, limit) {
 
 async function findOnePostLike(postId, userId) {
     const result = await getPostsLikesCollection().findOne({
-        postId: new ObjectId(postId, userId),
-        userId: new ObjectId(postId, userId),
+        postId: new ObjectId(postId),
+        userId: new ObjectId(userId),
     });
 
     return result;
@@ -35,7 +35,7 @@ async function findOnePostLike(postId, userId) {
 
 async function addNewPostLike(newPostLike) {
     await getPostsLikesCollection().insertOne({
-        ...postLike,
+        ...newPostLike,
         postId: new ObjectId(newPostLike.postId),
         userId: new ObjectId(newPostLike.userId),
     });
