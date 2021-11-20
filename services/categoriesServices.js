@@ -18,10 +18,10 @@ async function addNewCategory(newCategory) {
     await getCategoriesCollection().insertOne(newCategory);
 }
 
-async function findAndUpdateCategoryById(id, newCategory) {
+async function findAndUpdateCategoryById(id, updatedCategory) {
     const result = await getCategoriesCollection().updateOne(
         { _id: new ObjectId(id) },
-        { $set: newCategory }
+        { $set: updatedCategory }
     );
 
     if (result.matchedCount !== 1) return null;

@@ -3,17 +3,17 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getPostsCollection = () => getDatabase().collection("posts");
 
-async function searchPostsList(search, category, sort, skip, limit) {
-    const find = {};
-    if (search !== "") find.$text = { $search: search };
-    if (category !== "") find.category = { category };
+async function searchPostsList(search, categoryId, sort, skip, limit) {
+    const query = {};
+    if (search !== "") query.$text = { $search: search };
+    if (categoryId !== "") query.categoryId = new ObjectId(categoryId);
 
     const cursor = await getPostsCollection().aggregate([
-        { $match: find },
+        { $match: query },
         {
             $lookup: {
                 from: "categories",
-                localField: "category",
+                localField: "categoryId",
                 foreignField: "_id",
                 as: "category",
             },
@@ -21,6 +21,7 @@ async function searchPostsList(search, category, sort, skip, limit) {
         { $sort: sort },
         { $skip: skip },
         { $limit: limit },
+        { $project: { categoryId: 0 } },
     ]);
 
     const result = await cursor.toArray();
@@ -33,11 +34,12 @@ async function findPostById(id) {
         {
             $lookup: {
                 from: "categories",
-                localField: "category",
+                localField: "categoryId",
                 foreignField: "_id",
                 as: "category",
             },
         },
+        { $project: { categoryId: 0 } },
     ]);
 
     const result = await cursor.toArray();
@@ -45,13 +47,21 @@ async function findPostById(id) {
 }
 
 async function addNewPost(newPost) {
-    await getPostsCollection().insertOne(newPost);
+    await getPostsCollection().insertOne({
+        ...newPost,
+        categoryId: new ObjectId(newPost.categoryId),
+    });
 }
 
-async function findAndUpdatePostById(id, newPost) {
+async function findAndUpdatePostById(id, updatedPost) {
     const result = await getPostsCollection().updateOne(
         { _id: new ObjectId(id) },
-        { $set: newPost }
+        {
+            $set: {
+                ...updatedPost,
+                categoryId: new ObjectId(updatedPost.categoryId),
+            },
+        }
     );
 
     if (result.matchedCount !== 1) return null;

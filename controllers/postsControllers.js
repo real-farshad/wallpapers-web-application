@@ -1,5 +1,5 @@
+const validateId = require("../utils/validateId");
 const { postSchema, postQuerySchema } = require("../schemas/postsSchemas");
-const { ObjectId } = require("mongodb");
 
 // GET /
 async function getPostsList(req, res, next, database) {
@@ -19,7 +19,8 @@ async function getPostsList(req, res, next, database) {
         return res.status(403).json({ error: err.message });
     }
 
-    // validate category
+    // validate category and replace it with categoryId
+    query.categoryId = "";
     if (query.category !== "") {
         try {
             const category = await database.findCategoryByTitle(query.category);
@@ -30,7 +31,7 @@ async function getPostsList(req, res, next, database) {
                 });
             }
 
-            query.category = category._id;
+            query.categoryId = category._id;
         } catch (err) {
             next(err);
         }
@@ -42,14 +43,14 @@ async function getPostsList(req, res, next, database) {
     // reverse sort order to show newest and most popular first
     sort = { [sort]: -1 };
 
-    const { search, category, page, limit } = query;
-    const skip = (page - 1) * 4;
+    const { search, categoryId, page, limit } = query;
+    const skip = (page - 1) * 20;
 
     try {
         // search for related documents in database
         const postsList = await database.searchPostsList(
             search,
-            category,
+            categoryId,
             sort,
             skip,
             limit
@@ -67,11 +68,8 @@ async function getSinglePost(req, res, next, database) {
     const postId = req.params.id;
 
     // validate post id
-    if (!ObjectId.isValid(postId)) {
-        return res.status(403).json({
-            error: "invalid post id!",
-        });
-    }
+    const isValidId = validateId(postId);
+    if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
     try {
         // find post
@@ -91,7 +89,7 @@ async function getSinglePost(req, res, next, database) {
 }
 
 // POST /
-// body.request => image_url, title, category_id
+// body.request => image_url, title, category
 async function createNewPost(req, res, next, database) {
     let newPost = req.body;
 
@@ -113,9 +111,9 @@ async function createNewPost(req, res, next, database) {
         }
 
         delete newPost.category;
-        newPost.category = category._id;
+        newPost.categoryId = category._id;
     } catch (err) {
-        next(err);
+        return next(err);
     }
 
     // add extra properties
@@ -137,23 +135,20 @@ async function createNewPost(req, res, next, database) {
 }
 
 // PUT /:id
-// body.request => image_url, title, category_id
+// body.request => image_url, title, category
 async function updatePost(req, res, next, database) {
     const postId = req.params.id;
     let updatedPost = req.body;
+
+    // validate post id
+    const isValidId = validateId(postId);
+    if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
     try {
         // validate request's body
         updatedPost = await postSchema.validateAsync(updatedPost);
     } catch (err) {
         return res.status(403).json({ error: err.message });
-    }
-
-    // validate post id
-    if (!ObjectId.isValid(postId)) {
-        return res.status(403).json({
-            error: "invalid post id!",
-        });
     }
 
     try {
@@ -167,7 +162,7 @@ async function updatePost(req, res, next, database) {
         }
 
         delete updatedPost.category;
-        updatedPost.category = category._id;
+        updatedPost.categoryId = category._id;
     } catch (err) {
         next(err);
     }
@@ -194,11 +189,8 @@ async function deletePost(req, res, next, database) {
     const postId = req.params.id;
 
     // validate post id
-    if (!ObjectId.isValid(postId)) {
-        return res.status(403).json({
-            error: "invalid post id!",
-        });
-    }
+    const isValidId = validateId(postId);
+    if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
     // delete related likes
     // delete related comments

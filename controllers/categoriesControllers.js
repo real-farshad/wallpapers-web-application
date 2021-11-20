@@ -1,11 +1,13 @@
-const { ObjectId } = require("mongodb");
+const validateId = require("../utils/validateId");
 const { categorySchema } = require("../schemas/categoriesSchemas");
 
 // GET /
 async function getCategoriesList(req, res, next, database) {
     try {
-        // return all categories
+        // get all categories
         const categories = await database.getCategoriesList();
+
+        // return list of categories
         return res.json(categories);
     } catch (err) {
         next(err);
@@ -41,18 +43,15 @@ async function updateCategory(req, res, next, database) {
     const categoryId = req.params.id;
     let updatedCategory = req.body;
 
+    // validate category id
+    const isValidId = validateId(categoryId);
+    if (!isValidId) return res.status(403).json({ error: "invalid category id!" });
+
     // validate request's body
     try {
         updatedCategory = await categorySchema.validateAsync(updatedCategory);
     } catch (err) {
         return res.status(403).json({ error: err.message });
-    }
-
-    // validate category id
-    if (!ObjectId.isValid(categoryId)) {
-        return res.status(403).json({
-            error: "invalid category id!",
-        });
     }
 
     try {
@@ -80,11 +79,8 @@ async function deleteCategory(req, res, next, database) {
     const categoryId = req.params.id;
 
     // validate category id
-    if (!ObjectId.isValid(categoryId)) {
-        return res.status(403).json({
-            error: "invalid category id!",
-        });
-    }
+    const isValidId = validateId(categoryId);
+    if (!isValidId) return res.status(403).json({ error: "invalid category id!" });
 
     try {
         // find and delete category
