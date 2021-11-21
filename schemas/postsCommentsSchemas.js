@@ -5,12 +5,12 @@ const postCommentSchema = Joi.object({
     postId: Joi.string().max(64).required(),
 });
 
-const postCommentQuerySchema = Joi.object({
+const postCommentsQuerySchema = Joi.object({
     page: Joi.number().min(1),
     limit: Joi.number().min(1).max(10),
 });
 
 module.exports = {
     postCommentSchema,
-    postCommentQuerySchema,
+    postCommentsQuerySchema,
 };

@@ -1,10 +1,10 @@
 const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../configs/mongodb");
 
-const getPostsLikesCollection = () => getDatabase().collection("posts-likes");
+const getPostsSavesCollection = () => getDatabase().collection("posts-saves");
 
-async function getUserLikedPosts(userId, skip, limit) {
-    const cursor = await getPostsLikesCollection().aggregate([
+async function getUserSaveddPosts(userId, skip, limit) {
+    const cursor = await getPostsSavesCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
         {
             $lookup: {
@@ -24,8 +24,8 @@ async function getUserLikedPosts(userId, skip, limit) {
     return result;
 }
 
-async function findOnePostLike(postId, userId) {
-    const result = await getPostsLikesCollection().findOne({
+async function findOnePostSave(postId, userId) {
+    const result = await getPostsSavesCollection().findOne({
         postId: new ObjectId(postId),
         userId: new ObjectId(userId),
     });
@@ -33,16 +33,16 @@ async function findOnePostLike(postId, userId) {
     return result;
 }
 
-async function addNewPostLike(newPostLike) {
-    await getPostsLikesCollection().insertOne({
-        ...newPostLike,
-        postId: new ObjectId(newPostLike.postId),
-        userId: new ObjectId(newPostLike.userId),
+async function addNewPostSave(newPostSave) {
+    await getPostsSavesCollection().insertOne({
+        ...newPostSave,
+        postId: new ObjectId(newPostSave.postId),
+        userId: new ObjectId(newPostSave.userId),
     });
 }
 
-async function findAndDeletePostLike(postId, userId) {
-    const result = await getPostsLikesCollection().deleteOne({
+async function findAndDeletePostSave(postId, userId) {
+    const result = await getPostsSavesCollection().deleteOne({
         postId: new ObjectId(postId),
         userId: new ObjectId(userId),
     });
@@ -52,8 +52,8 @@ async function findAndDeletePostLike(postId, userId) {
 }
 
 module.exports = {
-    getUserLikedPosts,
-    findOnePostLike,
-    addNewPostLike,
-    findAndDeletePostLike,
+    getUserSaveddPosts,
+    findOnePostSave,
+    addNewPostSave,
+    findAndDeletePostSave,
 };

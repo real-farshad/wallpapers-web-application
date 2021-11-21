@@ -19,7 +19,7 @@ async function getCategoriesList(req, res, next, database) {
 async function createNewCategory(req, res, next, database) {
     let newCategory = req.body;
 
-    // validate request's body
+    // validate request body
     try {
         newCategory = await categorySchema.validateAsync(newCategory);
     } catch (err) {
@@ -47,7 +47,7 @@ async function updateCategory(req, res, next, database) {
     const isValidId = validateId(categoryId);
     if (!isValidId) return res.status(403).json({ error: "invalid category id!" });
 
-    // validate request's body
+    // validate request body
     try {
         updatedCategory = await categorySchema.validateAsync(updatedCategory);
     } catch (err) {

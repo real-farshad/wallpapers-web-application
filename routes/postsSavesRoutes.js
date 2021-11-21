@@ -3,26 +3,28 @@ const database = require("../services/index");
 const validateAuthorization = require("../middlewares/validateAuthorization");
 
 const {
-    getUserPostsComments,
-    getPostComments,
-    createNewPostComment,
-    deletePostComment,
-} = require("../controllers/postsCommentsControllers");
+    getSavedPostsList,
+    getPostSave,
+    createNewPostSave,
+    deletePostSave,
+} = require("../controllers/postsSavesControllers");
 
 const router = express.Router();
 
 router.get("/", validateAuthorization, (req, res, next) =>
-    getUserPostsComments(req, res, next, database)
+    getSavedPostsList(req, res, next, database)
 );
 
-router.get("/:id", (req, res, next) => getPostComments(req, res, next, database));
+router.get("/:id", validateAuthorization, (req, res, next) =>
+    getPostSave(req, res, next, database)
+);
 
 router.post("/", validateAuthorization, (req, res, next) =>
-    createNewPostComment(req, res, next, database)
+    createNewPostSave(req, res, next, database)
 );
 
 router.delete("/:id", validateAuthorization, (req, res, next) =>
-    deletePostComment(req, res, next, database)
+    deletePostSave(req, res, next, database)
 );
 
 module.exports = router;

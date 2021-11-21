@@ -21,7 +21,7 @@ async function getLikedPostsList(req, res, next, database) {
     const skip = (page - 1) * 20;
 
     try {
-        // find and return user's liked posts
+        // find and return user liked posts
         const userLikedPosts = await database.getUserLikedPosts(userId, skip, limit);
         return res.json(userLikedPosts);
     } catch (err) {
@@ -44,12 +44,12 @@ async function getPostLike(req, res, next, database) {
 
         if (!result) {
             return res.json({
-                hasLiked: false,
+                isLiked: false,
             });
         }
 
-        // return success if post like exists and failure if it doesn't
-        return res.json({ hasLiked: true });
+        // return result to see if the post has been liked
+        return res.json({ isLiked: true });
     } catch (err) {
         next(err);
     }
@@ -60,18 +60,18 @@ async function getPostLike(req, res, next, database) {
 async function createNewPostLike(req, res, next, database) {
     let newPostLike = req.body;
 
-    // validate request's body
+    // validate request body
     try {
         newPostLike = await postLikeSchema.validateAsync(newPostLike);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
-    // validate post's id
+    // validate post id
     const isValidId = validateId(newPostLike.postId);
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
-    // add user's id to post like
+    // add user id to post like
     newPostLike.userId = req.user._id;
 
     try {
@@ -90,7 +90,7 @@ async function createNewPostLike(req, res, next, database) {
         // add like to post likes collection
         await database.addNewPostLike(newPostLike);
 
-        // increment post's like count
+        // increment post like count
         await database.incrementPostLikeCount(newPostLike.postId);
 
         // return success
@@ -105,12 +105,12 @@ async function deletePostLike(req, res, next, database) {
     const postId = req.params.id;
     const userId = req.user._id;
 
-    // validate post's id
+    // validate post id
     const isValidId = validateId(postId);
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
     try {
-        // find and delete like from post likes collection
+        // find and delete post like from post likes collection
         const result = await database.findAndDeletePostLike(postId, userId);
 
         if (!result) {
@@ -119,7 +119,7 @@ async function deletePostLike(req, res, next, database) {
             });
         }
 
-        // decrement post's like count
+        // decrement post like count
         await database.decrementPostLikeCount(postId);
 
         // return success

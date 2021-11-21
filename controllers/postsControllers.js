@@ -89,11 +89,11 @@ async function getSinglePost(req, res, next, database) {
 }
 
 // POST /
-// body.request => image_url, title, category
+// body.request => imageUrl, title, category
 async function createNewPost(req, res, next, database) {
     let newPost = req.body;
 
-    // validate request's body
+    // validate request body
     try {
         newPost = await postSchema.validateAsync(newPost);
     } catch (err) {
@@ -117,11 +117,10 @@ async function createNewPost(req, res, next, database) {
     }
 
     // add extra properties
-    newPost.like_count = 0;
-    newPost.comment_count = 0;
-    newPost.download_count = 0;
-    newPost.publish_date = Date.now();
-    newPost.publisher_id = req.user._id;
+    newPost.likeCount = 0;
+    newPost.commentCount = 0;
+    newPost.publishDate = Date.now();
+    newPost.publisherId = req.user._id;
 
     try {
         // insert new document into the database
@@ -135,7 +134,7 @@ async function createNewPost(req, res, next, database) {
 }
 
 // PUT /:id
-// body.request => image_url, title, category
+// body.request => imageUrl, title, category
 async function updatePost(req, res, next, database) {
     const postId = req.params.id;
     let updatedPost = req.body;
@@ -145,7 +144,7 @@ async function updatePost(req, res, next, database) {
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
     try {
-        // validate request's body
+        // validate request body
         updatedPost = await postSchema.validateAsync(updatedPost);
     } catch (err) {
         return res.status(403).json({ error: err.message });
@@ -194,6 +193,7 @@ async function deletePost(req, res, next, database) {
 
     // delete related likes
     // delete related comments
+    // delete related saves
 
     try {
         // find and delete the post

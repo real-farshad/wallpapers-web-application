@@ -77,28 +77,28 @@ async function findAndDeletePostById(id) {
 async function incrementPostLikeCount(postId) {
     await getPostsCollection().updateOne(
         { _id: new ObjectId(postId) },
-        { $inc: { like_count: 1 } }
+        { $inc: { likeCount: 1 } }
     );
 }
 
 async function decrementPostLikeCount(postId) {
     await getPostsCollection().updateOne(
         { _id: new ObjectId(postId) },
-        { $inc: { like_count: -1 } }
+        { $inc: { likeCount: -1 } }
     );
 }
 
 async function incrementPostCommentCount(postId) {
     await getPostsCollection().updateOne(
         { _id: new ObjectId(postId) },
-        { $inc: { comment_count: 1 } }
+        { $inc: { commentCount: 1 } }
     );
 }
 
 async function decrementPostCommentCount(postId) {
     await getPostsCollection().updateOne(
         { _id: new ObjectId(postId) },
-        { $inc: { comment_count: -1 } }
+        { $inc: { commentCount: -1 } }
     );
 }
 

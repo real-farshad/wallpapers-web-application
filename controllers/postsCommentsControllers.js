@@ -1,11 +1,11 @@
 const validateId = require("../utils/validateId");
 const {
     postCommentSchema,
-    postCommentQuerySchema,
+    postCommentsQuerySchema,
 } = require("../schemas/postsCommentsSchemas");
 
 // GET /
-async function getUserPostComments(req, res, next, database) {
+async function getUserPostsComments(req, res, next, database) {
     let query = {
         page: req.query.page || 1,
         limit: req.query.limit || 10,
@@ -15,7 +15,7 @@ async function getUserPostComments(req, res, next, database) {
 
     // validate query
     try {
-        query = await postCommentQuerySchema.validateAsync(query);
+        query = await postCommentsQuerySchema.validateAsync(query);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
@@ -25,7 +25,7 @@ async function getUserPostComments(req, res, next, database) {
 
     try {
         // find and return user comments
-        const userLikedPosts = await database.getUserLikedPosts(userId, skip, limit);
+        const userLikedPosts = await database.getUserCommentsList(userId, skip, limit);
         return res.json(userLikedPosts);
     } catch (err) {
         next(err);
@@ -47,7 +47,7 @@ async function getPostComments(req, res, next, database) {
 
     // validate query
     try {
-        query = await postCommentQuerySchema.validateAsync(query);
+        query = await postCommentsQuerySchema.validateAsync(query);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
@@ -56,9 +56,27 @@ async function getPostComments(req, res, next, database) {
     const skip = (page - 1) * 10;
 
     try {
-        // find and return post comments list
+        // find related posts
         const postComments = await database.getPostCommentsList(postId, skip, limit);
-        return res.json(postComments);
+
+        let formattedPostComments = postComments.map((postComment) => {
+            if (postComment.user[0].googleId) {
+                return {
+                    ...postComment,
+                    user: {
+                        username: postComment.user[0]._json.name,
+                        avatar: postComment.user[0]._json.picture,
+                    },
+                };
+            }
+
+            return {
+                ...postComment,
+                user: { username: postComment.user[0].username },
+            };
+        });
+
+        return res.json(formattedPostComments);
     } catch (err) {
         next(err);
     }
@@ -82,7 +100,7 @@ async function createNewPostComment(req, res, next, database) {
 
     // add comment's extra properties
     newPostComment.userId = req.user._id;
-    newPostComment.publish_date = Date.now();
+    newPostComment.publishDate = Date.now();
 
     try {
         // add new comment to database
@@ -128,7 +146,7 @@ async function deletePostComment(req, res, next, database) {
 }
 
 module.exports = {
-    getUserPostComments,
+    getUserPostsComments,
     getPostComments,
     createNewPostComment,
     deletePostComment,

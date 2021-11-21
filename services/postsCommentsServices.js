@@ -3,18 +3,18 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getPostsCommentsCollection = () => getDatabase().collection("posts-comments");
 
-async function getUserLikedPosts(userId, skip, limit) {
+async function getUserCommentsList(userId, skip, limit) {
     const cursor = await getPostsLikesCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
         {
             $lookup: {
                 from: "posts",
-                localField: "post_id",
+                localField: "postId",
                 foreignField: "_id",
                 as: "post",
             },
         },
-        { $sort: { "post.publish_date": -1 } },
+        { $sort: { publishDate: -1 } },
         { $skip: skip },
         { $limit: limit },
         { $project: { post: 1 } },
@@ -26,19 +26,19 @@ async function getUserLikedPosts(userId, skip, limit) {
 
 async function getPostCommentsList(postId, skip, limit) {
     const cursor = await getPostsCommentsCollection().aggregate([
-        { $match: { post_id: new ObjectId(postId) } },
+        { $match: { postId: new ObjectId(postId) } },
         {
             $lookup: {
                 from: "users",
-                localField: "user_id",
+                localField: "userId",
                 foreignField: "_id",
-                as: "user_info",
+                as: "user",
             },
         },
-        { $sort: { publish_date: -1 } },
+        { $sort: { publishDate: -1 } },
         { $skip: skip },
         { $limit: limit },
-        { $project: { user_id: 0 } },
+        { $project: { userId: 0 } },
     ]);
 
     const result = await cursor.toArray();
@@ -48,15 +48,15 @@ async function getPostCommentsList(postId, skip, limit) {
 async function addNewPostComment(newPostComment) {
     await getPostsCommentsCollection().insertOne({
         ...newPostComment,
-        post_id: new ObjectId(newPostComment.postId),
-        user_id: new ObjectId(newPostComment.userId),
+        postId: new ObjectId(newPostComment.postId),
+        userId: new ObjectId(newPostComment.userId),
     });
 }
 
 async function findAndDeletePostComment(postId, userId) {
     const result = await getPostsCommentsCollection().deleteOne({
-        post_id: new ObjectId(postId),
-        user_id: new ObjectId(userId),
+        postId: new ObjectId(postId),
+        userId: new ObjectId(userId),
     });
 
     if (result.deletedCount !== 1) return null;
@@ -64,7 +64,7 @@ async function findAndDeletePostComment(postId, userId) {
 }
 
 module.exports = {
-    getUserLikedPosts,
+    getUserCommentsList,
     getPostCommentsList,
     addNewPostComment,
     findAndDeletePostComment,
