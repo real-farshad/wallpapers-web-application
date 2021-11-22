@@ -18,7 +18,7 @@ async function getSavedPostsList(req, res, next, database) {
     }
 
     const { page, limit } = query;
-    const skip = (page - 1) * 10;
+    const skip = (page - 1) * limit;
 
     try {
         // find and return user liked posts
@@ -71,11 +71,20 @@ async function createNewPostSave(req, res, next, database) {
     const isValidId = validateId(newPostSave.postId);
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
-    // add user id to post save
+    // set extra fields for new post save
     newPostSave.userId = req.user._id;
+    newPostSave.createdAt = Date.now();
 
     try {
-        // check if post has already been liked
+        // make sure there is a post with this id in the database
+        const post = await database.findPostById(newPostSave.postId);
+        if (!post) {
+            return res.status(404).json({
+                error: "no post with this id was found!",
+            });
+        }
+
+        // check if post has already been saved
         const previousPostSave = await database.findOnePostSave(
             newPostSave.postId,
             newPostSave.userId
@@ -117,7 +126,7 @@ async function deletePostSave(req, res, next, database) {
         }
 
         // return success
-        return res.json({ postSaveDeleted: true });
+        return res.json({ saveDeleted: true });
     } catch (err) {
         next(err);
     }

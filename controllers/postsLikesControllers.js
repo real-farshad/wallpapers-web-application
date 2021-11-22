@@ -18,7 +18,7 @@ async function getLikedPostsList(req, res, next, database) {
     }
 
     const { page, limit } = query;
-    const skip = (page - 1) * 20;
+    const skip = (page - 1) * limit;
 
     try {
         // find and return user liked posts
@@ -71,10 +71,19 @@ async function createNewPostLike(req, res, next, database) {
     const isValidId = validateId(newPostLike.postId);
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
-    // add user id to post like
+    // set extra fields for post like
     newPostLike.userId = req.user._id;
+    newPostLike.createdAt = Date.now();
 
     try {
+        // make sure there is a post with this id in the database
+        const post = await database.findPostById(newPostLike.postId);
+        if (!post) {
+            return res.status(404).json({
+                error: "no post with this id was found!",
+            });
+        }
+
         // check if post has already been liked
         const previousPostLike = await database.findOnePostLike(
             newPostLike.postId,
@@ -123,7 +132,7 @@ async function deletePostLike(req, res, next, database) {
         await database.decrementPostLikeCount(postId);
 
         // return success
-        return res.json({ postLikeDeleted: true });
+        return res.json({ likeDeleted: true });
     } catch (err) {
         next(err);
     }

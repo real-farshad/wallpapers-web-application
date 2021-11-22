@@ -21,7 +21,7 @@ async function getUserPostsComments(req, res, next, database) {
     }
 
     const { page, limit } = query;
-    const skip = (page - 1) * 20;
+    const skip = (page - 1) * limit;
 
     try {
         // find and return user comments
@@ -98,11 +98,19 @@ async function createNewPostComment(req, res, next, database) {
     const isValidId = validateId(newPostComment.postId);
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
-    // add comment's extra properties
+    // set extra fields for new post comment
     newPostComment.userId = req.user._id;
-    newPostComment.publishDate = Date.now();
+    newPostComment.createdAt = Date.now();
 
     try {
+        // make sure there is a post with this id in the database
+        const post = await database.findPostById(newPostComment.postId);
+        if (!post) {
+            return res.status(404).json({
+                error: "no post with this id was found!",
+            });
+        }
+
         // add new comment to database
         await database.addNewPostComment(newPostComment);
 
@@ -110,7 +118,7 @@ async function createNewPostComment(req, res, next, database) {
         await database.incrementPostCommentCount();
 
         // return success
-        return res.json({ postCommendAdded: true });
+        return res.json({ newCommentAdded: true });
     } catch (err) {
         next(err);
     }
@@ -139,7 +147,7 @@ async function deletePostComment(req, res, next, database) {
         await database.decrementPostCommentCount(postId);
 
         // return success
-        return res.json({ postLikeDeleted: true });
+        return res.json({ commentDeleted: true });
     } catch (err) {
         next(err);
     }

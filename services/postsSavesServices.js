@@ -14,7 +14,7 @@ async function getUserSaveddPosts(userId, skip, limit) {
                 as: "post",
             },
         },
-        { $sort: { "post.publishDate": -1 } },
+        { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit },
         { $project: { _id: 0, post: 1 } },

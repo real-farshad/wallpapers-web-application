@@ -14,7 +14,7 @@ async function getUserLikedPosts(userId, skip, limit) {
                 as: "post",
             },
         },
-        { $sort: { "post.publishDate": -1 } },
+        { $sort: { "post.createdAt": -1 } },
         { $skip: skip },
         { $limit: limit },
         { $project: { _id: 0, post: 1 } },

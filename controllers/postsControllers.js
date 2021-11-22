@@ -38,13 +38,13 @@ async function getPostsList(req, res, next, database) {
     }
 
     // translate sort order to it's related post document field
-    let sort = query.sort === "new" ? "publish_date" : "like_count";
+    let sort = query.sort === "new" ? "createdAt" : "likeCount";
 
     // reverse sort order to show newest and most popular first
     sort = { [sort]: -1 };
 
     const { search, categoryId, page, limit } = query;
-    const skip = (page - 1) * 20;
+    const skip = (page - 1) * limit;
 
     try {
         // search for related documents in database
@@ -119,7 +119,7 @@ async function createNewPost(req, res, next, database) {
     // add extra properties
     newPost.likeCount = 0;
     newPost.commentCount = 0;
-    newPost.publishDate = Date.now();
+    newPost.createdAt = Date.now();
     newPost.publisherId = req.user._id;
 
     try {
@@ -196,7 +196,7 @@ async function deletePost(req, res, next, database) {
     // delete related saves
 
     try {
-        // find and delete the post
+        // find and delete post
         const result = await database.findAndDeletePostById(postId);
 
         if (!result) {
