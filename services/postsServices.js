@@ -49,6 +49,7 @@ async function findPostById(id) {
 async function addNewPost(newPost) {
     await getPostsCollection().insertOne({
         ...newPost,
+        publisherId: new ObjectId(newPost.categoryId),
         categoryId: new ObjectId(newPost.categoryId),
     });
 }
@@ -74,28 +75,28 @@ async function findAndDeletePostById(id) {
     return result;
 }
 
-async function incrementPostLikeCount(postId) {
+async function incrementLikeCount(postId) {
     await getPostsCollection().updateOne(
         { _id: new ObjectId(postId) },
         { $inc: { likeCount: 1 } }
     );
 }
 
-async function decrementPostLikeCount(postId) {
+async function decrementLikeCount(postId) {
     await getPostsCollection().updateOne(
         { _id: new ObjectId(postId) },
         { $inc: { likeCount: -1 } }
     );
 }
 
-async function incrementPostCommentCount(postId) {
+async function incrementCommentCount(postId) {
     await getPostsCollection().updateOne(
         { _id: new ObjectId(postId) },
         { $inc: { commentCount: 1 } }
     );
 }
 
-async function decrementPostCommentCount(postId) {
+async function decrementCommentCount(postId) {
     await getPostsCollection().updateOne(
         { _id: new ObjectId(postId) },
         { $inc: { commentCount: -1 } }
@@ -108,8 +109,8 @@ module.exports = {
     addNewPost,
     findAndUpdatePostById,
     findAndDeletePostById,
-    incrementPostLikeCount,
-    decrementPostLikeCount,
-    incrementPostCommentCount,
-    decrementPostCommentCount,
+    incrementLikeCount,
+    decrementLikeCount,
+    incrementCommentCount,
+    decrementCommentCount,
 };

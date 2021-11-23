@@ -1,18 +1,22 @@
 const express = require("express");
-const postsRoutes = require("./postsRoutes");
-const categoriesRoutes = require("./categoriesRoutes");
-const postsLikesRoutes = require("./postsLikesRoutes");
-const postsCommentsRoutes = require("./postsCommentsRoutes");
-const usersRoutes = require("./usersRoutes");
 const authRoutes = require("./authRoutes");
+const usersRoutes = require("./usersRoutes");
+const categoriesRoutes = require("./categoriesRoutes");
+const postsRoutes = require("./postsRoutes");
+const likesRoutes = require("./likesRoutes");
+const commentsRoutes = require("./commentsRoutes");
+const savesRoutes = require("./savesRoutes.js");
+const collectionRoutes = require("./collectionsRoutes");
 
 const router = express.Router();
 
-router.use("/posts", postsRoutes);
-router.use("/categories", categoriesRoutes);
-router.use("/posts-likes", postsLikesRoutes);
-router.use("/posts-comments", postsCommentsRoutes);
-router.use("/users", usersRoutes);
 router.use("/auth", authRoutes);
+router.use("/users", usersRoutes);
+router.use("/categories", categoriesRoutes);
+router.use("/posts", postsRoutes);
+router.use("/likes", likesRoutes);
+router.use("/posts-comments", commentsRoutes);
+router.user("/saves", savesRoutes);
+router.user("/collections", collectionRoutes);
 
 module.exports = router;

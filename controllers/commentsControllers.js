@@ -1,21 +1,17 @@
 const validateId = require("../utils/validateId");
-const {
-    postCommentSchema,
-    postCommentsQuerySchema,
-} = require("../schemas/postsCommentsSchemas");
+const { commentSchema, commentsQuerySchema } = require("../schemas/commentsSchemas");
 
 // GET /
-async function getUserPostsComments(req, res, next, database) {
+async function getUserComments(req, res, next, database) {
+    const userId = req.user._id;
     let query = {
         page: req.query.page || 1,
         limit: req.query.limit || 10,
     };
 
-    const userId = req.user._id;
-
     // validate query
     try {
-        query = await postCommentsQuerySchema.validateAsync(query);
+        query = await commentsQuerySchema.validateAsync(query);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
@@ -25,8 +21,8 @@ async function getUserPostsComments(req, res, next, database) {
 
     try {
         // find and return user comments
-        const userLikedPosts = await database.getUserCommentsList(userId, skip, limit);
-        return res.json(userLikedPosts);
+        const userComments = await database.getUserCommentsList(userId, skip, limit);
+        return res.json(userComments);
     } catch (err) {
         next(err);
     }
@@ -34,12 +30,11 @@ async function getUserPostsComments(req, res, next, database) {
 
 // GET /:id
 async function getPostComments(req, res, next, database) {
+    const postId = req.params.id;
     let query = {
         page: req.query.page || 1,
         limit: req.query.limit || 10,
     };
-
-    const postId = req.params.id;
 
     // validate post's id
     const isValidId = validateId(postId);
@@ -47,7 +42,7 @@ async function getPostComments(req, res, next, database) {
 
     // validate query
     try {
-        query = await postCommentsQuerySchema.validateAsync(query);
+        query = await commentsQuerySchema.validateAsync(query);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
@@ -56,27 +51,27 @@ async function getPostComments(req, res, next, database) {
     const skip = (page - 1) * 10;
 
     try {
-        // find related posts
-        const postComments = await database.getPostCommentsList(postId, skip, limit);
+        // find related comments
+        const comments = await database.getCommentsList(postId, skip, limit);
 
-        let formattedPostComments = postComments.map((postComment) => {
-            if (postComment.user[0].googleId) {
+        let formattedComments = comments.map((comment) => {
+            if (comment.user[0].googleId) {
                 return {
-                    ...postComment,
+                    ...comment,
                     user: {
-                        username: postComment.user[0]._json.name,
-                        avatar: postComment.user[0]._json.picture,
+                        username: comment.user[0]._json.name,
+                        avatar: comment.user[0]._json.picture,
                     },
                 };
             }
 
             return {
-                ...postComment,
-                user: { username: postComment.user[0].username },
+                ...comment,
+                user: { username: comment.user[0].username },
             };
         });
 
-        return res.json(formattedPostComments);
+        return res.json(formattedComments);
     } catch (err) {
         next(err);
     }
@@ -84,27 +79,28 @@ async function getPostComments(req, res, next, database) {
 
 // POST /
 // req.body => description, postId
-async function createNewPostComment(req, res, next, database) {
-    let newPostComment = req.body;
+async function createNewComment(req, res, next, database) {
+    let newComment = req.body;
 
     // validate request's body
     try {
-        newPostComment = await postCommentSchema.validateAsync(newPostComment);
+        newComment = await commentSchema.validateAsync(newComment);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
     // validate post's id
-    const isValidId = validateId(newPostComment.postId);
+    const isValidId = validateId(newComment.postId);
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
-    // set extra fields for new post comment
-    newPostComment.userId = req.user._id;
-    newPostComment.createdAt = Date.now();
+    // set extra fields for new comment
+    newComment.userId = req.user._id;
+    newComment.createdAt = Date.now();
 
     try {
         // make sure there is a post with this id in the database
-        const post = await database.findPostById(newPostComment.postId);
+        const post = await database.findPostById(newComment.postId);
+
         if (!post) {
             return res.status(404).json({
                 error: "no post with this id was found!",
@@ -112,10 +108,10 @@ async function createNewPostComment(req, res, next, database) {
         }
 
         // add new comment to database
-        await database.addNewPostComment(newPostComment);
+        await database.addNewComment(newComment);
 
-        // increment post's comment_count by 1
-        await database.incrementPostCommentCount();
+        // increment post commentCount by 1
+        await database.incrementCommentCount();
 
         // return success
         return res.json({ newCommentAdded: true });
@@ -125,26 +121,26 @@ async function createNewPostComment(req, res, next, database) {
 }
 
 // DELETE /:id
-async function deletePostComment(req, res, next, database) {
+async function deleteComment(req, res, next, database) {
     const postId = req.params.id;
     const userId = req.user._id;
 
-    // validate post comment's id
-    const isValidId = validateId(postCommentId);
+    // validate comment id
+    const isValidId = validateId(postId);
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
     try {
-        // find and delete post comment
-        const result = await database.findAndDeletePostComment(postId, userId);
+        // find and delete comment
+        const result = await database.findAndDeleteComment(postId, userId);
 
         if (!result) {
             return res.status(404).json({
-                error: "no post comment with this id, for this user, was found!",
+                error: "no comment with this id, for this user, was found!",
             });
         }
 
-        // decrement post's comment count
-        await database.decrementPostCommentCount(postId);
+        // decrement post commentCount
+        await database.decrementCommentCount(postId);
 
         // return success
         return res.json({ commentDeleted: true });
@@ -154,8 +150,8 @@ async function deletePostComment(req, res, next, database) {
 }
 
 module.exports = {
-    getUserPostsComments,
+    getUserComments,
     getPostComments,
-    createNewPostComment,
-    deletePostComment,
+    createNewComment,
+    deleteComment,
 };

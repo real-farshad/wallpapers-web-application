@@ -1,17 +1,19 @@
 const usersServices = require("./usersServices");
-const postsServices = require("./postsServices");
 const categoriesServices = require("./categoriesServices");
-const postsLikesServices = require("./postsLikesServices");
-const postsCommentsServices = require("./postsCommentsServices");
-const postsSavesServices = require("./postsSavesServices");
+const postsServices = require("./postsServices");
+const likesServices = require("./likesServices");
+const commentsServices = require("./commentsServices");
+const savesServices = require("./savesServices");
+const collectionsServices = require("./collectionsServices");
 
 const database = {
     ...usersServices,
-    ...postsServices,
     ...categoriesServices,
-    ...postsLikesServices,
-    ...postsCommentsServices,
-    ...postsSavesServices,
+    ...postsServices,
+    ...likesServices,
+    ...commentsServices,
+    ...savesServices,
+    ...collectionsServices,
 };
 
 module.exports = database;

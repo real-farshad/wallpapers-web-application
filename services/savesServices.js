@@ -1,10 +1,10 @@
 const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../configs/mongodb");
 
-const getPostsLikesCollection = () => getDatabase().collection("posts-likes");
+const getSavesCollection = () => getDatabase().collection("saves");
 
-async function getUserLikedPosts(userId, skip, limit) {
-    const cursor = await getPostsLikesCollection().aggregate([
+async function getUserSavedPosts(userId, skip, limit) {
+    const cursor = await getSavesCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
         {
             $lookup: {
@@ -14,7 +14,7 @@ async function getUserLikedPosts(userId, skip, limit) {
                 as: "post",
             },
         },
-        { $sort: { "post.createdAt": -1 } },
+        { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit },
         { $project: { _id: 0, post: 1 } },
@@ -24,8 +24,8 @@ async function getUserLikedPosts(userId, skip, limit) {
     return result;
 }
 
-async function findOnePostLike(postId, userId) {
-    const result = await getPostsLikesCollection().findOne({
+async function findOneSave(postId, userId) {
+    const result = await getSavesCollection().findOne({
         postId: new ObjectId(postId),
         userId: new ObjectId(userId),
     });
@@ -33,16 +33,16 @@ async function findOnePostLike(postId, userId) {
     return result;
 }
 
-async function addNewPostLike(newPostLike) {
-    await getPostsLikesCollection().insertOne({
-        ...newPostLike,
-        postId: new ObjectId(newPostLike.postId),
-        userId: new ObjectId(newPostLike.userId),
+async function addNewSave(newSave) {
+    await getSavesCollection().insertOne({
+        ...newSave,
+        postId: new ObjectId(newSave.postId),
+        userId: new ObjectId(newSave.userId),
     });
 }
 
-async function findAndDeletePostLike(postId, userId) {
-    const result = await getPostsLikesCollection().deleteOne({
+async function findAndDeleteSave(postId, userId) {
+    const result = await getSavesCollection().deleteOne({
         postId: new ObjectId(postId),
         userId: new ObjectId(userId),
     });
@@ -52,8 +52,8 @@ async function findAndDeletePostLike(postId, userId) {
 }
 
 module.exports = {
-    getUserLikedPosts,
-    findOnePostLike,
-    addNewPostLike,
-    findAndDeletePostLike,
+    getUserSavedPosts,
+    findOneSave,
+    addNewSave,
+    findAndDeleteSave,
 };

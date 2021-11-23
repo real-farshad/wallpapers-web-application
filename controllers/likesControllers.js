@@ -1,18 +1,18 @@
 const validateId = require("../utils/validateId");
-const { postSaveSchema, savedPostsQuerySchema } = require("../schemas/postsSavesSchemas");
+const { likeSchema, likesQuerySchema } = require("../schemas/likesSchemas");
 
 // GET /
-async function getSavedPostsList(req, res, next, database) {
+async function getUserLikes(req, res, next, database) {
     let query = {
         page: req.query.page || 1,
-        limit: req.query.limit || 10,
+        limit: req.query.limit || 20,
     };
 
     const userId = req.user._id;
 
     // validate query
     try {
-        query = await savedPostsQuerySchema.validateAsync(query);
+        query = await likesQuerySchema.validateAsync(query);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
@@ -22,7 +22,7 @@ async function getSavedPostsList(req, res, next, database) {
 
     try {
         // find and return user liked posts
-        const userLikedPosts = await database.getUserSavedPosts(userId, skip, limit);
+        const userLikedPosts = await database.getUserLikes(userId, skip, limit);
         return res.json(userLikedPosts);
     } catch (err) {
         next(err);
@@ -30,7 +30,7 @@ async function getSavedPostsList(req, res, next, database) {
 }
 
 // GET /:id
-async function getPostSave(req, res, next, database) {
+async function checkLike(req, res, next, database) {
     const postId = req.params.id;
     const userId = req.user._id;
 
@@ -39,17 +39,17 @@ async function getPostSave(req, res, next, database) {
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
     try {
-        // find post save with these post and user ids
-        const result = await database.findOnePostSave(postId, userId);
+        // find a like with these post and user ids
+        const result = await database.findOnePostLike(postId, userId);
 
         if (!result) {
             return res.json({
-                isSaved: false,
+                isLiked: false,
             });
         }
 
-        // return result to see if the post has been saved
-        return res.json({ isSaved: true });
+        // return result to see if the post has been liked
+        return res.json({ isLiked: true });
     } catch (err) {
         next(err);
     }
@@ -57,57 +57,61 @@ async function getPostSave(req, res, next, database) {
 
 // POST /
 // req.body => postId
-async function createNewPostSave(req, res, next, database) {
-    let newPostSave = req.body;
+async function createNewLike(req, res, next, database) {
+    let newLike = req.body;
 
     // validate request body
     try {
-        newPostSave = await postSaveSchema.validateAsync(newPostSave);
+        newLike = await likeSchema.validateAsync(newLike);
     } catch (err) {
         return res.status(403).json({ error: err.message });
     }
 
     // validate post id
-    const isValidId = validateId(newPostSave.postId);
+    const isValidId = validateId(newLike.postId);
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
-    // set extra fields for new post save
-    newPostSave.userId = req.user._id;
-    newPostSave.createdAt = Date.now();
+    // set extra fields for like
+    newLike.userId = req.user._id;
+    newLike.createdAt = Date.now();
 
     try {
         // make sure there is a post with this id in the database
-        const post = await database.findPostById(newPostSave.postId);
+        const post = await database.findPostById(newLike.postId);
+
         if (!post) {
             return res.status(404).json({
                 error: "no post with this id was found!",
             });
         }
 
-        // check if post has already been saved
-        const previousPostSave = await database.findOnePostSave(
-            newPostSave.postId,
-            newPostSave.userId
+        // check if post has already been liked
+        const previousPostLike = await database.findOnePostLike(
+            newLike.postId,
+            newLike.userId
         );
 
-        if (previousPostSave) {
+        if (previousPostLike) {
             return res.status(403).json({
-                error: "post has already been saved!",
+                error: "post has already been liked!",
             });
         }
 
-        // add like to post likes collection
-        await database.addNewPostSave(newPostSave);
+        // add like to likes collection
+        await database.addNewLike(newLike);
+
+        // increment post likeCount
+        await database.incrementLikeCount(newLike.postId);
 
         // return success
-        return res.json({ postSaved: true });
+        return res.json({ postLiked: true });
     } catch (err) {
         next(err);
     }
 }
 
 // DELETE /:id
-async function deletePostSave(req, res, next, database) {
+async function deleteLike(req, res, next, database) {
     const postId = req.params.id;
     const userId = req.user._id;
 
@@ -116,25 +120,28 @@ async function deletePostSave(req, res, next, database) {
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
     try {
-        // find and delete post save from post saves collection
-        const result = await database.findAndDeletePostSave(postId, userId);
+        // find and delete like from likes collection
+        const result = await database.findAndDeleteLike(postId, userId);
 
         if (!result) {
             return res.status(404).json({
-                error: "no post save with this id, for this user, was found!",
+                error: "no like with this id, for this user, was found!",
             });
         }
 
+        // decrement post likeCount
+        await database.decrementLikeCount(postId);
+
         // return success
-        return res.json({ saveDeleted: true });
+        return res.json({ likeDeleted: true });
     } catch (err) {
         next(err);
     }
 }
 
 module.exports = {
-    getSavedPostsList,
-    getPostSave,
-    createNewPostSave,
-    deletePostSave,
+    getUserLikes,
+    checkLike,
+    createNewLike,
+    deleteLike,
 };

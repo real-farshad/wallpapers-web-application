@@ -1,10 +1,10 @@
 const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../configs/mongodb");
 
-const getPostsCommentsCollection = () => getDatabase().collection("posts-comments");
+const getCommentsCollection = () => getDatabase().collection("comments");
 
 async function getUserCommentsList(userId, skip, limit) {
-    const cursor = await getPostsLikesCollection().aggregate([
+    const cursor = await getCommentsCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
         {
             $lookup: {
@@ -24,8 +24,8 @@ async function getUserCommentsList(userId, skip, limit) {
     return result;
 }
 
-async function getPostCommentsList(postId, skip, limit) {
-    const cursor = await getPostsCommentsCollection().aggregate([
+async function getCommentsList(postId, skip, limit) {
+    const cursor = await getCommentsCollection().aggregate([
         { $match: { postId: new ObjectId(postId) } },
         {
             $lookup: {
@@ -45,16 +45,16 @@ async function getPostCommentsList(postId, skip, limit) {
     return result;
 }
 
-async function addNewPostComment(newPostComment) {
-    await getPostsCommentsCollection().insertOne({
-        ...newPostComment,
-        postId: new ObjectId(newPostComment.postId),
-        userId: new ObjectId(newPostComment.userId),
+async function addNewComment(newComment) {
+    await getCommentsCollection().insertOne({
+        ...newComment,
+        postId: new ObjectId(newComment.postId),
+        userId: new ObjectId(newComment.userId),
     });
 }
 
-async function findAndDeletePostComment(postId, userId) {
-    const result = await getPostsCommentsCollection().deleteOne({
+async function findAndDeleteComment(postId, userId) {
+    const result = await getCommentsCollection().deleteOne({
         postId: new ObjectId(postId),
         userId: new ObjectId(userId),
     });
@@ -65,7 +65,7 @@ async function findAndDeletePostComment(postId, userId) {
 
 module.exports = {
     getUserCommentsList,
-    getPostCommentsList,
-    addNewPostComment,
-    findAndDeletePostComment,
+    getCommentsList,
+    addNewComment,
+    findAndDeleteComment,
 };
