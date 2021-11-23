@@ -50,9 +50,18 @@ async function findAndDeleteCollection(collectionId, userId) {
     return result;
 }
 
+async function findCollectionById(id) {
+    const result = await getCollectionsCollection().findOne({
+        _id: new ObjectId(id),
+    });
+
+    return result;
+}
+
 module.exports = {
     findCollections,
     findUserCollections,
     addNewCollection,
     findAndDeleteCollection,
+    findCollectionById,
 };
