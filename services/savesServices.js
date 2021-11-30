@@ -51,9 +51,16 @@ async function findAndDeleteSave(postId, userId) {
     return result;
 }
 
+async function deleteManySavesByPostId(postId) {
+    await getSavesCollection().deleteMany({
+        postId: new ObjectId(postId),
+    });
+}
+
 module.exports = {
     getUserSavedPosts,
     findOneSave,
     addNewSave,
     findAndDeleteSave,
+    deleteManySavesByPostId,
 };

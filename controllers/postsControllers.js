@@ -7,6 +7,7 @@ async function getPostsList(req, res, next, database) {
     let query = {
         search: req.query.search || "",
         category: req.query.category || "",
+        period: req.query.period || "",
         sort: req.query.sort || "new",
         page: req.query.page || 1,
         limit: req.query.limit || 20,
@@ -37,13 +38,25 @@ async function getPostsList(req, res, next, database) {
         }
     }
 
+    // calculate period in milliseconds if it's not empty
+    if (query.period === "weekly") {
+        const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+        query.period = Date.now() - weekInMilliseconds;
+    } else if (query.period === "monthly") {
+        const monthInMilliseconds = 30 * 7 * 24 * 60 * 60 * 1000;
+        query.period = Date.now() - monthInMilliseconds;
+    } else if (query.period === "yearly") {
+        const yearInMilliseconds = 365 * 30 * 7 * 24 * 60 * 60 * 1000;
+        query.period = Date.now() - yearInMilliseconds;
+    }
+
     // translate sort order to it's related post document field
     let sort = query.sort === "new" ? "createdAt" : "likeCount";
 
     // reverse sort order to show newest and most popular first
     sort = { [sort]: -1 };
 
-    const { search, categoryId, page, limit } = query;
+    const { search, categoryId, period, page, limit } = query;
     const skip = (page - 1) * limit;
 
     try {
@@ -52,6 +65,7 @@ async function getPostsList(req, res, next, database) {
             search,
             categoryId,
             sort,
+            period,
             skip,
             limit
         );
@@ -192,8 +206,16 @@ async function deletePost(req, res, next, database) {
     if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
 
     // delete related likes
+    await database.deleteManyLikesByPostId(postId);
+
     // delete related comments
+    await database.deleteManyCommentsByPostId(postId);
+
     // delete related saves
+    await database.deleteManySavesByPostId(postId);
+
+    // delete related collection posts
+    await database.deleteManycollectionPostsByPostId(postId);
 
     try {
         // find and delete post

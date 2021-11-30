@@ -3,10 +3,11 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getPostsCollection = () => getDatabase().collection("posts");
 
-async function searchPostsList(search, categoryId, sort, skip, limit) {
+async function searchPostsList(search, categoryId, sort, period, skip, limit) {
     const query = {};
     if (search !== "") query.$text = { $search: search };
     if (categoryId !== "") query.categoryId = new ObjectId(categoryId);
+    if (period !== "") query.createdAt = { $gt: period };
 
     const cursor = await getPostsCollection().aggregate([
         { $match: query },

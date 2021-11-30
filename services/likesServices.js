@@ -51,9 +51,16 @@ async function findAndDeleteLike(postId, userId) {
     return result;
 }
 
+async function deleteManyLikesByPostId(postId) {
+    await getLikesCollection().deleteMany({
+        postId: new ObjectId(postId),
+    });
+}
+
 module.exports = {
     getUserLikes,
     findOnePostLike,
     addNewLike,
     findAndDeleteLike,
+    deleteManyLikesByPostId,
 };

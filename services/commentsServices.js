@@ -63,9 +63,16 @@ async function findAndDeleteComment(postId, userId) {
     return result;
 }
 
+async function deleteManyCommentsByPostId(postId) {
+    await getCommentsCollection().deleteMany({
+        postId: new ObjectId(postId),
+    });
+}
+
 module.exports = {
     getUserCommentsList,
     getCommentsList,
     addNewComment,
     findAndDeleteComment,
+    deleteManyCommentsByPostId,
 };

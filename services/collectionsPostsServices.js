@@ -48,9 +48,16 @@ async function deleteCollectionPostById(id) {
     return result;
 }
 
+async function deleteManycollectionPostsByPostId(postId) {
+    await getCollectionsPostsCollection().deleteMany({
+        postId: new ObjectId(postId),
+    });
+}
+
 module.exports = {
     findCollectionPosts,
     addNewCollectionPost,
     findCollectionPostByid,
     deleteCollectionPostById,
+    deleteManycollectionPostsByPostId,
 };
