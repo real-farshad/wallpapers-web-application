@@ -6,18 +6,24 @@ const mockUsers = require("./mockUsers");
 const mockCategories = require("./mockCategories");
 const mockPosts = require("./mockPosts");
 const mockComments = require("./mockComments");
+const mockCollections = require("./mockCollections");
+const mockCollectionsPosts = require("./mockCollectionsPosts");
 
 let client;
 let database;
 
 async function populate() {
     try {
+        //
+        //
         // connect to database
         await connectToDb();
 
         // delete previous data from database
         await clearCollections();
 
+        //
+        //
         // hash user passwords
         const users = await processUsers(mockUsers);
 
@@ -25,10 +31,14 @@ async function populate() {
         await addManyUsersToDatabase(users);
         console.log("inserting users: DONE");
 
+        //
+        //
         // add categories to database
         await addManyCategoriesToDatabase(mockCategories);
         console.log("inserting categories: DONE");
 
+        //
+        //
         // add categoryId and publisherId and delete category and publisher
         const posts = await processPosts(mockPosts);
 
@@ -36,6 +46,8 @@ async function populate() {
         await addManyPostsToDatabase(posts);
         console.log("inserting posts: DONE");
 
+        //
+        //
         // add PostId and UserId and delete post and user
         const comments = await processComments(mockComments);
 
@@ -43,6 +55,26 @@ async function populate() {
         await addManyCommentsToDatabase(comments);
         console.log("inserting comments: DONE");
 
+        //
+        //
+        // add userId and remove user
+        const collections = await processCollections(mockCollections);
+
+        // add collections to database
+        await addManyCollectionsToDatabase(collections);
+        console.log("inserting collections: DONE");
+
+        //
+        //
+        // add collectionId and postId and remove collection and post
+        const collectionsPosts = await processCollectionsPosts(mockCollectionsPosts);
+
+        // add collections posts to database
+        await addManyCollectionsPostsToDatabase(collectionsPosts);
+        console.log("inserting collections posts: DONE");
+
+        //
+        //
         // disconnect from database
         await disconnectFromDB();
 
@@ -90,7 +122,7 @@ async function clearCollections() {
 async function processUsers(users) {
     const usersList = [...users];
 
-    for (let user of users) {
+    for (let user of usersList) {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(user.password, salt);
         user.password = hashedPassword;
@@ -123,13 +155,13 @@ async function processPosts(posts) {
 
 async function findCategoryId(title) {
     const category = await database.collection("categories").findOne({ title });
-    if (!category) throw new Error("category with this title was not found");
+    if (!category) throw new Error(`category with title: "${title}" was not found`);
     return category._id;
 }
 
 async function findUserId(username) {
     const user = await database.collection("users").findOne({ username });
-    if (!user) throw new Error("user with this username was not found!");
+    if (!user) throw new Error(`user with username: "${username}" was not found!`);
     return user._id;
 }
 
@@ -153,10 +185,49 @@ async function processComments(comments) {
 
 async function findPostId(title) {
     const post = await database.collection("posts").findOne({ title });
-    if (!post) throw new Error("post with this title was not found!");
+    if (!post) throw new Error(`post with title: "${title}" was not found!`);
     return post._id;
 }
 
 async function addManyCommentsToDatabase(comments) {
     await database.collection("comments").insertMany(comments);
+}
+
+async function processCollections(collections) {
+    const collectionsList = [...collections];
+
+    for (let collection of collectionsList) {
+        collection.userId = await findUserId(collection.user);
+        delete collection.user;
+    }
+
+    return collectionsList;
+}
+
+async function addManyCollectionsToDatabase(collections) {
+    await database.collection("collections").insertMany(collections);
+}
+
+async function processCollectionsPosts(collectionsPosts) {
+    const collectionsPostsList = [...collectionsPosts];
+
+    for (let collectionPost of collectionsPostsList) {
+        collectionPost.collectionId = await findCollectionId(collectionPost.collection);
+        delete collectionPost.collection;
+
+        collectionPost.postId = await findPostId(collectionPost.post);
+        delete collectionPost.post;
+    }
+
+    return collectionsPostsList;
+}
+
+async function findCollectionId(title) {
+    const collection = await database.collection("collections").findOne({ title });
+    if (!collection) throw new Error(`collection with title: "${title}" was not found!`);
+    return collection._id;
+}
+
+async function addManyCollectionsPostsToDatabase(collectionsPosts) {
+    await database.collection("collections-posts").insertMany(collectionsPosts);
 }
