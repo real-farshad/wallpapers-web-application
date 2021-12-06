@@ -132,7 +132,6 @@ async function createNewPost(req, res, next, database) {
 
     // add extra properties
     newPost.likeCount = 0;
-    newPost.commentCount = 0;
     newPost.createdAt = Date.now();
     newPost.publisherId = req.user._id;
 

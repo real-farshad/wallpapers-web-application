@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const mockUsers = require("./mockUsers");
 const mockCategories = require("./mockCategories");
 const mockPosts = require("./mockPosts");
+const mockComments = require("./mockComments");
 
 let client;
 let database;
@@ -28,12 +29,19 @@ async function populate() {
         await addManyCategoriesToDatabase(mockCategories);
         console.log("inserting categories: DONE");
 
-        // add categoryId and publisherId to posts and delete category and publisher
+        // add categoryId and publisherId and delete category and publisher
         const posts = await processPosts(mockPosts);
 
         // add posts to database
         await addManyPostsToDatabase(posts);
         console.log("inserting posts: DONE");
+
+        // add PostId and UserId and delete post and user
+        const comments = await processComments(mockComments);
+
+        // add comments to database
+        await addManyCommentsToDatabase(comments);
+        console.log("inserting comments: DONE");
 
         // disconnect from database
         await disconnectFromDB();
@@ -115,14 +123,40 @@ async function processPosts(posts) {
 
 async function findCategoryId(title) {
     const category = await database.collection("categories").findOne({ title });
+    if (!category) throw new Error("category with this title was not found");
     return category._id;
 }
 
 async function findUserId(username) {
     const user = await database.collection("users").findOne({ username });
+    if (!user) throw new Error("user with this username was not found!");
     return user._id;
 }
 
 async function addManyPostsToDatabase(posts) {
     await database.collection("posts").insertMany(posts);
+}
+
+async function processComments(comments) {
+    const commentsList = [...comments];
+
+    for (let comment of commentsList) {
+        comment.postId = await findPostId(comment.post);
+        delete comment.post;
+
+        comment.userId = await findUserId(comment.user);
+        delete comment.user;
+    }
+
+    return commentsList;
+}
+
+async function findPostId(title) {
+    const post = await database.collection("posts").findOne({ title });
+    if (!post) throw new Error("post with this title was not found!");
+    return post._id;
+}
+
+async function addManyCommentsToDatabase(comments) {
+    await database.collection("comments").insertMany(comments);
 }

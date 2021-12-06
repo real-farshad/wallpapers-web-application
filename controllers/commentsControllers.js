@@ -110,9 +110,6 @@ async function createNewComment(req, res, next, database) {
         // add new comment to database
         await database.addNewComment(newComment);
 
-        // increment post commentCount by 1
-        await database.incrementCommentCount();
-
         // return success
         return res.json({ newCommentAdded: true });
     } catch (err) {
@@ -138,9 +135,6 @@ async function deleteComment(req, res, next, database) {
                 error: "no comment with this id, for this user, was found!",
             });
         }
-
-        // decrement post commentCount
-        await database.decrementCommentCount(postId);
 
         // return success
         return res.json({ commentDeleted: true });

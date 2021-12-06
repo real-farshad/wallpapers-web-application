@@ -90,20 +90,6 @@ async function decrementLikeCount(postId) {
     );
 }
 
-async function incrementCommentCount(postId) {
-    await getPostsCollection().updateOne(
-        { _id: new ObjectId(postId) },
-        { $inc: { commentCount: 1 } }
-    );
-}
-
-async function decrementCommentCount(postId) {
-    await getPostsCollection().updateOne(
-        { _id: new ObjectId(postId) },
-        { $inc: { commentCount: -1 } }
-    );
-}
-
 module.exports = {
     searchPostsList,
     findPostById,
@@ -112,6 +98,4 @@ module.exports = {
     findAndDeletePostById,
     incrementLikeCount,
     decrementLikeCount,
-    incrementCommentCount,
-    decrementCommentCount,
 };
