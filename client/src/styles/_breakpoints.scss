@@ -1,0 +1,34 @@
+// small screens
+@mixin min-width-sm {
+    @media (min-width: 576px) {
+        @content;
+    }
+}
+
+// medium screens
+@mixin min-width-md {
+    @media (min-width: 768px) {
+        @content;
+    }
+}
+
+// large screens
+@mixin min-width-lg {
+    @media (min-width: 992px) {
+        @content;
+    }
+}
+
+// extra large screens
+@mixin min-width-xl {
+    @media (min-width: 1200px) {
+        @content;
+    }
+}
+
+// extra extra large screens
+@mixin min-width-xxl {
+    @media (min-width: 1400px) {
+        @content;
+    }
+}

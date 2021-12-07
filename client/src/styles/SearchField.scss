@@ -1,0 +1,10 @@
+.search-field__input {
+    font-weight: var(--medium-font-weight);
+    color: var(--white);
+    opacity: var(--primary-opacity);
+
+    &::placeholder {
+        color: var(--white);
+        opacity: var(--light-opacity);
+    }
+}

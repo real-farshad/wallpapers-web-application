@@ -1,0 +1,63 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    font-size: var(--standard-font-size);
+    font-weight: var(--regular-font-weight);
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+}
+
+a {
+    display: inline-block;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    font: inherit;
+    background-color: unset;
+    padding: 0;
+    margin: 0;
+    border: unset;
+    cursor: pointer;
+}
+
+input {
+    font: inherit;
+    background-color: unset;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
