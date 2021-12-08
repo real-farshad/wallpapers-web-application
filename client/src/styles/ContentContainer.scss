@@ -1,3 +1,10 @@
+@import "breakpoints";
+
 .content-container {
     padding: 0 var(--content-space);
+
+    @include min-width-xl {
+        max-width: var(--max-content-width-xl);
+        margin: auto;
+    }
 }

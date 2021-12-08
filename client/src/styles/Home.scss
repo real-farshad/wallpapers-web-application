@@ -1,0 +1,30 @@
+@import "breakpoints";
+
+.home__navbar {
+    margin-bottom: 470px;
+
+    @include min-width-md {
+        margin-bottom: 370px;
+    }
+
+    @include min-width-lg {
+        margin-bottom: 325px;
+    }
+
+    @include min-width-xl {
+        margin-bottom: 100px;
+    }
+}
+
+.homepage__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+
+    @include min-width-xl {
+        position: fixed;
+    }
+}

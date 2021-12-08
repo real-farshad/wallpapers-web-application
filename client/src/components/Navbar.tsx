@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import SearchField from "./SearchField";
 import AuthBtns from "./AuthBtns";
+import NavLink from "./NavLink";
 import "../styles/Navbar.scss";
 
 function Navbar() {
@@ -9,7 +9,7 @@ function Navbar() {
         isOpen: false,
         animateOverlay: false,
         animateCloseMenuBtn: false,
-        animateNavLinks: {
+        animateNavItems: {
             home: false,
             popular: false,
             new: false,
@@ -25,18 +25,18 @@ function Navbar() {
         animate(["animateCloseMenuBtn"], true, 150);
 
         let delay = 150;
-        for (let navLink in menu.animateNavLinks) {
-            animate(["animateNavLinks", navLink], true, delay);
+        for (let navLink in menu.animateNavItems) {
+            animate(["animateNavItems", navLink], true, delay);
             delay += 50;
         }
     }
 
     function closeMenu() {
-        if (!menu.animateNavLinks.home) return;
+        if (!menu.animateNavItems.home) return;
 
         let delay = 0;
-        for (let navLink of Object.keys(menu.animateNavLinks).reverse()) {
-            animate(["animateNavLinks", navLink], false, delay);
+        for (let navLink of Object.keys(menu.animateNavItems).reverse()) {
+            animate(["animateNavItems", navLink], false, delay);
             delay += 50;
         }
 
@@ -48,11 +48,11 @@ function Navbar() {
     function animate(target: string[], value: boolean, delay: number): void {
         setTimeout(() => {
             // update state without mutating it
-            if (target[0] === "animateNavLinks") {
+            if (target[0] === "animateNavItems") {
                 setMenu((prevState) => ({
                     ...prevState,
-                    animateNavLinks: {
-                        ...prevState.animateNavLinks,
+                    animateNavItems: {
+                        ...prevState.animateNavItems,
                         [target[1]]: value,
                     },
                 }));
@@ -99,8 +99,8 @@ function Navbar() {
                 }`}
             >
                 <li
-                    className={`navbar__nav-link navbar__nav-link--search-field${
-                        menu.animateNavLinks.home ? " navbar__nav-link--animate-in" : ""
+                    className={`navbar__nav-item navbar__nav-item--search-field${
+                        menu.animateNavItems.home ? " navbar__nav-item--animate-in" : ""
                     }`}
                 >
                     <div className="navbar__search-field">
@@ -109,39 +109,39 @@ function Navbar() {
                 </li>
 
                 <li
-                    className={`navbar__nav-link${
-                        menu.animateNavLinks.home ? " navbar__nav-link--animate-in" : ""
+                    className={`navbar__nav-item${
+                        menu.animateNavItems.home ? " navbar__nav-item--animate-in" : ""
                     }`}
                 >
-                    <Link to="/">HOME</Link>
+                    <NavLink to="/">HOME</NavLink>
                 </li>
 
                 <li
-                    className={`navbar__nav-link${
-                        menu.animateNavLinks.popular
-                            ? " navbar__nav-link--animate-in"
+                    className={`navbar__nav-item${
+                        menu.animateNavItems.popular
+                            ? " navbar__nav-item--animate-in"
                             : ""
                     }`}
                 >
-                    <Link to="/">POPULAR</Link>
+                    <NavLink to="/popular">POPULAR</NavLink>
                 </li>
 
                 <li
-                    className={`navbar__nav-link${
-                        menu.animateNavLinks.new ? " navbar__nav-link--animate-in" : ""
+                    className={`navbar__nav-item${
+                        menu.animateNavItems.new ? " navbar__nav-item--animate-in" : ""
                     }`}
                 >
-                    <Link to="/">NEW</Link>
+                    <NavLink to="/new">NEW</NavLink>
                 </li>
 
                 <li
-                    className={`navbar__nav-link${
-                        menu.animateNavLinks.collections
-                            ? " navbar__nav-link--animate-in"
+                    className={`navbar__nav-item${
+                        menu.animateNavItems.collections
+                            ? " navbar__nav-item--animate-in"
                             : ""
                     }`}
                 >
-                    <Link to="/">COLLECTIONS</Link>
+                    <NavLink to="/collections">COLLECTIONS</NavLink>
                 </li>
             </ul>
 

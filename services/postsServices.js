@@ -19,14 +19,28 @@ async function searchPostsList(search, categoryId, sort, period, skip, limit) {
                 as: "category",
             },
         },
+        {
+            $lookup: {
+                from: "users",
+                localField: "publisherId",
+                foreignField: "_id",
+                as: "publisher",
+            },
+        },
         { $sort: sort },
         { $skip: skip },
         { $limit: limit },
-        { $project: { categoryId: 0 } },
+        {
+            $project: {
+                categoryId: 0,
+                publisherId: 0,
+            },
+        },
     ]);
 
-    const result = await cursor.toArray();
-    return result;
+    const posts = await cursor.toArray();
+    for (let post of posts) post.publisher = post.publisher[0];
+    return posts;
 }
 
 async function findPostById(id) {

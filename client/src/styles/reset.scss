@@ -4,6 +4,20 @@
     box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 99px;
+    border: 3px solid var(--black);
+}
+
 body {
     font-family: "Montserrat", sans-serif;
     font-size: var(--standard-font-size);
@@ -47,6 +61,7 @@ ul {
 
 button {
     font: inherit;
+    color: inherit;
     background-color: unset;
     padding: 0;
     margin: 0;

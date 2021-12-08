@@ -1,0 +1,20 @@
+@import "breakpoints";
+
+.section-title {
+    font-size: 34px;
+    line-height: 1;
+    font-weight: var(--black-font-weight);
+    opacity: var(--primary-opacity);
+
+    @include min-width-md {
+        font-size: 38px;
+    }
+
+    @include min-width-lg {
+        font-size: 40px;
+    }
+
+    @include min-width-xl {
+        font-size: 44px;
+    }
+}
