@@ -13,14 +13,6 @@ async function searchPostsList(search, categoryId, sort, period, skip, limit) {
         { $match: query },
         {
             $lookup: {
-                from: "categories",
-                localField: "categoryId",
-                foreignField: "_id",
-                as: "category",
-            },
-        },
-        {
-            $lookup: {
                 from: "users",
                 localField: "publisherId",
                 foreignField: "_id",

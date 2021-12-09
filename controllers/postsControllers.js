@@ -70,6 +70,14 @@ async function getPostsList(req, res, next, database) {
             limit
         );
 
+        // remove large image url and user info
+        for (let post of postsList) {
+            post.imageUrl = post.imageUrl.thumbnail;
+
+            const username = post.publisher.username;
+            post.publisher = username ? username : post.publisher._json.name;
+        }
+
         // return list of related posts
         return res.json(postsList);
     } catch (err) {

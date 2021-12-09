@@ -7,7 +7,7 @@ module.exports = [
         title: "Pellentesque Ligula Magna",
         category: "art",
         likeCount: 5839,
-        createdAt: new Date().getTime("10-10-2021"),
+        createdAt: new Date("10-10-2021").getTime(),
         publisher: "Charlotte",
     },
 
@@ -19,7 +19,7 @@ module.exports = [
         title: "Lobortis Eget Ultrices Sed Leo",
         category: "gaming",
         likeCount: 5258,
-        createdAt: new Date().getTime("9-8-2021"),
+        createdAt: new Date("9-8-2021").getTime(),
         publisher: "Levi",
     },
 
@@ -31,7 +31,7 @@ module.exports = [
         title: "Curabitur Faucibus Risus Commodo",
         category: "anime",
         likeCount: 5193,
-        createdAt: new Date().getTime("9-13-2021"),
+        createdAt: new Date("9-13-2021").getTime(),
         publisher: "Ellie",
     },
 
@@ -43,7 +43,7 @@ module.exports = [
         title: "Bibendum Nibh Quis Sagittis",
         category: "art",
         likeCount: 5124,
-        createdAt: new Date().getTime("10-15-2021"),
+        createdAt: new Date("10-15-2021").getTime(),
         publisher: "Logan",
     },
 
@@ -55,7 +55,7 @@ module.exports = [
         title: "Eros Diam At Purus Nullam",
         category: "gaming",
         likeCount: 5017,
-        createdAt: new Date().getTime("8-30-2021"),
+        createdAt: new Date("8-30-2021").getTime(),
         publisher: "Claire",
     },
 

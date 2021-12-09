@@ -1,6 +1,6 @@
 @import "breakpoints";
 
-.popular-preview {
+.new-preview {
     @include min-width-md {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -12,7 +12,7 @@
     }
 }
 
-.popular-preview__title {
+.new-preview__title {
     margin-bottom: 50px;
 
     @include min-width-md {
@@ -21,14 +21,14 @@
     }
 
     @include min-width-xl {
-        grid-column: 1/2;
+        grid-column: 3/4;
         display: flex;
         align-items: flex-end;
         padding-bottom: 37px;
     }
 }
 
-.popular-preview__card {
+.new-preview__card {
     margin-bottom: 50px;
 
     @include min-width-md {
@@ -36,44 +36,44 @@
     }
 }
 
-.popular-preview__card:nth-child(2) {
-    @include min-width-xl {
-        grid-column: 2/3;
-        grid-row: 1/2;
-    }
-}
-
-.popular-preview__card:nth-child(3) {
-    @include min-width-xl {
-        grid-column: 3/4;
-        grid-row: 1/2;
-    }
-}
-
-.popular-preview__card:nth-child(4) {
+.new-preview__card:nth-child(2) {
     @include min-width-xl {
         grid-column: 1/2;
-        grid-row: 2/3;
+        grid-row: 1/2;
     }
 }
 
-.popular-preview__card:nth-child(5) {
+.new-preview__card:nth-child(3) {
+    @include min-width-xl {
+        grid-column: 2/3;
+        grid-row: 1/2;
+    }
+}
+
+.new-preview__card:nth-child(4) {
     @include min-width-xl {
         grid-column: 2/3;
         grid-row: 2/3;
     }
 }
 
-.popular-preview__card:nth-child(6) {
+.new-preview__card:nth-child(5) {
     @include min-width-xl {
-        grid-column: 2/3;
+        grid-column: 3/4;
+        grid-row: 2/3;
+    }
+}
+
+.new-preview__card:nth-child(6) {
+    @include min-width-xl {
+        grid-column: 1/2;
         grid-row: 3/4;
     }
 }
 
-.popular-preview__card:nth-child(7) {
+.new-preview__card:nth-child(7) {
     @include min-width-xl {
-        grid-column: 3/4;
+        grid-column: 2/3;
         grid-row: 3/4;
     }
 }
