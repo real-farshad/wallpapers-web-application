@@ -14,8 +14,11 @@ async function searchPostsList(search, categoryId, sort, period, skip, limit) {
         {
             $lookup: {
                 from: "users",
-                localField: "publisherId",
-                foreignField: "_id",
+                let: { id: "$publisherId" },
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                    { $project: { username: 1, _json: { name: 1 } } },
+                ],
                 as: "publisher",
             },
         },
@@ -24,15 +27,17 @@ async function searchPostsList(search, categoryId, sort, period, skip, limit) {
         { $limit: limit },
         {
             $project: {
-                categoryId: 0,
-                publisherId: 0,
+                imageUrl: { thumbnail: 1 },
+                title: 1,
+                likeCount: 1,
+                createdAt: 1,
+                publisher: { $arrayElemAt: ["$publisher", 0] },
             },
         },
     ]);
 
-    const posts = await cursor.toArray();
-    for (let post of posts) post.publisher = post.publisher[0];
-    return posts;
+    const result = await cursor.toArray();
+    return result;
 }
 
 async function findPostById(id) {
@@ -40,13 +45,24 @@ async function findPostById(id) {
         { $match: { _id: new ObjectId(id) } },
         {
             $lookup: {
-                from: "categories",
-                localField: "categoryId",
-                foreignField: "_id",
-                as: "category",
+                from: "users",
+                let: { id: "$publisherId" },
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                    { $project: { username: 1, _json: { name: 1 } } },
+                ],
+                as: "publisher",
             },
         },
-        { $project: { categoryId: 0 } },
+        {
+            $project: {
+                imageUrl: 1,
+                title: 1,
+                likeCount: 1,
+                createdAt: 1,
+                publisher: { $arrayElemAt: ["$publisher", 0] },
+            },
+        },
     ]);
 
     const result = await cursor.toArray();

@@ -1,22 +1,22 @@
 @import "breakpoints";
 
-.standard-card__primary-info-container {
+.wallpaper-card__primary-info-container {
     margin-bottom: 10px;
 }
 
-.standard-card__publisher {
+.wallpaper-card__publisher {
     font-weight: var(--medium-font-weight);
     margin-bottom: 3px;
     opacity: var(--primary-opacity);
 }
 
-.standard-card__publish-date {
+.wallpaper-card__publish-date {
     font-size: 10px;
     font-weight: var(--medium-font-weight);
     opacity: 0.4;
 }
 
-.standard-card__image-container {
+.wallpaper-card__image-container {
     position: relative;
     width: 100%;
     height: 300px;
@@ -32,7 +32,7 @@
     }
 }
 
-.standard-card__image-overlay {
+.wallpaper-card__image-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -47,13 +47,13 @@
     }
 }
 
-.standard-card__image-container:hover .standard-card__image-overlay {
+.wallpaper-card__image-container:hover .wallpaper-card__image-overlay {
     @include min-width-lg {
         opacity: 0.5;
     }
 }
 
-.standard-card__title {
+.wallpaper-card__title {
     font-size: 20px;
     font-weight: var(--bold-font-weight);
     position: absolute;
@@ -79,18 +79,18 @@
     }
 }
 
-.standard-card__image-container:hover .standard-card__title {
+.wallpaper-card__image-container:hover .wallpaper-card__title {
     @include min-width-lg {
         transform: translateX(0);
         opacity: var(--primary-opacity);
     }
 }
 
-.standard-card__btns {
+.wallpaper-card__btns {
     display: flex;
     justify-content: flex-end;
 }
 
-.standard-card__like-btn {
+.wallpaper-card__like-btn {
     margin-right: 20px;
 }

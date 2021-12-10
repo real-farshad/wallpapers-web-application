@@ -32,3 +32,11 @@
 .home__content-section {
     margin-bottom: 100px;
 }
+
+.home__copy-right {
+    margin-bottom: 30px;
+
+    @include min-width-lg {
+        margin-bottom: 40px;
+    }
+}

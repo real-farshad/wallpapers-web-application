@@ -3,7 +3,7 @@ interface StandardCountTypes {
 }
 
 function StandardCount({ count }: StandardCountTypes) {
-    const countString = count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count;
+    let countString = count >= 1000 ? `${Math.floor(count / 100) / 10}k` : count;
     return <span>{countString}</span>;
 }
 

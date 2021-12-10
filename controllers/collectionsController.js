@@ -23,7 +23,7 @@ async function getNewCollections(req, res, next, database) {
     const skip = (page - 1) * limit;
 
     try {
-        // find and return collections
+        // find and return latest collections
         const collections = await database.findCollections(skip, limit);
         return res.json(collections);
     } catch (err) {
@@ -74,6 +74,7 @@ async function createNewCollection(req, res, next, database) {
     // set extra fields for new collection
     newCollection.userId = req.user._id;
     newCollection.createdAt = Date.now();
+    newCollection.postCount = 0;
 
     try {
         // add new collection to database

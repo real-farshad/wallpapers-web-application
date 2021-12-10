@@ -6,6 +6,8 @@ import PopularPreview from "../components/PopularPreview";
 import CoverImage from "../components/CoverImage";
 import homepageBackground from "../assets/homepage-background.jpg";
 import NewPreview from "../components/NewPreview";
+import CollectionsPreview from "../components/CollectionsPreview";
+import CopyRight from "../components/CopyRight";
 
 function Home() {
     return (
@@ -29,7 +31,17 @@ function Home() {
                     <div className="home__content-section">
                         <NewPreview />
                     </div>
+
+                    <div className="home__content-section">
+                        <CollectionsPreview />
+                    </div>
                 </main>
+
+                <footer>
+                    <div className="home__copy-right">
+                        <CopyRight />
+                    </div>
+                </footer>
             </ContentContainer>
         </Fragment>
     );

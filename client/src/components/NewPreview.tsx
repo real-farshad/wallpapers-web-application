@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SectionTitle from "./SectionTitle";
-import StandardCard from "./StandardCard";
+import WallpaperCard from "./WallpaperCard";
 import "../styles/NewPreview.scss";
 
 function NewPreview() {
@@ -32,7 +32,7 @@ function NewPreview() {
                 newWallpapers.map((wallpaper: any) => {
                     return (
                         <div className="new-preview__card" key={wallpaper._id}>
-                            <StandardCard data={wallpaper} />
+                            <WallpaperCard data={wallpaper} />
                         </div>
                     );
                 })}

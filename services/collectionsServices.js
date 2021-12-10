@@ -8,14 +8,25 @@ async function findCollections(skip, limit) {
         {
             $lookup: {
                 from: "users",
-                localField: "userId",
-                foreignField: "_id",
+                let: { id: "$userId" },
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                    { $project: { username: 1, _json: { name: 1 } } },
+                ],
                 as: "user",
             },
         },
         { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit },
+        {
+            $project: {
+                title: 1,
+                createdAt: 1,
+                postCount: 1,
+                user: { $arrayElemAt: ["$user", 0] },
+            },
+        },
     ]);
 
     const result = await cursor.toArray();
@@ -58,10 +69,26 @@ async function findCollectionById(id) {
     return result;
 }
 
+async function incrementCollectionPostCount(collectionId) {
+    await getPostsCollection().updateOne(
+        { _id: new ObjectId(collectionId) },
+        { $inc: { postCount: 1 } }
+    );
+}
+
+async function decrementCollectionPostCount(collectionId) {
+    await getPostsCollection().updateOne(
+        { _id: new ObjectId(collectionId) },
+        { $inc: { postCount: -1 } }
+    );
+}
+
 module.exports = {
     findCollections,
     findUserCollections,
     addNewCollection,
     findAndDeleteCollection,
     findCollectionById,
+    incrementCollectionPostCount,
+    decrementCollectionPostCount,
 };

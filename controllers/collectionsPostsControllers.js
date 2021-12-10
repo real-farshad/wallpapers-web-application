@@ -34,6 +34,14 @@ async function getCollectionPosts(req, res, next, database) {
             skip,
             limit
         );
+
+        for (let collectionPost of collectionPosts) {
+            const postId = collectionPost.postId;
+            const collectionPostInfo = await database.findPostById(postId);
+            collectionPost.post = collectionPostInfo;
+            delete collectionPost.postId;
+        }
+
         return res.json(collectionPosts);
     } catch (err) {
         next(err);
@@ -80,6 +88,9 @@ async function createNewCollectionPost(req, res, next, database) {
         // add new collection post to database
         await database.addNewCollectionPost(newCollectionPost);
 
+        // increment collection post count
+        await database.incrementCollectionPostCount(newCollectionPost.collectionId);
+
         // return success
         return res.json({ newCollectionPostAdded: true });
     } catch (err) {
@@ -117,6 +128,9 @@ async function deleteCollectionPost(req, res, next, database) {
 
         // delete collection post
         await database.deleteCollectionPostById(collectionPostId);
+
+        // decrement collection post count
+        await database.decrementCollectionPostCount(collectionPost.collectionId);
 
         // return success
         return res.json({ collectionPostDeleted: true });

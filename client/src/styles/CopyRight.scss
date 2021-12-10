@@ -1,0 +1,24 @@
+@import "breakpoints";
+
+.copy-right {
+    font-weight: var(--medium-font-weight);
+
+    @include min-width-lg {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.copy-right__text {
+    margin-bottom: 10px;
+    opacity: 0.4;
+
+    @include min-width-lg {
+        margin-bottom: 0;
+    }
+}
+
+.copy-right__link {
+    opacity: var(--primary-opacity);
+}
