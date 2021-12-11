@@ -1,0 +1,15 @@
+@import "breakpoints";
+
+.infinite-scroll-wallpapers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 50px;
+
+    @include min-width-md {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include min-width-xl {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

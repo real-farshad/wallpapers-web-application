@@ -1,7 +1,12 @@
 import "../styles/SaveBtn.scss";
 
-function SaveBtn() {
-    return <button className="save-btn">SAVE</button>;
+interface SaveBtnTypes {
+    saved: boolean;
+}
+
+function SaveBtn(props: SaveBtnTypes) {
+    const { saved } = props;
+    return <button className="save-btn">{saved ? "SAVED" : "SAVE"}</button>;
 }
 
 export default SaveBtn;
