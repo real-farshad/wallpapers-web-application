@@ -7,14 +7,14 @@ interface CollectionCardTypes {
     data: {
         user: { username: string };
         createdAt: number;
-        imageUrl: { thumbnail: string };
+        post: { imageUrl: { thumbnail: string } };
         title: string;
         postCount: number;
     };
 }
 
 function CollectionCard(props: CollectionCardTypes) {
-    const { user, createdAt, imageUrl, title, postCount } = props.data;
+    const { user, createdAt, post, title, postCount } = props.data;
 
     return (
         <div className="collection-card">
@@ -29,7 +29,7 @@ function CollectionCard(props: CollectionCardTypes) {
             </div>
 
             <div className="collection-card__image-container">
-                <CoverImage src={imageUrl.thumbnail} />
+                <CoverImage src={post.imageUrl.thumbnail} />
 
                 <div className="collection-card__image-overlay" />
 

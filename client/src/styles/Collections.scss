@@ -1,0 +1,29 @@
+@import "breakpoints";
+
+.collections__navbar {
+    margin-bottom: 470px;
+
+    @include min-width-md {
+        margin-bottom: 300px;
+    }
+
+    @include min-width-lg {
+        margin-bottom: 325px;
+    }
+
+    @include min-width-xl {
+        margin-bottom: 100px;
+    }
+}
+
+.collections__popular {
+    margin-bottom: 100px;
+}
+
+.collections__copy-right {
+    margin-bottom: 30px;
+
+    @include min-width-lg {
+        margin-bottom: 40px;
+    }
+}

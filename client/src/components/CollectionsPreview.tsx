@@ -10,16 +10,6 @@ function CollectionsPreview() {
         (async () => {
             const collectionRes = await fetch("/api/collections/?limit=6");
             const popularCollections = await collectionRes.json();
-
-            for (let collection of popularCollections) {
-                const collectionsPostsRes = await fetch(
-                    `/api/collections-posts/${collection._id}?limit=1`
-                );
-                const collectionPost = await collectionsPostsRes.json();
-                console.log(collectionPost[0]);
-                collection.imageUrl = collectionPost[0].post.imageUrl;
-            }
-
             setCollections(popularCollections);
         })();
     }, []);

@@ -16,7 +16,7 @@ function PopularWallpapers() {
         })();
     }, []);
 
-    async function loadWallpapers() {
+    async function loadMoreWallpapers() {
         const res = await fetch(`/api/posts/?sort=popular&page=${page}&limit=8`);
         const wallpapers = await res.json();
 
@@ -45,7 +45,7 @@ function PopularWallpapers() {
 
             <InfiniteScrollWallpapers
                 wallpapers={popularWallpapers}
-                loadWallpapers={loadWallpapers}
+                loadMoreWallpapers={loadMoreWallpapers}
                 wallpapersFinished={wallpapersFinished}
             />
         </div>

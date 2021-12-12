@@ -4,17 +4,17 @@ import WallpaperCard from "./WallpaperCard";
 interface InfiniteScrollWallpapersTypes {
     wallpapers: object[];
     wallpapersFinished: boolean;
-    loadWallpapers: () => void;
+    loadMoreWallpapers: () => void;
 }
 
 function InfiniteScrollWallpapers(props: InfiniteScrollWallpapersTypes) {
-    const { wallpapers, wallpapersFinished, loadWallpapers } = props;
+    const { wallpapers, wallpapersFinished, loadMoreWallpapers } = props;
 
     const [reachedBottom, setReachedBottom] = useState(false);
 
     useEffect(() => {
         if (reachedBottom) {
-            loadWallpapers();
+            loadMoreWallpapers();
             setReachedBottom(false);
         }
     }, [reachedBottom]);

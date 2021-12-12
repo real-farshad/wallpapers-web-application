@@ -5,6 +5,9 @@ const getCollectionsCollection = () => getDatabase().collection("collections");
 
 async function findCollections(skip, limit) {
     const cursor = await getCollectionsCollection().aggregate([
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit },
         {
             $lookup: {
                 from: "users",
@@ -16,17 +19,34 @@ async function findCollections(skip, limit) {
                 as: "user",
             },
         },
-        { $sort: { createdAt: -1 } },
-        { $skip: skip },
-        { $limit: limit },
+        { $addFields: { user: { $first: "$user" } } },
         {
-            $project: {
-                title: 1,
-                createdAt: 1,
-                postCount: 1,
-                user: { $arrayElemAt: ["$user", 0] },
+            $lookup: {
+                from: "collections-posts",
+                let: { id: "$_id" },
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$collectionId", "$$id"] } } },
+                    { $sort: { createdAt: -1 } },
+                    { $limit: 1 },
+                    { $project: { _id: 0, postId: 1 } },
+                ],
+                as: "collectionPost",
             },
         },
+        { $addFields: { collectionPost: { $first: "$collectionPost" } } },
+        {
+            $lookup: {
+                from: "posts",
+                let: { id: "$collectionPost.postId" },
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                    { $project: { _id: 0, "imageUrl.thumbnail": 1 } },
+                ],
+                as: "post",
+            },
+        },
+        { $addFields: { post: { $first: "$post" } } },
+        { $project: { userId: 0, collectionPost: 0 } },
     ]);
 
     const result = await cursor.toArray();
