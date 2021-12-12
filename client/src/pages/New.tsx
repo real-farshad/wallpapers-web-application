@@ -1,26 +1,26 @@
 import ContentContainer from "../components/ContentContainer";
 import Navbar from "../components/Navbar";
-import PopularWallpapers from "../components/PopularWallpapers";
+import NewWallpapers from "../components/NewWallpapers";
 import CopyRight from "../components/CopyRight";
-import "../styles/Popular.scss";
+import "../styles/New.scss";
 
-function Popular() {
+function New() {
     return (
         <ContentContainer>
             <header>
-                <div className="popular__navbar">
+                <div className="new__navbar">
                     <Navbar />
                 </div>
             </header>
 
             <main>
-                <div className="popular__wallpapers">
-                    <PopularWallpapers />
+                <div className="new__wallpapers">
+                    <NewWallpapers />
                 </div>
             </main>
 
             <footer>
-                <div className="popular__copy-right">
+                <div className="new__copy-right">
                     <CopyRight />
                 </div>
             </footer>
@@ -28,4 +28,4 @@ function Popular() {
     );
 }
 
-export default Popular;
+export default New;

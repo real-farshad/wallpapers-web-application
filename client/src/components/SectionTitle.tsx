@@ -1,10 +1,10 @@
 import "../styles/SectionTitle.scss";
 
-interface SectionTitle {
+interface SectionTitleTypes {
     title: any;
 }
 
-function SectionTitle({ title }: SectionTitle) {
+function SectionTitle({ title }: SectionTitleTypes) {
     return <h1 className="section-title">{title}</h1>;
 }
 

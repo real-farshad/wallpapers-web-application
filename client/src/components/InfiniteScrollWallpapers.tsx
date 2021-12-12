@@ -1,16 +1,23 @@
-import { useCallback } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import WallpaperCard from "./WallpaperCard";
-import "../styles/InfiniteScrollWallpapers.scss";
 
 interface InfiniteScrollWallpapersTypes {
     wallpapers: object[];
     wallpapersFinished: boolean;
     loadWallpapers: () => void;
-    children: any;
 }
 
 function InfiniteScrollWallpapers(props: InfiniteScrollWallpapersTypes) {
-    const { wallpapers, wallpapersFinished, loadWallpapers, children } = props;
+    const { wallpapers, wallpapersFinished, loadWallpapers } = props;
+
+    const [reachedBottom, setReachedBottom] = useState(false);
+
+    useEffect(() => {
+        if (reachedBottom) {
+            loadWallpapers();
+            setReachedBottom(false);
+        }
+    }, [reachedBottom]);
 
     const lastWallpaperCardRef = useCallback((lastWallpaperCard) => {
         if (lastWallpaperCard !== null) {
@@ -19,7 +26,7 @@ function InfiniteScrollWallpapers(props: InfiniteScrollWallpapersTypes) {
                     entries.forEach((entry) => {
                         if (entry.isIntersecting) {
                             observer.unobserve(lastWallpaperCard as any);
-                            loadWallpapers();
+                            setReachedBottom(true);
                         }
                     });
                 },
@@ -30,31 +37,22 @@ function InfiniteScrollWallpapers(props: InfiniteScrollWallpapersTypes) {
     }, []);
 
     return (
-        <div className="infinite-scroll-wallpapers">
-            {children}
-
+        <Fragment>
             {wallpapers.length > 0 &&
                 wallpapers.map((wallpaper: any, wallpaperIndex) => {
                     const isLastWallpaper = wallpaperIndex === wallpapers.length - 1;
                     const observe = isLastWallpaper && !wallpapersFinished;
                     return observe ? (
-                        <div
-                            className="infinite-scroll-wallpapers__card"
-                            ref={lastWallpaperCardRef}
-                            key={wallpaper._id}
-                        >
+                        <div ref={lastWallpaperCardRef} key={wallpaper._id}>
                             <WallpaperCard data={wallpaper} />
                         </div>
                     ) : (
-                        <div
-                            className="infinite-scroll-wallpapers__card"
-                            key={wallpaper._id}
-                        >
+                        <div key={wallpaper._id}>
                             <WallpaperCard data={wallpaper} />
                         </div>
                     );
                 })}
-        </div>
+        </Fragment>
     );
 }
 

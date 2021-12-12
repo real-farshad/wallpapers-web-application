@@ -1,41 +1,41 @@
 import { useState, useEffect } from "react";
-import InfiniteScrollWallpapers from "./InfiniteScrollWallpapers";
 import SectionTitle from "./SectionTitle";
-import "../styles/PopularWallpapers.scss";
+import InfiniteScrollWallpapers from "./InfiniteScrollWallpapers";
+import "../styles/NewWallpapers.scss";
 
-function PopularWallpapers() {
-    const [popularWallpapers, setPopularWallpapers] = useState([]);
+function NewWallpapers() {
+    const [newWallpapers, setNewWallpapers] = useState([]);
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
     const [page, setPage] = useState(2);
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("/api/posts/?sort=popular&limit=8");
+            const res = await fetch("/api/posts/?sort=new&limit=8");
             const wallpapers = await res.json();
-            setPopularWallpapers(wallpapers);
+            setNewWallpapers(wallpapers);
         })();
     }, []);
 
     async function loadWallpapers() {
-        const res = await fetch(`/api/posts/?sort=popular&page=${page}&limit=8`);
+        const res = await fetch(`/api/posts/?sort=new&page=${page}&limit=8`);
         const wallpapers = await res.json();
 
-        setPopularWallpapers((prevState) => [...prevState, ...(wallpapers as never[])]);
+        setNewWallpapers((prevState) => [...prevState, ...(wallpapers as never[])]);
         if (wallpapers.length < 8) setWallpapersFinished(true);
         setPage((prevState) => prevState + 1);
     }
 
     return (
-        <div className="popular-wallpapers">
-            <div className="popular-wallpapers__info">
-                <div className="popular-wallpapers__period"></div>
+        <div className="new-wallpapers">
+            <div className="new-wallpapers__info">
+                <div className="new-wallpapers__period"></div>
 
-                <div className="popular-wallpapers__title">
+                <div className="new-wallpapers__title">
                     <SectionTitle
                         title={
                             <span>
                                 MOST <br />
-                                POPULAR <br />
+                                RECENT <br />
                                 WALLPAPERS
                             </span>
                         }
@@ -44,7 +44,7 @@ function PopularWallpapers() {
             </div>
 
             <InfiniteScrollWallpapers
-                wallpapers={popularWallpapers}
+                wallpapers={newWallpapers}
                 loadWallpapers={loadWallpapers}
                 wallpapersFinished={wallpapersFinished}
             />
@@ -52,4 +52,4 @@ function PopularWallpapers() {
     );
 }
 
-export default PopularWallpapers;
+export default NewWallpapers;

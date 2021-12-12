@@ -20,7 +20,7 @@ function CollectionCard(props: CollectionCardTypes) {
         <div className="collection-card">
             <div className="collection-card__primary-info-container">
                 <p className="collection-card__publisher">
-                    By <a href="#">@{user.username}</a>
+                    By <a href="/#">@{user.username}</a>
                 </p>
 
                 <p className="collection-card__publish-date">

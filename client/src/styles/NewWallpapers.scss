@@ -1,6 +1,6 @@
 @import "breakpoints";
 
-.popular-wallpapers {
+.new-wallpapers {
     display: grid;
     grid-template-columns: 1fr;
     gap: 50px;
@@ -14,7 +14,7 @@
     }
 }
 
-.popular-wallpapers__info {
+.new-wallpapers__info {
     @include min-width-md {
         display: flex;
         flex-direction: column;
@@ -22,7 +22,7 @@
     }
 }
 
-.popular-wallpapers__period {
+.new-wallpapers__period {
     margin-bottom: 100px;
 
     @include min-width-md {
@@ -30,7 +30,7 @@
     }
 }
 
-.popular-wallpapers__title {
+.new-wallpapers__title {
     @include min-width-md {
         margin-bottom: 37px;
     }
