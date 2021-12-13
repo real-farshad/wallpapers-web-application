@@ -6,7 +6,7 @@
 
 .wallpaper-card__publisher {
     font-weight: var(--medium-font-weight);
-    margin-bottom: 3px;
+    margin-bottom: 5px;
     opacity: var(--primary-opacity);
 }
 
@@ -24,7 +24,7 @@
     cursor: pointer;
 
     @include min-width-md {
-        height: 275px;
+        height: 255px;
     }
 
     @include min-width-xl {
@@ -54,22 +54,20 @@
 }
 
 .wallpaper-card__title {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: var(--bold-font-weight);
     position: absolute;
-    bottom: -12px;
+    bottom: 10px;
     left: 10px;
-    width: 210px;
+    width: 290px;
     opacity: var(--primary-opacity);
 
     @include min-width-md {
-        font-size: 22px;
+        bottom: 18px;
         left: 18px;
-        width: 225px;
     }
 
     @include min-width-lg {
-        font-size: 24px;
         bottom: -15px;
         left: 25px;
         width: 250px;
@@ -89,8 +87,28 @@
 .wallpaper-card__btns {
     display: flex;
     justify-content: flex-end;
+    align-items: flex-start;
 }
 
 .wallpaper-card__like-btn {
+    font-weight: var(--medium-font-weight);
+    text-align: center;
     margin-right: 20px;
+    cursor: pointer;
+}
+
+.wallpaper-card__like-text {
+    opacity: var(--primary-opacity);
+    margin-bottom: 3px;
+}
+
+.wallpaper-card__like-count {
+    font-size: 10px;
+    opacity: 0.4;
+}
+
+.wallpaper-card__save-btn {
+    font-weight: var(--medium-font-weight);
+    opacity: var(--primary-opacity);
+    cursor: pointer;
 }

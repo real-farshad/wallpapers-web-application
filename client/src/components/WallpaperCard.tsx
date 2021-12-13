@@ -1,8 +1,7 @@
 import { useState } from "react";
-import CoverImage from "./CoverImage";
-import LikeBtn from "./LikeBtn";
-import SaveBtn from "./SaveBtn";
 import StandardTime from "./StandardTime";
+import CoverImage from "./CoverImage";
+import StandardCount from "./StandardCount";
 import "../styles/WallpaperCard.scss";
 
 interface WallpaperCardTypes {
@@ -50,13 +49,19 @@ function WallpaperCard(props: WallpaperCardTypes) {
             </div>
 
             <div className="wallpaper-card__btns">
-                <div className="wallpaper-card__like-btn" onClick={handleClickOnLike}>
-                    <LikeBtn liked={liked} likeCount={likeCount} />
-                </div>
+                <button className="wallpaper-card__like-btn" onClick={handleClickOnLike}>
+                    <p className="wallpaper-card__like-text">
+                        {liked ? "LIKED" : "LIKE"}
+                    </p>
 
-                <div onClick={handleClickOnSave}>
-                    <SaveBtn saved={saved} />
-                </div>
+                    <p className="wallpaper-card__like-count">
+                        <StandardCount count={likeCount} />
+                    </p>
+                </button>
+
+                <button className="wallpaper-card__save-btn" onClick={handleClickOnSave}>
+                    {saved ? "SAVED" : "SAVE"}
+                </button>
             </div>
         </div>
     );

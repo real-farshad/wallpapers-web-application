@@ -7,7 +7,7 @@ async function getPostsList(req, res, next, database) {
     let query = {
         search: req.query.search || "",
         category: req.query.category || "",
-        period: req.query.period || "",
+        duration: req.query.duration || "",
         sort: req.query.sort || "new",
         page: req.query.page || 1,
         limit: req.query.limit || 20,
@@ -38,17 +38,9 @@ async function getPostsList(req, res, next, database) {
         }
     }
 
-    // calculate period in milliseconds if it's not empty
-    if (query.period === "weekly") {
-        const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000;
-        query.period = Date.now() - weekInMilliseconds;
-    } else if (query.period === "monthly") {
-        const monthInMilliseconds = 30 * 7 * 24 * 60 * 60 * 1000;
-        query.period = Date.now() - monthInMilliseconds;
-    } else if (query.period === "yearly") {
-        const yearInMilliseconds = 365 * 30 * 7 * 24 * 60 * 60 * 1000;
-        query.period = Date.now() - yearInMilliseconds;
-    }
+    // calculate duration in milliseconds if it's not empty
+    if (query.duration === "2020") query.duration = new Date("1-1-2020").getTime();
+    else if (query.duration === "2021") query.duration = new Date("1-1-2021").getTime();
 
     // translate sort order to it's related post document field
     let sort = query.sort === "new" ? "createdAt" : "likeCount";
@@ -56,7 +48,7 @@ async function getPostsList(req, res, next, database) {
     // reverse sort order to show newest and most popular first
     sort = { [sort]: -1 };
 
-    const { search, categoryId, period, page, limit } = query;
+    const { search, categoryId, duration, page, limit } = query;
     const skip = (page - 1) * limit;
 
     try {
@@ -65,7 +57,7 @@ async function getPostsList(req, res, next, database) {
             search,
             categoryId,
             sort,
-            period,
+            duration,
             skip,
             limit
         );

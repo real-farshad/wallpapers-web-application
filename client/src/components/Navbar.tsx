@@ -67,9 +67,9 @@ function Navbar() {
 
     return (
         <nav className="navbar">
-            <div className="navbar__menu-btn" onClick={openMenu}>
+            <button className="navbar__menu-btn" onClick={openMenu}>
                 MENU
-            </div>
+            </button>
 
             <div
                 className={`navbar__menu-layout${
@@ -81,7 +81,7 @@ function Navbar() {
                         menu.animateOverlay ? " navbar__menu-overlay--animate-in" : ""
                     }`}
                 />
-                <div
+                <button
                     className={`navbar__close-menu-btn${
                         menu.animateCloseMenuBtn
                             ? " navbar__close-menu-btn--animate-in"
@@ -90,7 +90,7 @@ function Navbar() {
                     onClick={closeMenu}
                 >
                     CLOSE MENU
-                </div>
+                </button>
             </div>
 
             <ul

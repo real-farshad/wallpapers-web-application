@@ -1,13 +1,13 @@
 import { Fragment } from "react";
 import Navbar from "../components/Navbar";
 import ContentContainer from "../components/ContentContainer";
-import "../styles/Home.scss";
 import PopularPreview from "../components/PopularPreview";
 import CoverImage from "../components/CoverImage";
 import homepageBackground from "../assets/homepage-background.jpg";
 import NewPreview from "../components/NewPreview";
 import CollectionsPreview from "../components/CollectionsPreview";
 import CopyRight from "../components/CopyRight";
+import "../styles/Home.scss";
 
 function Home() {
     return (

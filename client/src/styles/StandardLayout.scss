@@ -1,0 +1,21 @@
+@import "breakpoints";
+
+.standard-layout__navbar {
+    margin-bottom: 70px;
+
+    @include min-width-md {
+        margin-bottom: 100px;
+    }
+}
+
+.standard-layout__content {
+    margin-bottom: 100px;
+}
+
+.standard-layout__copy-right {
+    margin-bottom: 30px;
+
+    @include min-width-lg {
+        margin-bottom: 40px;
+    }
+}

@@ -1,0 +1,19 @@
+@import "breakpoints";
+
+.section-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--content-space);
+
+    @include min-width-md {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include min-width-lg {
+        gap: 50px;
+    }
+
+    @include min-width-xl {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
