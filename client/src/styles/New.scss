@@ -1,6 +1,8 @@
 @import "breakpoints";
 
 .new__title {
+    margin-bottom: -20px;
+
     @include min-width-md {
         display: flex;
         align-items: flex-end;

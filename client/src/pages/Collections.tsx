@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import StandardLayout from "../components/StandardLayout";
 import SectionGrid from "../components/SectionGrid";
 import SectionTitle from "../components/SectionTitle";
-import InfiniteScrollCollections from "../components/InfiniteScrollCollections";
+import InfiniteScroll from "../components/InfiniteScroll";
+import CollectionCard from "../components/CollectionCard";
 import "../styles/Collections.scss";
 
 function Collections() {
@@ -42,10 +43,11 @@ function Collections() {
                     />
                 </div>
 
-                <InfiniteScrollCollections
-                    collections={popularCollections}
-                    loadMoreCollections={loadMoreCollections}
-                    collectionsFinished={collectionsFinished}
+                <InfiniteScroll
+                    elements={popularCollections}
+                    loadMoreElements={loadMoreCollections}
+                    elementsFinished={collectionsFinished}
+                    template={<CollectionCard />}
                 />
             </SectionGrid>
         </StandardLayout>

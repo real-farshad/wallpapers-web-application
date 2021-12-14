@@ -1,6 +1,6 @@
 @import "breakpoints";
 
-.collection-card__primary-info-container {
+.collection-card__primary-info {
     margin-bottom: 10px;
 }
 
@@ -33,6 +33,7 @@
 }
 
 .collection-card__image-overlay {
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -42,6 +43,7 @@
     opacity: 0.5;
 
     @include min-width-lg {
+        display: block;
         opacity: 0;
         transition: 0.3s;
     }
@@ -56,18 +58,15 @@
 .collection-card__title {
     font-size: 24px;
     font-weight: var(--bold-font-weight);
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    width: 290px;
     opacity: var(--primary-opacity);
+}
 
-    @include min-width-md {
-        bottom: 18px;
-        left: 18px;
-    }
+.collection-card__title--lg {
+    display: none;
 
     @include min-width-lg {
+        display: block;
+        position: absolute;
         bottom: -15px;
         left: 25px;
         width: 250px;
@@ -77,14 +76,34 @@
     }
 }
 
-.collection-card__image-container:hover .collection-card__title {
+.collection-card__image-container:hover .collection-card__title--lg {
     @include min-width-lg {
         transform: translateX(0);
         opacity: var(--primary-opacity);
     }
 }
 
+.collection-card__secondary-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    @include min-width-lg {
+        justify-content: flex-end;
+    }
+}
+
+.collection-card__title--sm {
+    flex-grow: 1;
+    padding-right: 30px;
+
+    @include min-width-lg {
+        display: none;
+    }
+}
+
 .collection-card__btn {
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;

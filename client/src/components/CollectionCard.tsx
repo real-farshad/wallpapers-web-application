@@ -13,12 +13,12 @@ interface CollectionCardTypes {
     };
 }
 
-function CollectionCard(props: CollectionCardTypes) {
+function CollectionCard(props: CollectionCardTypes | any) {
     const { user, createdAt, post, title, postCount } = props.data;
 
     return (
         <div className="collection-card">
-            <div className="collection-card__primary-info-container">
+            <div className="collection-card__primary-info">
                 <p className="collection-card__publisher">
                     By <a href="/#">@{user.username}</a>
                 </p>
@@ -33,17 +33,25 @@ function CollectionCard(props: CollectionCardTypes) {
 
                 <div className="collection-card__image-overlay" />
 
-                <h1 className="collection-card__title">{title}</h1>
+                <h1 className="collection-card__title collection-card__title--lg">
+                    {title}
+                </h1>
             </div>
 
-            <div className="collection-card__btn">
-                <div className="collection-card__link">
-                    <Link to="/">SEE COLLECTION</Link>
-                </div>
+            <div className="collection-card__secondary-info">
+                <h1 className="collection-card__title collection-card__title--sm">
+                    {title}
+                </h1>
 
-                <p className="collection-card__wallpaper-count">
-                    {postCount} Wallpaper{postCount > 1 ? "s" : ""}
-                </p>
+                <div className="collection-card__btn">
+                    <div className="collection-card__link">
+                        <Link to="/">SEE COLLECTION</Link>
+                    </div>
+
+                    <p className="collection-card__wallpaper-count">
+                        {postCount} Wallpaper{postCount > 1 ? "s" : ""}
+                    </p>
+                </div>
             </div>
         </div>
     );

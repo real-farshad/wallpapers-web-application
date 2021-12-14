@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import SectionGrid from "./SectionGrid";
 import SectionTitle from "./SectionTitle";
 import WallpaperCard from "./WallpaperCard";
 import "../styles/PopularPreview.scss";
@@ -15,7 +16,7 @@ function PopularPreview() {
     }, []);
 
     return (
-        <div className="popular-preview">
+        <SectionGrid>
             <div className="popular-preview__title">
                 <SectionTitle
                     title={
@@ -36,7 +37,7 @@ function PopularPreview() {
                         </div>
                     );
                 })}
-        </div>
+        </SectionGrid>
     );
 }
 

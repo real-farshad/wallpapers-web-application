@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import SectionGrid from "./SectionGrid";
 import SectionTitle from "./SectionTitle";
 import WallpaperCard from "./WallpaperCard";
 import "../styles/NewPreview.scss";
@@ -15,7 +16,7 @@ function NewPreview() {
     }, []);
 
     return (
-        <div className="new-preview">
+        <SectionGrid>
             <div className="new-preview__title">
                 <SectionTitle
                     title={
@@ -36,7 +37,7 @@ function NewPreview() {
                         </div>
                     );
                 })}
-        </div>
+        </SectionGrid>
     );
 }
 

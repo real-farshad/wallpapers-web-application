@@ -3,10 +3,12 @@
 .section-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--content-space);
+    gap: 50px;
 
     @include min-width-md {
         grid-template-columns: repeat(2, 1fr);
+        column-gap: 30px;
+        row-gap: 50px;
     }
 
     @include min-width-lg {

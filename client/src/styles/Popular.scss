@@ -3,9 +3,14 @@
 .popular__info {
     display: flex;
     flex-direction: column-reverse;
+    margin-bottom: -20px;
 
     @include min-width-md {
         flex-direction: column;
+        margin-bottom: 0;
+    }
+
+    @include min-width-lg {
         justify-content: space-between;
     }
 }
@@ -19,6 +24,11 @@
         justify-content: baseline;
         align-items: flex-start;
         margin-top: 37px;
+        margin-bottom: 85px;
+    }
+
+    @include min-width-lg {
+        margin-bottom: 0;
     }
 }
 

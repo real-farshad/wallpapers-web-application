@@ -14,7 +14,7 @@ interface WallpaperCardTypes {
     };
 }
 
-function WallpaperCard(props: WallpaperCardTypes) {
+function WallpaperCard(props: WallpaperCardTypes | any) {
     const { publisher, createdAt, imageUrl, title, likeCount } = props.data;
 
     const [liked, setLiked] = useState(false);
@@ -30,7 +30,7 @@ function WallpaperCard(props: WallpaperCardTypes) {
 
     return (
         <div className="wallpaper-card">
-            <div className="wallpaper-card__primary-info-container">
+            <div className="wallpaper-card__primary-info">
                 <p className="wallpaper-card__publisher">
                     By <a href="/#">@{publisher.username}</a>
                 </p>
@@ -45,23 +45,37 @@ function WallpaperCard(props: WallpaperCardTypes) {
 
                 <div className="wallpaper-card__image-overlay" />
 
-                <h1 className="wallpaper-card__title">{title}</h1>
+                <h1 className="wallpaper-card__title wallpaper-card__title--lg">
+                    {title}
+                </h1>
             </div>
 
-            <div className="wallpaper-card__btns">
-                <button className="wallpaper-card__like-btn" onClick={handleClickOnLike}>
-                    <p className="wallpaper-card__like-text">
-                        {liked ? "LIKED" : "LIKE"}
-                    </p>
+            <div className="wallpaper-card__secondary-info">
+                <h1 className="wallpaper-card__title wallpaper-card__title--sm">
+                    {title}
+                </h1>
 
-                    <p className="wallpaper-card__like-count">
-                        <StandardCount count={likeCount} />
-                    </p>
-                </button>
+                <div className="wallpaper-card__btns-container">
+                    <button
+                        className="wallpaper-card__like-btn"
+                        onClick={handleClickOnLike}
+                    >
+                        <p className="wallpaper-card__like-text">
+                            {liked ? "LIKED" : "LIKE"}
+                        </p>
 
-                <button className="wallpaper-card__save-btn" onClick={handleClickOnSave}>
-                    {saved ? "SAVED" : "SAVE"}
-                </button>
+                        <p className="wallpaper-card__like-count">
+                            <StandardCount count={likeCount} />
+                        </p>
+                    </button>
+
+                    <button
+                        className="wallpaper-card__save-btn"
+                        onClick={handleClickOnSave}
+                    >
+                        {saved ? "SAVED" : "SAVE"}
+                    </button>
+                </div>
             </div>
         </div>
     );

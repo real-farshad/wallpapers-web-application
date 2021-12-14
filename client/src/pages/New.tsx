@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import StandardLayout from "../components/StandardLayout";
 import SectionGrid from "../components/SectionGrid";
 import SectionTitle from "../components/SectionTitle";
-import InfiniteScrollWallpapers from "../components/InfiniteScrollWallpapers";
+import InfiniteScroll from "../components/InfiniteScroll";
+import WallpaperCard from "../components/WallpaperCard";
 import "../styles/New.scss";
 
 function New() {
@@ -42,10 +43,11 @@ function New() {
                     />
                 </div>
 
-                <InfiniteScrollWallpapers
-                    wallpapers={newWallpapers}
-                    loadMoreWallpapers={loadMoreWallpapers}
-                    wallpapersFinished={wallpapersFinished}
+                <InfiniteScroll
+                    elements={newWallpapers}
+                    loadMoreElements={loadMoreWallpapers}
+                    elementsFinished={wallpapersFinished}
+                    template={<WallpaperCard />}
                 />
             </SectionGrid>
         </StandardLayout>

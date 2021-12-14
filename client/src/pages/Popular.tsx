@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import StandardLayout from "../components/StandardLayout";
 import SectionGrid from "../components/SectionGrid";
 import SectionTitle from "../components/SectionTitle";
-import InfiniteScrollWallpapers from "../components/InfiniteScrollWallpapers";
+import InfiniteScroll from "../components/InfiniteScroll";
+import WallpaperCard from "../components/WallpaperCard";
 import "../styles/Popular.scss";
 
 function Popular() {
@@ -52,10 +53,11 @@ function Popular() {
                     </div>
                 </div>
 
-                <InfiniteScrollWallpapers
-                    wallpapers={popularWallpapers}
-                    loadMoreWallpapers={loadMoreWallpapers}
-                    wallpapersFinished={wallpapersFinished}
+                <InfiniteScroll
+                    elements={popularWallpapers}
+                    loadMoreElements={loadMoreWallpapers}
+                    elementsFinished={wallpapersFinished}
+                    template={<WallpaperCard />}
                 />
             </SectionGrid>
         </StandardLayout>

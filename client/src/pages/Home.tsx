@@ -32,7 +32,7 @@ function Home() {
                         <NewPreview />
                     </div>
 
-                    <div className="home__content-section">
+                    <div className="home__content-section home__content-section--last">
                         <CollectionsPreview />
                     </div>
                 </main>
