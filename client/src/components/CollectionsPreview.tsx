@@ -18,15 +18,13 @@ function CollectionsPreview() {
     return (
         <SectionGrid>
             <div className="collections-preview__title">
-                <SectionTitle
-                    title={
-                        <span>
-                            MOST <br />
-                            POPULAR <br />
-                            COLLECTIONS
-                        </span>
-                    }
-                />
+                <SectionTitle>
+                    <span>
+                        MOST <br />
+                        POPULAR <br />
+                        COLLECTIONS
+                    </span>
+                </SectionTitle>
             </div>
 
             {collections.length > 0 &&

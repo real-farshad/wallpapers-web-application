@@ -48,6 +48,12 @@ async function populate() {
 
         //
         //
+        // create text index from post title for searching
+        await createPostTitleTextIndex();
+        console.log("create post title text index: DONE");
+
+        //
+        //
         // add PostId and UserId and delete post and user
         const comments = await processComments(mockComments);
 
@@ -167,6 +173,10 @@ async function findUserId(username) {
 
 async function addManyPostsToDatabase(posts) {
     await database.collection("posts").insertMany(posts);
+}
+
+async function createPostTitleTextIndex() {
+    database.collection("posts").createIndex({ title: "text" });
 }
 
 async function processComments(comments) {

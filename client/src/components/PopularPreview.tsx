@@ -18,15 +18,13 @@ function PopularPreview() {
     return (
         <SectionGrid>
             <div className="popular-preview__title">
-                <SectionTitle
-                    title={
-                        <span>
-                            MOST <br />
-                            POPULAR <br />
-                            WALLPAPERS
-                        </span>
-                    }
-                />
+                <SectionTitle>
+                    <span>
+                        MOST <br />
+                        POPULAR <br />
+                        WALLPAPERS
+                    </span>
+                </SectionTitle>
             </div>
 
             {popularWallpapers.length > 0 &&

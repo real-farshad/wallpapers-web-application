@@ -41,15 +41,13 @@ function Popular() {
                     </div>
 
                     <div className="popular__title">
-                        <SectionTitle
-                            title={
-                                <span>
-                                    MOST <br />
-                                    POPULAR <br />
-                                    WALLPAPERS
-                                </span>
-                            }
-                        />
+                        <SectionTitle>
+                            <span>
+                                MOST <br />
+                                POPULAR <br />
+                                WALLPAPERS
+                            </span>
+                        </SectionTitle>
                     </div>
                 </div>
 

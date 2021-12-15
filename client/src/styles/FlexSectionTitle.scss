@@ -1,0 +1,11 @@
+@import "breakpoints";
+
+.flex-section-title {
+    margin-bottom: -20px;
+
+    @include min-width-md {
+        display: flex;
+        align-items: flex-end;
+        margin-bottom: 37px;
+    }
+}

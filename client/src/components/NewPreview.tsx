@@ -18,15 +18,13 @@ function NewPreview() {
     return (
         <SectionGrid>
             <div className="new-preview__title">
-                <SectionTitle
-                    title={
-                        <span>
-                            MOST <br />
-                            RECENT <br />
-                            WALLPAPERS
-                        </span>
-                    }
-                />
+                <SectionTitle>
+                    <span>
+                        MOST <br />
+                        RECENT <br />
+                        WALLPAPERS
+                    </span>
+                </SectionTitle>
             </div>
 
             {newWallpapers.length > 0 &&
