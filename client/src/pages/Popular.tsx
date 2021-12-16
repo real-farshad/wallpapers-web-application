@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import StandardLayout from "../components/StandardLayout";
 import SectionGrid from "../components/SectionGrid";
+import SectionInfoContainer from "../components/SectionInfoContainer";
+import ControlBtnsContainer from "../components/ControlBtnsContainer";
+import ControlBtn from "../components/ControlBtn";
 import SectionTitle from "../components/SectionTitle";
 import InfiniteScroll from "../components/InfiniteScroll";
 import WallpaperCard from "../components/WallpaperCard";
-import "../styles/Popular.scss";
 
 function Popular() {
     const [popularWallpapers, setPopularWallpapers] = useState([]);
@@ -31,25 +33,27 @@ function Popular() {
     return (
         <StandardLayout>
             <SectionGrid>
-                <div className="popular__info">
-                    <div className="popular__duration">
-                        <button className="popular__duration-btn popular__duration-btn--active">
-                            2021 And After
-                        </button>
-                        <button className="popular__duration-btn">2020 And After</button>
-                        <button className="popular__duration-btn">All Times</button>
-                    </div>
+                <SectionInfoContainer twoRows>
+                    <ControlBtnsContainer>
+                        <div>
+                            <ControlBtn active>2021 And After</ControlBtn>
+                        </div>
 
-                    <div className="popular__title">
-                        <SectionTitle>
-                            <span>
-                                MOST <br />
-                                POPULAR <br />
-                                WALLPAPERS
-                            </span>
-                        </SectionTitle>
-                    </div>
-                </div>
+                        <div>
+                            <ControlBtn>2020 And After</ControlBtn>
+                        </div>
+
+                        <div>
+                            <ControlBtn>All Times</ControlBtn>
+                        </div>
+                    </ControlBtnsContainer>
+
+                    <SectionTitle>
+                        MOST <br />
+                        POPULAR <br />
+                        WALLPAPERS
+                    </SectionTitle>
+                </SectionInfoContainer>
 
                 <InfiniteScroll
                     elements={popularWallpapers}

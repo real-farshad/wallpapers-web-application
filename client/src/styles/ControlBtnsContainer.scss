@@ -1,0 +1,11 @@
+@import "breakpoints";
+
+.control-btns-container {
+    display: flex;
+    gap: 30px;
+
+    @include min-width-md {
+        flex-direction: column;
+        gap: 5px;
+    }
+}

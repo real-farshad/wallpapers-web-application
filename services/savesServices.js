@@ -6,6 +6,9 @@ const getSavesCollection = () => getDatabase().collection("saves");
 async function getUserSavedPosts(userId, skip, limit) {
     const cursor = await getSavesCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit },
         {
             $lookup: {
                 from: "posts",
@@ -14,9 +17,6 @@ async function getUserSavedPosts(userId, skip, limit) {
                 as: "post",
             },
         },
-        { $sort: { createdAt: -1 } },
-        { $skip: skip },
-        { $limit: limit },
         { $project: { _id: 0, post: 1 } },
     ]);
 

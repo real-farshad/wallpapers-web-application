@@ -1,0 +1,8 @@
+.control-btn {
+    font-weight: var(--medium-font-weight);
+    opacity: 0.4;
+
+    &--active {
+        opacity: var(--primary-opacity);
+    }
+}

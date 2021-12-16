@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import SectionGrid from "./SectionGrid";
+import SectionInfoContainer from "./SectionInfoContainer";
 import SectionTitle from "./SectionTitle";
 import CollectionCard from "./CollectionCard";
 import "../styles/CollectionsPreview.scss";
@@ -18,13 +19,13 @@ function CollectionsPreview() {
     return (
         <SectionGrid>
             <div className="collections-preview__title">
-                <SectionTitle>
-                    <span>
+                <SectionInfoContainer>
+                    <SectionTitle>
                         MOST <br />
                         POPULAR <br />
                         COLLECTIONS
-                    </span>
-                </SectionTitle>
+                    </SectionTitle>
+                </SectionInfoContainer>
             </div>
 
             {collections.length > 0 &&

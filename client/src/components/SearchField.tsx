@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import "../styles/SearchField.scss";
 
 function SearchField() {
-    const { text } = useParams();
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const { selection, text } = params;
 
     const [search, setSaerch] = useState(text ? text : "");
 
@@ -13,7 +14,9 @@ function SearchField() {
         const searchTextIsTooShort = search.length < 3;
         if (searchTextIsTooShort) return;
 
-        window.location.href = "/search/" + search;
+        window.location.href = `/search?selection=${
+            selection === "new" ? "new" : "popular"
+        }&text=${search}`;
     }
 
     function handleSearchInputChange(e: any) {
@@ -25,6 +28,7 @@ function SearchField() {
             <input
                 className="search-field__input"
                 placeholder="SEARCH"
+                maxLength={64}
                 value={search}
                 onChange={handleSearchInputChange}
             />

@@ -5,6 +5,7 @@ const collectionSchema = Joi.object({
 });
 
 const collectionsQuerySchema = Joi.object({
+    search: Joi.string().trim().max(64).allow(""),
     page: Joi.number().min(1),
     limit: Joi.number().min(1).max(10),
 });

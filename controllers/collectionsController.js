@@ -8,6 +8,7 @@ const {
 // req.query => page, limit
 async function getNewCollections(req, res, next, database) {
     let query = {
+        search: req.query.search || "",
         page: req.query.page || 1,
         limit: req.query.limit || 3,
     };
@@ -19,12 +20,12 @@ async function getNewCollections(req, res, next, database) {
         return res.status(403).json({ error: err.message });
     }
 
-    const { page, limit } = query;
+    const { search, page, limit } = query;
     const skip = (page - 1) * limit;
 
     try {
         // find and return latest collections
-        const collections = await database.findCollections(skip, limit);
+        const collections = await database.findCollections(search, skip, limit);
         return res.json(collections);
     } catch (err) {
         next(err);

@@ -3,8 +3,12 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getCollectionsCollection = () => getDatabase().collection("collections");
 
-async function findCollections(skip, limit) {
+async function findCollections(search, skip, limit) {
+    const query = {};
+    if (search !== "") query.$text = { $search: search };
+
     const cursor = await getCollectionsCollection().aggregate([
+        { $match: query },
         { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit },

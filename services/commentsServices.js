@@ -6,6 +6,9 @@ const getCommentsCollection = () => getDatabase().collection("comments");
 async function getUserCommentsList(userId, skip, limit) {
     const cursor = await getCommentsCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit },
         {
             $lookup: {
                 from: "posts",
@@ -14,9 +17,6 @@ async function getUserCommentsList(userId, skip, limit) {
                 as: "post",
             },
         },
-        { $sort: { createdAt: -1 } },
-        { $skip: skip },
-        { $limit: limit },
         { $project: { post: 1 } },
     ]);
 

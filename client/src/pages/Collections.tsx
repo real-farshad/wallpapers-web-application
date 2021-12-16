@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import StandardLayout from "../components/StandardLayout";
 import SectionGrid from "../components/SectionGrid";
-import FlexSectionTitle from "../components/FlexSectionTitle";
+import SectionInfoContainer from "../components/SectionInfoContainer";
+import SectionTitle from "../components/SectionTitle";
 import InfiniteScroll from "../components/InfiniteScroll";
 import CollectionCard from "../components/CollectionCard";
 import "../styles/Collections.scss";
@@ -31,13 +32,13 @@ function Collections() {
     return (
         <StandardLayout>
             <SectionGrid>
-                <FlexSectionTitle>
-                    <span>
+                <SectionInfoContainer>
+                    <SectionTitle>
                         MOST <br />
                         RECENT <br />
                         WALLPAPERS
-                    </span>
-                </FlexSectionTitle>
+                    </SectionTitle>
+                </SectionInfoContainer>
 
                 <InfiniteScroll
                     elements={popularCollections}

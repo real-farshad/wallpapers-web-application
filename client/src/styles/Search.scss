@@ -1,0 +1,23 @@
+@import "breakpoints";
+
+.search__result-section {
+    min-height: 400px;
+
+    @include min-width-md {
+        min-height: 350px;
+    }
+
+    @include min-width-lg {
+        min-height: 360px;
+    }
+
+    @include min-width-xl {
+        min-height: 440px;
+    }
+}
+
+.search__not-found-message {
+    font-weight: var(--medium-font-weight);
+    word-break: break-all;
+    opacity: var(--primary-opacity);
+}

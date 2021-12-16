@@ -72,6 +72,12 @@ async function populate() {
 
         //
         //
+        // create text index from collection title for searching
+        await createCollectionTitleTextIndex();
+        console.log("create collection title text index: DONE");
+
+        //
+        //
         // add collectionId and postId and remove collection and post
         const collectionsPosts = await processCollectionsPosts(mockCollectionsPosts);
 
@@ -216,6 +222,10 @@ async function processCollections(collections) {
 
 async function addManyCollectionsToDatabase(collections) {
     await database.collection("collections").insertMany(collections);
+}
+
+async function createCollectionTitleTextIndex() {
+    database.collection("collections").createIndex({ title: "text" });
 }
 
 async function processCollectionsPosts(collectionsPosts) {

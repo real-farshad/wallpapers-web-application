@@ -6,6 +6,9 @@ const getLikesCollection = () => getDatabase().collection("likes");
 async function getUserLikes(userId, skip, limit) {
     const cursor = await getLikesCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
+        { $sort: { "post.createdAt": -1 } },
+        { $skip: skip },
+        { $limit: limit },
         {
             $lookup: {
                 from: "posts",
@@ -14,9 +17,6 @@ async function getUserLikes(userId, skip, limit) {
                 as: "post",
             },
         },
-        { $sort: { "post.createdAt": -1 } },
-        { $skip: skip },
-        { $limit: limit },
         { $project: { _id: 0, post: 1 } },
     ]);
 

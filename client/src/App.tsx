@@ -13,7 +13,7 @@ function App() {
             <Route path="/popular" element={<Popular />} />
             <Route path="/new" element={<New />} />
             <Route path="/collections" element={<Collections />} />
-            <Route path="/search/:text" element={<Search />} />
+            <Route path="/search" element={<Search />} />
         </Routes>
     );
 }

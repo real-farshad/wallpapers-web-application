@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import SectionGrid from "./SectionGrid";
+import SectionInfoContainer from "./SectionInfoContainer";
 import SectionTitle from "./SectionTitle";
 import WallpaperCard from "./WallpaperCard";
 import "../styles/NewPreview.scss";
@@ -18,13 +19,13 @@ function NewPreview() {
     return (
         <SectionGrid>
             <div className="new-preview__title">
-                <SectionTitle>
-                    <span>
+                <SectionInfoContainer>
+                    <SectionTitle>
                         MOST <br />
                         RECENT <br />
                         WALLPAPERS
-                    </span>
-                </SectionTitle>
+                    </SectionTitle>
+                </SectionInfoContainer>
             </div>
 
             {newWallpapers.length > 0 &&

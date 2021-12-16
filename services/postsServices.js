@@ -11,6 +11,9 @@ async function searchPostsList(search, categoryId, sort, duration, skip, limit) 
 
     const cursor = await getPostsCollection().aggregate([
         { $match: query },
+        { $sort: sort },
+        { $skip: skip },
+        { $limit: limit },
         {
             $lookup: {
                 from: "users",
@@ -22,9 +25,6 @@ async function searchPostsList(search, categoryId, sort, duration, skip, limit) 
                 as: "publisher",
             },
         },
-        { $sort: sort },
-        { $skip: skip },
-        { $limit: limit },
         {
             $project: {
                 imageUrl: { thumbnail: 1 },

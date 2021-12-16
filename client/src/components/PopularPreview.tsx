@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import SectionGrid from "./SectionGrid";
+import SectionInfoContainer from "./SectionInfoContainer";
 import SectionTitle from "./SectionTitle";
 import WallpaperCard from "./WallpaperCard";
 import "../styles/PopularPreview.scss";
@@ -18,13 +19,13 @@ function PopularPreview() {
     return (
         <SectionGrid>
             <div className="popular-preview__title">
-                <SectionTitle>
-                    <span>
+                <SectionInfoContainer>
+                    <SectionTitle>
                         MOST <br />
                         POPULAR <br />
                         WALLPAPERS
-                    </span>
-                </SectionTitle>
+                    </SectionTitle>
+                </SectionInfoContainer>
             </div>
 
             {popularWallpapers.length > 0 &&

@@ -1,55 +1,126 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import FlexSectionTitle from "../components/FlexSectionTitle";
-import InfiniteScroll from "../components/InfiniteScroll";
-import SectionGrid from "../components/SectionGrid";
 import StandardLayout from "../components/StandardLayout";
+import SectionGrid from "../components/SectionGrid";
+import SectionInfoContainer from "../components/SectionInfoContainer";
+import ControlBtnsContainer from "../components/ControlBtnsContainer";
+import ControlBtn from "../components/ControlBtn";
+import SectionTitle from "../components/SectionTitle";
+import InfiniteScroll from "../components/InfiniteScroll";
 import WallpaperCard from "../components/WallpaperCard";
+import CollectionCard from "../components/CollectionCard";
+import "../styles/Search.scss";
 
 function Search() {
-    const { text } = useParams();
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const { selection, text } = params;
 
-    const [wallpapers, setWallpapers] = useState([]);
-    const [wallpapersFinished, setWallpapersFinished] = useState(false);
-    const [page, setPage] = useState(2);
+    const [results, setResults] = useState([]);
+    const [resultsFinished, setResultsFinished] = useState(false);
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
+        const textString = text ? JSON.stringify(text) : "";
+        const searchTextTooShort = textString.length < 3;
+        const searchTextTooLong = textString.length > 64;
+        if (searchTextTooShort || searchTextTooLong) return;
+
         (async () => {
-            const res = await fetch(`/api/posts/?search=${text}&sort=new&limit=8`);
-            const wallpapers = await res.json();
-            setWallpapers(wallpapers);
+            const res = await fetch(
+                `/api/${
+                    selection === "collections" ? "collections" : "posts"
+                }/?search=${textString}&sort=${
+                    selection === "new" ? "new" : "popular"
+                }&limit=8`
+            );
+            const searchResults = await res.json();
+            setResults(searchResults);
         })();
     }, []);
 
-    async function loadMoreWallpapers() {
+    async function loadMoreResults() {
         const res = await fetch(
-            `/api/posts/?search=${text}&sort=new&page=${page}&limit=8`
+            `/api/${
+                selection === "collections" ? "collections" : "posts"
+            }/?search=${text}&sort=${selection === "new" ? "new" : "popular"}&page=${
+                page + 1
+            }&limit=8`
         );
-        const wallpapers = await res.json();
+        const results = await res.json();
 
-        setWallpapers((prevState) => [...prevState, ...(wallpapers as never[])]);
-        if (wallpapers.length < 8) setWallpapersFinished(true);
+        setResults((prevState) => [...prevState, ...(results as never[])]);
+        if (results.length < 8) setResultsFinished(true);
         setPage((prevState) => prevState + 1);
+    }
+
+    function handleClickOnPopularSelection() {
+        if (selection === "popular") return;
+        window.location.href = `/search?selection=popular&text=${text}`;
+    }
+
+    function handleClickOnNewSelection() {
+        if (selection === "new") return;
+        window.location.href = `/search?selection=new&text=${text}`;
+    }
+
+    function handleClickOnCollectionsSelection() {
+        if (selection === "collections") return;
+        window.location.href = `/search?selection=collections&text=${text}`;
     }
 
     return (
         <StandardLayout>
-            <SectionGrid>
-                <FlexSectionTitle>
-                    <span>
-                        RESULT
-                        <br />
-                        WALLPAPERS
-                    </span>
-                </FlexSectionTitle>
+            <div className="search__result-section">
+                <SectionGrid>
+                    <SectionInfoContainer twoRows>
+                        <ControlBtnsContainer>
+                            <div onClick={handleClickOnPopularSelection}>
+                                <ControlBtn
+                                    active={!selection || selection === "popular"}
+                                >
+                                    2021 And After
+                                </ControlBtn>
+                            </div>
 
-                <InfiniteScroll
-                    elements={wallpapers}
-                    loadMoreElements={loadMoreWallpapers}
-                    elementsFinished={wallpapersFinished}
-                    template={<WallpaperCard />}
-                />
-            </SectionGrid>
+                            <div onClick={handleClickOnNewSelection}>
+                                <ControlBtn active={selection === "new"}>
+                                    2020 And After
+                                </ControlBtn>
+                            </div>
+
+                            <div onClick={handleClickOnCollectionsSelection}>
+                                <ControlBtn active={selection === "collections"}>
+                                    All Times
+                                </ControlBtn>
+                            </div>
+                        </ControlBtnsContainer>
+
+                        <SectionTitle>
+                            RESULT <br />
+                            WALLPAPERS
+                        </SectionTitle>
+                    </SectionInfoContainer>
+
+                    <InfiniteScroll
+                        elements={results}
+                        loadMoreElements={loadMoreResults}
+                        elementsFinished={resultsFinished}
+                        template={
+                            selection === "collections" ? (
+                                <CollectionCard />
+                            ) : (
+                                <WallpaperCard />
+                            )
+                        }
+                    />
+
+                    {results.length === 0 && (
+                        <p className="search__not-found-message">
+                            No match for: "{text}" was found!
+                        </p>
+                    )}
+                </SectionGrid>
+            </div>
         </StandardLayout>
     );
 }
