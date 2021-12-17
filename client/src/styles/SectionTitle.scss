@@ -8,6 +8,7 @@
 
     @include min-width-md {
         font-size: 38px;
+        margin-bottom: -5px;
     }
 
     @include min-width-lg {

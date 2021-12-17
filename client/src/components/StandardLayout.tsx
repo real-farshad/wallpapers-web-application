@@ -1,11 +1,11 @@
-import ContentContainer from "./ContentContainer";
+import ContentWidthContainer from "./ContentWidthContainer";
 import Navbar from "./Navbar";
 import CopyRight from "./CopyRight";
 import "../styles/StandardLayout.scss";
 
 function StandardLayout({ children }: any) {
     return (
-        <ContentContainer>
+        <ContentWidthContainer>
             <header>
                 <div className="standard-layout__navbar">
                     <Navbar />
@@ -21,7 +21,7 @@ function StandardLayout({ children }: any) {
                     <CopyRight />
                 </div>
             </footer>
-        </ContentContainer>
+        </ContentWidthContainer>
     );
 }
 

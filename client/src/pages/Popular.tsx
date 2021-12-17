@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import StandardLayout from "../components/StandardLayout";
+import ContentWidthContainer from "../components/ContentWidthContainer";
+import HeaderContainer from "../components/HeaderContainer";
+import Navbar from "../components/Navbar";
+import MainContainer from "../components/MainContainer";
 import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
 import ControlBtnsContainer from "../components/ControlBtnsContainer";
@@ -7,6 +10,8 @@ import ControlBtn from "../components/ControlBtn";
 import SectionTitle from "../components/SectionTitle";
 import InfiniteScroll from "../components/InfiniteScroll";
 import WallpaperCard from "../components/WallpaperCard";
+import FooterContainer from "../components/FooterContainer";
+import CopyRight from "../components/CopyRight";
 
 function Popular() {
     const [popularWallpapers, setPopularWallpapers] = useState([]);
@@ -31,38 +36,48 @@ function Popular() {
     }
 
     return (
-        <StandardLayout>
-            <SectionGrid>
-                <SectionInfoContainer twoRows>
-                    <ControlBtnsContainer>
-                        <div>
-                            <ControlBtn active>2021 And After</ControlBtn>
-                        </div>
+        <ContentWidthContainer>
+            <HeaderContainer>
+                <Navbar />
+            </HeaderContainer>
 
-                        <div>
-                            <ControlBtn>2020 And After</ControlBtn>
-                        </div>
+            <MainContainer>
+                <SectionGrid>
+                    <SectionInfoContainer twoRows>
+                        <ControlBtnsContainer>
+                            <div>
+                                <ControlBtn active>2021 And After</ControlBtn>
+                            </div>
 
-                        <div>
-                            <ControlBtn>All Times</ControlBtn>
-                        </div>
-                    </ControlBtnsContainer>
+                            <div>
+                                <ControlBtn>2020 And After</ControlBtn>
+                            </div>
 
-                    <SectionTitle>
-                        MOST <br />
-                        POPULAR <br />
-                        WALLPAPERS
-                    </SectionTitle>
-                </SectionInfoContainer>
+                            <div>
+                                <ControlBtn>All Times</ControlBtn>
+                            </div>
+                        </ControlBtnsContainer>
 
-                <InfiniteScroll
-                    elements={popularWallpapers}
-                    loadMoreElements={loadMoreWallpapers}
-                    elementsFinished={wallpapersFinished}
-                    template={<WallpaperCard />}
-                />
-            </SectionGrid>
-        </StandardLayout>
+                        <SectionTitle>
+                            MOST <br />
+                            POPULAR <br />
+                            WALLPAPERS
+                        </SectionTitle>
+                    </SectionInfoContainer>
+
+                    <InfiniteScroll
+                        elements={popularWallpapers}
+                        loadMoreElements={loadMoreWallpapers}
+                        elementsFinished={wallpapersFinished}
+                        template={<WallpaperCard />}
+                    />
+                </SectionGrid>
+            </MainContainer>
+
+            <FooterContainer>
+                <CopyRight />
+            </FooterContainer>
+        </ContentWidthContainer>
     );
 }
 

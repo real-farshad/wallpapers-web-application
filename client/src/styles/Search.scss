@@ -1,5 +1,18 @@
 @import "breakpoints";
 
+.search {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.search__container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .search__result-section {
     min-height: 400px;
 
@@ -14,10 +27,4 @@
     @include min-width-xl {
         min-height: 440px;
     }
-}
-
-.search__not-found-message {
-    font-weight: var(--medium-font-weight);
-    word-break: break-all;
-    opacity: var(--primary-opacity);
 }

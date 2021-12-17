@@ -1,6 +1,6 @@
 @import "breakpoints";
 
-.content-container {
+.content-width-container {
     padding: 0 var(--content-space);
 
     @include min-width-xl {

@@ -4,11 +4,11 @@
     margin-bottom: 475px;
 
     @include min-width-md {
-        margin-bottom: 150px;
+        margin-bottom: 50px;
     }
 
     @include min-width-lg {
-        margin-bottom: 200px;
+        margin-bottom: 100px;
     }
 
     @include min-width-xl {
@@ -31,20 +31,4 @@
 
 .home__content-section {
     margin-bottom: 100px;
-
-    &--last {
-        margin-bottom: 70px;
-
-        @include min-width-lg {
-            margin-bottom: 100px;
-        }
-    }
-}
-
-.home__copy-right {
-    margin-bottom: 30px;
-
-    @include min-width-lg {
-        margin-bottom: 40px;
-    }
 }

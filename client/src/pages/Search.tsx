@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import StandardLayout from "../components/StandardLayout";
+import ContentWidthContainer from "../components/ContentWidthContainer";
+import HeaderContainer from "../components/HeaderContainer";
+import Navbar from "../components/Navbar";
 import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
 import ControlBtnsContainer from "../components/ControlBtnsContainer";
@@ -8,6 +10,8 @@ import SectionTitle from "../components/SectionTitle";
 import InfiniteScroll from "../components/InfiniteScroll";
 import WallpaperCard from "../components/WallpaperCard";
 import CollectionCard from "../components/CollectionCard";
+import FooterContainer from "../components/FooterContainer";
+import CopyRight from "../components/CopyRight";
 import "../styles/Search.scss";
 
 function Search() {
@@ -69,59 +73,68 @@ function Search() {
     }
 
     return (
-        <StandardLayout>
-            <div className="search__result-section">
-                <SectionGrid>
-                    <SectionInfoContainer twoRows>
-                        <ControlBtnsContainer>
-                            <div onClick={handleClickOnPopularSelection}>
-                                <ControlBtn
-                                    active={!selection || selection === "popular"}
-                                >
-                                    2021 And After
-                                </ControlBtn>
-                            </div>
+        <ContentWidthContainer>
+            <div className="search">
+                <HeaderContainer>
+                    <Navbar />
+                </HeaderContainer>
 
-                            <div onClick={handleClickOnNewSelection}>
-                                <ControlBtn active={selection === "new"}>
-                                    2020 And After
-                                </ControlBtn>
-                            </div>
+                <div className="search__container">
+                    <div className="search__result-section">
+                        <SectionGrid>
+                            <SectionInfoContainer twoRows>
+                                <ControlBtnsContainer>
+                                    <div onClick={handleClickOnPopularSelection}>
+                                        <ControlBtn
+                                            active={!selection || selection === "popular"}
+                                        >
+                                            Popular First
+                                        </ControlBtn>
+                                    </div>
 
-                            <div onClick={handleClickOnCollectionsSelection}>
-                                <ControlBtn active={selection === "collections"}>
-                                    All Times
-                                </ControlBtn>
-                            </div>
-                        </ControlBtnsContainer>
+                                    <div onClick={handleClickOnNewSelection}>
+                                        <ControlBtn active={selection === "new"}>
+                                            New First
+                                        </ControlBtn>
+                                    </div>
 
-                        <SectionTitle>
-                            RESULT <br />
-                            WALLPAPERS
-                        </SectionTitle>
-                    </SectionInfoContainer>
+                                    <div onClick={handleClickOnCollectionsSelection}>
+                                        <ControlBtn active={selection === "collections"}>
+                                            Collections
+                                        </ControlBtn>
+                                    </div>
+                                </ControlBtnsContainer>
 
-                    <InfiniteScroll
-                        elements={results}
-                        loadMoreElements={loadMoreResults}
-                        elementsFinished={resultsFinished}
-                        template={
-                            selection === "collections" ? (
-                                <CollectionCard />
-                            ) : (
-                                <WallpaperCard />
-                            )
-                        }
-                    />
+                                <SectionTitle>
+                                    {results.length} <br />
+                                    MATCHING <br />
+                                    {selection === "collections"
+                                        ? `COLLECTION${results.length > 1 ? "S" : ""}`
+                                        : `WALLPAPER${results.length > 1 ? "S" : ""}`}
+                                </SectionTitle>
+                            </SectionInfoContainer>
 
-                    {results.length === 0 && (
-                        <p className="search__not-found-message">
-                            No match for: "{text}" was found!
-                        </p>
-                    )}
-                </SectionGrid>
+                            <InfiniteScroll
+                                elements={results}
+                                loadMoreElements={loadMoreResults}
+                                elementsFinished={resultsFinished}
+                                template={
+                                    selection === "collections" ? (
+                                        <CollectionCard />
+                                    ) : (
+                                        <WallpaperCard />
+                                    )
+                                }
+                            />
+                        </SectionGrid>
+                    </div>
+
+                    <FooterContainer>
+                        <CopyRight />
+                    </FooterContainer>
+                </div>
             </div>
-        </StandardLayout>
+        </ContentWidthContainer>
     );
 }
 

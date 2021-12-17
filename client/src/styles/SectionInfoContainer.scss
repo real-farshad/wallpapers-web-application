@@ -1,6 +1,8 @@
 @import "breakpoints";
 
 .section-info-container {
+    margin-bottom: -20px;
+
     &--two-rows {
         display: flex;
         flex-direction: column-reverse;
@@ -11,7 +13,8 @@
         height: 255px;
         display: flex;
         align-items: flex-end;
-        margin-top: 30px;
+        margin-top: 42px;
+        margin-bottom: 0;
 
         &--two-rows {
             flex-direction: column;

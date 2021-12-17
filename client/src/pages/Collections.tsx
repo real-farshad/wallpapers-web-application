@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import StandardLayout from "../components/StandardLayout";
+import ContentWidthContainer from "../components/ContentWidthContainer";
+import HeaderContainer from "../components/HeaderContainer";
+import Navbar from "../components/Navbar";
+import MainContainer from "../components/MainContainer";
 import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
 import SectionTitle from "../components/SectionTitle";
 import InfiniteScroll from "../components/InfiniteScroll";
 import CollectionCard from "../components/CollectionCard";
-import "../styles/Collections.scss";
+import FooterContainer from "../components/FooterContainer";
+import CopyRight from "../components/CopyRight";
 
 function Collections() {
     const [popularCollections, setPopularCollections] = useState([]);
@@ -30,24 +34,34 @@ function Collections() {
     }
 
     return (
-        <StandardLayout>
-            <SectionGrid>
-                <SectionInfoContainer>
-                    <SectionTitle>
-                        MOST <br />
-                        RECENT <br />
-                        WALLPAPERS
-                    </SectionTitle>
-                </SectionInfoContainer>
+        <ContentWidthContainer>
+            <HeaderContainer>
+                <Navbar />
+            </HeaderContainer>
 
-                <InfiniteScroll
-                    elements={popularCollections}
-                    loadMoreElements={loadMoreCollections}
-                    elementsFinished={collectionsFinished}
-                    template={<CollectionCard />}
-                />
-            </SectionGrid>
-        </StandardLayout>
+            <MainContainer>
+                <SectionGrid>
+                    <SectionInfoContainer>
+                        <SectionTitle>
+                            MOST <br />
+                            RECENT <br />
+                            WALLPAPERS
+                        </SectionTitle>
+                    </SectionInfoContainer>
+
+                    <InfiniteScroll
+                        elements={popularCollections}
+                        loadMoreElements={loadMoreCollections}
+                        elementsFinished={collectionsFinished}
+                        template={<CollectionCard />}
+                    />
+                </SectionGrid>
+            </MainContainer>
+
+            <FooterContainer>
+                <CopyRight />
+            </FooterContainer>
+        </ContentWidthContainer>
     );
 }
 

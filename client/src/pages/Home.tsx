@@ -1,12 +1,14 @@
 import { Fragment } from "react";
-import Navbar from "../components/Navbar";
-import ContentContainer from "../components/ContentContainer";
-import PopularPreview from "../components/PopularPreview";
-import CoverImage from "../components/CoverImage";
+import ContentWidthContainer from "../components/ContentWidthContainer";
 import homepageBackground from "../assets/homepage-background.jpg";
+import CoverImage from "../components/CoverImage";
+import Navbar from "../components/Navbar";
+import MainContainer from "../components/MainContainer";
+import PopularPreview from "../components/PopularPreview";
 import NewPreview from "../components/NewPreview";
 import CollectionsPreview from "../components/CollectionsPreview";
 import CopyRight from "../components/CopyRight";
+import FooterContainer from "../components/FooterContainer";
 import "../styles/Home.scss";
 
 function Home() {
@@ -16,14 +18,14 @@ function Home() {
                 <CoverImage src={homepageBackground} />
             </div>
 
-            <ContentContainer>
+            <ContentWidthContainer>
                 <header>
                     <div className="home__navbar">
                         <Navbar />
                     </div>
                 </header>
 
-                <main>
+                <MainContainer>
                     <div className="home__content-section">
                         <PopularPreview />
                     </div>
@@ -32,17 +34,13 @@ function Home() {
                         <NewPreview />
                     </div>
 
-                    <div className="home__content-section home__content-section--last">
-                        <CollectionsPreview />
-                    </div>
-                </main>
+                    <CollectionsPreview />
+                </MainContainer>
 
-                <footer>
-                    <div className="home__copy-right">
-                        <CopyRight />
-                    </div>
-                </footer>
-            </ContentContainer>
+                <FooterContainer>
+                    <CopyRight />
+                </FooterContainer>
+            </ContentWidthContainer>
         </Fragment>
     );
 }

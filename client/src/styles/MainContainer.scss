@@ -1,0 +1,13 @@
+@import "breakpoints";
+
+.main-container {
+    margin-bottom: 50px;
+
+    @include min-width-md {
+        margin-bottom: 70px;
+    }
+
+    @include min-width-lg {
+        margin-bottom: 100px;
+    }
+}
