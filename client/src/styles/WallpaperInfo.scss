@@ -1,0 +1,97 @@
+@import "breakpoints";
+
+.wallpaper-info__primary-container {
+    margin-bottom: 30px;
+}
+
+.wallpaper-info__title {
+    max-width: 500px;
+    margin-bottom: 5px;
+}
+
+.wallpaper-info__category {
+    font-size: 10px;
+    font-weight: var(--medium-font-weight);
+    opacity: 0.6;
+}
+
+.wallpaper-info__secondary-container {
+    @include min-width-md {
+        display: flex;
+        align-items: flex-end;
+        gap: 50px;
+    }
+}
+
+.wallpaper-info__publisher {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    @include min-width-md {
+        margin-bottom: 0;
+    }
+}
+
+.wallpaper-info__publisher-avatar {
+    width: 50px;
+    height: 50px;
+}
+
+.wallpaper-info__username {
+    font-weight: var(--medium-font-weight);
+    opacity: var(--primary-opacity);
+    margin-bottom: 5px;
+}
+
+.wallpaper-info__publish-date {
+    font-size: 10px;
+    font-weight: var(--medium-font-weight);
+    opacity: 0.6;
+}
+
+.wallpaper-info__action-btns {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+
+    @include min-width-md {
+        gap: 50px;
+    }
+}
+
+.wallpaper-info__download-btn {
+    font-weight: var(--medium-font-weight);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    opacity: var(--primary-opacity);
+}
+
+.wallpaper-info__download-btn-description {
+    font-size: 10px;
+    font-weight: var(--medium-font-weight);
+    opacity: 0.6;
+}
+
+.wallpaper-info__like-btn {
+    font-weight: var(--medium-font-weight);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    opacity: var(--primary-opacity);
+}
+
+.wallpaper-info__like-count {
+    font-size: 10px;
+    font-weight: var(--medium-font-weight);
+    width: 100%;
+    text-align: center;
+    opacity: 0.6;
+}
+
+.wallpaper-info__save-btn {
+    font-weight: var(--medium-font-weight);
+    opacity: var(--primary-opacity);
+}
