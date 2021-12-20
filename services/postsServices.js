@@ -45,13 +45,60 @@ async function findPostById(id) {
         { $match: { _id: new ObjectId(id) } },
         {
             $lookup: {
+                from: "categories",
+                let: { id: "$categoryId" },
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                    { $project: { _id: 0, title: 1 } },
+                ],
+                as: "category",
+            },
+        },
+        {
+            $lookup: {
                 from: "users",
                 let: { id: "$publisherId" },
                 pipeline: [
                     { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
-                    { $project: { username: 1, _json: { name: 1 } } },
+                    { $project: { avatar: 1, username: 1, _json: { name: 1 } } },
                 ],
                 as: "publisher",
+            },
+        },
+        {
+            $lookup: {
+                from: "comments",
+                let: { id: "$_id" },
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$postId", "$$id"] } } },
+                    { $sort: { createdAt: -1 } },
+                    { $limit: 2 },
+                    {
+                        $lookup: {
+                            from: "users",
+                            let: { id: "$userId" },
+                            pipeline: [
+                                { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                                {
+                                    $project: {
+                                        avatar: 1,
+                                        username: 1,
+                                        _json: { name: 1 },
+                                    },
+                                },
+                            ],
+                            as: "user",
+                        },
+                    },
+                    {
+                        $project: {
+                            description: 1,
+                            createdAt: 1,
+                            user: { $arrayElemAt: ["$user", 0] },
+                        },
+                    },
+                ],
+                as: "comments",
             },
         },
         {
@@ -60,7 +107,9 @@ async function findPostById(id) {
                 title: 1,
                 likeCount: 1,
                 createdAt: 1,
+                category: { $arrayElemAt: ["$category", 0] },
                 publisher: { $arrayElemAt: ["$publisher", 0] },
+                comments: 1,
             },
         },
     ]);

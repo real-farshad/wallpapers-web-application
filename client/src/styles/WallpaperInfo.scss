@@ -2,17 +2,35 @@
 
 .wallpaper-info__primary-container {
     margin-bottom: 30px;
+
+    @include min-width-md {
+        margin-bottom: 25px;
+    }
 }
 
 .wallpaper-info__title {
-    max-width: 500px;
-    margin-bottom: 5px;
+    font-size: 36px;
+    font-weight: var(--bold-font-weight);
+    line-height: 1;
+    max-width: 400px;
+    margin-bottom: 10px;
+    opacity: var(--primary-opacity);
+
+    @include min-width-xl {
+        line-height: normal;
+        max-width: 600px;
+        margin-bottom: 0;
+    }
 }
 
 .wallpaper-info__category {
     font-size: 10px;
     font-weight: var(--medium-font-weight);
     opacity: 0.6;
+
+    span {
+        text-transform: capitalize;
+    }
 }
 
 .wallpaper-info__secondary-container {

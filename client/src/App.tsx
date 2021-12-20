@@ -5,7 +5,7 @@ import Popular from "./pages/Popular";
 import New from "./pages/New";
 import Collections from "./pages/Collections";
 import Search from "./pages/Search";
-import SingleWallpaper from "./components/SingleWallpaper";
+import Wallpaper from "./pages/Wallpaper";
 import "./styles/App.scss";
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
                 <Route path="/new" element={<New />} />
                 <Route path="/collections" element={<Collections />} />
                 <Route path="/search" element={<Search />} />
-                <Route path="/single" element={<SingleWallpaper />} />
+                <Route path="/single/:id" element={<Wallpaper />} />
             </Routes>
         </Fragment>
     );

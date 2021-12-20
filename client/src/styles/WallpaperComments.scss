@@ -1,23 +1,22 @@
 @import "breakpoints";
 
-.comments-container {
+.wallpaper-comments {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
     @include min-width-xl {
-        display: flex;
         flex-direction: column-reverse;
     }
 }
 
-.comments-container__comment {
-    margin-bottom: 50px;
-}
-
-.comments-container__message-form {
+.wallpaper-comments__message-form {
     display: flex;
     align-items: flex-end;
     gap: 20px;
 }
 
-.comments-container__message-input {
+.wallpaper-comments__message-input {
     flex-grow: 1;
     font-weight: var(--medium-font-weight);
     color: var(--white);
@@ -27,11 +26,11 @@
 
     &::placeholder {
         color: var(--white);
-        opacity: 0.4;
+        opacity: 0.6;
     }
 }
 
-.comments-container__send-btn {
+.wallpaper-comments__send-btn {
     font-weight: var(--medium-font-weight);
     opacity: var(--primary-opacity);
     margin-bottom: -2px;
@@ -39,20 +38,15 @@
 }
 
 .commments-container__comment-messages-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
     @include min-width-md {
-        display: flex;
-        gap: 50px;
+        flex-direction: row;
     }
 
     @include min-width-xl {
         flex-direction: column;
     }
-
-    @include min-width-xl {
-        gap: 0;
-    }
-}
-
-.comments-container__message {
-    opacity: var(--primary-opacity);
 }

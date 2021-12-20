@@ -1,6 +1,7 @@
 @import "breakpoints";
 
 .home__navbar {
+    margin-top: var(--content-space);
     margin-bottom: 475px;
 
     @include min-width-md {
@@ -8,6 +9,7 @@
     }
 
     @include min-width-lg {
+        margin-top: 40px;
         margin-bottom: 100px;
     }
 
