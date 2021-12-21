@@ -14,6 +14,10 @@
     font-weight: var(--medium-font-weight);
     opacity: var(--primary-opacity);
     margin-bottom: 5px;
+
+    button {
+        text-decoration: underline;
+    }
 }
 
 .comment__publish-date {

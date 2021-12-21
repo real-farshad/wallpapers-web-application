@@ -39,7 +39,7 @@ function WallpaperInfo(props: WallpaperInfoTypes) {
 
                     <div className="wallpaper-info__publisher-info">
                         <p className="wallpaper-info__username">
-                            By @{publisher.username}
+                            By <button>@{publisher.username}</button>
                         </p>
 
                         <p className="wallpaper-info__publish-date">

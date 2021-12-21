@@ -25,7 +25,9 @@ function Comment(props: CommentTypes) {
                 </div>
 
                 <div>
-                    <p className="comment__username">By @{user.username}</p>
+                    <p className="comment__username">
+                        By <button>@{user.username}</button>
+                    </p>
 
                     <p className="comment__publish-date">
                         Published At <StandardTime time={createdAt} />

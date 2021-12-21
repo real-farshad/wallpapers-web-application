@@ -31,7 +31,7 @@ async function searchPostsList(search, categoryId, sort, duration, skip, limit) 
                 title: 1,
                 likeCount: 1,
                 createdAt: 1,
-                publisher: { $arrayElemAt: ["$publisher", 0] },
+                publisher: { $first: "$publisher" },
             },
         },
     ]);
@@ -94,7 +94,7 @@ async function findPostById(id) {
                         $project: {
                             description: 1,
                             createdAt: 1,
-                            user: { $arrayElemAt: ["$user", 0] },
+                            user: { $first: "$user" },
                         },
                     },
                 ],
@@ -107,8 +107,8 @@ async function findPostById(id) {
                 title: 1,
                 likeCount: 1,
                 createdAt: 1,
-                category: { $arrayElemAt: ["$category", 0] },
-                publisher: { $arrayElemAt: ["$publisher", 0] },
+                category: { $first: "$category" },
+                publisher: { $first: "$publisher" },
                 comments: 1,
             },
         },

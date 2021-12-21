@@ -1,0 +1,21 @@
+@import "breakpoints";
+
+.wallpaper-content {
+    margin-bottom: 60px;
+
+    @include min-width-xl {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 100px;
+        margin-bottom: 100px;
+    }
+}
+
+.wallpaper-content__info-section {
+    margin-bottom: 60px;
+
+    @include min-width-xl {
+        margin-bottom: 0;
+    }
+}

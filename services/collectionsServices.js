@@ -23,7 +23,6 @@ async function findCollections(search, skip, limit) {
                 as: "user",
             },
         },
-        { $addFields: { user: { $first: "$user" } } },
         {
             $lookup: {
                 from: "collections-posts",
@@ -32,25 +31,36 @@ async function findCollections(search, skip, limit) {
                     { $match: { $expr: { $eq: ["$collectionId", "$$id"] } } },
                     { $sort: { createdAt: -1 } },
                     { $limit: 1 },
-                    { $project: { _id: 0, postId: 1 } },
+                    {
+                        $lookup: {
+                            from: "posts",
+                            let: { id: "$postId" },
+                            pipeline: [
+                                { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                                { $project: { _id: 0, "imageUrl.thumbnail": 1 } },
+                            ],
+                            as: "post",
+                        },
+                    },
+                    {
+                        $project: {
+                            "imageUrl.thumbnail": {
+                                $first: "$post.imageUrl.thumbnail",
+                            },
+                        },
+                    },
                 ],
-                as: "collectionPost",
+                as: "posts",
             },
         },
-        { $addFields: { collectionPost: { $first: "$collectionPost" } } },
         {
-            $lookup: {
-                from: "posts",
-                let: { id: "$collectionPost.postId" },
-                pipeline: [
-                    { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
-                    { $project: { _id: 0, "imageUrl.thumbnail": 1 } },
-                ],
-                as: "post",
+            $project: {
+                title: 1,
+                createdAt: 1,
+                post: { $first: "$posts" },
+                user: { $first: "$user" },
             },
         },
-        { $addFields: { post: { $first: "$post" } } },
-        { $project: { userId: 0, collectionPost: 0 } },
     ]);
 
     const result = await cursor.toArray();
