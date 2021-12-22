@@ -6,7 +6,7 @@ import WallpaperContent from "../components/WallpaperContent";
 import "../styles/Wallpaper.scss";
 
 function Wallpaper() {
-    const [data, setData] = useState([] as any);
+    const [data, setData] = useState(null as any);
     const { id } = useParams();
 
     useEffect(() => {
@@ -20,7 +20,7 @@ function Wallpaper() {
         })();
     }, []);
 
-    if (data.length === 0) return null;
+    if (!data) return null;
 
     return (
         <WallpaperLayout backgroundImage={data.imageUrl.large}>

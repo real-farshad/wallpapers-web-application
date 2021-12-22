@@ -5,7 +5,11 @@ import SectionTitle from "./SectionTitle";
 import WallpaperCard from "./WallpaperCard";
 import "../styles/PopularPreview.scss";
 
-function PopularPreview() {
+interface PopularPreviewTypes {
+    addWallpaperId: (id: string) => void;
+}
+
+function PopularPreview({ addWallpaperId }: PopularPreviewTypes) {
     const [popularWallpapers, setPopularWallpapers] = useState([]);
 
     useEffect(() => {
@@ -31,7 +35,11 @@ function PopularPreview() {
             {popularWallpapers.length > 0 &&
                 popularWallpapers.map((wallpaper: any) => {
                     return (
-                        <div className="popular-preview__card" key={wallpaper._id}>
+                        <div
+                            className="popular-preview__card"
+                            key={wallpaper._id}
+                            onClick={() => addWallpaperId(wallpaper._id)}
+                        >
                             <WallpaperCard data={wallpaper} />
                         </div>
                     );

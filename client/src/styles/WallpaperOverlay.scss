@@ -1,0 +1,28 @@
+@import "breakpoints";
+
+.wallpaper-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+.wallpaper-overlay__navbar {
+    margin-top: var(--content-space);
+    margin-bottom: 480px;
+
+    @include min-width-md {
+        margin-bottom: 100px;
+    }
+
+    @include min-width-lg {
+        margin-top: 40px;
+    }
+}
+
+.wallpaper-overlay__go-back-btn {
+    font-weight: var(--medium-font-weight);
+    text-decoration: underline;
+    opacity: var(--primary-opacity);
+}

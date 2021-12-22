@@ -11,7 +11,11 @@ import CopyRight from "../components/CopyRight";
 import FooterContainer from "../components/FooterContainer";
 import "../styles/Home.scss";
 
-function Home() {
+interface HomeTypes {
+    addWallpaperId: (id: string) => void;
+}
+
+function Home({ addWallpaperId }: HomeTypes) {
     return (
         <Fragment>
             <div className="home__background">
@@ -27,7 +31,7 @@ function Home() {
 
                 <MainContainer>
                     <div className="home__content-section">
-                        <PopularPreview />
+                        <PopularPreview addWallpaperId={addWallpaperId} />
                     </div>
 
                     <div className="home__content-section">
