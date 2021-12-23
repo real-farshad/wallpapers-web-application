@@ -5,6 +5,9 @@ import "../styles/WallpaperInfo.scss";
 
 interface WallpaperInfoTypes {
     info: {
+        imageUrl: {
+            large: string;
+        };
         title: string;
         category: {
             title: string;
@@ -19,7 +22,26 @@ interface WallpaperInfoTypes {
 }
 
 function WallpaperInfo(props: WallpaperInfoTypes) {
-    const { title, category, publisher, createdAt, likeCount } = props.info;
+    const { imageUrl, title, category, publisher, createdAt, likeCount } = props.info;
+
+    async function handleClickOnDownload(e: any) {
+        const res = await fetch(imageUrl.large);
+        const result = await res.blob();
+        saveBlob(result, title);
+    }
+
+    function saveBlob(blob: Blob, fileName: string) {
+        const a: any = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+
+        const url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }
 
     return (
         <div className="wallpaper-info">
@@ -49,7 +71,10 @@ function WallpaperInfo(props: WallpaperInfoTypes) {
                 </div>
 
                 <div className="wallpaper-info__action-btns">
-                    <button className="wallpaper-info__download-btn">
+                    <button
+                        className="wallpaper-info__download-btn"
+                        onClick={handleClickOnDownload}
+                    >
                         Download Wallpaper
                         <span className="wallpaper-info__download-btn-description">
                             High Resolution

@@ -44,6 +44,7 @@ async function findCollections(search, skip, limit) {
                     },
                     {
                         $project: {
+                            _id: 0,
                             "imageUrl.thumbnail": {
                                 $first: "$post.imageUrl.thumbnail",
                             },

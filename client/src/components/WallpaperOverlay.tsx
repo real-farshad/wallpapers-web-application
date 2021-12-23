@@ -1,18 +1,12 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useWallpaperOverlayContext } from "../contexts/WallpaperOverlayContext";
 import WallpaperLayout from "../components/WallpaperLayout";
 import WallpaperContent from "../components/WallpaperContent";
 import "../styles/WallpaperOverlay.scss";
 
-interface WallpaperOverlayTypes {
-    wallpaperId: string;
-    lastUrl: string;
-    removeWallpaperId: () => void;
-    changeLastUrl: (url: string) => void;
-}
-
-function WallpaperOverlay(props: WallpaperOverlayTypes) {
-    const { wallpaperId, lastUrl, removeWallpaperId, changeLastUrl } = props;
+function WallpaperOverlay() {
+    const { wallpaperId, lastUrl, setWallpaperId, setLastUrl } =
+        useWallpaperOverlayContext();
 
     const [data, setData] = useState(null as any);
 
@@ -31,14 +25,15 @@ function WallpaperOverlay(props: WallpaperOverlayTypes) {
 
     useEffect(() => {
         if (data) {
-            changeLastUrl(window.location.href);
+            setLastUrl(window.location.href);
             window.history.pushState("", "", "/single/" + wallpaperId);
         }
     }, [data]);
 
     function handleClickOnGoBackBtn() {
         window.history.pushState("", "", lastUrl);
-        removeWallpaperId();
+        setWallpaperId(null);
+        setLastUrl("");
     }
 
     if (!data) return null;

@@ -5,6 +5,9 @@ import WallpaperInfo from "./WallpaperInfo";
 
 interface WallpaperContentTypes {
     data: {
+        imageUrl: {
+            large: string;
+        };
         title: string;
         category: {
             title: string;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useWallpaperOverlayContext } from "../contexts/WallpaperOverlayContext";
 import StandardTime from "./StandardTime";
 import CoverImage from "./CoverImage";
 import StandardCount from "./StandardCount";
@@ -6,6 +7,7 @@ import "../styles/WallpaperCard.scss";
 
 interface WallpaperCardTypes {
     data: {
+        _id: string;
         publisher: { username: string };
         createdAt: number;
         imageUrl: { thumbnail: string };
@@ -15,7 +17,9 @@ interface WallpaperCardTypes {
 }
 
 function WallpaperCard(props: WallpaperCardTypes | any) {
-    const { publisher, createdAt, imageUrl, title, likeCount } = props.data;
+    const { setWallpaperId } = useWallpaperOverlayContext();
+
+    const { _id, publisher, createdAt, imageUrl, title, likeCount } = props.data;
 
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -40,7 +44,10 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
                 </p>
             </div>
 
-            <div className="wallpaper-card__image-container">
+            <div
+                className="wallpaper-card__image-container"
+                onClick={() => setWallpaperId(_id)}
+            >
                 <CoverImage src={imageUrl.thumbnail} />
 
                 <div className="wallpaper-card__image-overlay" />

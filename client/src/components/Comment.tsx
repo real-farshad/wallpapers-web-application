@@ -1,6 +1,6 @@
 import "../styles/Comment.scss";
 import UserAvatar from "./UserAvatar";
-import StandardTime from "./StandardTime";
+import PassedTime from "./PassedTime";
 
 interface CommentTypes {
     data: {
@@ -30,7 +30,7 @@ function Comment(props: CommentTypes) {
                     </p>
 
                     <p className="comment__publish-date">
-                        Published At <StandardTime time={createdAt} />
+                        Published <PassedTime time={createdAt} />
                     </p>
                 </div>
             </div>

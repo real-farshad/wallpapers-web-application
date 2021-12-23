@@ -103,7 +103,9 @@ async function findPostById(id) {
         },
         {
             $project: {
-                imageUrl: 1,
+                imageUrl: {
+                    large: 1,
+                },
                 title: 1,
                 likeCount: 1,
                 createdAt: 1,

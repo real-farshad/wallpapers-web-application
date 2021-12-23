@@ -1,4 +1,5 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
+import { useWallpaperOverlayContext } from "./contexts/WallpaperOverlayContext";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Popular from "./pages/Popular";
@@ -10,21 +11,12 @@ import WallpaperOverlay from "./components/WallpaperOverlay";
 import "./styles/App.scss";
 
 function App() {
-    const [lastUrl, setLastUrl] = useState("");
-    const [wallpaperId, setWallpaperId] = useState(null) as any;
-
-    function addWallpaperId(id: string) {
-        setWallpaperId(id);
-    }
-
-    function removeWallpaperId() {
-        setWallpaperId(null);
-    }
+    const { wallpaperId } = useWallpaperOverlayContext();
 
     return (
         <Fragment>
             <Routes>
-                <Route path="/" element={<Home addWallpaperId={addWallpaperId} />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/popular" element={<Popular />} />
                 <Route path="/new" element={<New />} />
                 <Route path="/collections" element={<Collections />} />
@@ -32,14 +24,7 @@ function App() {
                 <Route path="/single/:id" element={<Wallpaper />} />
             </Routes>
 
-            {wallpaperId && (
-                <WallpaperOverlay
-                    wallpaperId={wallpaperId}
-                    lastUrl={lastUrl}
-                    removeWallpaperId={removeWallpaperId}
-                    changeLastUrl={(url: string) => setLastUrl(url)}
-                />
-            )}
+            {wallpaperId && <WallpaperOverlay />}
         </Fragment>
     );
 }
