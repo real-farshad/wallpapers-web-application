@@ -1,5 +1,5 @@
-import WallpaperOverlayProvider from "./WallpaperOverlayContext";
+import WallpaperProvider from "./WallpaperContext";
 
 export default function AppProvider({ children }: any) {
-    return <WallpaperOverlayProvider>{children}</WallpaperOverlayProvider>;
+    return <WallpaperProvider>{children}</WallpaperProvider>;
 }

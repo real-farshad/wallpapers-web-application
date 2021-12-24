@@ -35,14 +35,12 @@ async function getCollectionPosts(req, res, next, database) {
             limit
         );
 
+        const posts = [];
         for (let collectionPost of collectionPosts) {
-            const postId = collectionPost.postId;
-            const collectionPostInfo = await database.findPostById(postId);
-            collectionPost.post = collectionPostInfo;
-            delete collectionPost.postId;
+            posts.push(collectionPost.post);
         }
 
-        return res.json(collectionPosts);
+        return res.json(posts);
     } catch (err) {
         next(err);
     }

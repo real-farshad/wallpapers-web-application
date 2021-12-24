@@ -1,22 +1,17 @@
+import { useWallpaperContext } from "../contexts/WallpaperContext";
 import Comment from "./Comment";
 import "../styles/WallpaperComments.scss";
 
-interface WallpaperCommentsTypes {
-    comments: [
-        {
-            _id: string;
-            description: string;
-            createdAt: number;
-            user: {
-                avatar: string;
-                username: string;
-            };
-        }
-    ];
-}
+function WallpaperComments() {
+    const { wallpaper } = useWallpaperContext();
+    const comments = wallpaper.comments;
 
-function WallpaperComments({ comments }: WallpaperCommentsTypes) {
-    const currentUser = { ...comments[0], description: undefined };
+    const currentUser = {
+        user: {
+            username: "ellie",
+            avatar: "/images/ellie.jpg",
+        },
+    };
 
     return (
         <div className="wallpaper-comments">
@@ -34,7 +29,7 @@ function WallpaperComments({ comments }: WallpaperCommentsTypes) {
             </div>
 
             <div className="commments-container__comment-messages-container">
-                {comments.map((comment, index) => {
+                {comments.map((comment: any, index: number) => {
                     if (index > 1) return;
                     return <Comment data={comment} key={comment._id} />;
                 })}

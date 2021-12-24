@@ -12,23 +12,23 @@ import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
 
 function Collections() {
-    const [popularCollections, setPopularCollections] = useState([]);
+    const [collections, setCollections] = useState([]);
     const [collectionsFinished, setCollectionsFinished] = useState(false);
     const [page, setPage] = useState(2);
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("/api/collections/?sort=new&limit=8");
-            const collections = await res.json();
-            setPopularCollections(collections);
+            const res = await fetch("/api/collections/?limit=8");
+            const collectionsArray = await res.json();
+            setCollections(collectionsArray);
         })();
     }, []);
 
     async function loadMoreCollections() {
-        const res = await fetch(`/api/collections/?sort=new&page=${page}&limit=8`);
+        const res = await fetch(`/api/collections/?page=${page}&limit=8`);
         const collections = await res.json();
 
-        setPopularCollections((prevState) => [...prevState, ...(collections as never[])]);
+        setCollections((prevState) => [...prevState, ...(collections as never[])]);
         if (collections.length < 8) setCollectionsFinished(true);
         setPage((prevState) => prevState + 1);
     }
@@ -50,7 +50,7 @@ function Collections() {
                     </SectionInfoContainer>
 
                     <InfiniteScroll
-                        elements={popularCollections}
+                        elements={collections}
                         loadMoreElements={loadMoreCollections}
                         elementsFinished={collectionsFinished}
                         template={<CollectionCard />}

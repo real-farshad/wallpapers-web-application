@@ -1,46 +1,27 @@
+import { useWallpaperContext } from "../contexts/WallpaperContext";
 import UserAvatar from "./UserAvatar";
 import StandardTime from "./StandardTime";
 import StandardCount from "./StandardCount";
 import "../styles/WallpaperInfo.scss";
 
-interface WallpaperInfoTypes {
-    info: {
-        imageUrl: {
-            large: string;
-        };
-        title: string;
-        category: {
-            title: string;
-        };
-        publisher: {
-            avatar: string;
-            username: string;
-        };
-        createdAt: number;
-        likeCount: number;
-    };
-}
-
-function WallpaperInfo(props: WallpaperInfoTypes) {
-    const { imageUrl, title, category, publisher, createdAt, likeCount } = props.info;
+function WallpaperInfo() {
+    const { wallpaper } = useWallpaperContext();
+    const { imageUrl, title, category, publisher, createdAt, likeCount } = wallpaper;
 
     async function handleClickOnDownload(e: any) {
         const res = await fetch(imageUrl.large);
-        const result = await res.blob();
-        saveBlob(result, title);
-    }
+        const blob = await res.blob();
 
-    function saveBlob(blob: Blob, fileName: string) {
-        const a: any = document.createElement("a");
-        document.body.appendChild(a);
-        a.style = "display: none";
+        const imageURL = URL.createObjectURL(blob);
 
-        const url = window.URL.createObjectURL(blob);
-        a.href = url;
-        a.download = fileName;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
+        const link = document.createElement("a");
+        link.style.display = "none";
+        link.href = imageURL;
+        link.download = title;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     return (

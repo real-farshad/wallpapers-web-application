@@ -5,6 +5,7 @@ import "../styles/CollectionCard.scss";
 
 interface CollectionCardTypes {
     data: {
+        _id: string;
         user: { username: string };
         createdAt: number;
         post: { imageUrl: { thumbnail: string } };
@@ -14,7 +15,7 @@ interface CollectionCardTypes {
 }
 
 function CollectionCard(props: CollectionCardTypes | any) {
-    const { user, createdAt, post, title, postCount } = props.data;
+    const { _id, user, createdAt, post, title, postCount } = props.data;
 
     return (
         <div className="collection-card">
@@ -28,7 +29,7 @@ function CollectionCard(props: CollectionCardTypes | any) {
                 </p>
             </div>
 
-            <div className="collection-card__image-container">
+            <Link to={`/collection/${_id}`} className="collection-card__image-container">
                 <CoverImage src={post.imageUrl.thumbnail} />
 
                 <div className="collection-card__image-overlay" />
@@ -36,7 +37,7 @@ function CollectionCard(props: CollectionCardTypes | any) {
                 <h1 className="collection-card__title collection-card__title--lg">
                     {title}
                 </h1>
-            </div>
+            </Link>
 
             <div className="collection-card__secondary-info">
                 <h1 className="collection-card__title collection-card__title--sm">
@@ -45,7 +46,7 @@ function CollectionCard(props: CollectionCardTypes | any) {
 
                 <div className="collection-card__btn">
                     <div className="collection-card__link">
-                        <Link to="/">SEE COLLECTION</Link>
+                        <Link to={`/collection/${_id}`}>SEE COLLECTION</Link>
                     </div>
 
                     <p className="collection-card__wallpaper-count">

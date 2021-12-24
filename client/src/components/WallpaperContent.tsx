@@ -1,47 +1,18 @@
 import { Fragment } from "react";
-import "../styles/WallpaperContent.scss";
-import WallpaperComments from "./WallpaperComments";
 import WallpaperInfo from "./WallpaperInfo";
+import WallpaperComments from "./WallpaperComments";
+import "../styles/WallpaperContent.scss";
 
-interface WallpaperContentTypes {
-    data: {
-        imageUrl: {
-            large: string;
-        };
-        title: string;
-        category: {
-            title: string;
-        };
-        publisher: {
-            avatar: string;
-            username: string;
-        };
-        createdAt: number;
-        likeCount: number;
-        comments: [
-            {
-                _id: string;
-                description: string;
-                createdAt: number;
-                user: {
-                    avatar: string;
-                    username: string;
-                };
-            }
-        ];
-    };
-}
-
-function WallpaperContent({ data }: WallpaperContentTypes) {
+function WallpaperContent() {
     return (
         <Fragment>
             <div className="wallpaper-content">
                 <div className="wallpaper-content__info-section">
-                    <WallpaperInfo info={data} />
+                    <WallpaperInfo />
                 </div>
 
                 <div className="wallpaper-content__comment-section">
-                    <WallpaperComments comments={data.comments} />
+                    <WallpaperComments />
                 </div>
             </div>
         </Fragment>

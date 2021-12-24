@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useWallpaperContext } from "../contexts/WallpaperContext";
 import { useParams } from "react-router-dom";
 import WallpaperLayout from "../components/WallpaperLayout";
 import Navbar from "../components/Navbar";
@@ -6,24 +7,18 @@ import WallpaperContent from "../components/WallpaperContent";
 import "../styles/Wallpaper.scss";
 
 function Wallpaper() {
-    const [data, setData] = useState(null as any);
+    const { wallpaper, setWallpaper, fetchAndSetWallpaper } = useWallpaperContext();
     const { id } = useParams();
 
     useEffect(() => {
-        (async () => {
-            (async () => {
-                const res = await fetch("/api/posts/" + id);
-                if (res.status !== 200) window.location.href = "/";
-                const wallpaper = await res.json();
-                setData(wallpaper);
-            })();
-        })();
+        fetchAndSetWallpaper(id);
+        return () => setWallpaper(null);
     }, []);
 
-    if (!data) return null;
+    if (!wallpaper) return null;
 
     return (
-        <WallpaperLayout backgroundImage={data.imageUrl.large}>
+        <WallpaperLayout backgroundImage={wallpaper.imageUrl.large}>
             <header>
                 <div className="wallpaper__navbar">
                     <Navbar />
@@ -31,7 +26,7 @@ function Wallpaper() {
             </header>
 
             <main>
-                <WallpaperContent data={data} />
+                <WallpaperContent />
             </main>
         </WallpaperLayout>
     );

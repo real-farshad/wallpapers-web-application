@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { useWallpaperOverlayContext } from "./contexts/WallpaperOverlayContext";
+import { useWallpaperContext } from "./contexts/WallpaperContext";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Popular from "./pages/Popular";
@@ -7,11 +7,12 @@ import New from "./pages/New";
 import Collections from "./pages/Collections";
 import Search from "./pages/Search";
 import Wallpaper from "./pages/Wallpaper";
+import Collection from "./pages/Collection";
 import WallpaperOverlay from "./components/WallpaperOverlay";
 import "./styles/App.scss";
 
 function App() {
-    const { wallpaperId } = useWallpaperOverlayContext();
+    const { wallpaperId } = useWallpaperContext();
 
     return (
         <Fragment>
@@ -21,7 +22,8 @@ function App() {
                 <Route path="/new" element={<New />} />
                 <Route path="/collections" element={<Collections />} />
                 <Route path="/search" element={<Search />} />
-                <Route path="/single/:id" element={<Wallpaper />} />
+                <Route path="/wallpaper/:id" element={<Wallpaper />} />
+                <Route path="/collection/:id" element={<Collection />} />
             </Routes>
 
             {wallpaperId && <WallpaperOverlay />}

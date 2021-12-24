@@ -5,7 +5,7 @@ import PassedTime from "./PassedTime";
 interface CommentTypes {
     data: {
         description?: string;
-        createdAt: number;
+        createdAt?: number;
         user: {
             avatar: string;
             username: string;
@@ -29,9 +29,15 @@ function Comment(props: CommentTypes) {
                         By <button>@{user.username}</button>
                     </p>
 
-                    <p className="comment__publish-date">
-                        Published <PassedTime time={createdAt} />
-                    </p>
+                    {createdAt ? (
+                        <p className="comment__publisher-secondary-info">
+                            Published <PassedTime time={createdAt} />
+                        </p>
+                    ) : (
+                        <p className="comment__publisher-secondary-info">
+                            Signed In User
+                        </p>
+                    )}
                 </div>
             </div>
 

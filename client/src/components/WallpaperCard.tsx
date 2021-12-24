@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useWallpaperOverlayContext } from "../contexts/WallpaperOverlayContext";
+import { useWallpaperContext } from "../contexts/WallpaperContext";
 import StandardTime from "./StandardTime";
 import CoverImage from "./CoverImage";
 import StandardCount from "./StandardCount";
@@ -17,7 +17,7 @@ interface WallpaperCardTypes {
 }
 
 function WallpaperCard(props: WallpaperCardTypes | any) {
-    const { setWallpaperId } = useWallpaperOverlayContext();
+    const { setWallpaperId } = useWallpaperContext();
 
     const { _id, publisher, createdAt, imageUrl, title, likeCount } = props.data;
 

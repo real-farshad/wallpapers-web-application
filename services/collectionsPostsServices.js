@@ -4,11 +4,48 @@ const { getDatabase } = require("../configs/mongodb");
 const getCollectionsPostsCollection = () => getDatabase().collection("collections-posts");
 
 async function findCollectionPosts(collectionId, skip, limit) {
-    const cursor = await getCollectionsPostsCollection()
-        .find({ collectionId: new ObjectId(collectionId) })
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
+    const cursor = await getCollectionsPostsCollection().aggregate([
+        { $match: { collectionId: new ObjectId(collectionId) } },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit },
+        {
+            $lookup: {
+                from: "posts",
+                let: { id: "$postId" },
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                    {
+                        $lookup: {
+                            from: "users",
+                            let: { id: "$publisherId" },
+                            pipeline: [
+                                { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                                { $project: { username: 1, _json: { name: 1 } } },
+                            ],
+                            as: "publisher",
+                        },
+                    },
+                    {
+                        $project: {
+                            imageUrl: { thumbnail: 1 },
+                            title: 1,
+                            likeCount: 1,
+                            createdAt: 1,
+                            publisher: { $first: "$publisher" },
+                        },
+                    },
+                ],
+                as: "post",
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                post: { $first: "$post" },
+            },
+        },
+    ]);
 
     const result = await cursor.toArray();
     return result;
