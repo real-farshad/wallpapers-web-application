@@ -68,6 +68,14 @@ async function findCollections(search, skip, limit) {
     return result;
 }
 
+async function findCollectionById(id) {
+    const result = await getCollectionsCollection().findOne({
+        _id: new ObjectId(id),
+    });
+
+    return result;
+}
+
 async function findUserCollections(userId, skip, limit) {
     const cursor = await getCollectionsCollection()
         .find({ userId: new ObjectId(userId) })
@@ -96,14 +104,6 @@ async function findAndDeleteCollection(collectionId, userId) {
     return result;
 }
 
-async function findCollectionById(id) {
-    const result = await getCollectionsCollection().findOne({
-        _id: new ObjectId(id),
-    });
-
-    return result;
-}
-
 async function incrementCollectionPostCount(collectionId) {
     await getPostsCollection().updateOne(
         { _id: new ObjectId(collectionId) },
@@ -120,10 +120,10 @@ async function decrementCollectionPostCount(collectionId) {
 
 module.exports = {
     findCollections,
+    findCollectionById,
     findUserCollections,
     addNewCollection,
     findAndDeleteCollection,
-    findCollectionById,
     incrementCollectionPostCount,
     decrementCollectionPostCount,
 };

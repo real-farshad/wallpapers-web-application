@@ -11,19 +11,27 @@ import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
 import SectionTitle from "../components/SectionTitle";
 import WallpaperCard from "../components/WallpaperCard";
+import "../styles/Collection.scss";
 
 function Collection() {
     const { id } = useParams();
 
+    const [collectionInfo, setCollectionInfo] = useState(null as any);
     const [wallpapers, setWallpapers] = useState([]);
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
     const [page, setPage] = useState(2);
 
     useEffect(() => {
         (async () => {
-            const res = await fetch(`/api/collections-posts/${id}?limit=8`);
-            const collectionWallpapers = await res.json();
-            console.log(collectionWallpapers);
+            const collectionsRes = await fetch(`/api/collections/${id}`);
+            const collectionInfo = await collectionsRes.json();
+            console.log(collectionInfo);
+            setCollectionInfo(collectionInfo);
+
+            const collectionsPostsRes = await fetch(
+                `/api/collections-posts/${id}?limit=8`
+            );
+            const collectionWallpapers = await collectionsPostsRes.json();
             setWallpapers(collectionWallpapers);
         })();
     }, []);
@@ -41,32 +49,36 @@ function Collection() {
         setPage((prevState) => prevState + 1);
     }
 
-    if (wallpapers.length === 0) return null;
+    if (!collectionInfo || wallpapers.length === 0) return null;
 
     return (
         <ContentWidthContainer>
-            <HeaderContainer>
-                <Navbar />
-            </HeaderContainer>
+            <div className="collection">
+                <HeaderContainer>
+                    <Navbar />
+                </HeaderContainer>
 
-            <MainContainer>
-                <SectionGrid>
-                    <SectionInfoContainer>
-                        <SectionTitle>{"title here"}</SectionTitle>
-                    </SectionInfoContainer>
+                <div className="collection__container">
+                    <MainContainer>
+                        <SectionGrid>
+                            <SectionInfoContainer>
+                                <SectionTitle>{collectionInfo.title}</SectionTitle>
+                            </SectionInfoContainer>
 
-                    <InfiniteScroll
-                        elements={wallpapers}
-                        loadMoreElements={loadMoreWallpapers}
-                        elementsFinished={wallpapersFinished}
-                        template={<WallpaperCard />}
-                    />
-                </SectionGrid>
-            </MainContainer>
+                            <InfiniteScroll
+                                elements={wallpapers}
+                                loadMoreElements={loadMoreWallpapers}
+                                elementsFinished={wallpapersFinished}
+                                template={<WallpaperCard />}
+                            />
+                        </SectionGrid>
+                    </MainContainer>
 
-            <FooterContainer>
-                <CopyRight />
-            </FooterContainer>
+                    <FooterContainer>
+                        <CopyRight />
+                    </FooterContainer>
+                </div>
+            </div>
         </ContentWidthContainer>
     );
 }

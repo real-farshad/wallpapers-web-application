@@ -35,7 +35,7 @@ function Comment(props: CommentTypes) {
                         </p>
                     ) : (
                         <p className="comment__publisher-secondary-info">
-                            Signed In User
+                            Currently Active User
                         </p>
                     )}
                 </div>

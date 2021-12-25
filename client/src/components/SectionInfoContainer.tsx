@@ -1,17 +1,17 @@
 import "../styles/SectionInfoContainer.scss";
 
 interface SectionInfoContainerTypes {
-    twoRows?: boolean;
+    controls?: boolean;
     children: any;
 }
 
 function SectionInfoContainer(props: SectionInfoContainerTypes) {
-    const { twoRows, children } = props;
+    const { controls, children } = props;
 
     return (
         <div
             className={`section-info-container${
-                twoRows ? " section-info-container--two-rows" : ""
+                controls ? " section-info-container--two-rows" : ""
             }`}
         >
             {children}

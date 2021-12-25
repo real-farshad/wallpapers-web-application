@@ -43,7 +43,7 @@ function Popular() {
 
             <MainContainer>
                 <SectionGrid>
-                    <SectionInfoContainer twoRows>
+                    <SectionInfoContainer controls>
                         <ControlBtnsContainer>
                             <div>
                                 <ControlBtn active>2021 And After</ControlBtn>

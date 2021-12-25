@@ -32,6 +32,24 @@ async function getNewCollections(req, res, next, database) {
     }
 }
 
+// GET /:id
+// req.query => collectionId
+async function getCollectionInfo(req, res, next, database) {
+    const collectionId = req.params.id;
+
+    // validate collection id
+    const isValidId = validateId(collectionId);
+    if (!isValidId) return res.status(403).json({ error: "invalid collection id!" });
+
+    try {
+        // find collection by id and return it
+        const collection = await database.findCollectionById(collectionId);
+        return res.json(collection);
+    } catch (err) {
+        next(err);
+    }
+}
+
 // GET /
 // req.query => page, limit
 async function getUserCollections(req, res, next, database) {
@@ -118,6 +136,7 @@ async function deleteCollection(req, res, next, database) {
 
 module.exports = {
     getNewCollections,
+    getCollectionInfo,
     getUserCollections,
     createNewCollection,
     deleteCollection,

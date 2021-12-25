@@ -4,6 +4,7 @@ const validateAuthorization = require("../middlewares/validateAuthorization");
 
 const {
     getNewCollections,
+    getCollectionInfo,
     getUserCollections,
     createNewCollection,
     deleteCollection,
@@ -12,6 +13,8 @@ const {
 const router = express.Router();
 
 router.get("/", (req, res, next) => getNewCollections(req, res, next, database));
+
+router.get("/:id", (req, res, next) => getCollectionInfo(req, res, next, database));
 
 router.get("/user", validateAuthorization, (req, res, next) =>
     getUserCollections(req, res, next, database)

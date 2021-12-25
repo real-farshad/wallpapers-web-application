@@ -82,7 +82,7 @@ function Search() {
                 <div className="search__container">
                     <div className="search__result-section">
                         <SectionGrid>
-                            <SectionInfoContainer twoRows>
+                            <SectionInfoContainer controls>
                                 <ControlBtnsContainer>
                                     <div onClick={handleClickOnPopularSelection}>
                                         <ControlBtn
