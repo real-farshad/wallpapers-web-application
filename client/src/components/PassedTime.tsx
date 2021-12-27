@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 interface PassedTimeTypes {
     time: number;
 }
@@ -30,7 +32,7 @@ function PassedTime({ time }: PassedTimeTypes) {
         timeString = `${Math.floor(passedTime / yearInMs)} years`;
     }
 
-    return <span>{timeString} ago</span>;
+    return <Fragment>{timeString} ago</Fragment>;
 }
 
 export default PassedTime;

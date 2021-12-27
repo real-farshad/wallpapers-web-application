@@ -41,6 +41,7 @@ async function getPostsList(req, res, next, database) {
     // calculate duration in milliseconds if it's not empty
     if (query.duration === "2020") query.duration = new Date("1-1-2020").getTime();
     else if (query.duration === "2021") query.duration = new Date("1-1-2021").getTime();
+    else if (query.duration === "all-times") query.duration = "";
 
     // translate sort order to it's related post document field
     let sort = query.sort === "new" ? "createdAt" : "likeCount";

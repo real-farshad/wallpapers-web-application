@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
 import Navbar from "../components/Navbar";
@@ -14,20 +15,32 @@ import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
 
 function Popular() {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const duration = searchParams.get("duration");
+
     const [popularWallpapers, setPopularWallpapers] = useState([]);
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
     const [page, setPage] = useState(2);
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("/api/posts/?sort=popular&limit=8");
+            const url = `/api/posts/?duration=${
+                duration ? duration : "2021"
+            }&sort=popular&limit=8`;
+
+            const res = await fetch(url);
             const wallpapers = await res.json();
+
             setPopularWallpapers(wallpapers);
         })();
-    }, []);
+    }, [searchParams]);
 
     async function loadMoreWallpapers() {
-        const res = await fetch(`/api/posts/?sort=popular&page=${page}&limit=8`);
+        const url = `/api/posts/?duration=${
+            duration ? duration : "2021"
+        }&sort=popular&page=${page}&limit=8`;
+
+        const res = await fetch(url);
         const wallpapers = await res.json();
 
         setPopularWallpapers((prevState) => [...prevState, ...(wallpapers as never[])]);
@@ -45,16 +58,34 @@ function Popular() {
                 <SectionGrid>
                     <SectionInfoContainer controls>
                         <ControlBtnsContainer>
-                            <div>
-                                <ControlBtn active>2021 And After</ControlBtn>
+                            <div
+                                onClick={() => {
+                                    setSearchParams({ duration: "2021" });
+                                }}
+                            >
+                                <ControlBtn active={!duration || duration === "2021"}>
+                                    2021 And After
+                                </ControlBtn>
                             </div>
 
-                            <div>
-                                <ControlBtn>2020 And After</ControlBtn>
+                            <div
+                                onClick={() => {
+                                    setSearchParams({ duration: "2020" });
+                                }}
+                            >
+                                <ControlBtn active={duration === "2020"}>
+                                    2020 And After
+                                </ControlBtn>
                             </div>
 
-                            <div>
-                                <ControlBtn>All Times</ControlBtn>
+                            <div
+                                onClick={() => {
+                                    setSearchParams({ duration: "all-times" });
+                                }}
+                            >
+                                <ControlBtn active={duration === "all-times"}>
+                                    All Times
+                                </ControlBtn>
                             </div>
                         </ControlBtnsContainer>
 

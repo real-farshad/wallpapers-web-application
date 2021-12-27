@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
 import Navbar from "../components/Navbar";
@@ -15,62 +16,53 @@ import CopyRight from "../components/CopyRight";
 import "../styles/Search.scss";
 
 function Search() {
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const params = Object.fromEntries(urlSearchParams.entries());
-    const { selection, text } = params;
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const selection = searchParams.get("selection");
+    const title: any = searchParams.get("title");
 
     const [results, setResults] = useState([]);
     const [resultsFinished, setResultsFinished] = useState(false);
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        const textString = text ? JSON.stringify(text) : "";
-        const searchTextTooShort = textString.length < 3;
-        const searchTextTooLong = textString.length > 64;
-        if (searchTextTooShort || searchTextTooLong) return;
+        if (!title || title.length < 3 || title.length > 64) return;
 
         (async () => {
-            const res = await fetch(
-                `/api/${
-                    selection === "collections" ? "collections" : "posts"
-                }/?search=${textString}&sort=${
-                    selection === "new" ? "new" : "popular"
-                }&limit=8`
-            );
+            const url = `/api/${
+                selection === "collections" ? "collections" : "posts"
+            }/?search=${title}&sort=${selection === "new" ? "new" : "popular"}&limit=8`;
+
+            const res = await fetch(url);
             const searchResults = await res.json();
+
             setResults(searchResults);
+            setPage((prevState) => prevState + 1);
         })();
-    }, []);
+    }, [searchParams]);
 
     async function loadMoreResults() {
-        const res = await fetch(
-            `/api/${
-                selection === "collections" ? "collections" : "posts"
-            }/?search=${text}&sort=${selection === "new" ? "new" : "popular"}&page=${
-                page + 1
-            }&limit=8`
-        );
-        const results = await res.json();
+        const url = `/api/${
+            selection === "collections" ? "collections" : "posts"
+        }/?search=${title}&sort=${
+            selection === "new" ? "new" : "popular"
+        }&page=${page}&limit=8`;
 
-        setResults((prevState) => [...prevState, ...(results as never[])]);
+        const res = await fetch(url);
+        const results: never[] = await res.json();
+
+        setResults((prevState) => [...prevState, ...results]);
         if (results.length < 8) setResultsFinished(true);
         setPage((prevState) => prevState + 1);
     }
 
-    function handleClickOnPopularSelection() {
-        if (selection === "popular") return;
-        window.location.href = `/search?selection=popular&text=${text}`;
+    function handleClickOnControlBtn(type: string) {
+        if (selection === type) return;
+        setSearchParams({ title, selection: type });
+        setPage(1);
     }
 
-    function handleClickOnNewSelection() {
-        if (selection === "new") return;
-        window.location.href = `/search?selection=new&text=${text}`;
-    }
-
-    function handleClickOnCollectionsSelection() {
-        if (selection === "collections") return;
-        window.location.href = `/search?selection=collections&text=${text}`;
-    }
+    if (page === 1) return null;
 
     return (
         <ContentWidthContainer>
@@ -84,7 +76,9 @@ function Search() {
                         <SectionGrid>
                             <SectionInfoContainer controls>
                                 <ControlBtnsContainer>
-                                    <div onClick={handleClickOnPopularSelection}>
+                                    <div
+                                        onClick={() => handleClickOnControlBtn("popular")}
+                                    >
                                         <ControlBtn
                                             active={!selection || selection === "popular"}
                                         >
@@ -92,13 +86,17 @@ function Search() {
                                         </ControlBtn>
                                     </div>
 
-                                    <div onClick={handleClickOnNewSelection}>
+                                    <div onClick={() => handleClickOnControlBtn("new")}>
                                         <ControlBtn active={selection === "new"}>
                                             New First
                                         </ControlBtn>
                                     </div>
 
-                                    <div onClick={handleClickOnCollectionsSelection}>
+                                    <div
+                                        onClick={() =>
+                                            handleClickOnControlBtn("collections")
+                                        }
+                                    >
                                         <ControlBtn active={selection === "collections"}>
                                             Collections
                                         </ControlBtn>

@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 interface StandardTimeTypes {
     time: number;
 }
@@ -13,7 +15,7 @@ function StandardTime(props: StandardTimeTypes) {
 
     const timeString = `${day} ${month} ${year}`;
 
-    return <span>{timeString}</span>;
+    return <Fragment>{timeString}</Fragment>;
 }
 
 export default StandardTime;

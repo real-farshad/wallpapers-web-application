@@ -12,7 +12,7 @@ const postSchema = Joi.object({
 const postQuerySchema = Joi.object({
     search: Joi.string().trim().max(64).allow(""),
     category: Joi.string().lowercase().trim().max(64).allow(""),
-    duration: Joi.string().valid("2021", "2020").allow(""),
+    duration: Joi.string().valid("2021", "2020", "all-times").allow(""),
     sort: Joi.string().valid("new", "popular"),
     page: Joi.number().min(0),
     limit: Joi.number().max(20),

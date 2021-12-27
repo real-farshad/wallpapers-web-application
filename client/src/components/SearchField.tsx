@@ -1,26 +1,27 @@
 import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "../styles/SearchField.scss";
 
 function SearchField() {
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const params = Object.fromEntries(urlSearchParams.entries());
-    const { selection, text } = params;
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
-    const [search, setSaerch] = useState(text ? text : "");
+    const title = searchParams.get("title");
+
+    const [searchInput, setSearchInput] = useState(title ? title : "");
 
     async function handleFormSubmit(e: any) {
         e.preventDefault();
 
-        const searchTextIsTooShort = search.length < 3;
-        if (searchTextIsTooShort) return;
+        const searchInputIsTooShort = searchInput.length < 3;
+        if (searchInputIsTooShort) return;
 
-        window.location.href = `/search?selection=${
-            selection === "new" ? "new" : "popular"
-        }&text=${search}`;
-    }
+        const selection = searchParams.get("selection");
+        const url = `/search?title=${searchInput}${
+            selection ? `&selection=${selection}` : ""
+        }`;
 
-    function handleSearchInputChange(e: any) {
-        setSaerch(e.target.value);
+        navigate(url);
     }
 
     return (
@@ -29,8 +30,8 @@ function SearchField() {
                 className="search-field__input"
                 placeholder="SEARCH"
                 maxLength={64}
-                value={search}
-                onChange={handleSearchInputChange}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
             />
         </form>
     );
