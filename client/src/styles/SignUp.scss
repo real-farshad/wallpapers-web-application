@@ -1,0 +1,28 @@
+.sign-up {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sing-up__title-container {
+    margin-bottom: 100px;
+}
+
+.sign-up__title {
+    margin-bottom: 5px;
+    max-width: 330px;
+}
+
+.sign-up__title-description {
+    font-weight: var(--medium-font-weight);
+    max-width: 200px;
+    opacity: 0.4;
+}
+
+.sign-up__title-break {
+    display: none;
+}
+
+.sing-up__google {
+    margin-bottom: 50px;
+}

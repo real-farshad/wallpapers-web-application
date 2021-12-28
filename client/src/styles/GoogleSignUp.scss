@@ -1,0 +1,28 @@
+@import "breakpoints";
+
+.google-sign-up {
+    max-width: 330px;
+}
+
+.google-sign-up__title {
+    font-size: 24px;
+    font-weight: var(--bold-font-weight);
+    margin-bottom: 20px;
+    opacity: 0.87;
+}
+
+.google-sign-up__title-break {
+    display: none;
+}
+
+.google-sign-up__description {
+    font-weight: var(--medium-font-weight);
+    margin-bottom: 10px;
+    opacity: 0.4;
+}
+
+.google-sing-up__btn {
+    font-weight: var(--medium-font-weight);
+    text-decoration: underline;
+    opacity: 0.87;
+}
