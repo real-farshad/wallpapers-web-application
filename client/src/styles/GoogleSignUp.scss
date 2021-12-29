@@ -1,14 +1,16 @@
 @import "breakpoints";
 
-.google-sign-up {
-    max-width: 330px;
-}
-
 .google-sign-up__title {
     font-size: 24px;
     font-weight: var(--bold-font-weight);
+    max-width: 86%;
     margin-bottom: 20px;
     opacity: 0.87;
+
+    @include min-width-xl {
+        font-size: 36px;
+        max-width: unset;
+    }
 }
 
 .google-sign-up__title-break {
@@ -18,7 +20,7 @@
 .google-sign-up__description {
     font-weight: var(--medium-font-weight);
     margin-bottom: 10px;
-    opacity: 0.4;
+    opacity: 0.6;
 }
 
 .google-sing-up__btn {

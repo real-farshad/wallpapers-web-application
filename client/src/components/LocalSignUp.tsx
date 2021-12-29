@@ -4,8 +4,8 @@ function LocalSignUp() {
     return (
         <div className="local-sign-up">
             <h1 className="local-sign-up__title">
-                Sign Up With <br className="local-sign-up__title-break" />
-                Your Google Account
+                Sign Up <br className="local-sign-up__title-break" />
+                With Your Email
             </h1>
 
             <form className="local-sign-up__form">

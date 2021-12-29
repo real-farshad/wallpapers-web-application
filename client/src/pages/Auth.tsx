@@ -25,9 +25,7 @@ function Auth() {
                     </header>
 
                     <main className="auth__main">
-                        <div className="auth__sign-up">
-                            <SignUp />
-                        </div>
+                        <SignUp />
 
                         {/* <div className="auth__sign-up"></div> */}
                     </main>
