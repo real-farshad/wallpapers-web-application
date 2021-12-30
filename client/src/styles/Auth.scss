@@ -21,7 +21,7 @@
 .auth__background-image {
     width: 100%;
     height: 100%;
-    background-position: center;
+    background-position: center left;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -36,36 +36,25 @@
     opacity: 0.6;
 }
 
-.auth__navbar {
-    margin-top: var(--content-space);
-    margin-bottom: 440px;
-
-    @include min-width-md {
-        margin-bottom: 100px;
-    }
-}
-
 .auth__container {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 440px;
+    min-height: 100vh;
+    padding-top: var(--content-space);
+    padding-bottom: 50px;
 
     @include min-width-md {
-        display: flex;
-        flex-direction: column;
         justify-content: space-between;
-        min-height: 100vh;
+        gap: 80px;
     }
-}
 
-.auth__header {
-    flex-shrink: 0;
-}
-
-.auth__main {
-    flex-grow: 1;
-    height: 100%;
-    margin-bottom: 50px;
+    @include min-width-lg {
+        padding-bottom: 75px;
+    }
 
     @include min-width-xl {
-        margin-bottom: 100px;
+        padding-bottom: 100px;
     }
 }

@@ -6,7 +6,7 @@ import "../styles/SignUp.scss";
 function SignUp() {
     return (
         <div className="sign-up">
-            <div className="sign-up__primary-container">
+            <div>
                 <div className="sign-up__title">
                     <SectionTitle>
                         BECOME <br className="sign-up__title-break" />
@@ -20,7 +20,7 @@ function SignUp() {
                 </p>
             </div>
 
-            <div className="sign-up__secondary-container">
+            <div className="sign-up__options-container">
                 <div className="sign-up__google-container">
                     <div className="sign-up__google">
                         <GoogleSignUp />

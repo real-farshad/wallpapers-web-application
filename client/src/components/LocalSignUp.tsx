@@ -4,8 +4,9 @@ function LocalSignUp() {
     return (
         <div className="local-sign-up">
             <h1 className="local-sign-up__title">
-                Sign Up <br className="local-sign-up__title-break" />
-                With Your Email
+                Sign Up <br className="local-sign-up__md-title-break" />
+                With Your <br className="local-sign-up__sm-title-break" />
+                Email
             </h1>
 
             <form className="local-sign-up__form">
@@ -17,13 +18,13 @@ function LocalSignUp() {
 
                 <input
                     className="local-sign-up__input"
-                    type="text"
+                    type="email"
                     placeholder="Email*"
                 />
 
                 <input
                     className="local-sign-up__input"
-                    type="text"
+                    type="password"
                     placeholder="Password*"
                 />
 

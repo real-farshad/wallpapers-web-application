@@ -3,17 +3,26 @@
 .local-sign-up__title {
     font-size: 24px;
     font-weight: var(--bold-font-weight);
-    max-width: 520px;
     margin-bottom: 30px;
-    opacity: 0.87;
+    opacity: var(--primary-opacity);
 
     @include min-width-xl {
         font-size: 36px;
     }
 }
 
-.local-sign-up__title-break {
+.local-sign-up__md-title-break {
     display: none;
+
+    @include min-width-md {
+        display: block;
+    }
+}
+
+.local-sign-up__sm-title-break {
+    @include min-width-md {
+        display: none;
+    }
 }
 
 .local-sign-up__form {
@@ -26,7 +35,7 @@
 .local-sign-up__input {
     font-size: 12px;
     font-weight: var(--medium-font-weight);
-    color: rgba(255, 255, 255, 0.87);
+    color: rgba(255, 255, 255, var(--primary-opacity));
     width: 100%;
     padding-bottom: 5px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.4);
@@ -41,5 +50,5 @@
 .local-sign-up__btn {
     font-weight: var(--medium-font-weight);
     text-decoration: underline;
-    opacity: 0.87;
+    opacity: var(--primary-opacity);
 }

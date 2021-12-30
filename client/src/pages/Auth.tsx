@@ -18,14 +18,14 @@ function Auth() {
 
             <ContentWidthContainer>
                 <div className="auth__container">
-                    <header className="auth__header">
-                        <div className="auth__navbar">
-                            <Navbar />
-                        </div>
+                    <header>
+                        <Navbar />
                     </header>
 
-                    <main className="auth__main">
-                        <SignUp />
+                    <main>
+                        <div className="auth__sign-up">
+                            <SignUp />
+                        </div>
 
                         {/* <div className="auth__sign-up"></div> */}
                     </main>

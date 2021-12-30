@@ -5,7 +5,7 @@
     font-weight: var(--bold-font-weight);
     max-width: 86%;
     margin-bottom: 20px;
-    opacity: 0.87;
+    opacity: var(--primary-opacity);
 
     @include min-width-xl {
         font-size: 36px;
@@ -15,6 +15,10 @@
 
 .google-sign-up__title-break {
     display: none;
+
+    @include min-width-md {
+        display: block;
+    }
 }
 
 .google-sign-up__description {
@@ -26,5 +30,5 @@
 .google-sing-up__btn {
     font-weight: var(--medium-font-weight);
     text-decoration: underline;
-    opacity: 0.87;
+    opacity: var(--primary-opacity);
 }

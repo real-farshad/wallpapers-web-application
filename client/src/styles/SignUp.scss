@@ -1,29 +1,19 @@
 @import "breakpoints";
 
 .sign-up {
-    @include min-width-xl {
-        display: flex;
-        flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+
+    @include min-width-md {
         justify-content: space-between;
-        height: 100%;
-    }
-}
-
-.sign-up__primary-container {
-    margin-bottom: 100px;
-
-    @include min-width-xl {
-        margin-bottom: 0;
+        gap: 50px;
     }
 }
 
 .sign-up__title {
-    margin-bottom: 5px;
     max-width: 520px;
-
-    @include min-width-md {
-        max-width: 330px;
-    }
+    margin-bottom: 5px;
 
     @include min-width-md {
         max-width: unset;
@@ -36,10 +26,6 @@
     opacity: 0.4;
 
     @include min-width-md {
-        max-width: 200px;
-    }
-
-    @include min-width-xl {
         max-width: 220px;
     }
 }
@@ -47,28 +33,24 @@
 .sign-up__title-break {
     display: none;
 
-    @include min-width-xl {
+    @include min-width-md {
         display: block;
     }
 }
 
-.sign-up__secondary-container {
+.sign-up__options-container {
     display: flex;
     flex-direction: column;
+    gap: 50px;
 
     @include min-width-md {
         flex-direction: row;
-        align-items: flex-end;
+        align-items: flex-start;
         justify-content: space-between;
-        gap: 50px;
     }
-}
 
-.sign-up__google-container {
-    margin-bottom: 50px;
-
-    @include min-width-md {
-        margin-bottom: 0;
+    @include min-width-xl {
+        align-items: flex-end;
     }
 }
 
@@ -81,14 +63,14 @@
 }
 
 .sign-up__local-form-container {
-    @include min-width-xl {
+    @include min-width-md {
         flex-shrink: 0;
         width: 50%;
     }
 }
 
 .sign-up__local-form {
-    @include min-width-xl {
+    @include min-width-md {
         max-width: 400px;
     }
 }
