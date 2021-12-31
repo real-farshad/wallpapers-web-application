@@ -2,6 +2,7 @@ import authBg from "../assets/auth-bg.jpg";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import Navbar from "../components/Navbar";
 import SignUp from "../components/SignUp";
+import SignIn from "../components/SignIn";
 import "../styles/Auth.scss";
 
 function Auth() {
@@ -23,11 +24,15 @@ function Auth() {
                     </header>
 
                     <main>
-                        <div className="auth__sign-up">
+                        {/* <div className="auth__sign-up">
                             <SignUp />
-                        </div>
+                        </div> */}
 
-                        {/* <div className="auth__sign-up"></div> */}
+                        <div className="auth__sign-in-container">
+                            <div className="auth__sign-in">
+                                <SignIn />
+                            </div>
+                        </div>
                     </main>
                 </div>
             </ContentWidthContainer>

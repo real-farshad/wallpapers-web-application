@@ -1,0 +1,58 @@
+@import "breakpoints";
+
+.sign-in {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+
+    @include min-width-md {
+        justify-content: space-between;
+        gap: 50px;
+    }
+
+    @include min-width-xl {
+        gap: 165px;
+    }
+}
+
+.sign-in__title {
+    padding-top: 40px;
+    margin-bottom: 5px;
+
+    @include min-width-md {
+        padding-top: 0;
+        margin-bottom: 10px;
+    }
+}
+
+.sign-in__title-break {
+    display: none;
+
+    @include min-width-md {
+        display: block;
+    }
+}
+
+.sign-in__title-description {
+    font-weight: var(--medium-font-weight);
+    opacity: 0.4;
+}
+
+.sign-in__description {
+    font-weight: var(--medium-font-weight);
+    margin-bottom: 30px;
+    opacity: 0.4;
+
+    @include min-width-md {
+        max-width: 500px;
+    }
+
+    @include min-width-xl {
+        max-width: 275px;
+    }
+}
+
+.sign-in__local {
+    max-width: 700px;
+    margin-bottom: 20px;
+}
