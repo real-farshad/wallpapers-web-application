@@ -1,6 +1,7 @@
 @import "breakpoints";
 
 .navigation {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -11,7 +12,7 @@
     }
 }
 
-.navigation__item {
+.navigation__element-container {
     overflow: hidden;
 
     &--search-field {

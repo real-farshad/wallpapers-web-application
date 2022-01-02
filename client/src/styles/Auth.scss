@@ -42,7 +42,7 @@
     flex-direction: column;
     gap: 440px;
     min-height: 100vh;
-    padding-top: 40px;
+    padding-top: var(--content-space);
     padding-bottom: 50px;
 
     @include min-width-md {
@@ -51,6 +51,7 @@
     }
 
     @include min-width-lg {
+        padding-top: 40px;
         padding-bottom: 75px;
     }
 

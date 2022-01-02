@@ -6,7 +6,7 @@ import FooterContainer from "../components/FooterContainer";
 import HeaderContainer from "../components/HeaderContainer";
 import InfiniteScroll from "../components/InfiniteScroll";
 import MainContainer from "../components/MainContainer";
-import Navbar from "../components/Navbar";
+import StandardNavbar from "../components/StandardNavbar";
 import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
 import SectionTitle from "../components/SectionTitle";
@@ -55,7 +55,7 @@ function Collection() {
         <ContentWidthContainer>
             <div className="collection">
                 <HeaderContainer>
-                    <Navbar />
+                    <StandardNavbar />
                 </HeaderContainer>
 
                 <div className="collection__container">

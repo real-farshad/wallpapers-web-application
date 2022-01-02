@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import homepageBackground from "../assets/homepage-background.jpg";
 import CoverImage from "../components/CoverImage";
-import Navbar from "../components/Navbar";
+import StandardNavbar from "../components/StandardNavbar";
 import MainContainer from "../components/MainContainer";
 import PopularPreview from "../components/PopularPreview";
 import NewPreview from "../components/NewPreview";
@@ -21,7 +21,7 @@ function Home() {
             <ContentWidthContainer>
                 <header>
                     <div className="home__navbar">
-                        <Navbar />
+                        <StandardNavbar />
                     </div>
                 </header>
 

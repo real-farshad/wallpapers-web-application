@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
-import Navbar from "../components/Navbar";
+import StandardNavbar from "../components/StandardNavbar";
 import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
 import ControlBtnsContainer from "../components/ControlBtnsContainer";
@@ -68,7 +68,7 @@ function Search() {
         <ContentWidthContainer>
             <div className="search">
                 <HeaderContainer>
-                    <Navbar />
+                    <StandardNavbar />
                 </HeaderContainer>
 
                 <div className="search__container">

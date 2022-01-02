@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
 import { useParams } from "react-router-dom";
 import WallpaperLayout from "../components/WallpaperLayout";
-import Navbar from "../components/Navbar";
+import StandardNavbar from "../components/StandardNavbar";
 import WallpaperContent from "../components/WallpaperContent";
 import "../styles/Wallpaper.scss";
 
@@ -21,7 +21,7 @@ function Wallpaper() {
         <WallpaperLayout backgroundImage={wallpaper.imageUrl.large}>
             <header>
                 <div className="wallpaper__navbar">
-                    <Navbar />
+                    <StandardNavbar />
                 </div>
             </header>
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
-import Navbar from "../components/Navbar";
+import StandardNavbar from "../components/StandardNavbar";
 import MainContainer from "../components/MainContainer";
 import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
@@ -51,7 +51,7 @@ function Popular() {
     return (
         <ContentWidthContainer>
             <HeaderContainer>
-                <Navbar />
+                <StandardNavbar />
             </HeaderContainer>
 
             <MainContainer>
