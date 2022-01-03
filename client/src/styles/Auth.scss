@@ -22,13 +22,21 @@
 .auth__background-image {
     width: 100%;
     height: 100%;
-    background-position: center left;
+    background-position: 40% center;
     background-repeat: no-repeat;
     background-size: cover;
-    transition: 1s;
+    transition: 1.05s;
+
+    @include min-width-lg {
+        background-position: left center;
+    }
 
     &--right-position {
-        background-position: center right;
+        background-position: 60% center;
+
+        @include min-width-lg {
+            background-position: right center;
+        }
     }
 }
 
@@ -63,68 +71,5 @@
 
     @include min-width-xl {
         padding-bottom: 100px;
-    }
-}
-
-.auth__navigation {
-    display: flex;
-    padding-bottom: 2px;
-}
-
-.auth__navigation-btn {
-    font-weight: var(--medium-font-weight);
-    opacity: 0.4;
-    transition: 0.3s;
-
-    &:hover,
-    &--active {
-        opacity: var(--primary-opacity);
-    }
-}
-
-.auth__separator {
-    font-weight: var(--medium-font-weight);
-    opacity: var(--primary-opacity);
-    margin: 0 15px;
-
-    @include min-width-lg {
-        margin: 0 25px;
-    }
-}
-
-.auth__sign-up-container {
-    opacity: 0;
-    transform: translateX(-100px);
-    transition: 0.5s;
-
-    &--animate-in {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.auth__sign-in-container {
-    display: flex;
-    justify-content: flex-end;
-    opacity: 0;
-    transform: translateX(100px);
-    transition: 0.5s;
-
-    &--animate-in {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.auth__sign-in {
-    width: 100%;
-
-    @include min-width-lg {
-        max-width: 400px;
-    }
-
-    @include min-width-xl {
-        max-width: 500px;
-        padding-right: 100px;
     }
 }
