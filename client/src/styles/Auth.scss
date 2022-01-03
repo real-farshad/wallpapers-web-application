@@ -4,6 +4,7 @@
     position: relative;
     width: 100%;
     min-height: 100vh;
+    overflow: hidden;
 }
 
 .auth__background {
@@ -24,6 +25,11 @@
     background-position: center left;
     background-repeat: no-repeat;
     background-size: cover;
+    transition: 1s;
+
+    &--right-position {
+        background-position: center right;
+    }
 }
 
 .auth__background-overlay {
@@ -60,9 +66,54 @@
     }
 }
 
+.auth__navigation {
+    display: flex;
+    padding-bottom: 2px;
+}
+
+.auth__navigation-btn {
+    font-weight: var(--medium-font-weight);
+    opacity: 0.4;
+    transition: 0.3s;
+
+    &:hover,
+    &--active {
+        opacity: var(--primary-opacity);
+    }
+}
+
+.auth__separator {
+    font-weight: var(--medium-font-weight);
+    opacity: var(--primary-opacity);
+    margin: 0 15px;
+
+    @include min-width-lg {
+        margin: 0 25px;
+    }
+}
+
+.auth__sign-up-container {
+    opacity: 0;
+    transform: translateX(-100px);
+    transition: 0.5s;
+
+    &--animate-in {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .auth__sign-in-container {
     display: flex;
     justify-content: flex-end;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: 0.5s;
+
+    &--animate-in {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .auth__sign-in {
@@ -70,5 +121,10 @@
 
     @include min-width-lg {
         max-width: 400px;
+    }
+
+    @include min-width-xl {
+        max-width: 500px;
+        padding-right: 100px;
     }
 }

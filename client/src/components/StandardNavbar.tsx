@@ -4,7 +4,7 @@ import AuthNavigation from "./AuthNavigation";
 function StandardNavbar() {
     return (
         <Navbar>
-            <AuthNavigation signInActive={true} signUpActive={true} />
+            <AuthNavigation />
         </Navbar>
     );
 }

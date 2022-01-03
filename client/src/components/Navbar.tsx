@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Navigation from "./Navigation";
-import AuthBtns from "./AuthNavigation";
 import "../styles/Navbar.scss";
 
 function Navbar({ children }: any) {

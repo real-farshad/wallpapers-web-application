@@ -7,16 +7,7 @@
 
 .auth-navigation__link {
     font-weight: var(--medium-font-weight);
-    opacity: 0.4;
-    transition: 0.3s;
-
-    &:hover {
-        opacity: var(--primary-opacity);
-    }
-
-    &--active {
-        opacity: var(--primary-opacity);
-    }
+    opacity: var(--primary-opacity);
 }
 
 .auth-navigation__separator {
