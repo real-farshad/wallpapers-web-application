@@ -1,6 +1,10 @@
 import "../styles/GoogleSignUp.scss";
 
 function GoogleSignUp() {
+    function handleClickOnSignUpBtn() {
+        window.open("http://localhost:5000/api/auth/google", "_self");
+    }
+
     return (
         <div className="google-sign-up">
             <h1 className="google-sign-up__title">
@@ -14,7 +18,9 @@ function GoogleSignUp() {
                 much faster and easier.
             </p>
 
-            <button className="google-sing-up__btn">Sign Up With Google</button>
+            <button className="google-sing-up__btn" onClick={handleClickOnSignUpBtn}>
+                Sign Up With Google
+            </button>
         </div>
     );
 }

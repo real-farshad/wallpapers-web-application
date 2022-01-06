@@ -1,6 +1,26 @@
+import { useState } from "react";
+import FormUsernameInput from "./FormUsernameInput";
+import FormEmailInput from "./FormEmailInput";
+import FormPasswordInput from "./FormPasswordInput";
+import FormSubmitBtn from "./FormSubmitBtn";
 import "../styles/LocalSignUp.scss";
 
 function LocalSignUp() {
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    async function handleFormSubmit(e: any) {
+        e.preventDefault();
+
+        const user = { username, email, password };
+        await fetch("/api/auth/sign-up", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user),
+        });
+    }
+
     return (
         <div className="local-sign-up">
             <h1 className="local-sign-up__title">
@@ -9,28 +29,18 @@ function LocalSignUp() {
                 Email
             </h1>
 
-            <form className="local-sign-up__form">
-                <input
-                    className="local-sign-up__input"
-                    type="text"
-                    placeholder="Username*"
+            <form className="local-sign-up__form" onSubmit={handleFormSubmit}>
+                <FormUsernameInput
+                    autoFocus={true}
+                    value={username}
+                    changeValue={setUsername}
                 />
 
-                <input
-                    className="local-sign-up__input"
-                    type="email"
-                    placeholder="Email*"
-                />
+                <FormEmailInput value={email} changeValue={setEmail} />
 
-                <input
-                    className="local-sign-up__input"
-                    type="password"
-                    placeholder="Password*"
-                />
+                <FormPasswordInput value={password} changeValue={setPassword} />
 
-                <button className="local-sign-up__btn" type="submit">
-                    Create A New Account
-                </button>
+                <FormSubmitBtn value="Create A New Account" />
             </form>
         </div>
     );
