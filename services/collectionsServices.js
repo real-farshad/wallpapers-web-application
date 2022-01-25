@@ -36,8 +36,17 @@ async function findCollections(search, skip, limit) {
                             from: "posts",
                             let: { id: "$postId" },
                             pipeline: [
-                                { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
-                                { $project: { _id: 0, "imageUrl.thumbnail": 1 } },
+                                {
+                                    $match: {
+                                        $expr: { $eq: ["$_id", "$$id"] },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        _id: 0,
+                                        "imageUrl.thumbnail": 1,
+                                    },
+                                },
                             ],
                             as: "post",
                         },

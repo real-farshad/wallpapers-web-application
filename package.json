@@ -1,27 +1,27 @@
 {
-    "name": "full-stack-wallpaper-app",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "server-dev": "nodemon ./server.js",
-        "client-dev": "cd client && npm run start",
-        "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
-        "populate": "node ./populate/script.js"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "bcrypt": "^5.0.1",
-        "concurrently": "^6.4.0",
-        "dotenv": "^10.0.0",
-        "express": "^4.17.1",
-        "express-session": "^1.17.2",
-        "joi": "^17.4.2",
-        "mongodb": "^4.1.4",
-        "passport": "^0.5.0",
-        "passport-google-oauth": "^2.0.0",
-        "passport-local": "^1.0.0"
-    }
+  "name": "full-stack-wallpaper-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server-dev": "nodemon ./server.js",
+    "client-dev": "cd client && npm run start",
+    "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
+    "populate": "node ./populate/script.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "concurrently": "^7.0.0",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "joi": "^17.5.0",
+    "mongodb": "^4.3.1",
+    "passport": "^0.5.2",
+    "passport-google-oauth": "^2.0.0",
+    "passport-local": "^1.0.0"
+  }
 }

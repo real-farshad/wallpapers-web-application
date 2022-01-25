@@ -33,13 +33,13 @@ async function getNewCollections(req, res, next, database) {
 }
 
 // GET /:id
-// req.query => collectionId
 async function getCollectionInfo(req, res, next, database) {
     const collectionId = req.params.id;
 
     // validate collection id
     const isValidId = validateId(collectionId);
-    if (!isValidId) return res.status(403).json({ error: "invalid collection id!" });
+    if (!isValidId)
+        return res.status(403).json({ error: "invalid collection id!" });
 
     try {
         // find collection by id and return it
@@ -71,7 +71,11 @@ async function getUserCollections(req, res, next, database) {
 
     try {
         // find and return collections
-        const collections = await database.findUserCollections(userId, skip, limit);
+        const collections = await database.findUserCollections(
+            userId,
+            skip,
+            limit
+        );
         return res.json(collections);
     } catch (err) {
         next(err);
@@ -113,13 +117,17 @@ async function deleteCollection(req, res, next, database) {
 
     // validate collection id
     const isValidId = validateId(collectionId);
-    if (!isValidId) return res.status(403).json({ error: "invalid collection id!" });
+    if (!isValidId)
+        return res.status(403).json({ error: "invalid collection id!" });
 
     // delete related collection posts
 
     try {
         // delete collection
-        const result = await database.findAndDeleteCollection(collectionId, userId);
+        const result = await database.findAndDeleteCollection(
+            collectionId,
+            userId
+        );
 
         if (!result) {
             return res.status(404).json({

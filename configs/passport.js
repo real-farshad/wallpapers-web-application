@@ -16,12 +16,16 @@ module.exports.passportConfig = function (app) {
                     const email = username;
                     const user = await database.findUserByEmail(email);
 
-                    if (!user)
+                    if (!user) {
                         return done(null, false, {
                             message: "invalid email or password!",
                         });
+                    }
 
-                    const result = await bcrypt.compare(password, user.password);
+                    const result = await bcrypt.compare(
+                        password,
+                        user.password
+                    );
 
                     if (!result) {
                         return done(null, false, {
@@ -46,9 +50,16 @@ module.exports.passportConfig = function (app) {
             },
             async (accessToken, refreshToken, profile, done) => {
                 try {
+                    const newUser = {
+                        googleId: profile.id,
+                        username: profile._json.name,
+                        avatar: profile._json.picture,
+                        local: false,
+                    };
+
                     const user = await database.insertOrUpdateUser(
                         { googleId: profile.id },
-                        { ...profile }
+                        newUser
                     );
 
                     done(null, user);

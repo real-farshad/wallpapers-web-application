@@ -3,7 +3,7 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getCommentsCollection = () => getDatabase().collection("comments");
 
-async function getUserCommentsList(userId, skip, limit) {
+async function getUserCommentsList({ userId, skip, limit }) {
     const cursor = await getCommentsCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
         { $sort: { createdAt: -1 } },
@@ -30,8 +30,11 @@ async function getCommentsList(postId, skip, limit) {
         {
             $lookup: {
                 from: "users",
-                localField: "userId",
-                foreignField: "_id",
+                let: { id: "$userId" },
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                    { $project: { username: 1, avatar: 1 } },
+                ],
                 as: "user",
             },
         },
@@ -53,7 +56,7 @@ async function addNewComment(newComment) {
     });
 }
 
-async function findAndDeleteComment(postId, userId) {
+async function findAndDeleteComment({ postId, userId }) {
     const result = await getCommentsCollection().deleteOne({
         postId: new ObjectId(postId),
         userId: new ObjectId(userId),
