@@ -38,7 +38,7 @@ async function validateComment(comment) {
         return [knownError, null];
     }
 
-    return [null, params];
+    return [null, validComment];
 }
 
 async function validatePostId(postId, database) {

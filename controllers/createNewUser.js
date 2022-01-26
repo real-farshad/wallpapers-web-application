@@ -9,7 +9,7 @@ async function createNewUser(req, res, next, database) {
     if (err) return handleError(err, res, next);
 
     try {
-        newUser.password = await hashUserPassword();
+        newUser.password = await hashUserPassword(newUser.password);
         newUser.local = true;
 
         await database.addNewUser(newUser);

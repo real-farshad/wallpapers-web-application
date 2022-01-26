@@ -3,7 +3,14 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getPostsCollection = () => getDatabase().collection("posts");
 
-async function searchPostsList(search, categoryId, sort, duration, skip, limit) {
+async function searchPostsList(
+    search,
+    categoryId,
+    sort,
+    duration,
+    skip,
+    limit
+) {
     const query = {};
     if (search !== "") query.$text = { $search: search };
     if (categoryId !== "") query.categoryId = new ObjectId(categoryId);
@@ -60,7 +67,13 @@ async function findPostById(id) {
                 let: { id: "$publisherId" },
                 pipeline: [
                     { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
-                    { $project: { avatar: 1, username: 1, _json: { name: 1 } } },
+                    {
+                        $project: {
+                            avatar: 1,
+                            username: 1,
+                            _json: { name: 1 },
+                        },
+                    },
                 ],
                 as: "publisher",
             },
@@ -78,7 +91,11 @@ async function findPostById(id) {
                             from: "users",
                             let: { id: "$userId" },
                             pipeline: [
-                                { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
+                                {
+                                    $match: {
+                                        $expr: { $eq: ["$_id", "$$id"] },
+                                    },
+                                },
                                 {
                                     $project: {
                                         avatar: 1,
@@ -128,6 +145,15 @@ async function addNewPost(newPost) {
     });
 }
 
+async function findUserPostById({ postId, userId }) {
+    const result = await getPostsCollection().findOne({
+        postId: new ObjectId(postId),
+        publisherId: new ObjectId(userId),
+    });
+
+    return result;
+}
+
 async function findAndUpdatePostById(id, updatedPost) {
     const result = await getPostsCollection().updateOne(
         { _id: new ObjectId(id) },
@@ -144,7 +170,9 @@ async function findAndUpdatePostById(id, updatedPost) {
 }
 
 async function findAndDeletePostById(id) {
-    const result = await getPostsCollection().deleteOne({ _id: new ObjectId(id) });
+    const result = await getPostsCollection().deleteOne({
+        _id: new ObjectId(id),
+    });
     if (result.deletedCount !== 1) return null;
     return result;
 }
@@ -167,6 +195,7 @@ module.exports = {
     searchPostsList,
     findPostById,
     addNewPost,
+    findUserPostById,
     findAndUpdatePostById,
     findAndDeletePostById,
     incrementLikeCount,

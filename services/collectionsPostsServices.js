@@ -1,9 +1,10 @@
 const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../configs/mongodb");
 
-const getCollectionsPostsCollection = () => getDatabase().collection("collections-posts");
+const getCollectionsPostsCollection = () =>
+    getDatabase().collection("collections-posts");
 
-async function findCollectionPosts(collectionId, skip, limit) {
+async function findCollectionPosts({ collectionId, skip, limit }) {
     const cursor = await getCollectionsPostsCollection().aggregate([
         { $match: { collectionId: new ObjectId(collectionId) } },
         { $sort: { createdAt: -1 } },
@@ -20,8 +21,17 @@ async function findCollectionPosts(collectionId, skip, limit) {
                             from: "users",
                             let: { id: "$publisherId" },
                             pipeline: [
-                                { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
-                                { $project: { username: 1, _json: { name: 1 } } },
+                                {
+                                    $match: {
+                                        $expr: { $eq: ["$_id", "$$id"] },
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        username: 1,
+                                        _json: { name: 1 },
+                                    },
+                                },
                             ],
                             as: "publisher",
                         },
@@ -47,8 +57,14 @@ async function findCollectionPosts(collectionId, skip, limit) {
         },
     ]);
 
-    const result = await cursor.toArray();
-    return result;
+    const collectionPosts = await cursor.toArray();
+
+    const posts = [];
+    for (let collectionPost of collectionPosts) {
+        posts.push(collectionPost.post);
+    }
+
+    return posts;
 }
 
 async function addNewCollectionPost(newCollectionPost) {
@@ -76,9 +92,9 @@ async function deleteCollectionPostById(id) {
     return result;
 }
 
-async function deleteManycollectionPostsByPostId(postId) {
+async function deleteManycollectionPosts(collectionId) {
     await getCollectionsPostsCollection().deleteMany({
-        postId: new ObjectId(postId),
+        postId: new ObjectId(collectionId),
     });
 }
 
@@ -87,5 +103,5 @@ module.exports = {
     addNewCollectionPost,
     findCollectionPostByid,
     deleteCollectionPostById,
-    deleteManycollectionPostsByPostId,
+    deleteManycollectionPosts,
 };

@@ -85,6 +85,15 @@ async function findCollectionById(id) {
     return result;
 }
 
+async function findUserCollectionById({ collectionId, userId }) {
+    const result = await getCollectionsCollection().findOne({
+        _id: new ObjectId(id),
+        userId: new ObjectId(userId),
+    });
+
+    return result;
+}
+
 async function findUserCollections(userId, skip, limit) {
     const cursor = await getCollectionsCollection()
         .find({ userId: new ObjectId(userId) })
@@ -130,6 +139,7 @@ async function decrementCollectionPostCount(collectionId) {
 module.exports = {
     findCollections,
     findCollectionById,
+    findUserCollectionById,
     findUserCollections,
     addNewCollection,
     findAndDeleteCollection,

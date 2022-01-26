@@ -1,20 +1,20 @@
-const { likesQuerySchema } = require("../schemas/likesSchemas");
+const { savesQuerySchema } = require("../schemas/savesSchemas");
 const handleError = require("../utils/handleError");
 
 // GET /
-async function getUserLikes(req, res, next, database) {
+async function getUserSavedPosts(req, res, next, database) {
     let [err, params] = await validateQueryParams(req.query);
     if (err) return handleError(err, res, next);
 
     params = formatParams(params);
 
     try {
-        const userLikedPosts = await database.getUserLikes({
-            userId: req.user._id,
+        const userSavedPosts = await database.getUserSavedPosts({
             ...params,
+            userId: req.user._id,
         });
 
-        return res.json(userLikedPosts);
+        return res.json(userSavedPosts);
     } catch (err) {
         next(err);
     }
@@ -27,7 +27,7 @@ async function validateQueryParams(queryParams) {
     };
 
     try {
-        params = await likesQuerySchema.validateAsync(params);
+        params = await savesQuerySchema.validateAsync(params);
     } catch (err) {
         const knownError = {
             known: true,
@@ -50,4 +50,4 @@ function formatParams(params) {
     return fParams;
 }
 
-module.exports = getUserLikes;
+module.exports = getUserSavedPosts;

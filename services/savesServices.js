@@ -3,7 +3,7 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getSavesCollection = () => getDatabase().collection("saves");
 
-async function getUserSavedPosts(userId, skip, limit) {
+async function getUserSavedPosts({ userId, skip, limit }) {
     const cursor = await getSavesCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
         { $sort: { createdAt: -1 } },
@@ -24,7 +24,7 @@ async function getUserSavedPosts(userId, skip, limit) {
     return result;
 }
 
-async function findOneSave(postId, userId) {
+async function findOneSave({ postId, userId }) {
     const result = await getSavesCollection().findOne({
         postId: new ObjectId(postId),
         userId: new ObjectId(userId),
@@ -41,7 +41,7 @@ async function addNewSave(newSave) {
     });
 }
 
-async function findAndDeleteSave(postId, userId) {
+async function findAndDeleteSave({ postId, userId }) {
     const result = await getSavesCollection().deleteOne({
         postId: new ObjectId(postId),
         userId: new ObjectId(userId),
