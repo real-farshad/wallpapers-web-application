@@ -1,9 +1,10 @@
-const validateId = require("../utils/validateId");
+const validatePostId = require("./utils/validatePostId");
+const handleError = require("./utils/handleError");
 
 // GET /:id
 async function checkSave(req, res, next, database) {
-    const isValidId = validateId(req.params.id);
-    if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
+    const err = validatePostId(req.params.id);
+    if (err) return handleError(err, res, next);
 
     try {
         const save = await database.findOneSave({
@@ -19,7 +20,7 @@ async function checkSave(req, res, next, database) {
 
         return res.json({ isSaved: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

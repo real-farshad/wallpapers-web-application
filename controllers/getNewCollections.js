@@ -1,5 +1,5 @@
 const { collectionsQuerySchema } = require("../schemas/collectionsSchemas");
-const handleError = require("../utils/handleError");
+const handleError = require("./utils/handleError");
 
 // GET /
 // req.query => page, limit

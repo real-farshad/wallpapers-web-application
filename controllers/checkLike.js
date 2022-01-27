@@ -1,9 +1,10 @@
-const validateId = require("../utils/validateId");
+const validatePostId = require("./utils/validatePostId");
+const handleError = require("./utils/handleError");
 
 // GET /:id
 async function checkLike(req, res, next, database) {
     const err = validatePostId(req.params.id);
-    if (err) return res.status(err.status).message(err.message);
+    if (err) return handleError(err, res, next);
 
     try {
         const result = await database.findOnePostLike({
@@ -17,25 +18,9 @@ async function checkLike(req, res, next, database) {
             });
         }
 
-        // return result to see if the post has been liked
         return res.json({ isLiked: true });
     } catch (err) {
-        next(err);
-    }
-}
-
-async function validatePostId(postId) {
-    const isValidId = validateId(postId);
-    if (!isValidId) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: "invalid post id!",
-        };
-
-        return knownError;
-    } else {
-        return null;
+        return next(err);
     }
 }
 

@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { userSchema } = require("../schemas/usersSchemas");
-const handleError = require("../utils/handleError");
+const handleError = require("./utils/handleError");
 
 // PUT /
 // req.body => username, email, password
@@ -12,17 +12,17 @@ async function updateUser(req, res, next, database) {
         });
     }
 
-    let [err, user] = await validateUser(req.body);
-    if (err) return handleError(err);
+    let [userError, user] = await validateUser(req.body);
+    if (userError) return handleError(userError, res, next);
 
-    err = await checkPassword({
+    const passwordError = await checkPassword({
         password: user.password,
         hash: req.user.password,
     });
 
-    if (err) return handleError(err);
+    if (passwordError) return handleError(passwordError, res, next);
 
-    err = await checkEmail(
+    const emailError = await checkEmail(
         {
             newEmail: user.email,
             previousEmail: req.user.email,
@@ -30,7 +30,7 @@ async function updateUser(req, res, next, database) {
         database
     );
 
-    if (err) return handleError(err);
+    if (emailError) return handleError(emailError, res, next);
 
     user.password = await hashUserPassword(user.password);
 
@@ -48,7 +48,7 @@ async function updateUser(req, res, next, database) {
 
         return res.json({ userInfoUpdated: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

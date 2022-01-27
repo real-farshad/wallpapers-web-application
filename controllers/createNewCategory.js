@@ -1,35 +1,19 @@
-const { categorySchema } = require("../schemas/categoriesSchemas");
+const validateCategory = require("./utils/validateCategory");
+const handleError = require("./utils/handleError");
 
 // POST /
 // req.body => title
 async function createNewCategory(req, res, next, database) {
     let [err, category] = await validateCategory(req.body);
-    if (err) return handleError(err);
+    if (err) return handleError(err, res, next);
 
     try {
         await database.addNewCategory(category);
 
         return res.json({ newCategoryCreated: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
-}
-
-async function validateCategory(category) {
-    let validCategory = { ...category };
-
-    try {
-        validCategory = await categorySchema.validateAsync(validCategory);
-    } catch (err) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: err.message,
-        };
-        return [knownError, null];
-    }
-
-    return [null, validCategory];
 }
 
 module.exports = createNewCategory;

@@ -1,23 +1,25 @@
-const validateId = require("../utils/validateId");
 const { commentsQuerySchema } = require("../schemas/commentsSchemas");
-const handleError = require("../utils/handleError");
+const validatePostId = require("./utils/validatePostId");
+const handleError = require("./utils/handleError");
 
 // GET /:id
 async function getPostComments(req, res, next, database) {
-    let [err, params] = await validateQueryParams(req.query);
-    if (err) return handleError(err, res, next);
+    let [queryParamsError, params] = await validateQueryParams(req.query);
+    if (queryParamsError) return handleError(queryParamsError, res, next);
 
-    err = await validatePostId(req.params.id, database);
-    if (err) return handleError(err, res, next);
+    const postIdError = validatePostId(req.params.id);
+    if (postIdError) return handleError(postIdError, res, next);
+
+    const postError = await validatePost(req.params.id, database);
+    if (postError) return handleError(postError, res, next);
 
     params = formatParams(params);
 
     try {
-        // find related comments
         const comments = await database.getCommentsList(postId, skip, limit);
         return res.json(comments);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 
@@ -41,18 +43,7 @@ async function validateQueryParams(queryParams) {
     return [null, params];
 }
 
-async function validatePostId(postId, database) {
-    const isValidId = validateId(postId);
-    if (!isValidId) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: "invalid post id!",
-        };
-
-        return knownError;
-    }
-
+async function validatePost(postId, database) {
     try {
         const post = await database.findPostById(postId);
         if (!post) {

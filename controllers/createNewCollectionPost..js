@@ -1,16 +1,20 @@
 const { collectionPostSchema } = require("../schemas/collectionsPostsSchemas");
-const handleError = require("../utils/handleError");
+const validatePostId = require("./utils/validatePostId");
+const handleError = require("./utils/handleError");
 
 // POST /
 // req.body => collectionId, postId
 async function createNewCollectionPost(req, res, next, database) {
     let [err, collectionPost] = await validateCollectionPost(req.body);
-    if (err) return handleError(err);
+    if (err) return handleError(err, res, next);
 
-    err = await validatePost(collectionPost.postId, database);
-    if (!err) return handleError(err);
+    const postError = await validatePost(collectionPost.postId, database);
+    if (!postError) return handleError(postError, res, next);
 
-    err = await validateCollection(
+    const collectionIdError = validateCollectionId(collectionPost.collectionId);
+    if (collectionIdError) return handleError(collectionIdError, res, next);
+
+    const collectionError = await validateCollection(
         {
             collectionId: collectionPost.collectionId,
             userId: req.user._id,
@@ -18,7 +22,7 @@ async function createNewCollectionPost(req, res, next, database) {
         database
     );
 
-    if (!err) return handleErrorerr(err);
+    if (collectionError) return handleErrorerr(collectionError, res, next);
 
     try {
         await database.addNewCollectionPost({
@@ -32,7 +36,7 @@ async function createNewCollectionPost(req, res, next, database) {
 
         return res.json({ newCollectionPostAdded: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 
@@ -57,16 +61,8 @@ async function validateCollectionPost(collectionPost) {
 }
 
 async function validatePost(postId, database) {
-    const isValidId = validateId(postId);
-    if (!isValidId) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: "invalid post id!",
-        };
-
-        return knownError;
-    }
+    const postIdError = validatePostId(postId);
+    if (postIdError) return postIdError;
 
     try {
         const post = await database.findPostById(postId);

@@ -1,13 +1,10 @@
-const validateId = require("../utils/validateId");
+const validatePostId = require("./utils/validatePostId");
+const handleError = require("./utils/handleError");
 
 // DELETE /:id
 async function deletePost(req, res, next, database) {
-    const isValidPostId = validateId(postId);
-    if (!isValidPostId) {
-        return res.status(403).json({
-            error: "invalid post id!",
-        });
-    }
+    const err = validatePostId(req.params.id);
+    if (err) return handleError(err, res, next);
 
     await database.deleteManyLikesByPostId(postId);
     await database.deleteManyCommentsByPostId(postId);
@@ -24,7 +21,7 @@ async function deletePost(req, res, next, database) {
 
         return res.json({ postDeleted: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

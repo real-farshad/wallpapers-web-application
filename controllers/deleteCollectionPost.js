@@ -1,31 +1,25 @@
-const validateId = require("../utils/validateId");
-const handleError = require("../utils/handleError");
+const validateCollectionId = require("./utils/validateCollectionId");
+const handleError = require("./utils/handleError");
 
 // DELETE /:id
 async function deleteCollectionPost(req, res, next, database) {
-    const isValidId = validateId(collectionPostId);
-    if (!isValidId) {
-        return res.status(403).json({
-            error: "invalid collection post id!",
-        });
-    }
+    const collectionIdError = validateCollectionId(req.params.id);
+    if (collectionIdError) return handleError(collectionIdError, res, next);
 
-    let [err, collectionPost] = await validateCollectionPost(
+    let [collectionPostError, collectionPost] = await validateCollectionPost(
         req.params.id,
         database
     );
+    if (collectionPostError) return handleError(collectionPostError, res, next);
 
-    if (err) return handleError(err);
-
-    err = await checkUserCollectionAccess(
+    const accessError = await checkUserCollectionAccess(
         {
             collectionId: collectionPost.collectionId,
             userId: req.user._id,
         },
         database
     );
-
-    if (err) return handleError(err);
+    if (accessError) return handleError(accessError, res, next);
 
     try {
         await database.deleteCollectionPostById(collectionPostId);
@@ -36,7 +30,7 @@ async function deleteCollectionPost(req, res, next, database) {
 
         return res.json({ collectionPostDeleted: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

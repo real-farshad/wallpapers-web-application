@@ -1,21 +1,18 @@
-const validateId = require("../utils/validateId");
+const validateCollectionId = require("./utils/validateCollectionId");
+const handleError = require("./utils/handleError");
 
 // DELETE /:id
 async function deleteCollection(req, res, next, database) {
-    const isValidCollectionId = validateId(req.params.id);
-    if (!isValidCollectionId) {
-        return res.status(403).json({
-            error: "invalid collection id!",
-        });
-    }
+    const err = validateCollectionId(req.params.id);
+    if (err) return handleError(err, res, next);
 
     try {
-        const result = await database.findAndDeleteCollection(
+        const success = await database.findAndDeleteCollection(
             req.params.id,
             req.user._id
         );
 
-        if (!result) {
+        if (!success) {
             return res.status(404).json({
                 error: "no collection with this id, for this user, was found!",
             });
@@ -25,7 +22,7 @@ async function deleteCollection(req, res, next, database) {
 
         return res.json({ collectionDeleted: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

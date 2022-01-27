@@ -1,10 +1,11 @@
 const { collectionSchema } = require("../schemas/collectionsSchemas");
+const handleError = require("./utils/handleError");
 
 // POST /
 // req.body => title
 async function createNewCollection(req, res, next, database) {
     const [err, collection] = await validateCollection(req.body);
-    if (err) return handleError(err);
+    if (err) return handleError(err, res, next);
 
     try {
         await database.addNewCollection({
@@ -16,7 +17,7 @@ async function createNewCollection(req, res, next, database) {
 
         return res.json({ newCollectionAdded: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

@@ -1,21 +1,17 @@
-const validateId = require("../utils/validateId");
+const validatePostId = require("./utils/validatePostId");
+const handleError = require("./utils/handleError");
 const { postSchema } = require("../schemas/postsSchemas");
-const handleError = require("../utils/handleError");
 
 // PUT /:id
 // body.request => imageUrl, title, category
 async function updatePost(req, res, next, database) {
-    const isValidPostId = validateId(postId);
-    if (!isValidPostId) {
-        return res.status(403).json({
-            error: "invalid post id!",
-        });
-    }
+    const postIdError = validatePostId(req.params.id);
+    if (postIdError) return handleError(postIdError, res, next);
 
-    let [err, post] = await validatePost(req.body);
-    if (err) return handleError(err);
+    const [postError, post] = await validatePost(req.body);
+    if (postError) return handleError(postError);
 
-    err = await checkUserPostAccess(
+    const accessError = await checkUserPostAccess(
         {
             postId: req.params.id,
             userId: req.user._id,
@@ -23,7 +19,7 @@ async function updatePost(req, res, next, database) {
         database
     );
 
-    if (err) return handleError(err);
+    if (accessError) return handleError(accessError);
 
     const [categoryError, category] = await validateCategoryTitle(
         post.category,
@@ -40,7 +36,7 @@ async function updatePost(req, res, next, database) {
 
         return res.json({ postUpdated: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

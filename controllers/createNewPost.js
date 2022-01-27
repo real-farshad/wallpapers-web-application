@@ -1,11 +1,11 @@
 const { postSchema } = require("../schemas/postsSchemas");
-const handleError = require("../utils/handleError");
+const handleError = require("./utils/handleError");
 
 // POST /
 // body.request => imageUrl, title, category
 async function createNewPost(req, res, next, database) {
     const [postError, post] = await validatePost(req.body);
-    if (postError) return handleError(postError);
+    if (postError) return handleError(postError, res, next);
 
     const [categoryError, category] = await validateCategoryTitle(
         post.category,
@@ -27,7 +27,7 @@ async function createNewPost(req, res, next, database) {
 
         return res.json({ newPostCreated: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

@@ -1,5 +1,5 @@
 const { likesQuerySchema } = require("../schemas/likesSchemas");
-const handleError = require("../utils/handleError");
+const handleError = require("./utils/handleError");
 
 // GET /
 async function getUserLikes(req, res, next, database) {
@@ -16,7 +16,7 @@ async function getUserLikes(req, res, next, database) {
 
         return res.json(userLikedPosts);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

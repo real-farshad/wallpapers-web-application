@@ -4,7 +4,7 @@ async function getCategoriesList(req, res, next, database) {
         const categories = await database.getCategoriesList();
         return res.json(categories);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

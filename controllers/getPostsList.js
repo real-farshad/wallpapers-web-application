@@ -1,5 +1,5 @@
 const { postQuerySchema } = require("../schemas/postsSchemas");
-const handleError = require("../utils/handleError");
+const handleError = require("./utils/handleError");
 
 // GET /
 async function getPostsList(req, res, next, database) {

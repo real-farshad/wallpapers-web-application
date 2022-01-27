@@ -1,12 +1,12 @@
-const validateId = require("../utils/validateId");
 const { commentSchema } = require("../schemas/commentsSchemas");
-const handleError = require("../utils/handleError");
+const validatePostId = require("./utils/validatePostId");
+const handleError = require("./utils/handleError");
 
 // POST /
 // req.body => description, postId
 async function createNewComment(req, res, next, database) {
     let [err, comment] = await validateComment(req.body);
-    if (err) return handleError(err);
+    if (err) return handleError(err, res, next);
 
     err = await validatePostId(comment.postId, database);
     if (err) return handleError(err, res, next);
@@ -20,7 +20,7 @@ async function createNewComment(req, res, next, database) {
 
         return res.json({ newCommentAdded: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 
@@ -42,16 +42,8 @@ async function validateComment(comment) {
 }
 
 async function validatePostId(postId, database) {
-    const isValidId = validateId(postId);
-    if (!isValidId) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: "invalid post id!",
-        };
-
-        return knownError;
-    }
+    const postIdError = validatePostId(postId);
+    if (postIdError) return postIdError;
 
     try {
         const post = await database.findPostById(postId);

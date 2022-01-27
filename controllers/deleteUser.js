@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { userPasswordSchema } = require("../schemas/usersSchemas");
-const handleError = require("../utils/handleError");
+const handleError = require("./utils/handleError");
 
 // DELETE /
 // req.body => password
@@ -12,7 +12,7 @@ async function deleteUser(req, res, next, database) {
             hash: req.user.password,
         });
 
-        if (err) return handleError(err);
+        if (err) return handleError(err, res, next);
     }
 
     try {
@@ -26,7 +26,7 @@ async function deleteUser(req, res, next, database) {
 
         return res.json({ userDeleted: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

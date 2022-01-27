@@ -1,16 +1,20 @@
-const validateId = require("../utils/validateId");
 const {
     collectionsPostsSchemas,
 } = require("../schemas/collectionsPostsSchemas");
+const validateCollectionId = require("./utils/validateCollectionId");
+const handleError = require("./utils/handleError");
 
 // GET /:id
 // req.query => page, skip
 async function getCollectionPosts(req, res, next, database) {
-    let [err, params] = await validateQueryParams(req.query);
-    if (err) return handleError(err, res, next);
+    let [queryParamsError, params] = await validateQueryParams(req.query);
+    if (queryParamsError) return handleError(queryParamsError, res, next);
 
-    err = await validateCollectionId(req.params.id, database);
-    if (err) return handleError(err, res, next);
+    const collectionIdError = validateCollectionId(req.params.id);
+    if (collectionIdError) return handleError(collectionIdError, res, next);
+
+    const collectionError = await validateCollection(req.params.id, database);
+    if (collectionError) return handleError(collectionError, res, next);
 
     params = formatParams(params);
 
@@ -22,7 +26,7 @@ async function getCollectionPosts(req, res, next, database) {
 
         return res.json(collectionPosts);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 
@@ -46,18 +50,7 @@ async function validateQueryParams(queryParams) {
     return [null, params];
 }
 
-async function validateCollectionId(collectionId, database) {
-    const isValidId = validateId(collectionId);
-    if (!isValidId) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: "invalid collection id!",
-        };
-
-        return knownError;
-    }
-
+async function validateCollection(collectionId, database) {
     try {
         const collection = await database.findCollectionById(collectionId);
         if (!collection) {

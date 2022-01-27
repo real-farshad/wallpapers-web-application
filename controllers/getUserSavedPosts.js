@@ -1,5 +1,5 @@
 const { savesQuerySchema } = require("../schemas/savesSchemas");
-const handleError = require("../utils/handleError");
+const handleError = require("./utils/handleError");
 
 // GET /
 async function getUserSavedPosts(req, res, next, database) {
@@ -16,7 +16,7 @@ async function getUserSavedPosts(req, res, next, database) {
 
         return res.json(userSavedPosts);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

@@ -1,6 +1,6 @@
-const { userSchema } = require("../schemas/usersSchemas");
-const handleError = require("../utils/handleError");
 const bcrypt = require("bcrypt");
+const { userSchema } = require("../schemas/usersSchemas");
+const handleError = require("./utils/handleError");
 
 // POST /
 // req.body => username, email, password
@@ -16,7 +16,7 @@ async function createNewUser(req, res, next, database) {
 
         return res.json({ newUserCreated: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

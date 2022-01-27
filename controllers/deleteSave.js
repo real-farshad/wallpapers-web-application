@@ -1,17 +1,18 @@
-const validateId = require("../utils/validateId");
+const validatePostId = require("./utils/validatePostId");
+const handleError = require("./utils/handleError");
 
 // DELETE /:id
 async function deleteSave(req, res, next, database) {
-    const isValidId = validateId(req.params.id);
-    if (!isValidId) return res.status(403).json({ error: "invalid post id!" });
+    const err = validatePostId(req.params.id);
+    if (err) return handleError(err, res, next);
 
     try {
-        const result = await database.findAndDeleteSave({
+        const success = await database.findAndDeleteSave({
             postId: req.params.id,
             userId: req.user._id,
         });
 
-        if (!result) {
+        if (!success) {
             return res.status(404).json({
                 error: "no save with this id, for this user, was found!",
             });
@@ -19,7 +20,7 @@ async function deleteSave(req, res, next, database) {
 
         return res.json({ saveDeleted: true });
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 

@@ -1,15 +1,15 @@
-const validateId = require("../utils/validateId");
-const handleError = require("../utils/handleError");
-const { categorySchema } = require("../schemas/categoriesSchemas");
+const validateCategoryId = require("./utils/validateCategoryId");
+const validateCategory = require("./utils/validateCategory");
+const handleError = require("./utils/handleError");
 
 // PUT /:id
 // req.body => title
 async function updateCategory(req, res, next, database) {
-    let [err, newCategory] = await validateCategory(req.body);
-    if (err) return handleError(err);
+    const categoryIdError = validateCategoryId(req.params.id);
+    if (categoryIdError) return handleError(categoryIdError, res, next);
 
-    err = validateCategoryId(req.params.id);
-    if (err) return handleError(err);
+    let [categoryError, newCategory] = await validateCategory(req.body);
+    if (categoryError) return handleError(categoryError, res, next);
 
     try {
         const category = await database.findAndUpdateCategoryById({
@@ -27,34 +27,6 @@ async function updateCategory(req, res, next, database) {
     } catch (err) {
         next(err);
     }
-}
-
-async function validateCategory(category) {
-    try {
-        const validCategory = await categorySchema.validateAsync(category);
-        return [null, validCategory];
-    } catch (err) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: err.message,
-        };
-
-        return [knownError, null];
-    }
-}
-
-async function validateCategoryId(categoryId) {
-    const isValidId = validateId(categoryId);
-    if (!isValidId) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: "invalid post id!",
-        };
-
-        return knownError;
-    } else return null;
 }
 
 module.exports = updateCategory;

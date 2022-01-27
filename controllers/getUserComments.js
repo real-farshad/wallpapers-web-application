@@ -1,4 +1,5 @@
 const { commentsQuerySchema } = require("../schemas/commentsSchemas");
+const handleError = require("./utils/handleError");
 
 // GET /
 async function getUserComments(req, res, next, database) {
@@ -16,7 +17,7 @@ async function getUserComments(req, res, next, database) {
 
         return res.json(userComments);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 }
 
