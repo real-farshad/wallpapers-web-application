@@ -1,31 +1,43 @@
 const validateCategoryId = require("./utils/validateCategoryId");
-const validateCategory = require("./utils/validateCategory");
 const handleError = require("./utils/handleError");
 
-// PUT /:id
-// req.body => title
 async function updateCategory(req, res, next, database) {
-    const categoryIdError = validateCategoryId(req.params.id);
-    if (categoryIdError) return handleError(categoryIdError, res, next);
+    const categoryId = req.params.id;
+    let category = req.body;
 
-    let [categoryError, newCategory] = await validateCategory(req.body);
-    if (categoryError) return handleError(categoryError, res, next);
+    let err = validateCategoryId(categoryId);
+    if (err) return handleError(err, res, next);
 
+    let category;
+    [err, category] = await validateCategoryObject(category);
+    if (err) return handleError(err, res, next);
+
+    err = await updateCategoryInDatabase(categoryId, category, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function updateCategoryInDatabase(categoryId, category, database) {
     try {
-        const category = await database.findAndUpdateCategoryById({
-            categoryId: req.params.id,
-            newCategory,
+        const success = await database.findAndUpdateCategoryById({
+            categoryId,
+            category,
         });
 
-        if (!category) {
-            return res.status(404).json({
-                error: "no post with this id was found!",
-            });
+        if (!success) {
+            const knownError = {
+                known: true,
+                status: 404,
+                message: "no post with this id was found!",
+            };
+
+            return knownError;
         }
 
-        return res.json({ categoryUpdated: true });
+        return null;
     } catch (err) {
-        next(err);
+        return err;
     }
 }
 

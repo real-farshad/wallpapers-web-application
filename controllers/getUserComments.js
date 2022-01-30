@@ -1,34 +1,37 @@
 const { commentsQuerySchema } = require("../schemas/commentsSchemas");
 const handleError = require("./utils/handleError");
+const replacePageWithSkip = require("./utils/replacePageWithSkip");
 
-// GET /
 async function getUserComments(req, res, next, database) {
-    let [err, params] = await validateQueryParams(req.query);
+    const userId = req.user._id;
+    let query = req.query;
+
+    let err;
+    [err, query] = await validateQuery(query);
     if (err) return handleError(err, res, next);
 
-    params = formatParams(params);
+    query = replacePageWithSkip(query);
 
-    try {
-        const userComments = await database.getUserCommentsList({
-            userId,
-            skip,
-            limit,
-        });
+    let comments;
+    [err, comments] = await searchUserCommentsInDatabase(
+        userId,
+        query,
+        database
+    );
+    if (err) return handleError(err, res, next);
 
-        return res.json(userComments);
-    } catch (err) {
-        return next(err);
-    }
+    return res.json(comments);
 }
 
-async function validateQueryParams(queryParams) {
-    let params = {
-        page: queryParams.page || 1,
-        limit: queryParams.limit || 10,
+async function validateQuery(queryObject) {
+    let query = {
+        page: queryObject.page || 1,
+        limit: queryObject.limit || 10,
     };
 
     try {
-        params = await commentsQuerySchema.validateAsync(params);
+        query = await commentsQuerySchema.validateAsync(query);
+        return [null, query];
     } catch (err) {
         const knownError = {
             known: true,
@@ -38,15 +41,19 @@ async function validateQueryParams(queryParams) {
 
         return [knownError, null];
     }
-
-    return [null, params];
 }
 
-function formatParams(params) {
-    const fParams = { ...params };
-    fParams.skip = (fParams.page - 1) * fParams.limit;
-    delete fParams.page;
-    return fParams;
+async function searchUserCommentsInDatabase(userId, query, database) {
+    try {
+        const comments = await database.getUserCommentsList({
+            userId,
+            ...query,
+        });
+
+        return [null, comments];
+    } catch (err) {
+        return [err, null];
+    }
 }
 
 module.exports = getUserComments;

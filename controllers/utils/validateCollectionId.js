@@ -1,8 +1,8 @@
 const validateId = require("../utils/validateId");
 
 function validateCollectionId(collectionId) {
-    const isValidCollectionId = validateId(collectionId);
-    if (!isValidCollectionId) {
+    const isValidId = validateId(collectionId);
+    if (!isValidId) {
         const knownError = {
             known: true,
             status: 403,

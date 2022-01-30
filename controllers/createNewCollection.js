@@ -1,42 +1,34 @@
-const { collectionSchema } = require("../schemas/collectionsSchemas");
+const validateCollectionObject = require("./utils/validateCollectionObject");
 const handleError = require("./utils/handleError");
 
-// POST /
-// req.body => title
 async function createNewCollection(req, res, next, database) {
-    const [err, collection] = await validateCollection(req.body);
+    const userId = req.user._id;
+    let collection = req.body;
+
+    let err;
+    [err, collection] = await validateCollectionObject(collection);
     if (err) return handleError(err, res, next);
 
-    try {
-        await database.addNewCollection({
-            ...collection,
-            userId: req.user._id,
-            postCount: 0,
-            createdAt: Date.now(),
-        });
+    collection = {
+        ...collection,
+        userId,
+        postCount: 0,
+        createdAt: Date.now(),
+    };
 
-        return res.json({ newCollectionAdded: true });
-    } catch (err) {
-        return next(err);
-    }
+    err = await addNewCollectionToDatabase(collection, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
 }
 
-async function validateCollection(collection) {
-    let validCollection = { ...collection };
-
+async function addNewCollectionToDatabase(collection, database) {
     try {
-        validCollection = await collectionSchema.validateAsync(validCollection);
+        await database.addNewCollection(collection);
+        return null;
     } catch (err) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: err.message,
-        };
-
-        return [knownError, null];
+        return err;
     }
-
-    return [null, validCollection];
 }
 
 module.exports = createNewCollection;

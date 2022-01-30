@@ -1,15 +1,24 @@
-const validateId = require("./utils/validateId");
+const validateCommentId = require("./utils/validateCommentId");
 const handleError = require("./utils/handleError");
 
-// DELETE /:id
 async function deleteComment(req, res, next, database) {
-    const err = validateCommentId(req.params.id);
+    const userId = req.user._id,
+    const commentId = req.params.id;
+
+    let err = validateCommentId(commentId);
     if (err) return handleError(err, res, next);
 
+    err = await deleteCommentFromDatabase(commentId, userId, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function deleteCommentFromDatabase(commentId, userId, database) {
     try {
         const success = await database.findAndDeleteComment({
-            postId: req.params.id,
-            userId: req.user._id,
+            commentId,
+            userId,
         });
 
         if (!success) {
@@ -18,24 +27,9 @@ async function deleteComment(req, res, next, database) {
             });
         }
 
-        return res.json({ commentDeleted: true });
-    } catch (err) {
-        return next(err);
-    }
-}
-
-function validateCommentId(commentId) {
-    const isValidId = validateId(commentId);
-    if (!isValidId) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: "invalid post id!",
-        };
-
-        return knownError;
-    } else {
         return null;
+    } catch (err) {
+        return err;
     }
 }
 

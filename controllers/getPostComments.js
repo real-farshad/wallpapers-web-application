@@ -1,36 +1,42 @@
 const { commentsQuerySchema } = require("../schemas/commentsSchemas");
 const validatePostId = require("./utils/validatePostId");
+const checkPostExists = require("./utils/checkPostExists");
 const handleError = require("./utils/handleError");
+const replacePageWithSkip = require("./utils/replacePageWithSkip");
 
-// GET /:id
 async function getPostComments(req, res, next, database) {
-    let [queryParamsError, params] = await validateQueryParams(req.query);
-    if (queryParamsError) return handleError(queryParamsError, res, next);
+    const postId = req.params.id;
+    let query = req.query;
 
-    const postIdError = validatePostId(req.params.id);
-    if (postIdError) return handleError(postIdError, res, next);
+    let err;
+    [err, query] = await validateQuery(query);
+    if (err) return handleError(err, res, next);
 
-    const postError = await validatePost(req.params.id, database);
-    if (postError) return handleError(postError, res, next);
+    err = await validatePost(postId, database);
+    if (err) return handleError(err, res, next);
 
-    params = formatParams(params);
+    query = replacePageWithSkip(query);
 
-    try {
-        const comments = await database.getCommentsList(postId, skip, limit);
-        return res.json(comments);
-    } catch (err) {
-        return next(err);
-    }
+    let comments;
+    [err, comments] = await searchPostCommentsInDatabase(
+        postId,
+        query,
+        database
+    );
+    if (err) return handleError(err, res, next);
+
+    return res.json(comments);
 }
 
-async function validateQueryParams(queryParams) {
-    let params = {
-        page: queryParams.page || 1,
-        limit: queryParams.limit || 10,
+async function validateQuery(queryObject) {
+    let query = {
+        page: queryObject.page || 1,
+        limit: queryObject.limit || 10,
     };
 
     try {
-        query = await commentsQuerySchema.validateAsync(params);
+        query = await commentsQuerySchema.validateAsync(query);
+        return [null, query];
     } catch (err) {
         const knownError = {
             known: true,
@@ -39,36 +45,25 @@ async function validateQueryParams(queryParams) {
         };
         return [knownError, null];
     }
-
-    return [null, params];
 }
 
 async function validatePost(postId, database) {
-    try {
-        const post = await database.findPostById(postId);
-        if (!post) {
-            const knownError = {
-                known: true,
-                status: 404,
-                message: "no post with this id was found!",
-            };
+    let err = validatePostId(postId);
+    if (err) return err;
 
-            return knownError;
-        }
-    } catch (err) {
-        return err;
-    }
+    const err = await checkPostExists(postId, database);
+    if (err) return err;
 
     return null;
 }
 
-function formatParams(params) {
-    const fParams = { ...params };
-
-    fParams.skip = (fParams.page - 1) * fParams.limit;
-    delete fParams.page;
-
-    return fParams;
+async function searchPostCommentsInDatabase(postId, query, database) {
+    try {
+        const comments = await database.getCommentsList(postId, query);
+        return [null, comments];
+    } catch (err) {
+        return [err, null];
+    }
 }
 
 module.exports = getPostComments;

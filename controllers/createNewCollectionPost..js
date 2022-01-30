@@ -1,120 +1,70 @@
-const { collectionPostSchema } = require("../schemas/collectionsPostsSchemas");
 const validatePostId = require("./utils/validatePostId");
+const validateCollectionId = require("./utils/validateCollectionId");
+const validateCollectionPostObject = require("./utils/validateCollectionPostObject");
+const checkPostExists = require("./utils/checkPostExists");
+const checkCollectionExists = require("./utils/checkCollectionExists");
 const handleError = require("./utils/handleError");
 
-// POST /
-// req.body => collectionId, postId
 async function createNewCollectionPost(req, res, next, database) {
-    let [err, collectionPost] = await validateCollectionPost(req.body);
-    if (err) return handleError(err, res, next);
+    const userId = req.user._id;
+    let collectionPost = req.body;
 
-    const postError = await validatePost(collectionPost.postId, database);
-    if (!postError) return handleError(postError, res, next);
-
-    const collectionIdError = validateCollectionId(collectionPost.collectionId);
-    if (collectionIdError) return handleError(collectionIdError, res, next);
-
-    const collectionError = await validateCollection(
-        {
-            collectionId: collectionPost.collectionId,
-            userId: req.user._id,
-        },
+    let err;
+    [err, collectionPost] = await validateCollectionPost(
+        collectionPost,
+        userId,
         database
     );
 
-    if (collectionError) return handleErrorerr(collectionError, res, next);
+    if (err) return handleError(err, res, next);
 
+    collectionPost = {
+        ...collectionPost,
+        createdAt: Date.now(),
+    };
+
+    err = await addNewCollectionPostToDatabase(collectionPost, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function validateCollectionPost(collectionPostObject, userId, database) {
+    let [err, collectionPost] = await validateCollectionPostObject(
+        collectionPostObject
+    );
+    if (err) return [err, null];
+
+    err = validatePostId(collectionPost.postId);
+    if (err) return [err, null];
+
+    err = validateCollectionId(collectionPost.collectionId);
+    if (err) return [err, null];
+
+    err = await checkPostExists(collectionPost.postId, database);
+    if (err) return [err, null];
+
+    err = await checkCollectionExists(
+        { collectionId: collectionPost.collectionId, userId },
+        database
+    );
+    if (err) return [err, null];
+
+    return [null, collectionPost];
+}
+
+async function addNewCollectionPostToDatabase(collectionPost, database) {
     try {
-        await database.addNewCollectionPost({
-            ...collectionPost,
-            createdAt: Date.now(),
-        });
+        await database.addNewCollectionPost(collectionPost);
 
         await database.incrementCollectionPostCount(
             collectionPost.collectionId
         );
 
-        return res.json({ newCollectionPostAdded: true });
-    } catch (err) {
-        return next(err);
-    }
-}
-
-async function validateCollectionPost(collectionPost) {
-    let validCollectionPost = { ...collection };
-
-    try {
-        validCollectionPost = await collectionPostSchema.validateAsync(
-            collectionPost
-        );
-    } catch (err) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: err.message,
-        };
-
-        return [knownError, null];
-    }
-
-    return [null, validCollectionPost];
-}
-
-async function validatePost(postId, database) {
-    const postIdError = validatePostId(postId);
-    if (postIdError) return postIdError;
-
-    try {
-        const post = await database.findPostById(postId);
-        if (!post) {
-            const knownError = {
-                known: true,
-                status: 404,
-                message: "no post with this id was found!",
-            };
-
-            return knownError;
-        }
+        return null;
     } catch (err) {
         return err;
     }
-
-    return null;
-}
-
-async function validateCollection({ collectionId, userId }, database) {
-    const isValidId = validateId(collectionId);
-    if (!isValidId) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: "invalid collection id!",
-        };
-
-        return knownError;
-    }
-
-    try {
-        const collection = await database.findUserCollectionById({
-            collectionId,
-            userId,
-        });
-
-        if (!collection) {
-            const knownError = {
-                known: true,
-                status: 404,
-                message:
-                    "no collection with this id, for this user, was found!",
-            };
-
-            return knownError;
-        }
-    } catch (err) {
-        return err;
-    }
-
-    return null;
 }
 
 module.exports = createNewCollectionPost;

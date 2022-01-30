@@ -1,18 +1,25 @@
-const validateCategory = require("./utils/validateCategory");
+const validateCategoryObject = require("./utils/validateCategoryObject");
 const handleError = require("./utils/handleError");
 
-// POST /
-// req.body => title
 async function createNewCategory(req, res, next, database) {
-    let [err, category] = await validateCategory(req.body);
+    let category = req.body;
+
+    let err;
+    [err, category] = await validateCategoryObject(category);
     if (err) return handleError(err, res, next);
 
+    err = await addNewCategoryToDatabase(category, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function addNewCategoryToDatabase(category, database) {
     try {
         await database.addNewCategory(category);
-
-        return res.json({ newCategoryCreated: true });
+        return null;
     } catch (err) {
-        return next(err);
+        return err;
     }
 }
 

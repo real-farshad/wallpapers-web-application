@@ -1,27 +1,40 @@
 const validatePostId = require("./utils/validatePostId");
 const handleError = require("./utils/handleError");
 
-// DELETE /:id
 async function deletePost(req, res, next, database) {
-    const err = validatePostId(req.params.id);
+    const userId = req.user._id;
+    const postId = req.params.id;
+
+    let err = validatePostId(postId);
     if (err) return handleError(err, res, next);
 
-    await database.deleteManyLikesByPostId(postId);
-    await database.deleteManyCommentsByPostId(postId);
-    await database.deleteManySavesByPostId(postId);
-    await database.deleteManycollectionPostsByPostId(postId);
+    err = await deletePostFromDatabase(postId, userId, database);
+    if (err) return handleError(err, res, next);
 
+    return res.json({ success: true });
+}
+
+async function deletePostFromDatabase(postId, userId, database) {
     try {
-        const success = await database.findAndDeletePostById(postId);
+        const success = await database.findAndDeletePostById(postId, userId);
         if (!success) {
-            return res.status(404).json({
-                error: "no post with this id was found!",
-            });
+            const knownError = {
+                known: true,
+                status: 404,
+                message: "no post with this id, for this user, was found!",
+            };
+
+            return knownError;
         }
 
-        return res.json({ postDeleted: true });
+        await database.deleteManyLikesByPostId(postId);
+        await database.deleteManyCommentsByPostId(postId);
+        await database.deleteManySavesByPostId(postId);
+        await database.deleteManycollectionPostsByPostId(postId);
+
+        return null;
     } catch (err) {
-        return next(err);
+        return err;
     }
 }
 

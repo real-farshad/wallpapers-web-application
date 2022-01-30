@@ -1,26 +1,39 @@
 const validatePostId = require("./utils/validatePostId");
 const handleError = require("./utils/handleError");
 
-// DELETE /:id
 async function deleteSave(req, res, next, database) {
-    const err = validatePostId(req.params.id);
+    const userId = req.user._id;
+    const postId = req.params._id;
+
+    let err = validatePostId(postId);
     if (err) return handleError(err, res, next);
 
+    err = await deleteSaveFromDatabase(postId, userId, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function deleteSaveFromDatabase(postId, userId, database) {
     try {
         const success = await database.findAndDeleteSave({
-            postId: req.params.id,
-            userId: req.user._id,
+            postId,
+            userId,
         });
 
         if (!success) {
-            return res.status(404).json({
-                error: "no save with this id, for this user, was found!",
-            });
+            const knownError = {
+                known: true,
+                status: 404,
+                message: "no save with this id, for this user, was found!",
+            };
+
+            return knownError;
         }
 
-        return res.json({ saveDeleted: true });
+        return null;
     } catch (err) {
-        return next(err);
+        return err;
     }
 }
 

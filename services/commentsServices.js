@@ -24,7 +24,7 @@ async function getUserCommentsList({ userId, skip, limit }) {
     return result;
 }
 
-async function getCommentsList(postId, skip, limit) {
+async function getCommentsList(postId, { skip, limit }) {
     const cursor = await getCommentsCollection().aggregate([
         { $match: { postId: new ObjectId(postId) } },
         {

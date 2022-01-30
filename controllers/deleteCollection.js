@@ -1,28 +1,42 @@
 const validateCollectionId = require("./utils/validateCollectionId");
 const handleError = require("./utils/handleError");
 
-// DELETE /:id
 async function deleteCollection(req, res, next, database) {
-    const err = validateCollectionId(req.params.id);
+    const userId = req.user._id;
+    const collectionId = req.params.id;
+
+    let err = validateCollectionId(collectionId);
     if (err) return handleError(err, res, next);
 
+    err = await deleteCollectionFromDatabase(collectionId, userId, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function deleteCollectionFromDatabase(collectionId, userId, database) {
     try {
         const success = await database.findAndDeleteCollection(
-            req.params.id,
-            req.user._id
+            collectionId,
+            userId
         );
 
         if (!success) {
-            return res.status(404).json({
-                error: "no collection with this id, for this user, was found!",
-            });
+            const knownError = {
+                known: true,
+                status: 404,
+                message:
+                    "no collection with this id, for this user, was found!",
+            };
+
+            return knownError;
         }
 
-        await database.deleteManycollectionPosts(req.params.id);
+        await database.deleteManycollectionPosts(collectionId);
 
-        return res.json({ collectionDeleted: true });
+        return null;
     } catch (err) {
-        return next(err);
+        return err;
     }
 }
 

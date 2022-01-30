@@ -1,33 +1,37 @@
 const { savesQuerySchema } = require("../schemas/savesSchemas");
+const replacePageWithSkip = require("./utils/replacePageWithSkip");
 const handleError = require("./utils/handleError");
 
-// GET /
 async function getUserSavedPosts(req, res, next, database) {
-    let [err, params] = await validateQueryParams(req.query);
+    const userId = req.user._id;
+    let query = req.query;
+
+    let err;
+    [err, query] = await validateQuery(query);
     if (err) return handleError(err, res, next);
 
-    params = formatParams(params);
+    query = replacePageWithSkip(query);
 
-    try {
-        const userSavedPosts = await database.getUserSavedPosts({
-            ...params,
-            userId: req.user._id,
-        });
+    let savedPosts;
+    [err, savedPosts] = await searchUserSavedPostsInDatabase(
+        userId,
+        query,
+        database
+    );
+    if (err) return handleError(err, res, next);
 
-        return res.json(userSavedPosts);
-    } catch (err) {
-        return next(err);
-    }
+    return res.json(savedPosts);
 }
 
-async function validateQueryParams(queryParams) {
-    let params = {
-        page: queryParams.page || 1,
-        limit: queryParams.limit || 20,
+async function validateQuery(queryObject) {
+    let query = {
+        page: queryObject.page || 1,
+        limit: queryObject.limit || 20,
     };
 
     try {
-        params = await savesQuerySchema.validateAsync(params);
+        query = await savesQuerySchema.validateAsync(query);
+        return [null, query];
     } catch (err) {
         const knownError = {
             known: true,
@@ -37,17 +41,19 @@ async function validateQueryParams(queryParams) {
 
         return [knownError, null];
     }
-
-    return [null, params];
 }
 
-function formatParams(params) {
-    const fParams = { ...params };
+async function searchUserSavedPostsInDatabase(userId, query, database) {
+    try {
+        const savedPosts = await database.getUserSavedPosts({
+            userId,
+            ...query,
+        });
 
-    fParams.skip = (fParams.page - 1) * fParams.limit;
-    delete fParams.page;
-
-    return fParams;
+        return [null, savedPosts];
+    } catch (err) {
+        return [err, null];
+    }
 }
 
 module.exports = getUserSavedPosts;

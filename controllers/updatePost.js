@@ -1,96 +1,45 @@
 const validatePostId = require("./utils/validatePostId");
+const validatePostObject = require("./utils/validatePostObject");
+const checkUserPostAccess = require("./utils/checkUserPostAccess");
+const findCategoryByTitleInDatabase = require("./utils/findCategoryByTitleInDatabase");
 const handleError = require("./utils/handleError");
-const { postSchema } = require("../schemas/postsSchemas");
 
-// PUT /:id
-// body.request => imageUrl, title, category
 async function updatePost(req, res, next, database) {
-    const postIdError = validatePostId(req.params.id);
-    if (postIdError) return handleError(postIdError, res, next);
+    const userId = req.user.id;
+    const postId = req.params.id;
+    let post = req.body;
 
-    const [postError, post] = await validatePost(req.body);
-    if (postError) return handleError(postError);
+    let err = validatePostId(postId);
+    if (err) return handleError(err, res, next);
 
-    const accessError = await checkUserPostAccess(
-        {
-            postId: req.params.id,
-            userId: req.user._id,
-        },
-        database
-    );
+    [err, post] = await validatePostObject(post);
+    if (err) return handleError(err, res, next);
 
-    if (accessError) return handleError(accessError);
+    err = await checkUserPostAccess(postId, userId, database);
+    if (err) return handleError(err, res, next);
 
-    const [categoryError, category] = await validateCategoryTitle(
+    let category;
+    [err, category] = await findCategoryByTitleInDatabase(
         post.category,
         database
     );
-
-    if (categoryError) return handleError(categoryError);
+    if (err) return handleError(err, res, next);
 
     post.categoryId = category._id;
     delete post.category;
 
+    err = await updatePostInDatabase(postId, post, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function updatePostInDatabase(postId, post, database) {
     try {
         await database.findAndUpdatePostById(postId, post);
-
-        return res.json({ postUpdated: true });
-    } catch (err) {
-        return next(err);
-    }
-}
-
-async function validatePost(post) {
-    try {
-        const validPost = await postSchema.validateAsync(post);
-        return [null, validPost];
-    } catch (err) {
-        const knwonError = {
-            knwon: true,
-            status: 403,
-            message: err.message,
-        };
-
-        return [knwonError, null];
-    }
-}
-
-async function checkUserPostAccess({ postId, userId }, database) {
-    try {
-        const post = await database.findUserPostById({ postId, userId });
-        if (!post) {
-            const knownError = {
-                known: true,
-                status: 404,
-                message: "no post with this id, for this user was found!",
-            };
-
-            return knownError;
-        }
-
         return null;
     } catch (err) {
         return err;
-    }
-}
-
-async function validateCategoryTitle(categoryTitle, database) {
-    try {
-        const category = await database.findCategoryByTitle(categoryTitle);
-
-        if (!category) {
-            const knownError = {
-                knwon: true,
-                status: 404,
-                message: "this category does not exist!",
-            };
-
-            return [knownError, null];
-        }
-
-        return [null, category];
-    } catch (err) {
-        return [err, null];
     }
 }
 

@@ -1,33 +1,33 @@
 const { likesQuerySchema } = require("../schemas/likesSchemas");
+const replacePageWithSkip = require("./utils/replacePageWithSkip");
 const handleError = require("./utils/handleError");
 
-// GET /
 async function getUserLikes(req, res, next, database) {
-    let [err, params] = await validateQueryParams(req.query);
+    const userId = req.user._id;
+    let query = req.query;
+
+    let err;
+    [err, query] = await validateQuery(query);
     if (err) return handleError(err, res, next);
 
-    params = formatParams(params);
+    query = replacePageWithSkip(query);
 
-    try {
-        const userLikedPosts = await database.getUserLikes({
-            userId: req.user._id,
-            ...params,
-        });
+    let likes;
+    [err, likes] = await searchUserLikesInDatabase(userId, query, database);
+    if (err) return handleError(err, res, next);
 
-        return res.json(userLikedPosts);
-    } catch (err) {
-        return next(err);
-    }
+    return res.json(likes);
 }
 
-async function validateQueryParams(queryParams) {
-    let params = {
-        page: queryParams.page || 1,
-        limit: queryParams.limit || 20,
+async function validateQuery(queryObject) {
+    let query = {
+        page: queryObject.page || 1,
+        limit: queryObject.limit || 20,
     };
 
     try {
-        params = await likesQuerySchema.validateAsync(params);
+        query = await likesQuerySchema.validateAsync(query);
+        return [null, query];
     } catch (err) {
         const knownError = {
             known: true,
@@ -37,17 +37,15 @@ async function validateQueryParams(queryParams) {
 
         return [knownError, null];
     }
-
-    return [null, params];
 }
 
-function formatParams(params) {
-    const fParams = { ...params };
-
-    fParams.skip = (fParams.page - 1) * fParams.limit;
-    delete fParams.page;
-
-    return fParams;
+async function searchUserLikesInDatabase(userId, query, database) {
+    try {
+        const likes = await database.getUserLikes({ userId, ...query });
+        return [null, likes];
+    } catch (err) {
+        return [err, null];
+    }
 }
 
 module.exports = getUserLikes;

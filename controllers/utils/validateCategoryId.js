@@ -1,8 +1,8 @@
 const validateId = require("./validateId");
 
 function validateCategoryId(categoryId) {
-    const isValidCategoryId = validateId(categoryId);
-    if (!isValidCategoryId) {
+    const isValidId = validateId(categoryId);
+    if (!isValidId) {
         const knownError = {
             known: true,
             status: 403,

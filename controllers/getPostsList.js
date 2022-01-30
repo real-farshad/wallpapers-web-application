@@ -1,33 +1,36 @@
 const { postQuerySchema } = require("../schemas/postsSchemas");
+const findCategoryByTitleInDatabase = require("./utils/findCategoryByTitleInDatabase");
 const handleError = require("./utils/handleError");
+const replacePageWithSkip = require("./utils/replacePageWithSkip");
 
-// GET /
 async function getPostsList(req, res, next, database) {
-    let [err, params] = await validateQueryParams(req.query, database);
+    let query = req.query;
+
+    let err;
+    [err, query] = await validateQuery(query, database);
     if (err) return handleError(err, res, next);
 
-    params = formatParams(params);
+    query = formatQuery(query);
 
-    try {
-        const postsList = await database.searchPostsList(...params);
-        return res.json(postsList);
-    } catch (err) {
-        return next(err);
-    }
+    let posts;
+    [err, posts] = await searchPostsInDatabase(query, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json(posts);
 }
 
-async function validateQueryParams(queryParams, database) {
-    const params = {
-        search: queryParams.search || "",
-        category: queryParams.category || "",
-        duration: queryParams.duration || "",
-        sort: queryParams.sort || "new",
-        page: queryParams.page || 1,
-        limit: queryParams.limit || 20,
+async function validateQuery(queryObject, database) {
+    let query = {
+        search: queryObject.search || "",
+        category: queryObject.category || "",
+        duration: queryObject.duration || "",
+        sort: queryObject.sort || "new",
+        page: queryObject.page || 1,
+        limit: queryObject.limit || 20,
     };
 
     try {
-        query = await postQuerySchema.validateAsync(params);
+        query = await postQuerySchema.validateAsync(query);
     } catch (err) {
         const knownError = {
             known: true,
@@ -38,46 +41,43 @@ async function validateQueryParams(queryParams, database) {
         return [knownError, null];
     }
 
-    if (params.category) {
-        try {
-            const category = await database.findCategoryByTitle(
-                params.category
-            );
+    if (query.category !== "") {
+        const [err, category] = await findCategoryByTitleInDatabase(
+            query.category,
+            database
+        );
 
-            if (!category) {
-                const knownError = {
-                    known: true,
-                    status: 404,
-                    message: "this category does not exist",
-                };
+        if (err) return [err, null];
 
-                return [knownError, null];
-            } else {
-                params.categoryId = category._id;
-                delete params.category;
-            }
-        } catch (err) {
-            return [err, null];
-        }
+        query.categoryId = category._id;
+        delete query.category;
     }
 
-    return [null, params];
+    return [null, query];
 }
 
-function formatParams(params) {
-    const fParams = { ...params };
+function formatQuery(queryObject) {
+    let query = { ...queryObject };
 
-    if (fParams.duration !== "all-times") {
-        fParams.duration = new Date(`1-1-${fParams.duration}`).getTime();
+    if (query.duration !== "all-times") {
+        query.duration = new Date(`1-1-${query.duration}`).getTime();
     }
 
-    fParams.sort = fParams.sort === "new" ? "createdAt" : "likeCount";
-    fParams.sort = { [fParams.sort]: -1 };
+    query.sort = query.sort === "new" ? "createdAt" : "likeCount";
+    query.sort = { [query.sort]: -1 };
 
-    fParams.skip = (fParams.page - 1) * fParams.limit;
-    delete fParams.page;
+    query = replacePageWithSkip(query);
 
-    return fParams;
+    return query;
+}
+
+async function searchPostsInDatabase(query, database) {
+    try {
+        const posts = await database.searchPostsList(...query);
+        return [null, posts];
+    } catch (err) {
+        return [err, null];
+    }
 }
 
 module.exports = getPostsList;

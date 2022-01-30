@@ -1,4 +1,3 @@
-// GET /
 async function getUserInfo(req, res) {
     const user = {
         username: req.user.username,

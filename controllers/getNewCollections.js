@@ -1,50 +1,51 @@
 const { collectionsQuerySchema } = require("../schemas/collectionsSchemas");
+const replacePageWithSkip = require("./utils/replacePageWithSkip");
 const handleError = require("./utils/handleError");
 
-// GET /
-// req.query => page, limit
 async function getNewCollections(req, res, next, database) {
-    let [err, params] = await validateQueryParams(req.query);
+    let query = req.query;
+
+    let err;
+    [err, query] = await validateQuery(query);
     if (err) return handleError(err, res, next);
 
-    params = formatParams(params);
+    query = replacePageWithSkip(query);
 
-    try {
-        const collections = await database.findCollections(...params);
-        return res.json(collections);
-    } catch (err) {
-        return next(err);
-    }
+    let collections;
+    [err, collections] = await searchCollectionsInDatabase(query, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json(collections);
 }
 
-async function validateQueryParams(queryParams) {
-    let params = {
-        search: queryParams.search || "",
-        page: queryParams.page || 1,
-        limit: queryParams.limit || 3,
+async function validateQuery(queryObject) {
+    let query = {
+        search: queryObject.search || "",
+        page: queryObject.page || 1,
+        limit: queryObject.limit || 3,
     };
 
     try {
-        query = await collectionsQuerySchema.validateAsync(params);
+        query = await collectionsQuerySchema.validateAsync(query);
+        return [null, query];
     } catch (err) {
         const knownError = {
             known: true,
             status: 403,
             message: err.message,
         };
+
         return [knownError, null];
     }
-
-    return [null, params];
 }
 
-function formatParams(params) {
-    const fParams = { ...params };
-
-    fParams.skip = (fParams.page - 1) * fParams.limit;
-    delete fParams.page;
-
-    return fParams;
+async function searchCollectionsInDatabase(query, database) {
+    try {
+        const collections = await database.findCollections(...query);
+        return [null, collections];
+    } catch (err) {
+        return [err, null];
+    }
 }
 
 module.exports = getNewCollections;

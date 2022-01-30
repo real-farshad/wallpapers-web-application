@@ -1,63 +1,41 @@
-const bcrypt = require("bcrypt");
-const { userSchema } = require("../schemas/usersSchemas");
 const handleError = require("./utils/handleError");
+const hashPassword = require("./utils/hashPassword");
+const validateUserObject = require("./utils/validateUserObject");
+const checkUniqueEmail = require("./utils/checkUniqueEmail");
 
-// POST /
-// req.body => username, email, password
 async function createNewUser(req, res, next, database) {
-    const [err, newUser] = await validateUser(req.body);
+    let user = req.body;
+
+    let err;
+    [err, user] = await validateUser(user, database);
     if (err) return handleError(err, res, next);
 
-    try {
-        newUser.password = await hashUserPassword(newUser.password);
-        newUser.local = true;
+    user.password = await hashPassword(user.password);
+    user.local = true;
 
-        await database.addNewUser(newUser);
+    err = await addNewUserToDatabase(user, database);
+    if (err) return handleError(err, res, next);
 
-        return res.json({ newUserCreated: true });
-    } catch (err) {
-        return next(err);
-    }
+    return res.json({ success: true });
 }
 
-async function validateUser(user) {
-    let validUser = { ...user };
+async function validateUser(userObject, database) {
+    let [err, user] = await validateUserObject(userObject);
+    if (err) return [err, null];
 
-    try {
-        validUser = await userSchema.validateAsync(validUser);
-    } catch (err) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: err.message,
-        };
+    err = await checkUniqueEmail(user.email, database);
+    if (err) return [err, null];
 
-        return [knownError, null];
-    }
-
-    try {
-        const userWithSameEmail = await database.findUserByEmail(newUser.email);
-
-        if (userWithSameEmail) {
-            const knownError = {
-                known: true,
-                status: 403,
-                message: "an user with this email address already exists!",
-            };
-
-            return [knownError, null];
-        }
-    } catch (err) {
-        return [err, null];
-    }
-
-    return [null, validUser];
+    return [null, user];
 }
 
-function hashUserPassword(password) {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return hashedPassword;
+async function addNewUserToDatabase(user, database) {
+    try {
+        await database.addNewUser(user);
+        return null;
+    } catch (err) {
+        return err;
+    }
 }
 
 module.exports = createNewUser;

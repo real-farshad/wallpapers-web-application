@@ -2,80 +2,75 @@ const {
     collectionsPostsSchemas,
 } = require("../schemas/collectionsPostsSchemas");
 const validateCollectionId = require("./utils/validateCollectionId");
+const checkCollectionExists = require("./utils/checkCollectionExists");
 const handleError = require("./utils/handleError");
+const replacePageWithSkip = require("./utils/replacePageWithSkip");
 
-// GET /:id
-// req.query => page, skip
 async function getCollectionPosts(req, res, next, database) {
-    let [queryParamsError, params] = await validateQueryParams(req.query);
-    if (queryParamsError) return handleError(queryParamsError, res, next);
+    const collectionId = req.params.id;
+    let query = req.query;
 
-    const collectionIdError = validateCollectionId(req.params.id);
-    if (collectionIdError) return handleError(collectionIdError, res, next);
+    let err;
+    [err, query] = await validateQuery(query);
+    if (err) return handleError(err, res, next);
 
-    const collectionError = await validateCollection(req.params.id, database);
-    if (collectionError) return handleError(collectionError, res, next);
+    err = await validateCollection(collectionId, database);
+    if (err) return handleError(err, res, next);
 
-    params = formatParams(params);
+    query = replacePageWithSkip(query);
 
-    try {
-        const collectionPosts = await database.findCollectionPosts({
-            collectionId: req.params.id,
-            ...params,
-        });
+    let collectionPosts;
+    [err, collectionPosts] = await searchCollectionPostsInDatabase(
+        collectionId,
+        query,
+        database
+    );
+    if (err) return handleError(err, res, next);
 
-        return res.json(collectionPosts);
-    } catch (err) {
-        return next(err);
-    }
+    return res.json(collectionPosts);
 }
 
-async function validateQueryParams(queryParams) {
-    let params = {
-        page: queryParams.page || 1,
-        limit: queryParams.limit || 10,
+async function validateQuery(queryObject) {
+    let query = {
+        page: queryObject.page || 1,
+        limit: queryObject.limit || 10,
     };
 
     try {
-        query = await collectionsPostsSchemas.validateAsync(params);
+        query = await collectionsPostsSchemas.validateAsync(query);
+        return [null, query];
     } catch (err) {
         const knownError = {
             known: true,
             status: 403,
             message: err.message,
         };
+
         return [knownError, null];
     }
-
-    return [null, params];
 }
 
 async function validateCollection(collectionId, database) {
-    try {
-        const collection = await database.findCollectionById(collectionId);
-        if (!collection) {
-            const knownError = {
-                known: true,
-                status: 404,
-                message: "no collection with this id was found!",
-            };
+    let err = validateCollectionId(collectionId);
+    if (err) return err;
 
-            return knownError;
-        }
-    } catch (err) {
-        return err;
-    }
+    err = await checkCollectionExists(collectionId, database);
+    if (err) return err;
 
     return null;
 }
 
-function formatParams(params) {
-    const fParams = { ...params };
+async function searchCollectionPostsInDatabase(collectionId, query, database) {
+    try {
+        const collectionPosts = await database.findCollectionPosts({
+            collectionId,
+            ...query,
+        });
 
-    fParams.skip = (fParams.page - 1) * fParams.limit;
-    delete fParams.page;
-
-    return fParams;
+        return [null, collectionPosts];
+    } catch (err) {
+        return [err, null];
+    }
 }
 
 module.exports = getCollectionPosts;

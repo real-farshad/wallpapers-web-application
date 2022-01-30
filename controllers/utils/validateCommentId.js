@@ -1,12 +1,12 @@
 const validateId = require("./validateId");
 
-async function validatePostId(postId) {
-    const isValidId = validateId(postId);
+function validateCommentId(commentId) {
+    const isValidId = validateId(commentId);
     if (!isValidId) {
         const knownError = {
             known: true,
             status: 403,
-            message: "invalid post id!",
+            message: "invalid comment id!",
         };
 
         return knownError;
@@ -15,4 +15,4 @@ async function validatePostId(postId) {
     }
 }
 
-module.exports = validatePostId;
+module.exports = validateCommentId;

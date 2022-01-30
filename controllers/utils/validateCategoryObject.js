@@ -1,9 +1,9 @@
 const { categorySchema } = require("../schemas/categoriesSchemas");
 
-async function validateCategory(category) {
+async function validateCategoryObject(categoryObject) {
     try {
-        const validCategory = await categorySchema.validateAsync(category);
-        return [null, validCategory];
+        const category = await categorySchema.validateAsync(categoryObject);
+        return [null, category];
     } catch (err) {
         const knownError = {
             known: true,
@@ -15,4 +15,4 @@ async function validateCategory(category) {
     }
 }
 
-module.exports = validateCategory;
+module.exports = validateCategoryObject;

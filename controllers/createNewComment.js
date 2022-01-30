@@ -1,66 +1,48 @@
-const { commentSchema } = require("../schemas/commentsSchemas");
+const validateCommentObject = require("./utils/validateCommentObject");
 const validatePostId = require("./utils/validatePostId");
+const checkPostExists = require("./utils/checkPostExists");
 const handleError = require("./utils/handleError");
 
-// POST /
-// req.body => description, postId
 async function createNewComment(req, res, next, database) {
-    let [err, comment] = await validateComment(req.body);
+    const userId = req.user._id;
+    let comment = req.body;
+
+    let err;
+    [err, comment] = await validateComment(comment, database);
     if (err) return handleError(err, res, next);
 
-    err = await validatePostId(comment.postId, database);
+    comment = {
+        ...comment,
+        userId,
+        createdAt: Date.now(),
+    };
+
+    err = await addNewCommentToDatabase(comment, database);
     if (err) return handleError(err, res, next);
 
-    try {
-        await database.addNewComment({
-            ...comment,
-            userId: req.user._id,
-            createdAt: Date.now(),
-        });
-
-        return res.json({ newCommentAdded: true });
-    } catch (err) {
-        return next(err);
-    }
+    return res.json({ success: true });
 }
 
-async function validateComment(comment) {
-    let validComment = { ...comment };
+async function validateComment(commentObject, database) {
+    let [err, comment] = await validateCommentObject(commentObject);
+    if (err) return [err, null];
 
-    try {
-        validComment = await commentSchema.validateAsync(validComment);
-    } catch (err) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: err.message,
-        };
-        return [knownError, null];
-    }
+    err = validatePostId(comment.postId);
+    if (err) return [err, null];
 
-    return [null, validComment];
+    err = await checkPostExists(comment.postId, database);
+    if (err) return [err, null];
+
+    return [null, comment];
 }
 
-async function validatePostId(postId, database) {
-    const postIdError = validatePostId(postId);
-    if (postIdError) return postIdError;
-
+async function addNewCommentToDatabase(comment, database) {
     try {
-        const post = await database.findPostById(postId);
-        if (!post) {
-            const knownError = {
-                known: true,
-                status: 404,
-                message: "no post with this id was found!",
-            };
-
-            return knownError;
-        }
+        await database.addNewComment(comment);
+        return null;
     } catch (err) {
         return err;
     }
-
-    return null;
 }
 
 module.exports = createNewComment;

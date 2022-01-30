@@ -1,40 +1,27 @@
-const bcrypt = require("bcrypt");
 const { userPasswordSchema } = require("../schemas/usersSchemas");
+const checkPassword = require("./utils/checkPassword");
 const handleError = require("./utils/handleError");
 
-// DELETE /
-// req.body => password
 async function deleteUser(req, res, next, database) {
-    const localUser = req.user.local;
-    if (localUser) {
-        const err = await validatePassword({
-            password: req.body,
-            hash: req.user.password,
-        });
+    const user = req.user;
 
+    if (user.local) {
+        const password = req.body;
+        const passwordHash = user.password;
+
+        const err = await validatePassword(password, passwordHash);
         if (err) return handleError(err, res, next);
     }
 
-    try {
-        const success = await database.findAndDeleteUserById(req.user._id);
+    const err = await deleteUserFromDatabase(user._id, database);
+    if (err) return handleError(err, res, next);
 
-        if (!success) {
-            return res.status(404).json({
-                error: "no user with this id was found!",
-            });
-        }
-
-        return res.json({ userDeleted: true });
-    } catch (err) {
-        return next(err);
-    }
+    return res.json({ success: true });
 }
 
-async function validatePassword({ password, hash }) {
-    let validPassword;
-
+async function validatePassword(password, hash) {
     try {
-        validPassword = await userPasswordSchema.validateAsync(password);
+        await userPasswordSchema.validateAsync(password);
     } catch (err) {
         const knownError = {
             known: true,
@@ -45,18 +32,30 @@ async function validatePassword({ password, hash }) {
         return knownError;
     }
 
-    const hasCorrectPassword = await bcrypt.compare(validPassword, hash);
-    if (!hasCorrectPassword) {
-        const knownError = {
-            known: true,
-            status: 401,
-            message: "incorrect password!",
-        };
-
-        return knownError;
-    }
+    err = await checkPassword(password, hash);
+    if (err) return err;
 
     return null;
+}
+
+async function deleteUserFromDatabase(userId) {
+    try {
+        const success = await database.findAndDeleteUserById(userId);
+
+        if (!success) {
+            const knownError = {
+                known: true,
+                status: 404,
+                message: "no user with this id was found!",
+            };
+
+            return knownError;
+        }
+
+        return null;
+    } catch (err) {
+        return err;
+    }
 }
 
 module.exports = deleteUser;

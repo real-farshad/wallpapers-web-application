@@ -169,10 +169,12 @@ async function findAndUpdatePostById(id, updatedPost) {
     return result;
 }
 
-async function findAndDeletePostById(id) {
+async function findAndDeletePostById(postId, userId) {
     const result = await getPostsCollection().deleteOne({
-        _id: new ObjectId(id),
+        _id: new ObjectId(postId),
+        publisher: new ObjectId(userId),
     });
+
     if (result.deletedCount !== 1) return null;
     return result;
 }

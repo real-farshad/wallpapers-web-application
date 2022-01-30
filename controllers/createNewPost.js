@@ -1,70 +1,51 @@
-const { postSchema } = require("../schemas/postsSchemas");
+const validatePostObject = require("./utils/validatePostObject");
+const findCategoryByTitleInDatabase = require("./utils/findCategoryByTitleInDatabase");
 const handleError = require("./utils/handleError");
 
-// POST /
-// body.request => imageUrl, title, category
 async function createNewPost(req, res, next, database) {
-    const [postError, post] = await validatePost(req.body);
-    if (postError) return handleError(postError, res, next);
+    const userId = req.user._id;
+    let post = req.body;
 
-    const [categoryError, category] = await validateCategoryTitle(
+    let err;
+    [err, post] = await validatePost(req.body, database);
+    if (err) return handleError(err, res, next);
+
+    post = {
+        ...post,
+        likeCount: 0,
+        createdAt: Date.now(),
+        publisherId: userId,
+    };
+
+    err = await addNewPostToDatabase(post, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function validatePost(postObject, database) {
+    let [err, post] = await validatePostObject(postObject);
+    if (err) return [err, null];
+
+    let category;
+    [err, category] = await findCategoryByTitleInDatabase(
         post.category,
         database
     );
-
-    if (categoryError) return handleError(categoryError);
+    if (err) return [err, null];
 
     post.categoryId = category._id;
     delete post.category;
 
-    try {
-        await database.addNewPost({
-            ...post,
-            likeCount: 0,
-            createdAt: Date.now(),
-            publisherId: req.user._id,
-        });
-
-        return res.json({ newPostCreated: true });
-    } catch (err) {
-        return next(err);
-    }
+    return [null, post];
 }
 
-async function validatePost(post) {
-    let validPost = { ...post };
-
+async function addNewPostToDatabase(post, database) {
     try {
-        validPost = await postSchema.validateAsync(validPost);
+        await database.addNewPost(post);
+        return null;
     } catch (err) {
-        const knownError = {
-            known: true,
-            status: 403,
-            message: err.message,
-        };
-        return [knownError, null];
-    }
-
-    return [null, validPost];
-}
-
-async function validateCategoryTitle(categoryTitle, database) {
-    try {
-        const category = await database.findCategoryByTitle(categoryTitle);
-
-        if (!category) {
-            const knownError = {
-                knwon: true,
-                status: 404,
-                message: "this category does not exist!",
-            };
-
-            return [knownError, null];
-        }
-
-        return [null, category];
-    } catch (err) {
-        return [err, null];
+        return err;
     }
 }
 

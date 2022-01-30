@@ -1,53 +1,37 @@
 const validatePostId = require("./utils/validatePostId");
+const checkPostExists = require("./utils/checkPostExists");
+const checkPostAlreadyLiked = require("./utils/checkPostAlreadyLiked");
 const handleError = require("./utils/handleError");
 
-// POST /:id
 async function createNewLike(req, res, next, database) {
-    const postIdError = validatePostId(req.params.id);
-    if (postIdError) return handleError(postIdError, res, next);
+    const userId = req.user._id;
+    const postId = req.params.id;
 
-    const postError = await validatePost(req.params.id, database);
-    if (postError) return handleError(postError, res, next);
+    let err = validatePostId(postId);
+    if (err) return handleError(err, res, next);
 
-    try {
-        const postAlreadyLiked = await database.findOnePostLike({
-            postId: req.params.id,
-            userId: req.user._id,
-        });
+    err = await checkPostExists(postId, database);
+    if (err) return handleError(err, res, next);
 
-        if (postAlreadyLiked) {
-            return res.status(403).json({
-                error: "post has already been liked!",
-            });
-        }
+    err = await checkPostAlreadyLiked(postId, userId, database);
+    if (err) return handleError(err, res, next);
 
-        await database.addNewLike({
-            postId: req.params.postId,
-            createdAt: Date.now(),
-            userId: req.user._id,
-        });
+    const like = {
+        postId,
+        userId,
+        createdAt: Date.now(),
+    };
 
-        await database.incrementLikeCount(newLike.postId);
+    err = await addNewLikeToDatabase(like, database);
+    if (err) return handleError(err, res, next);
 
-        return res.json({ postLiked: true });
-    } catch (err) {
-        return next(err);
-    }
+    return res.json({ success: true });
 }
 
-async function validatePost(postId, database) {
+async function addNewLikeToDatabase(like, database) {
     try {
-        const post = await database.findPostById(postId);
-        if (!post) {
-            const knownError = {
-                known: true,
-                status: 404,
-                message: "no post with this id was found!",
-            };
-
-            return knownError;
-        }
-
+        await database.addNewLike(like);
+        await database.incrementLikeCount(like.postId);
         return null;
     } catch (err) {
         return err;

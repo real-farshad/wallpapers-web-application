@@ -1,79 +1,39 @@
 const validateCollectionId = require("./utils/validateCollectionId");
+const checkCollectionPostExists = require("./utils/checkCollectionPostExists");
+const checkUserCollectionAccess = require("./utils/checkUserCollectionAccess");
 const handleError = require("./utils/handleError");
 
-// DELETE /:id
 async function deleteCollectionPost(req, res, next, database) {
-    const collectionIdError = validateCollectionId(req.params.id);
-    if (collectionIdError) return handleError(collectionIdError, res, next);
+    const userId = req.user._id;
+    const collectionPostId = req.params.id;
 
-    let [collectionPostError, collectionPost] = await validateCollectionPost(
-        req.params.id,
+    let err = validateCollectionId(collectionPostId);
+    if (err) return handleError(err, res, next);
+
+    let collectionPost;
+    [err, collectionPost] = await checkCollectionPostExists(
+        collectionPostId,
         database
     );
-    if (collectionPostError) return handleError(collectionPostError, res, next);
+    if (err) return handleError(err, res, next);
 
-    const accessError = await checkUserCollectionAccess(
-        {
-            collectionId: collectionPost.collectionId,
-            userId: req.user._id,
-        },
+    err = await checkUserCollectionAccess(
+        collectionPost.collectionId,
+        userId,
         database
     );
-    if (accessError) return handleError(accessError, res, next);
+    if (err) return handleError(err, res, next);
 
+    err = await deleteCollectionPostFromDatabase(collectionPostId, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function deleteCollectionPostFromDatabase(collectionPostId, database) {
     try {
         await database.deleteCollectionPostById(collectionPostId);
-
-        await database.decrementCollectionPostCount(
-            collectionPost.collectionId
-        );
-
-        return res.json({ collectionPostDeleted: true });
-    } catch (err) {
-        return next(err);
-    }
-}
-
-async function validateCollectionPost(collectionPostId, database) {
-    try {
-        const collectionPost = await database.findCollectionPostById(
-            collectionPostId
-        );
-
-        if (!collectionPost) {
-            const knownError = {
-                known: true,
-                status: 404,
-                message: "no collection post with this id was found!",
-            };
-
-            return [knownError, null];
-        }
-
-        return [null, collectionPost];
-    } catch (err) {
-        return [err, null];
-    }
-}
-
-async function checkUserCollectionAccess({ collectionId, userId }, database) {
-    try {
-        const collection = await database.findUserCollectionById({
-            collectionId,
-            userId,
-        });
-
-        if (!collection) {
-            const knownError = {
-                known: true,
-                status: 404,
-                message:
-                    "no collection with this id, for this user, was found!",
-            };
-
-            return knownError;
-        }
-
+        await database.decrementCollectionPostCount(collectionPostId);
         return null;
     } catch (err) {
         return err;

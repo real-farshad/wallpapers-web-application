@@ -1,51 +1,36 @@
 const validatePostId = require("./utils/validatePostId");
+const checkPostExists = require("./utils/checkPostExists");
+const checkPostAlreadySaved = require("./utils/checkPostAlreadySaved");
 const handleError = require("./utils/handleError");
 
-// POST /:id
 async function createNewSave(req, res, next, database) {
-    const postIdError = await validatePostId(req.params.id, database);
-    if (postIdError) return handleError(postIdError, res, next);
+    const userId = req.user._id;
+    const postId = req.params.id;
 
-    const postError = await validatePost(req.params.id, database);
-    if (postError) return handleError(postError);
+    let err = validatePostId(postId, database);
+    if (err) return handleError(err, res, next);
 
-    try {
-        const postAlreadySaved = await database.findOnePostSave({
-            postId: req.body.postId,
-            userId: req.user.userId,
-        });
+    err = await checkPostExists(postId, database);
+    if (err) return handleError(err, res, next);
 
-        if (postAlreadySaved) {
-            return res.status(403).json({
-                error: "post has already been saved!",
-            });
-        }
+    err = await checkPostAlreadySaved(postId, userId, database);
+    if (err) return handleError(err, res, next);
 
-        await database.addNewSave({
-            postId: req.body.postId,
-            userId: req.user.userId,
-            createdAt: Date.now(),
-        });
+    const save = {
+        postId,
+        userId,
+        createdAt: Date.now(),
+    };
 
-        return res.json({ postSaved: true });
-    } catch (err) {
-        return next(err);
-    }
+    err = await addSaveToDatabase(save, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
 }
 
-async function validatePost(postId, database) {
+async function addSaveToDatabase(save, database) {
     try {
-        const post = await database.findPostById(postId);
-        if (!post) {
-            const knownError = {
-                known: true,
-                status: 404,
-                message: "no post with this id was found!",
-            };
-
-            return knownError;
-        }
-
+        await database.addNewSave(save);
         return null;
     } catch (err) {
         return err;

@@ -1,46 +1,41 @@
 const validatePostId = require("./utils/validatePostId");
+const checkPostExists = require("./utils/checkPostExists");
 const handleError = require("./utils/handleError");
 
-// DELETE /:id
 async function deleteLike(req, res, next, database) {
-    const postIdError = validatePostId(req.params.id);
-    if (postIdError) return handleError(postIdError, res, next);
+    const userId = req.user._id;
+    const postId = req.params.id;
 
-    const postError = await validatePost(req.params.id, database);
-    if (postError) return handleError(postError, res, next);
+    let err = validatePostId(postId);
+    if (err) return handleError(err, res, next);
 
+    err = await checkPostExists(postId, database);
+    if (err) return handleError(err, res, next);
+
+    err = await deleteLikeFromDatabase(postId, userId, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function deleteLikeFromDatabase(postId, userId, database) {
     try {
         const success = await database.findAndDeleteLike({
-            postId: req.params.id,
-            userId: req.user._id,
+            postId,
+            userId,
         });
 
         if (!success) {
-            return res.status(404).json({
-                error: "no like with this id, for this user, was found!",
-            });
-        }
-
-        await database.decrementLikeCount(req.params.id);
-
-        return res.json({ likeDeleted: true });
-    } catch (err) {
-        return next(err);
-    }
-}
-
-async function validatePost(postId, database) {
-    try {
-        const post = await database.findPostById(postId);
-        if (!post) {
             const knownError = {
                 known: true,
                 status: 404,
-                message: "no post with this id was found!",
+                message: "no like with this id, for this user, was found!",
             };
 
             return knownError;
         }
+
+        await database.decrementLikeCount(postId);
 
         return null;
     } catch (err) {

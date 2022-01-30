@@ -1,22 +1,34 @@
 const validateCategoryId = require("./utils/validateCategoryId");
 const handleError = require("./utils/handleError");
 
-// DELETE /:id
 async function deleteCategory(req, res, next, database) {
-    const err = validateCategoryId(req.params.id);
+    const categoryId = req.params.id;
+
+    let err = validateCategoryId(categoryId);
     if (err) return handleError(err, res, next);
 
+    err = await deleteCategoryFromDatabase(categoryId, database);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+}
+
+async function deleteCategoryFromDatabase(categoryId, database) {
     try {
-        const success = await database.findAndDeleteCategoryById(req.params.id);
+        const success = await database.findAndDeleteCategoryById(categoryId);
         if (!success) {
-            return res.status(404).json({
-                error: "no category with this id was found!",
-            });
+            const knownError = {
+                known: true,
+                status: 404,
+                message: "no category with this id was found!",
+            };
+
+            return knownError;
         }
 
-        return res.json({ categoryDeleted: true });
+        return null;
     } catch (err) {
-        return next(err);
+        return err;
     }
 }
 
