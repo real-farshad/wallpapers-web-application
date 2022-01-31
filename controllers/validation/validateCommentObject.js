@@ -1,4 +1,4 @@
-const { commentSchema } = require("../schemas/commentsSchemas");
+const { commentSchema } = require("../../schemas/commentsSchemas");
 
 async function validateCommentObject(commentObject) {
     try {

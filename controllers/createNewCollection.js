@@ -1,5 +1,5 @@
-const validateCollectionObject = require("./utils/validateCollectionObject");
 const handleError = require("./utils/handleError");
+const validateCollectionObject = require("./validation/validateCollectionObject");
 
 async function createNewCollection(req, res, next, database) {
     const userId = req.user._id;

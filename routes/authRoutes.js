@@ -3,11 +3,13 @@ const { passport } = require("../configs/passport");
 const database = require("../services");
 const validateAuthorization = require("../middlewares/validateAuthorization");
 
-const { createNewUser } = require("../controllers/usersControllers");
+const createNewUser = require("../controllers/createNewUser");
 
 const router = express.Router();
 
-router.post("/sign-up", (req, res, next) => createNewUser(req, res, next, database));
+router.post("/sign-up", (req, res, next) =>
+    createNewUser(req, res, next, database)
+);
 
 router.post("/sign-in", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {

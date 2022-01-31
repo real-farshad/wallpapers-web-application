@@ -1,6 +1,6 @@
-const validatePostId = require("./utils/validatePostId");
-const checkPostExists = require("./utils/checkPostExists");
 const handleError = require("./utils/handleError");
+const validatePostId = require("./validation/validatePostId");
+const checkPostExists = require("./utils/checkPostExists");
 
 async function deleteLike(req, res, next, database) {
     const userId = req.user._id;

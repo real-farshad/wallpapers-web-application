@@ -1,4 +1,4 @@
-const { collectionSchema } = require("../schemas/collectionsSchemas");
+const { collectionSchema } = require("../../schemas/collectionsSchemas");
 
 async function validateCollectionObject(collectionObject) {
     try {

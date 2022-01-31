@@ -1,7 +1,7 @@
-const validateCommentObject = require("./utils/validateCommentObject");
-const validatePostId = require("./utils/validatePostId");
-const checkPostExists = require("./utils/checkPostExists");
 const handleError = require("./utils/handleError");
+const validateCommentObject = require("./validation/validateCommentObject");
+const validatePostId = require("./validation/validatePostId");
+const checkPostExists = require("./utils/checkPostExists");
 
 async function createNewComment(req, res, next, database) {
     const userId = req.user._id;

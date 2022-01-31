@@ -1,5 +1,5 @@
-const validatePostId = require("./utils/validatePostId");
 const handleError = require("./utils/handleError");
+const validatePostId = require("./validation/validatePostId");
 
 async function deletePost(req, res, next, database) {
     const userId = req.user._id;

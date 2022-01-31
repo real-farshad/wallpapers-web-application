@@ -1,12 +1,12 @@
+const handleError = require("./utils/handleError");
 const {
     collectionsPostsSchemas,
 } = require("../schemas/collectionsPostsSchemas");
-const validateCollectionId = require("./utils/validateCollectionId");
+const validateCollectionId = require("./validation/validateCollectionId");
 const checkCollectionExists = require("./utils/checkCollectionExists");
-const handleError = require("./utils/handleError");
 const replacePageWithSkip = require("./utils/replacePageWithSkip");
 
-async function getCollectionPosts(req, res, next, database) {
+async function getCollectionPostsList(req, res, next, database) {
     const collectionId = req.params.id;
     let query = req.query;
 
@@ -73,4 +73,4 @@ async function searchCollectionPostsInDatabase(collectionId, query, database) {
     }
 }
 
-module.exports = getCollectionPosts;
+module.exports = getCollectionPostsList;

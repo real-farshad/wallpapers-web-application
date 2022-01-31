@@ -1,19 +1,19 @@
+const handleError = require("./utils/handleError");
 const { userPasswordSchema } = require("../schemas/usersSchemas");
 const checkPassword = require("./utils/checkPassword");
-const handleError = require("./utils/handleError");
 
 async function deleteUser(req, res, next, database) {
-    const user = req.user;
+    const currentUser = req.user;
 
-    if (user.local) {
-        const password = req.body;
+    if (currentUser.local) {
+        const confirmPassword = req.body;
         const passwordHash = user.password;
 
-        const err = await validatePassword(password, passwordHash);
+        const err = await validatePassword(confirmPassword, passwordHash);
         if (err) return handleError(err, res, next);
     }
 
-    const err = await deleteUserFromDatabase(user._id, database);
+    const err = await deleteUserFromDatabase(currentUser._id, database);
     if (err) return handleError(err, res, next);
 
     return res.json({ success: true });

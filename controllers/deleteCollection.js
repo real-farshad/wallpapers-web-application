@@ -1,5 +1,5 @@
-const validateCollectionId = require("./utils/validateCollectionId");
 const handleError = require("./utils/handleError");
+const validateCollectionId = require("./validation/validateCollectionId");
 
 async function deleteCollection(req, res, next, database) {
     const userId = req.user._id;

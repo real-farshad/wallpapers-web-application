@@ -2,12 +2,10 @@ const express = require("express");
 const database = require("../services/index");
 const validateAuthorization = require("../middlewares/validateAuthorization");
 
-const {
-    getUserSavedPosts,
-    checkSave,
-    createNewSave,
-    deleteSave,
-} = require("../controllers/savesControllers");
+const getUserSavedPosts = require("../controllers/getUserSavedPosts");
+const checkSave = require("../controllers/checkSave");
+const createNewSave = require("../controllers/createNewSave");
+const deleteSave = require("../controllers/deleteSave");
 
 const router = express.Router();
 
@@ -19,7 +17,7 @@ router.get("/:id", validateAuthorization, (req, res, next) =>
     checkSave(req, res, next, database)
 );
 
-router.post("/", validateAuthorization, (req, res, next) =>
+router.post("/:id", validateAuthorization, (req, res, next) =>
     createNewSave(req, res, next, database)
 );
 

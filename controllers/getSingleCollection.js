@@ -1,5 +1,5 @@
-const validateCollectionId = require("./utils/validateCollectionId");
 const handleError = require("./utils/handleError");
+const validateCollectionId = require("./validation/validateCollectionId");
 
 async function getSingleCollection(req, res, next, database) {
     const collectionId = req.params.id;

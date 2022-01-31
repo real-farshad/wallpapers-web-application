@@ -1,7 +1,7 @@
-const validateCollectionId = require("./utils/validateCollectionId");
+const handleError = require("./utils/handleError");
+const validateCollectionId = require("./validation/validateCollectionId");
 const checkCollectionPostExists = require("./utils/checkCollectionPostExists");
 const checkUserCollectionAccess = require("./utils/checkUserCollectionAccess");
-const handleError = require("./utils/handleError");
 
 async function deleteCollectionPost(req, res, next, database) {
     const userId = req.user._id;

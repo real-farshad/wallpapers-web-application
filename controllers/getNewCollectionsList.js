@@ -1,8 +1,8 @@
+const handleError = require("./utils/handleError");
 const { collectionsQuerySchema } = require("../schemas/collectionsSchemas");
 const replacePageWithSkip = require("./utils/replacePageWithSkip");
-const handleError = require("./utils/handleError");
 
-async function getNewCollections(req, res, next, database) {
+async function getNewCollectionsList(req, res, next, database) {
     let query = req.query;
 
     let err;
@@ -48,4 +48,4 @@ async function searchCollectionsInDatabase(query, database) {
     }
 }
 
-module.exports = getNewCollections;
+module.exports = getNewCollectionsList;

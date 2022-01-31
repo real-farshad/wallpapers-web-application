@@ -2,22 +2,19 @@ const express = require("express");
 const database = require("../services/index");
 const validateAuthorization = require("../middlewares/validateAuthorization");
 
-const {
-    getNewCollections,
-    getCollectionInfo,
-    getUserCollections,
-    createNewCollection,
-    deleteCollection,
-} = require("../controllers/collectionsController");
+const getNewCollectionsList = require("../controllers/getNewCollectionsList");
+const getSingleCollection = require("../controllers/getSingleCollection");
+const createNewCollection = require("../controllers/createNewCollection");
+const deleteCollection = require("../controllers/deleteCollection");
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => getNewCollections(req, res, next, database));
+router.get("/", (req, res, next) =>
+    getNewCollectionsList(req, res, next, database)
+);
 
-router.get("/:id", (req, res, next) => getCollectionInfo(req, res, next, database));
-
-router.get("/user", validateAuthorization, (req, res, next) =>
-    getUserCollections(req, res, next, database)
+router.get("/:id", (req, res, next) =>
+    getSingleCollection(req, res, next, database)
 );
 
 router.post("/", validateAuthorization, (req, res, next) =>

@@ -1,5 +1,5 @@
-const validateCategoryId = require("./utils/validateCategoryId");
 const handleError = require("./utils/handleError");
+const validateCategoryId = require("./validation/validateCategoryId");
 
 async function deleteCategory(req, res, next, database) {
     const categoryId = req.params.id;

@@ -1,7 +1,6 @@
-const validatePostId = require("./utils/validatePostId");
 const handleError = require("./utils/handleError");
+const validatePostId = require("./validation/validatePostId");
 
-// GET /:id
 async function checkSave(req, res, next, database) {
     const userId = req.user._id;
     const postId = req.params.id;

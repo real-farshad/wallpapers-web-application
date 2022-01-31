@@ -2,11 +2,9 @@ const express = require("express");
 const database = require("../services");
 const validateAuthorization = require("../middlewares/validateAuthorization");
 
-const {
-    getUserInfo,
-    updateUser,
-    deleteUser,
-} = require("../controllers/usersControllers");
+const getUserInfo = require("../controllers/getUserInfo");
+const updateUser = require("../controllers/updateUser");
+const deleteUser = require("../controllers/deleteUser");
 
 const router = express.Router();
 

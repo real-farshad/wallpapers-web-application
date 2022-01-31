@@ -1,6 +1,6 @@
+const handleError = require("./utils/handleError");
 const { postQuerySchema } = require("../schemas/postsSchemas");
 const findCategoryByTitleInDatabase = require("./utils/findCategoryByTitleInDatabase");
-const handleError = require("./utils/handleError");
 const replacePageWithSkip = require("./utils/replacePageWithSkip");
 
 async function getPostsList(req, res, next, database) {

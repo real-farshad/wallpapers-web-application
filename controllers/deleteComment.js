@@ -1,5 +1,5 @@
-const validateCommentId = require("./utils/validateCommentId");
 const handleError = require("./utils/handleError");
+const validateCommentId = require("./validation/validateCommentId");
 
 async function deleteComment(req, res, next, database) {
     const userId = req.user._id,

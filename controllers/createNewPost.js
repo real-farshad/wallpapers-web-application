@@ -1,6 +1,6 @@
-const validatePostObject = require("./utils/validatePostObject");
-const findCategoryByTitleInDatabase = require("./utils/findCategoryByTitleInDatabase");
 const handleError = require("./utils/handleError");
+const validatePostObject = require("./validation/validatePostObject");
+const findCategoryByTitleInDatabase = require("./utils/findCategoryByTitleInDatabase");
 
 async function createNewPost(req, res, next, database) {
     const userId = req.user._id;

@@ -1,4 +1,6 @@
-const { collectionPostSchema } = require("../schemas/collectionsPostsSchemas");
+const {
+    collectionPostSchema,
+} = require("../../schemas/collectionsPostsSchemas");
 async function validateCollectionPostObject(collectionPostObject) {
     try {
         const collectionPost = await collectionPostSchema.validateAsync(

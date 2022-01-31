@@ -2,12 +2,10 @@ const express = require("express");
 const database = require("../services/index");
 const validateAuthorization = require("../middlewares/validateAuthorization");
 
-const {
-    getUserLikes,
-    checkLike,
-    createNewLike,
-    deleteLike,
-} = require("../controllers/likesControllers");
+const getUserLikes = require("../controllers/getUserLikes");
+const checkLike = require("../controllers/checkLike");
+const createNewLike = require("../controllers/createNewLike");
+const deleteLike = require("../controllers/deleteLike");
 
 const router = express.Router();
 
@@ -19,7 +17,7 @@ router.get("/:id", validateAuthorization, (req, res, next) =>
     checkLike(req, res, next, database)
 );
 
-router.post("/", validateAuthorization, (req, res, next) =>
+router.post("/:id", validateAuthorization, (req, res, next) =>
     createNewLike(req, res, next, database)
 );
 

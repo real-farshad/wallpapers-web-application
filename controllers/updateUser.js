@@ -1,6 +1,6 @@
 const handleError = require("./utils/handleError");
 const hashPassword = require("./utils/hashPassword");
-const validateUserObject = require("./utils/validateUserObject");
+const validateUserObject = require("./validation/validateUserObject");
 const checkPassword = require("./utils/checkPassword");
 const checkUniqueEmail = require("./utils/checkUniqueEmail");
 

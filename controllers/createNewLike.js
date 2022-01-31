@@ -1,7 +1,7 @@
-const validatePostId = require("./utils/validatePostId");
+const handleError = require("./utils/handleError");
+const validatePostId = require("./validation/validatePostId");
 const checkPostExists = require("./utils/checkPostExists");
 const checkPostAlreadyLiked = require("./utils/checkPostAlreadyLiked");
-const handleError = require("./utils/handleError");
 
 async function createNewLike(req, res, next, database) {
     const userId = req.user._id;

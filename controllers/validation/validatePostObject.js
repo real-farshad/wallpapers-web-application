@@ -1,4 +1,4 @@
-const { postSchema } = require("../schemas/postsSchemas");
+const { postSchema } = require("../../schemas/postsSchemas");
 
 async function validatePostObject(postObject) {
     try {

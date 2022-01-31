@@ -1,6 +1,6 @@
+const handleError = require("./utils/handleError");
 const { likesQuerySchema } = require("../schemas/likesSchemas");
 const replacePageWithSkip = require("./utils/replacePageWithSkip");
-const handleError = require("./utils/handleError");
 
 async function getUserLikes(req, res, next, database) {
     const userId = req.user._id;

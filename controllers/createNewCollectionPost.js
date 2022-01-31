@@ -1,9 +1,9 @@
-const validatePostId = require("./utils/validatePostId");
-const validateCollectionId = require("./utils/validateCollectionId");
-const validateCollectionPostObject = require("./utils/validateCollectionPostObject");
+const handleError = require("./utils/handleError");
+const validateCollectionPostObject = require("./validation/validateCollectionPostObject");
+const validatePostId = require("./validation/validatePostId");
+const validateCollectionId = require("./validation/validateCollectionId");
 const checkPostExists = require("./utils/checkPostExists");
 const checkCollectionExists = require("./utils/checkCollectionExists");
-const handleError = require("./utils/handleError");
 
 async function createNewCollectionPost(req, res, next, database) {
     const userId = req.user._id;

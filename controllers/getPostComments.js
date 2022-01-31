@@ -1,7 +1,7 @@
-const { commentsQuerySchema } = require("../schemas/commentsSchemas");
-const validatePostId = require("./utils/validatePostId");
-const checkPostExists = require("./utils/checkPostExists");
 const handleError = require("./utils/handleError");
+const { commentsQuerySchema } = require("../schemas/commentsSchemas");
+const validatePostId = require("./validation/validatePostId");
+const checkPostExists = require("./utils/checkPostExists");
 const replacePageWithSkip = require("./utils/replacePageWithSkip");
 
 async function getPostComments(req, res, next, database) {

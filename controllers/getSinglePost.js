@@ -1,5 +1,5 @@
 const handleError = require("./utils/handleError");
-const validatePostId = require("./utils/validatePostId");
+const validatePostId = require("./validation/validatePostId");
 
 async function getSinglePost(req, res, next, database) {
     const postId = req.params.id;

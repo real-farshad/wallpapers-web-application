@@ -1,4 +1,4 @@
-const validateId = require("./validateId");
+const validateId = require("../utils/validateId");
 
 async function validatePostId(postId) {
     const isValidId = validateId(postId);

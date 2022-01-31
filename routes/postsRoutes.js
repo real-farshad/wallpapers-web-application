@@ -2,13 +2,11 @@ const express = require("express");
 const database = require("../services/index");
 const validateAuthorization = require("../middlewares/validateAuthorization");
 
-const {
-    getPostsList,
-    getSinglePost,
-    createNewPost,
-    updatePost,
-    deletePost,
-} = require("../controllers/postsControllers");
+const getPostsList = require("../controllers/getPostsList");
+const getSinglePost = require("../controllers/getSinglePost");
+const createNewPost = require("../controllers/createNewPost");
+const updatePost = require("../controllers/updatePost");
+const deletePost = require("../controllers/deletePost");
 
 const router = express.Router();
 

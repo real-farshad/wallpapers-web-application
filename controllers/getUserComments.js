@@ -1,5 +1,5 @@
-const { commentsQuerySchema } = require("../schemas/commentsSchemas");
 const handleError = require("./utils/handleError");
+const { commentsQuerySchema } = require("../schemas/commentsSchemas");
 const replacePageWithSkip = require("./utils/replacePageWithSkip");
 
 async function getUserComments(req, res, next, database) {

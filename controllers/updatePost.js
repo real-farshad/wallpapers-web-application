@@ -1,8 +1,8 @@
-const validatePostId = require("./utils/validatePostId");
-const validatePostObject = require("./utils/validatePostObject");
+const handleError = require("./utils/handleError");
+const validatePostId = require("./validation/validatePostId");
+const validatePostObject = require("./validation/validatePostObject");
 const checkUserPostAccess = require("./utils/checkUserPostAccess");
 const findCategoryByTitleInDatabase = require("./utils/findCategoryByTitleInDatabase");
-const handleError = require("./utils/handleError");
 
 async function updatePost(req, res, next, database) {
     const userId = req.user.id;

@@ -1,4 +1,4 @@
-const { categorySchema } = require("../schemas/categoriesSchemas");
+const { categorySchema } = require("../../schemas/categoriesSchemas");
 
 async function validateCategoryObject(categoryObject) {
     try {

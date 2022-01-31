@@ -1,4 +1,4 @@
-const { userSchema } = require("../schemas/usersSchemas");
+const { userSchema } = require("../../schemas/usersSchemas");
 
 async function validateUserObject(userObject) {
     try {

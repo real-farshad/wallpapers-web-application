@@ -1,5 +1,5 @@
-const validateCategoryObject = require("./utils/validateCategoryObject");
 const handleError = require("./utils/handleError");
+const validateCategoryObject = require("./validation/validateCategoryObject");
 
 async function createNewCategory(req, res, next, database) {
     let category = req.body;

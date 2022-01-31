@@ -1,6 +1,6 @@
+const handleError = require("./utils/handleError");
 const { savesQuerySchema } = require("../schemas/savesSchemas");
 const replacePageWithSkip = require("./utils/replacePageWithSkip");
-const handleError = require("./utils/handleError");
 
 async function getUserSavedPosts(req, res, next, database) {
     const userId = req.user._id;

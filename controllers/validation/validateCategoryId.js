@@ -1,4 +1,4 @@
-const validateId = require("./validateId");
+const validateId = require("../utils/validateId");
 
 function validateCategoryId(categoryId) {
     const isValidId = validateId(categoryId);
