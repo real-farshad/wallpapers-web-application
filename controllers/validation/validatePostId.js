@@ -1,6 +1,6 @@
 const validateId = require("../utils/validateId");
 
-async function validatePostId(postId) {
+function validatePostId(postId) {
     const isValidId = validateId(postId);
     if (!isValidId) {
         const knownError = {

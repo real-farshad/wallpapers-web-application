@@ -3,7 +3,9 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getCommentsCollection = () => getDatabase().collection("comments");
 
-async function getUserCommentsList({ userId, skip, limit }) {
+async function getUserCommentsList(userId, query) {
+    const { skip, limit } = query;
+
     const cursor = await getCommentsCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
         { $sort: { createdAt: -1 } },
@@ -24,7 +26,9 @@ async function getUserCommentsList({ userId, skip, limit }) {
     return result;
 }
 
-async function getCommentsList(postId, { skip, limit }) {
+async function getCommentsList(postId, query) {
+    const { skip, limit } = query;
+
     const cursor = await getCommentsCollection().aggregate([
         { $match: { postId: new ObjectId(postId) } },
         {

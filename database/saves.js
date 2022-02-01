@@ -3,7 +3,9 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getSavesCollection = () => getDatabase().collection("saves");
 
-async function getUserSavedPosts({ userId, skip, limit }) {
+async function getUserSavedPosts(userId, query) {
+    const { skip, limit } = query;
+
     const cursor = await getSavesCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
         { $sort: { createdAt: -1 } },

@@ -8,7 +8,6 @@ async function updateCategory(req, res, next, database) {
     let err = validateCategoryId(categoryId);
     if (err) return handleError(err, res, next);
 
-    let category;
     [err, category] = await validateCategoryObject(category);
     if (err) return handleError(err, res, next);
 

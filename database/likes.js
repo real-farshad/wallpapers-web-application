@@ -3,7 +3,9 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getLikesCollection = () => getDatabase().collection("likes");
 
-async function getUserLikes({ userId, skip, limit }) {
+async function getUserLikes(userId, query) {
+    const { skip, limit } = query;
+
     const cursor = await getLikesCollection().aggregate([
         { $match: { userId: new ObjectId(userId) } },
         { $sort: { "post.createdAt": -1 } },

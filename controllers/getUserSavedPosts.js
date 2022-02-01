@@ -45,11 +45,7 @@ async function validateQuery(queryObject) {
 
 async function searchUserSavedPostsInDatabase(userId, query, database) {
     try {
-        const savedPosts = await database.getUserSavedPosts({
-            userId,
-            ...query,
-        });
-
+        const savedPosts = await database.getUserSavedPosts(userId, query);
         return [null, savedPosts];
     } catch (err) {
         return [err, null];

@@ -3,7 +3,6 @@ const {
     collectionsPostsSchemas,
 } = require("../schemas/collectionsPostsSchemas");
 const validateCollectionId = require("./validation/validateCollectionId");
-const checkCollectionExists = require("./utils/checkCollectionExists");
 const replacePageWithSkip = require("./utils/replacePageWithSkip");
 
 async function getCollectionPostsList(req, res, next, database) {
@@ -60,12 +59,31 @@ async function validateCollection(collectionId, database) {
     return null;
 }
 
+async function checkCollectionExists(collectionId, database) {
+    try {
+        const collection = await database.findCollectionById(collectionId);
+        if (!collection) {
+            const knownError = {
+                known: true,
+                status: 404,
+                message: "no collection with this id was found!",
+            };
+
+            return knownError;
+        }
+
+        return null;
+    } catch (err) {
+        return err;
+    }
+}
+
 async function searchCollectionPostsInDatabase(collectionId, query, database) {
     try {
-        const collectionPosts = await database.findCollectionPosts({
+        const collectionPosts = await database.findCollectionPosts(
             collectionId,
-            ...query,
-        });
+            query
+        );
 
         return [null, collectionPosts];
     } catch (err) {

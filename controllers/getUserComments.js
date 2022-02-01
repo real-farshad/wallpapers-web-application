@@ -45,11 +45,7 @@ async function validateQuery(queryObject) {
 
 async function searchUserCommentsInDatabase(userId, query, database) {
     try {
-        const comments = await database.getUserCommentsList({
-            userId,
-            ...query,
-        });
-
+        const comments = await database.getUserCommentsList(userId, query);
         return [null, comments];
     } catch (err) {
         return [err, null];

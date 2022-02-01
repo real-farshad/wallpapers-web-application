@@ -41,7 +41,7 @@ async function validateQuery(queryObject) {
 
 async function searchCollectionsInDatabase(query, database) {
     try {
-        const collections = await database.findCollections(...query);
+        const collections = await database.findCollections(query);
         return [null, collections];
     } catch (err) {
         return [err, null];

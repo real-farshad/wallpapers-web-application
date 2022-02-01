@@ -3,21 +3,16 @@ const { getDatabase } = require("../configs/mongodb");
 
 const getPostsCollection = () => getDatabase().collection("posts");
 
-async function searchPostsList(
-    search,
-    categoryId,
-    sort,
-    duration,
-    skip,
-    limit
-) {
-    const query = {};
-    if (search !== "") query.$text = { $search: search };
-    if (categoryId !== "") query.categoryId = new ObjectId(categoryId);
-    if (duration !== "") query.createdAt = { $gt: duration };
+async function searchPostsList(query) {
+    const { search, categoryId, sort, duration, skip, limit } = query;
+
+    const match = {};
+    if (search !== "") match.$text = { $search: search };
+    if (categoryId !== "") match.categoryId = new ObjectId(categoryId);
+    if (duration !== "") match.createdAt = { $gt: duration };
 
     const cursor = await getPostsCollection().aggregate([
-        { $match: query },
+        { $match: match },
         { $sort: sort },
         { $skip: skip },
         { $limit: limit },

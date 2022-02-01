@@ -51,7 +51,7 @@ async function validatePost(postId, database) {
     let err = validatePostId(postId);
     if (err) return err;
 
-    const err = await checkPostExists(postId, database);
+    err = await checkPostExists(postId, database);
     if (err) return err;
 
     return null;

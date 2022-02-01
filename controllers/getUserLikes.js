@@ -41,7 +41,7 @@ async function validateQuery(queryObject) {
 
 async function searchUserLikesInDatabase(userId, query, database) {
     try {
-        const likes = await database.getUserLikes({ userId, ...query });
+        const likes = await database.getUserLikes(userId, query);
         return [null, likes];
     } catch (err) {
         return [err, null];

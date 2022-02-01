@@ -41,17 +41,19 @@ async function validateQuery(queryObject, database) {
         return [knownError, null];
     }
 
+    let category;
     if (query.category !== "") {
-        const [err, category] = await findCategoryByTitleInDatabase(
+        let err;
+        [err, category] = await findCategoryByTitleInDatabase(
             query.category,
             database
         );
 
         if (err) return [err, null];
-
-        query.categoryId = category._id;
-        delete query.category;
     }
+
+    query.categoryId = category ? category._id : "";
+    delete query.category;
 
     return [null, query];
 }
@@ -59,7 +61,7 @@ async function validateQuery(queryObject, database) {
 function formatQuery(queryObject) {
     let query = { ...queryObject };
 
-    if (query.duration !== "all-times") {
+    if (query.duration !== "") {
         query.duration = new Date(`1-1-${query.duration}`).getTime();
     }
 
@@ -73,7 +75,7 @@ function formatQuery(queryObject) {
 
 async function searchPostsInDatabase(query, database) {
     try {
-        const posts = await database.searchPostsList(...query);
+        const posts = await database.searchPostsList(query);
         return [null, posts];
     } catch (err) {
         return [err, null];

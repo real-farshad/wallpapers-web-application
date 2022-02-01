@@ -4,7 +4,9 @@ const { getDatabase } = require("../configs/mongodb");
 const getCollectionsPostsCollection = () =>
     getDatabase().collection("collections-posts");
 
-async function findCollectionPosts({ collectionId, skip, limit }) {
+async function findCollectionPosts(collectionId, query) {
+    const { skip, limit } = query;
+
     const cursor = await getCollectionsPostsCollection().aggregate([
         { $match: { collectionId: new ObjectId(collectionId) } },
         { $sort: { createdAt: -1 } },
