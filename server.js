@@ -1,54 +1,20 @@
-const path = require("path");
-const express = require("express");
-const session = require("express-session");
-const routes = require("./routes/index");
-const errorHandler = require("./middlewares/errorHandler");
-const { connectToDb } = require("./configs/mongodb");
-const { passportConfig } = require("./configs/passport");
-
-// dotenv config
 require("dotenv").config();
+const makeApp = require("./app");
+const { connectToDb } = require("./config/mongodb");
+const database = require("./database/_index");
 
-const app = express();
+async function runServer() {
+    const err = await connectToDb();
+    if (err) return console.log("Unable to connecto to mongodb!");
+    console.log("connected to mongodb...");
 
-// parse incoming request bodies
-app.use(express.json());
+    const app = makeApp(database);
 
-// express session config
-app.use(
-    session({
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: true,
-    })
-);
+    const port = process.env.PORT || "5000";
+    app.listen(port, () => {
+        const env = process.env.NODE_ENV;
+        console.log(`[${env.toUpperCase()}] - listening on port ${port}...`);
+    });
+}
 
-// passport config
-passportConfig(app);
-
-// serve static files
-app.use(express.static(path.resolve(__dirname, "./public")));
-
-// routes
-app.use("/api", routes);
-
-// connect the react app
-// app.use(express.static(path.resolve(__dirname, "./client/build")));
-// app.get("*", (req, res) => {
-//     return res.sendFile(path.resolve(__dirname, "./client/build/index.html"));
-// });
-
-// default error handler
-app.use(errorHandler);
-
-// connect to mongodb
-connectToDb()
-    .then(() => console.log("Connected to mongodb..."))
-    .catch((err) => console.log("Unable to connect to mongodb!"));
-
-// listen for requests
-const port = process.env.PORT || "5000";
-app.listen(port, () => {
-    const env = process.env.NODE_ENV;
-    return console.log(`[${env.toUpperCase()}] - listening on port ${port}...`);
-});
+runServer();

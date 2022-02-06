@@ -1,28 +1,28 @@
 const express = require("express");
-const database = require("../services/index");
-const validateAuthorization = require("../middlewares/validateAuthorization");
-
-const getCategoriesList = require("../controllers/getCategoriesList");
-const createNewCategory = require("../controllers/createNewCategory");
-const updateCategory = require("../controllers/updateCategory");
-const deleteCategory = require("../controllers/deleteCategory");
+const createCategory = require("../usecases/createCategory");
+const queryCategories = require("../usecases/queryCategories");
+const handleError = require("../utils/handleError");
 
 const router = express.Router();
 
-router.get("/", (req, res, next) =>
-    getCategoriesList(req, res, next, database)
-);
+router.post("/", async (req, res, next) => {
+    const db = req.database;
+    const category = req.body;
 
-router.post("/", validateAuthorization, (req, res, next) =>
-    createNewCategory(req, res, next, database)
-);
+    const err = await createCategory(category, db);
+    if (err) return handleError(err, res, next);
 
-router.put("/:id", validateAuthorization, (req, res, next) =>
-    updateCategory(req, res, next, database)
-);
+    return res.json({ success: true });
+});
 
-router.delete("/:id", validateAuthorization, (req, res, next) =>
-    deleteCategory(req, res, next, database)
-);
+router.get("/", async (req, res, next) => {
+    const db = req.database;
+    const query = req.query;
+
+    const [err, categories] = await queryCategories(query, db);
+    if (err) return handleError(err, res, next);
+
+    return res.json(categories);
+});
 
 module.exports = router;
