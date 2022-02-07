@@ -1,5 +1,6 @@
 const express = require("express");
 const routes = require("./routes");
+const errorHandler = require("./middleware/errorHandler");
 
 function makeApp(database) {
     const app = express();
@@ -12,6 +13,8 @@ function makeApp(database) {
     });
 
     app.use("/api", routes);
+
+    app.use(errorHandler);
 
     return app;
 }

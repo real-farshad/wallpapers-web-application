@@ -1,4 +1,4 @@
-const validateCategory = require("../validation/category");
+const validateCategory = require("../../validation/category");
 
 async function createCategory(category, db) {
     let [err, newCategory] = await validateCategory(category);

@@ -1,4 +1,4 @@
-const validateCategoriesQuery = require("../validation/categoriesQuery");
+const validateCategoriesQuery = require("../../validation/categoriesQuery");
 
 async function queryCategories(query, db) {
     let [err, validQuery] = await validateCategoriesQuery(query);

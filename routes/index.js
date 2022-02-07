@@ -1,8 +1,8 @@
 const express = require("express");
-const categoriesRoutes = require("./categoriesRoutes");
+const categories = require("./categories");
 
 const router = express.Router();
 
-router.use("/categories", categoriesRoutes);
+router.use("/categories", categories);
 
 module.exports = router;
