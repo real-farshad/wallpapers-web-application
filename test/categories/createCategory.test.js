@@ -38,7 +38,7 @@ describe("POST - /api/categories", () => {
         expect(response.statusCode).toBe(400);
     });
 
-    it("should return error status 400 if the title is more than 33 characters", async () => {
+    it("should return error status 400 if the title is more than 32 characters", async () => {
         const app = makeApp({});
         const longString = "a".repeat(33);
         const response = await request(app)
