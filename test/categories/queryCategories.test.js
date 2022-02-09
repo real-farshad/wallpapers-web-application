@@ -12,7 +12,9 @@ const mockQueryCategories = jest.fn(() => {
 describe("GET - /api/categories", () => {
     it("should return error status 400 if page in query exists and is not a number", async () => {
         const app = makeApp({});
-        const response = await request(app).get(url).query({ page: null });
+        const response = await request(app)
+            .get(url)
+            .query({ page: { index: 1 } });
         expect(response.statusCode).toBe(400);
     });
 

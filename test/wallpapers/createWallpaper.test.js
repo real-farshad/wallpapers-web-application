@@ -26,7 +26,7 @@ const mockSaveWallpaper = jest.fn(() => {
     return err;
 });
 
-describe("POST - /api/categories", () => {
+describe("POST - /api/wallpapers", () => {
     it("should return error status 400 if there is no title", async () => {
         const app = makeApp({});
 
