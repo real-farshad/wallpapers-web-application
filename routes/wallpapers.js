@@ -4,6 +4,7 @@ const queryWallpapers = require("../usecases/wallpapers/queryWallpapers");
 const findSingleWallpaper = require("../usecases/wallpapers/findSingleWallpaper");
 const updateWallpaper = require("../usecases/wallpapers/updateWallpaper");
 const handleError = require("../utils/handleError");
+const deleteWallpaper = require("../usecases/wallpapers/deleteWallpaper");
 
 const router = express.Router();
 
@@ -43,6 +44,16 @@ router.put("/:id", async (req, res, next) => {
     const db = req.database;
 
     const err = await updateWallpaper(wallpaperId, wallpaperUpdate, db);
+    if (err) return handleError(err, res, next);
+
+    return res.json({ success: true });
+});
+
+router.delete("/:id", async (req, res, next) => {
+    const wallpaperId = req.params.id;
+    const db = req.database;
+
+    const err = await deleteWallpaper(wallpaperId, db);
     if (err) return handleError(err, res, next);
 
     return res.json({ success: true });
