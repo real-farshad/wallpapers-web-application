@@ -152,7 +152,7 @@ describe("GET - /api/wallpapers", () => {
         expect(response.statusCode).toBe(400);
     });
 
-    it("should query database for related posts", async () => {
+    it("should query database for related wallpapers", async () => {
         const app = makeApp({ queryWallpapers: mockQueryWallpapers });
 
         await request(app).get(url);

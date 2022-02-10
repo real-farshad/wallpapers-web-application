@@ -2,8 +2,8 @@ const request = require("supertest");
 const makeApp = require("../../app");
 const { ObjectId } = require("mongodb");
 
-const mockId = new ObjectId();
 const url = "/api/categories";
+const mockId = new ObjectId();
 const validUrl = "/api/categories" + "/" + mockId;
 
 const mockFindAndDeleteCategory = jest.fn(() => {

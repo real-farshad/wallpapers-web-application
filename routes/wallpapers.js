@@ -1,6 +1,7 @@
 const express = require("express");
 const createWallpaper = require("../usecases/wallpapers/createWallpaper");
 const queryWallpapers = require("../usecases/wallpapers/queryWallpapers");
+const findSingleWallpaper = require("../usecases/wallpapers/findSingleWallpaper");
 const handleError = require("../utils/handleError");
 
 const router = express.Router();
@@ -23,6 +24,16 @@ router.get("/", async (req, res, next) => {
     if (err) return handleError(err, res, next);
 
     return res.json(wallpapers);
+});
+
+router.get("/:id", async (req, res, next) => {
+    const wallpaperId = req.params.id;
+    const db = req.database;
+
+    const [err, wallpaper] = await findSingleWallpaper(wallpaperId, db);
+    if (err) return handleError(err, res, next);
+
+    return res.json(wallpaper);
 });
 
 module.exports = router;
