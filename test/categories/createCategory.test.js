@@ -28,7 +28,6 @@ describe("POST - /api/categories", () => {
         const response = await request(app)
             .post(url)
             .send({ title: ["a", "b", "c"] });
-
         expect(response.statusCode).toBe(400);
     });
 
@@ -44,20 +43,7 @@ describe("POST - /api/categories", () => {
         const response = await request(app)
             .post(url)
             .send({ title: longString });
-
         expect(response.statusCode).toBe(400);
-    });
-
-    it("should return error status 500 if finding category by title fails", async () => {
-        const findCategoryByTitle = jest.fn(() => {
-            const err = "operation failed!";
-            const category = null;
-            return [err, category];
-        });
-        const app = makeApp({ findCategoryByTitle });
-
-        const response = await request(app).post(url).send(mockCategory);
-        expect(response.statusCode).toBe(500);
     });
 
     it("should return error status 400 if a category with same title exists", async () => {
@@ -67,25 +53,10 @@ describe("POST - /api/categories", () => {
             return [err, category];
         });
         const app = makeApp({ findCategoryByTitle });
-
         const response = await request(app)
             .post(url)
             .send({ title: "same category title" });
         expect(response.statusCode).toBe(400);
-    });
-
-    it("should return error status 500 if saving category in database fails", async () => {
-        const saveCategory = jest.fn(() => {
-            const err = "operation failed!";
-            return err;
-        });
-        const app = makeApp({
-            findCategoryByTitle: mockFindCategoryByTitle,
-            saveCategory,
-        });
-
-        const response = await request(app).post(url).send(mockCategory);
-        expect(response.statusCode).toBe(500);
     });
 
     it("should return status 200 if the ctegory is valid and has been saved", async () => {
@@ -93,7 +64,6 @@ describe("POST - /api/categories", () => {
             findCategoryByTitle: mockFindCategoryByTitle,
             saveCategory: mockSaveCategory,
         });
-
         const response = await request(app).post(url).send(mockCategory);
         expect(response.statusCode).toBe(200);
     });

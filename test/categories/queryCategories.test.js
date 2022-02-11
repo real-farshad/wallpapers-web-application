@@ -48,18 +48,6 @@ describe("GET - /api/categories", () => {
         expect(response.statusCode).toBe(400);
     });
 
-    it("should return error status 500 if querying categories fails", async () => {
-        const queryCategories = jest.fn(() => {
-            const err = "operation failed!";
-            const categories = [];
-            return [err, categories];
-        });
-        const app = makeApp({ queryCategories });
-
-        const response = await request(app).get(url);
-        expect(response.statusCode).toBe(500);
-    });
-
     it("should return status 200 if the query has been successful", async () => {
         const app = makeApp({ queryCategories: mockQueryCategories });
         const response = await request(app).get(url);

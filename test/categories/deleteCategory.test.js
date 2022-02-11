@@ -17,20 +17,7 @@ describe("DELETE - /api/categories/:id", () => {
         const app = makeApp({});
         const invalidId = "123456789";
         const response = await request(app).delete(url + "/" + invalidId);
-
         expect(response.statusCode).toBe(400);
-    });
-
-    it("should return error status 500 find and delete operation on database fails", async () => {
-        const findAndDeleteCategory = jest.fn(() => {
-            const err = "operation failed!";
-            const success = false;
-            return [err, success];
-        });
-        const app = makeApp({ findAndDeleteCategory });
-        const response = await request(app).delete(validUrl);
-
-        expect(response.statusCode).toBe(500);
     });
 
     it("should return error status 404 if category with related id doesn't exist", async () => {
@@ -41,7 +28,6 @@ describe("DELETE - /api/categories/:id", () => {
         });
         const app = makeApp({ findAndDeleteCategory });
         const response = await request(app).delete(validUrl);
-
         expect(response.statusCode).toBe(404);
     });
 
@@ -50,7 +36,6 @@ describe("DELETE - /api/categories/:id", () => {
             findAndDeleteCategory: mockFindAndDeleteCategory,
         });
         const response = await request(app).delete(validUrl);
-
         expect(response.statusCode).toBe(200);
     });
 });

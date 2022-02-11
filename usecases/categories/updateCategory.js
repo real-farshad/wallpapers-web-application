@@ -46,8 +46,17 @@ async function updateCategory(categoryId, category, db) {
         };
     }
 
-    err = await db.updateCategory(category);
+    let success;
+    [err, success] = await db.updateCategory(category);
     if (err) return err;
+
+    if (!success) {
+        return {
+            known: true,
+            status: 404,
+            message: "no category with this id was found!",
+        };
+    }
 
     return null;
 }

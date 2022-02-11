@@ -22,7 +22,8 @@ const mockFindCategoryByTitle = jest.fn(() => {
 
 const mockUpdateCategory = jest.fn(() => {
     const err = null;
-    return err;
+    const success = true;
+    return [err, success];
 });
 
 describe("PUT - /api/categories/:id", () => {
@@ -44,14 +45,12 @@ describe("PUT - /api/categories/:id", () => {
         const response = await request(app)
             .put(validUrl)
             .send({ title: ["a", "b", "c"] });
-
         expect(response.statusCode).toBe(400);
     });
 
     it("should return error status 400 if category title is less than 3 characters", async () => {
         const app = makeApp({});
         const response = await request(app).put(validUrl).send({ title: "ab" });
-
         expect(response.statusCode).toBe(400);
     });
 
@@ -61,21 +60,7 @@ describe("PUT - /api/categories/:id", () => {
         const response = await request(app)
             .put(validUrl)
             .send({ title: longString });
-
         expect(response.statusCode).toBe(400);
-    });
-
-    it("should return error status 500 if searching for category by id fails", async () => {
-        const findCategoryById = jest.fn(() => {
-            const err = "operation failed!";
-            const category = null;
-            return [err, category];
-        });
-        const app = makeApp({ findCategoryById });
-
-        const response = await request(app).put(validUrl).send(mockCategory);
-
-        expect(response.statusCode).toBe(500);
     });
 
     it("should return error status 404 if there is no category with related id", async () => {
@@ -85,9 +70,7 @@ describe("PUT - /api/categories/:id", () => {
             return [err, category];
         });
         const app = makeApp({ findCategoryById });
-
         const response = await request(app).put(validUrl).send(mockCategory);
-
         expect(response.statusCode).toBe(404);
     });
 
@@ -98,28 +81,10 @@ describe("PUT - /api/categories/:id", () => {
             return [err, category];
         });
         const app = makeApp({ findCategoryById });
-
         const response = await request(app)
             .put(validUrl)
             .send({ title: "same category title" });
-
         expect(response.statusCode).toBe(400);
-    });
-
-    it("should return error status 500 if finding category by title fails", async () => {
-        const findCategoryByTitle = jest.fn(() => {
-            const err = "operation failed!";
-            const category = null;
-            return [err, category];
-        });
-        const app = makeApp({
-            findCategoryById: mockFindCategoryById,
-            findCategoryByTitle,
-        });
-
-        const response = await request(app).put(validUrl).send(mockCategory);
-
-        expect(response.statusCode).toBe(500);
     });
 
     it("should return error status 400 if new category title is not unique", async () => {
@@ -132,26 +97,23 @@ describe("PUT - /api/categories/:id", () => {
             findCategoryById: mockFindCategoryById,
             findCategoryByTitle,
         });
-
         const response = await request(app).put(validUrl).send(mockCategory);
-
         expect(response.statusCode).toBe(400);
     });
 
-    it("should return error status 500 if updating the category fails", async () => {
+    it("should return status 404 if there is no category with such id", async () => {
         const updateCategory = jest.fn(() => {
-            const err = "operation failed!";
-            return err;
+            const err = null;
+            const success = false;
+            return [err, success];
         });
         const app = makeApp({
             findCategoryById: mockFindCategoryById,
             findCategoryByTitle: mockFindCategoryByTitle,
             updateCategory,
         });
-
         const response = await request(app).put(validUrl).send(mockCategory);
-
-        expect(response.statusCode).toBe(500);
+        expect(response.statusCode).toBe(404);
     });
 
     it("should return status 200 if update was successful", async () => {
@@ -160,9 +122,7 @@ describe("PUT - /api/categories/:id", () => {
             findCategoryByTitle: mockFindCategoryByTitle,
             updateCategory: mockUpdateCategory,
         });
-
         const response = await request(app).put(validUrl).send(mockCategory);
-
         expect(response.statusCode).toBe(200);
     });
 });
