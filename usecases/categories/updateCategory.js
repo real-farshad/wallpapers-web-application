@@ -1,7 +1,7 @@
 const validateId = require("../../utils/validateId");
 const validateCategory = require("../../validation/category");
 
-async function updateCategory(categoryId, category, db) {
+async function updateCategory(categoryId, categoryUpdate, db) {
     const isValidId = validateId(categoryId);
     if (!isValidId) {
         return {
@@ -11,7 +11,7 @@ async function updateCategory(categoryId, category, db) {
         };
     }
 
-    let [err, newCategory] = await validateCategory(category);
+    let [err, update] = await validateCategory(categoryUpdate);
     if (err) return { known: true, status: 400, message: err.message };
 
     let previousCategory;
@@ -26,7 +26,7 @@ async function updateCategory(categoryId, category, db) {
         };
     }
 
-    if (previousCategory.title === newCategory.title) {
+    if (previousCategory.title === update.title) {
         return {
             known: true,
             status: 400,
@@ -35,7 +35,7 @@ async function updateCategory(categoryId, category, db) {
     }
 
     let sameCategory;
-    [err, sameCategory] = await db.findCategoryByTitle(newCategory.title);
+    [err, sameCategory] = await db.findCategoryByTitle(update.title);
     if (err) return err;
 
     if (sameCategory) {
@@ -46,7 +46,7 @@ async function updateCategory(categoryId, category, db) {
         };
     }
 
-    err = await db.updateCategory(categoryId, category);
+    err = await db.updateCategory(categoryId, update);
     if (err) return err;
 
     return null;

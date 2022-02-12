@@ -2,12 +2,16 @@ const { getDatabase } = require("../../config/mongodb");
 const getCategoriesCollection = () => getDatabase().collection("categories");
 
 async function saveCategory(category) {
+    let error;
+
     try {
         await getCategoriesCollection().insertOne(category);
-        return null;
+        error = null;
     } catch (err) {
-        return err;
+        error = err;
     }
+
+    return error;
 }
 
 module.exports = saveCategory;

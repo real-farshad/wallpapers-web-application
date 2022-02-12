@@ -29,9 +29,9 @@ router.get("/", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
     const db = req.database;
     const categoryId = req.params.id;
-    const category = req.body;
+    const categoryUpdate = req.body;
 
-    const err = await updateCategory(categoryId, category, db);
+    const err = await updateCategory(categoryId, categoryUpdate, db);
     if (err) return next(err);
 
     return res.json({ success: true });

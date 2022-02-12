@@ -1,14 +1,13 @@
-const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
-const getCategoriesCollection = () => getDatabase().collection("categories");
+const getWallpapersCollection = () => getDatabase().collection("wallpapers");
 
-async function findAndDeleteCategory(id) {
+async function findAndDeleteWallpaper(wallpaperId) {
     let error;
     let success;
 
     try {
-        const result = await getCategoriesCollection().deleteOne({
-            _id: new ObjectId(id),
+        const result = await getWallpapersCollection().deleteOne({
+            _id: new ObjectId(wallpaperId),
         });
 
         if (result.deletedCount !== 1) success = false;
@@ -23,4 +22,4 @@ async function findAndDeleteCategory(id) {
     return [error, success];
 }
 
-module.exports = findAndDeleteCategory;
+module.exports = findAndDeleteWallpaper;

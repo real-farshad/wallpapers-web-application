@@ -2,15 +2,25 @@ const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getCategoriesCollection = () => getDatabase().collection("categories");
 
-async function findCategoryByTitle(id) {
+async function findCategoryById(categoryId) {
+    let error;
+    let category;
+
     try {
-        const category = await getCategoriesCollection().findOne({
-            _id: new ObjectId(id),
+        const result = await getCategoriesCollection().findOne({
+            _id: new ObjectId(categoryId),
         });
-        return [null, category];
+
+        if (!result) category = null;
+        else category = result;
+
+        error = null;
     } catch (err) {
-        return [err, null];
+        error = err;
+        category = null;
     }
+
+    return [error, category];
 }
 
-module.exports = findCategoryByTitle;
+module.exports = findCategoryById;

@@ -2,16 +2,21 @@ const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getCategoriesCollection = () => getDatabase().collection("categories");
 
-async function updateCategory(id, category) {
+async function updateCategory(id, categoryUpdate) {
+    let error;
+
     try {
         await getCategoriesCollection().updateOne(
             { _id: new ObjectId(id) },
-            { $set: category }
+            { $set: categoryUpdate }
         );
-        return null;
+
+        error = null;
     } catch (err) {
-        return err;
+        error = err;
     }
+
+    return error;
 }
 
 module.exports = updateCategory;

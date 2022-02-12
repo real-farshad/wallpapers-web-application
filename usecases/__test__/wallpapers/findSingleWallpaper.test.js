@@ -3,7 +3,7 @@ const findSingleWallpaper = require("../../wallpapers/findSingleWallpaper");
 
 const mockId = new ObjectId();
 const mockDB = {
-    findSingleWallpaper: jest.fn(() => {
+    findWallpaperById: jest.fn(() => {
         const err = null;
         const wallpaper = { title: "my wallpaper" };
         return [err, wallpaper];
@@ -22,7 +22,7 @@ describe("find single wallpaper", () => {
 
     it("should return error with status 404 if there is no post with related id in the database", async () => {
         const db = {
-            findSingleWallpaper: jest.fn(() => {
+            findWallpaperById: jest.fn(() => {
                 const err = null;
                 const wallpaper = null;
                 return [err, wallpaper];

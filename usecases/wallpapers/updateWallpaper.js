@@ -11,12 +11,10 @@ async function updateWallpaper(wallpaperId, wallpaperUpdate, db) {
         };
     }
 
-    let [err, validWallpaperUpdate] = await validateWallpaperUpdate(
-        wallpaperUpdate
-    );
+    let [err, update] = await validateWallpaperUpdate(wallpaperUpdate);
     if (err) return { known: true, status: 400, message: err.message };
 
-    let categoryTitle = validWallpaperUpdate.category;
+    let categoryTitle = update.category;
     if (categoryTitle) {
         let category;
         [err, category] = await db.findCategoryByTitle(categoryTitle);
@@ -30,15 +28,12 @@ async function updateWallpaper(wallpaperId, wallpaperUpdate, db) {
             };
         }
 
-        validWallpaperUpdate.categoryId = category._id;
-        delete validWallpaperUpdate.category;
+        update.categoryId = category._id;
+        delete update.category;
     }
 
     let success;
-    [err, success] = await db.findAndUpdateWallpaper(
-        wallpaperId,
-        validWallpaperUpdate
-    );
+    [err, success] = await db.findAndUpdateWallpaper(wallpaperId, update);
 
     if (!success) {
         return {
