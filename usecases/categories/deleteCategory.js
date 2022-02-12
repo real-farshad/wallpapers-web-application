@@ -17,7 +17,7 @@ async function updateCategory(categoryId, db) {
         return {
             known: true,
             status: 404,
-            message: "no category with this id was found!",
+            message: "a category with this id doesn't exist!",
         };
     }
 

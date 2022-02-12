@@ -11,8 +11,7 @@ async function createCategory(category, db) {
         return {
             known: true,
             status: 400,
-            message:
-                "there is already a category with this id in the database!",
+            message: "a category with this title already exists!",
         };
 
     err = await db.saveCategory(newCategory);

@@ -22,7 +22,7 @@ async function updateCategory(categoryId, category, db) {
         return {
             known: true,
             status: 404,
-            message: "no category with this id was found!",
+            message: "a category with this id doesn't exist!",
         };
     }
 
@@ -30,7 +30,7 @@ async function updateCategory(categoryId, category, db) {
         return {
             known: true,
             status: 400,
-            message: "category title should be different!",
+            message: "category has not change!",
         };
     }
 
@@ -46,17 +46,8 @@ async function updateCategory(categoryId, category, db) {
         };
     }
 
-    let success;
-    [err, success] = await db.updateCategory(category);
+    err = await db.updateCategory(categoryId, category);
     if (err) return err;
-
-    if (!success) {
-        return {
-            known: true,
-            status: 404,
-            message: "no category with this id was found!",
-        };
-    }
 
     return null;
 }

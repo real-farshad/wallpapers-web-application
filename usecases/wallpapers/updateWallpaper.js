@@ -26,7 +26,7 @@ async function updateWallpaper(wallpaperId, wallpaperUpdate, db) {
             return {
                 known: true,
                 status: 404,
-                message: "no category with this title was found!",
+                message: "a category with this title doesn't exist!",
             };
         }
 
@@ -44,7 +44,7 @@ async function updateWallpaper(wallpaperId, wallpaperUpdate, db) {
         return {
             known: true,
             status: 404,
-            message: "no wallpaper with this id was found!",
+            message: "a wallpaper with this id doesn't exist!",
         };
     }
 

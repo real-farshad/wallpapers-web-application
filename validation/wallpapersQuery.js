@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const wallpapersQuerySchema = Joi.object({
-    search: Joi.string().trim().min(3).max(64),
+    title: Joi.string().trim().min(3).max(64),
     category: Joi.string().lowercase().trim().min(3).max(32),
     duration: Joi.number().valid(2021, 2020),
     sort: Joi.string().valid("new", "popular"),

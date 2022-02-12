@@ -12,7 +12,7 @@ async function createWallpaper(wallpaper, db) {
         return {
             known: true,
             status: 404,
-            message: "no category with this title was found!",
+            message: "a category with this id doesn't exist!",
         };
     }
 
