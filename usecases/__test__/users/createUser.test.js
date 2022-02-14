@@ -44,7 +44,7 @@ describe("create user", () => {
         });
     });
 
-    it("should return error with status 400 if username is greater than 3 characters long", async () => {
+    it("should return error with status 400 if username is less than 3 characters long", async () => {
         const user = { username: "ab" };
         const err = await createUser(user);
         expect(err).toMatchObject({
@@ -55,7 +55,7 @@ describe("create user", () => {
         });
     });
 
-    it("should return error with status 400 if username is less than 96 characters long", async () => {
+    it("should return error with status 400 if username is greater than 96 characters long", async () => {
         const longString = "a".repeat(97);
         const user = { username: longString };
         const err = await createUser(user);
@@ -85,7 +85,7 @@ describe("create user", () => {
         });
     });
 
-    it("should return error with status 400 if email is greater than 3 characters long", async () => {
+    it("should return error with status 400 if email is less than 3 characters long", async () => {
         const user = { ...mockUsername, email: "ab" };
         const err = await createUser(user);
         expect(err).toMatchObject({
@@ -96,7 +96,7 @@ describe("create user", () => {
         });
     });
 
-    it("should return error with status 400 if email is less than 128 characters long", async () => {
+    it("should return error with status 400 if email is greater than 128 characters long", async () => {
         const longString = "a".repeat(129);
         const user = { ...mockUsername, email: longString };
         const err = await createUser(user);
@@ -135,7 +135,7 @@ describe("create user", () => {
         });
     });
 
-    it("should return error with status 400 if password is greater than 8 characters long", async () => {
+    it("should return error with status 400 if password is less than 8 characters long", async () => {
         const user = { ...mockUsername, ...mockEmail, password: "abcdefg" };
         const err = await createUser(user);
         expect(err).toMatchObject({
@@ -146,7 +146,7 @@ describe("create user", () => {
         });
     });
 
-    it("should return error with status 400 if password is less than 32 characters long", async () => {
+    it("should return error with status 400 if password is greater than 32 characters long", async () => {
         const longString = "a".repeat(33);
         const user = { ...mockUsername, ...mockEmail, password: longString };
         const err = await createUser(user);

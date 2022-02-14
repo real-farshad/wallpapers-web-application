@@ -1,4 +1,5 @@
 const validateUser = require("../../validation/user");
+const hashPassword = require("../../utils/hashPassword");
 
 async function createUser(user, db) {
     let [err, validUser] = await validateUser(user);
@@ -16,7 +17,9 @@ async function createUser(user, db) {
         };
     }
 
-    err = await db.saveUser(user);
+    validUser.password = await hashPassword(validUser.password);
+
+    err = await db.saveUser(validUser);
     if (err) return err;
 
     return null;

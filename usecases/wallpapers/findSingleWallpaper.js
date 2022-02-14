@@ -12,7 +12,7 @@ async function findSingleWallpaper(wallpaperId, db) {
         return [knownError, null];
     }
 
-    const [err, wallpaper] = await db.findSingleWallpaper(wallpaperId);
+    const [err, wallpaper] = await db.findWallpaperById(wallpaperId);
     if (err) return [err, null];
 
     if (!wallpaper) {
