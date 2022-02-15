@@ -55,14 +55,14 @@ describe("create user", () => {
         });
     });
 
-    it("should return error with status 400 if username is greater than 96 characters long", async () => {
-        const longString = "a".repeat(97);
+    it("should return error with status 400 if username is greater than 32 characters long", async () => {
+        const longString = "a".repeat(33);
         const user = { username: longString };
         const err = await createUser(user);
         expect(err).toMatchObject({
             status: 400,
             message: expect.stringMatching(
-                /.*(username).*(96 characters long).*/gi
+                /.*(username).*(32 characters long).*/gi
             ),
         });
     });

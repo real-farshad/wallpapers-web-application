@@ -2,24 +2,27 @@ const Joi = require("joi");
 
 const passwordPattern = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])/;
 
-const userSchema = Joi.object({
-    username: Joi.string().trim().alphanum().min(3).max(32).required(),
+const userUpdateSchema = Joi.object({
+    confirmationPassword: Joi.string().min(8).max(32).required(),
+    username: Joi.string().trim().alphanum().min(3).max(32),
     email: Joi.string()
         .trim()
         .min(3)
         .max(128)
-        .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-        .required(),
-    password: Joi.string().min(8).max(32).pattern(passwordPattern).required(),
+        .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
+    password: Joi.string().min(8).max(32).pattern(passwordPattern),
 });
 
-async function validateUser(user) {
+async function validateUserUpdate(userUpdate) {
     let error;
-    let validUser;
+    let validUserUpdate;
 
     try {
-        validUser = await userSchema.validateAsync(user);
-        error = null;
+        validUserUpdate = await userUpdateSchema.validateAsync(userUpdate);
+
+        if (Object.keys(validUserUpdate).length === 1) {
+            error = { message: "invalid request!" };
+        } else error = null;
     } catch (err) {
         if (err.message.includes("fails to match the required pattern")) {
             const allowed = [
@@ -41,10 +44,10 @@ async function validateUser(user) {
         }
 
         error = err;
-        validUser = null;
+        validUserUpdate = null;
     }
 
-    return [error, validUser];
+    return [error, validUserUpdate];
 }
 
-module.exports = validateUser;
+module.exports = validateUserUpdate;
