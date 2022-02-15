@@ -1,4 +1,5 @@
 const express = require("express");
+const authenticateUser = require("../middleware/authenticateUser");
 const createUser = require("../usecases/users/createUser");
 
 const router = express.Router();
@@ -16,11 +17,17 @@ router.post("/sign-up", async (req, res, next) => {
 router.post("/sign-in", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) return next(err);
-        if (!user) return res.status(401).json({ error: info.message });
+        if (!user) {
+            return next({
+                known: true,
+                status: 401,
+                error: info.message,
+            });
+        }
 
         req.logIn(user, (err) => {
             if (err) return next(err);
-            return res.json({ signedIn: true });
+            return res.json({ success: true });
         });
     })(req, res, next);
 });
@@ -38,9 +45,9 @@ router.get(
     (req, res) => res.redirect("/")
 );
 
-router.get("/sign-out", (req, res) => {
+router.get("/sign-out", authenticateUser, (req, res) => {
     req.logout();
-    return res.json({ signedOut: true });
+    return res.json({ success: true });
 });
 
 module.exports = router;

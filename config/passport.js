@@ -56,21 +56,18 @@ module.exports.passportConfig = function (app, db) {
                     { googleId: profile.id },
                     newUser
                 );
-                if (err) done(err);
 
-                done(null, user);
+                if (err) done(err);
+                else done(null, user);
             }
         )
     );
 
-    passport.serializeUser((user, done) => {
-        done(null, user._id);
-    });
-
+    passport.serializeUser((user, done) => done(null, user._id));
     passport.deserializeUser(async (id, done) => {
         const [err, user] = await db.findUserById(id);
         if (err) done(err);
-        done(null, user);
+        else done(null, user);
     });
 };
 
