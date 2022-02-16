@@ -152,7 +152,7 @@ describe("update wallpaper", () => {
         });
     });
 
-    it("should return error with status 400 if imageUrl has any extra property", async () => {
+    it("should return error with status 400 if imageUrl has any extra properties", async () => {
         const wallpaperUpdate = { extraProperty: "extra property" };
         const err = await updateWallpaper(mockId, wallpaperUpdate);
         expect(err).toMatchObject({
@@ -195,7 +195,7 @@ describe("update wallpaper", () => {
         });
     });
 
-    it("should return error with status 400 if there is any extra property in wallpaper", async () => {
+    it("should return error with status 400 if wallpaper has any extra properties", async () => {
         const wallpaperUpdate = { extraProperty: "extra property" };
         const err = await updateWallpaper(mockId, wallpaperUpdate);
         expect(err).toMatchObject({

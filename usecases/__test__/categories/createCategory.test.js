@@ -55,7 +55,7 @@ describe("create category", () => {
         });
     });
 
-    it("should return error with status 400 if category has any extra property", async () => {
+    it("should return error with status 400 if category has any extra properties", async () => {
         const category = { ...mockCategory, extraProperty: "extra property" };
         const err = await createCategory(category);
         expect(err).toMatchObject({

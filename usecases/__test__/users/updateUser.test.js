@@ -21,7 +21,7 @@ const mockDB = {
     }),
 };
 
-describe("create user", () => {
+describe("update user", () => {
     it("should return error with status 400 if confirmation password doesn't exist", async () => {
         const userUpdate = {};
         const err = await updateUser(userUpdate);

@@ -14,7 +14,7 @@ const mockDB = {
     }),
 };
 
-describe("create user", () => {
+describe("delete user", () => {
     it("should return error with status 400 if confirmationPassword doesn't exist", async () => {
         const err = await deleteUser();
         expect(err).toMatchObject({

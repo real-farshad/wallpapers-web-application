@@ -66,7 +66,7 @@ describe("query categories", () => {
         });
     });
 
-    it("should return error with status 400 if query has any extra property", async () => {
+    it("should return error with status 400 if query has any extra properties", async () => {
         const query = { extraProperty: "extra property" };
         const [err, categories] = await queryCategories(query);
         expect(err).toMatchObject({

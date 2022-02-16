@@ -167,7 +167,7 @@ describe("create user", () => {
         });
     });
 
-    it("should return error with status 400 if user has any extra property", async () => {
+    it("should return error with status 400 if user has any extra properties", async () => {
         const user = { ...mockUser, extraProperty: "extra property" };
         const err = await createUser(user);
         expect(err).toMatchObject({
