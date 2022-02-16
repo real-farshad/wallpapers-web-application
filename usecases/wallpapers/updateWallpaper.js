@@ -1,7 +1,7 @@
 const validateId = require("../../utils/validateId");
 const validateWallpaperUpdate = require("../../validation/wallpaperUpdate");
 
-async function updateWallpaper(wallpaperId, wallpaperUpdate, db) {
+async function updateWallpaper(wallpaperId, wallpaperUpdate, userId, db) {
     const isValidId = validateId(wallpaperId);
     if (!isValidId) {
         return {
@@ -33,7 +33,11 @@ async function updateWallpaper(wallpaperId, wallpaperUpdate, db) {
     }
 
     let success;
-    [err, success] = await db.findAndUpdateWallpaper(wallpaperId, update);
+    [err, success] = await db.findAndUpdateUserWallpaper(
+        wallpaperId,
+        update,
+        userId
+    );
 
     if (!success) {
         return {

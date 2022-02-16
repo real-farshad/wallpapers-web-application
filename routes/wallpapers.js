@@ -1,4 +1,5 @@
 const express = require("express");
+const authenticateUser = require("../middleware/authenticateUser");
 const createWallpaper = require("../usecases/wallpapers/createWallpaper");
 const queryWallpapers = require("../usecases/wallpapers/queryWallpapers");
 const findSingleWallpaper = require("../usecases/wallpapers/findSingleWallpaper");
@@ -7,11 +8,12 @@ const deleteWallpaper = require("../usecases/wallpapers/deleteWallpaper");
 
 const router = express.Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", authenticateUser, async (req, res, next) => {
     const wallpaper = req.body;
+    const userId = req.user._id;
     const db = req.database;
 
-    const err = await createWallpaper(wallpaper, db);
+    const err = await createWallpaper(wallpaper, userId, db);
     if (err) return next(err);
 
     return res.send("");
@@ -37,22 +39,24 @@ router.get("/:id", async (req, res, next) => {
     return res.json(wallpaper);
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", authenticateUser, async (req, res, next) => {
     const wallpaperId = req.params.id;
     const wallpaperUpdate = req.body;
+    const userId = req.user._id;
     const db = req.database;
 
-    const err = await updateWallpaper(wallpaperId, wallpaperUpdate, db);
+    const err = await updateWallpaper(wallpaperId, wallpaperUpdate, userId, db);
     if (err) return next(err);
 
     return res.json({ success: true });
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", authenticateUser, async (req, res, next) => {
     const wallpaperId = req.params.id;
+    const userId = req.user._id;
     const db = req.database;
 
-    const err = await deleteWallpaper(wallpaperId, db);
+    const err = await deleteWallpaper(wallpaperId, userId, db);
     if (err) return next(err);
 
     return res.json({ success: true });

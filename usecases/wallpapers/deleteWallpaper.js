@@ -1,6 +1,6 @@
 const validateId = require("../../utils/validateId");
 
-async function deleteWallpaper(wallpaperId, db) {
+async function deleteWallpaper(wallpaperId, userId, db) {
     const isValidId = validateId(wallpaperId);
     if (!isValidId) {
         return {
@@ -10,7 +10,10 @@ async function deleteWallpaper(wallpaperId, db) {
         };
     }
 
-    const [err, success] = await db.findAndDeleteWallpaper(wallpaperId);
+    const [err, success] = await db.findAndDeleteUserWallpaper(
+        wallpaperId,
+        userId
+    );
     if (err) return err;
 
     if (!success) {

@@ -2,8 +2,9 @@ const { ObjectId } = require("mongodb");
 const deleteWallpaper = require("../../wallpapers/deleteWallpaper");
 
 const mockId = new ObjectId();
+const mockUserId = "1";
 const mockDB = {
-    findAndDeleteWallpaper: jest.fn(() => {
+    findAndDeleteUserWallpaper: jest.fn(() => {
         const err = null;
         const success = true;
         return [err, success];
@@ -22,13 +23,13 @@ describe("delete wallpaper", () => {
 
     it("should return error with status 404 if there is no wallpaper with related id", async () => {
         const db = {
-            findAndDeleteWallpaper: jest.fn(() => {
+            findAndDeleteUserWallpaper: jest.fn(() => {
                 const err = null;
                 const success = false;
                 return [err, success];
             }),
         };
-        const err = await deleteWallpaper(mockId, db);
+        const err = await deleteWallpaper(mockId, mockUserId, db);
         expect(err).toMatchObject({
             status: 404,
             message: expect.stringMatching(
@@ -38,7 +39,7 @@ describe("delete wallpaper", () => {
     });
 
     it("should return null as error if the operation was successfull", async () => {
-        const err = await deleteWallpaper(mockId, mockDB);
+        const err = await deleteWallpaper(mockId, mockUserId, mockDB);
         expect(err).toBeNull();
     });
 });

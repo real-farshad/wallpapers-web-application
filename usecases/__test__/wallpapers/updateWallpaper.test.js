@@ -3,13 +3,14 @@ const updateWallpaper = require("../../wallpapers/updateWallpaper");
 
 const mockId = new ObjectId();
 const mockWallpaperUpdate = { title: "my wallpaper" };
+const mockUserId = "1";
 const mockDB = {
     findCategoryByTitle: jest.fn(() => {
         const err = null;
         const category = { title: "my category" };
         return [err, category];
     }),
-    findAndUpdateWallpaper: jest.fn(() => {
+    findAndUpdateUserWallpaper: jest.fn(() => {
         const err = null;
         const success = true;
         return [err, success];
@@ -214,7 +215,12 @@ describe("update wallpaper", () => {
                 return [err, category];
             }),
         };
-        const err = await updateWallpaper(mockId, wallpaperUpdate, db);
+        const err = await updateWallpaper(
+            mockId,
+            wallpaperUpdate,
+            mockUserId,
+            db
+        );
         expect(err).toMatchObject({
             status: 404,
             message: expect.stringMatching(/.*(category).*(doesn't exist).*/gi),
@@ -224,13 +230,18 @@ describe("update wallpaper", () => {
     it("should return error with status 404 if there is no wallpaper with related id in database", async () => {
         const db = {
             findCategoryByTitle: mockDB.findCategoryByTitle,
-            findAndUpdateWallpaper: jest.fn(() => {
+            findAndUpdateUserWallpaper: jest.fn(() => {
                 const err = null;
                 const success = null;
                 return [err, success];
             }),
         };
-        const err = await updateWallpaper(mockId, mockWallpaperUpdate, db);
+        const err = await updateWallpaper(
+            mockId,
+            mockWallpaperUpdate,
+            mockUserId,
+            db
+        );
         expect(err).toMatchObject({
             status: 404,
             message: expect.stringMatching(
@@ -240,7 +251,12 @@ describe("update wallpaper", () => {
     });
 
     it("should return null as error if the operation was successfull", async () => {
-        const err = await updateWallpaper(mockId, mockWallpaperUpdate, mockDB);
+        const err = await updateWallpaper(
+            mockId,
+            mockWallpaperUpdate,
+            mockUserId,
+            mockDB
+        );
         expect(err).toBeNull();
     });
 });

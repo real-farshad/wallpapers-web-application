@@ -11,6 +11,7 @@ const mockImageUrl = {
 };
 const mockCategory = { category: "my category" };
 const mockWallpaper = { ...mockTitle, ...mockImageUrl, ...mockCategory };
+const mockUserId = "1";
 const mockDB = {
     findCategoryByTitle: jest.fn(() => {
         const err = null;
@@ -265,7 +266,7 @@ describe("create wallpaper", () => {
                 return [err, category];
             }),
         };
-        const err = await createWallpaper(mockWallpaper, db);
+        const err = await createWallpaper(mockWallpaper, mockUserId, db);
         expect(err).toMatchObject({
             status: 404,
             message: expect.stringMatching(/.*(category).*(doesn't exist).*/gi),
@@ -273,12 +274,12 @@ describe("create wallpaper", () => {
     });
 
     it("should save the wallpaper in database", async () => {
-        await createWallpaper(mockWallpaper, mockDB);
+        await createWallpaper(mockWallpaper, mockUserId, mockDB);
         expect(mockDB.saveWallpaper.mock.calls.length).toBe(1);
     });
 
     it("should return null as error if the operation was successfull", async () => {
-        const err = await createWallpaper(mockWallpaper, mockDB);
+        const err = await createWallpaper(mockWallpaper, mockUserId, mockDB);
         expect(err).toBeNull();
     });
 });

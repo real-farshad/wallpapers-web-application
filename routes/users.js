@@ -18,11 +18,11 @@ router.put("/", authenticateUser, checkLocalUser, async (req, res, next) => {
 });
 
 router.delete("/", authenticateUser, async (req, res, next) => {
+    const confirmationPassword = req.body.confirmationPassword;
     const user = req.user;
-    const password = req.body.password;
     const db = req.database;
 
-    const err = await deleteUser(user, password, db);
+    const err = await deleteUser(confirmationPassword, user, db);
     if (err) return next(err);
 
     return res.json({ success: true });

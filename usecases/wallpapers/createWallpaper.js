@@ -1,6 +1,6 @@
 const validateWallpaper = require("../../validation/wallpaper");
 
-async function createWallpaper(wallpaper, db) {
+async function createWallpaper(wallpaper, userId, db) {
     let [err, validWallpaper] = await validateWallpaper(wallpaper);
     if (err) return { known: true, status: 400, message: err.message };
 
@@ -21,6 +21,7 @@ async function createWallpaper(wallpaper, db) {
 
     validWallpaper.likeCount = 0;
     validWallpaper.createdAt = Date.now();
+    validWallpaper.publisherId = userId;
 
     err = await db.saveWallpaper(validWallpaper);
     if (err) return err;

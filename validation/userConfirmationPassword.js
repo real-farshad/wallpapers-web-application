@@ -10,7 +10,7 @@ async function validatePassword(password) {
         validPassword = await userPasswordSchema.validateAsync(password);
         error = null;
     } catch (err) {
-        err.message = err.message.replace("value", "password");
+        err.message = err.message.replace("value", "confirmationPassword");
         error = err;
         validPassword = null;
     }

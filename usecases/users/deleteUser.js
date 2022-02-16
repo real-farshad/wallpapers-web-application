@@ -1,15 +1,11 @@
 const checkPassword = require("../../utils/checkPassword");
-const validatePassword = require("../../validation/password");
+const validatePassword = require("../../validation/userConfirmationPassword");
 
-async function deleteUser(user, password, db) {
-    let [err, validPassword] = await validatePassword(password);
+async function deleteUser(confirmationPassword, user, db) {
+    let [err, password] = await validatePassword(confirmationPassword);
     if (err) return { known: true, status: 400, message: err.message };
 
-    const hasCorrectPassword = await checkPassword(
-        validPassword,
-        user.password
-    );
-
+    const hasCorrectPassword = await checkPassword(password, user.password);
     if (!hasCorrectPassword) {
         return { status: 400, message: "wrong password!" };
     }
