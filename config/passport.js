@@ -45,7 +45,7 @@ module.exports.passportConfig = function (app, db) {
                 callbackURL: "/api/auth/google/callback",
             },
             async (accessToken, refreshToken, profile, done) => {
-                const newUser = {
+                const userUpdate = {
                     googleId: profile.id,
                     username: profile._json.name,
                     avatar: profile._json.picture,
@@ -54,7 +54,7 @@ module.exports.passportConfig = function (app, db) {
 
                 const [err, user] = await db.insertOrUpdateUser(
                     { googleId: profile.id },
-                    newUser
+                    userUpdate
                 );
 
                 if (err) done(err);

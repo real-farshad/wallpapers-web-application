@@ -20,7 +20,7 @@ async function deleteWallpaper(wallpaperId, userId, db) {
         return {
             known: true,
             status: 404,
-            message: "a wallpaper with this id doesn't exist!",
+            message: "a wallpaper with this id, for this user, doesn't exist!",
         };
     }
 

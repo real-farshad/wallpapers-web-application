@@ -2,13 +2,13 @@ const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getWallpapersCollection = () => getDatabase().collection("wallpapers");
 
-async function updateWallpaper(id, wallpaperUpdate) {
+async function findAndUpdateUserWallpaper(id, wallpaperUpdate, userId) {
     let error;
     let success;
 
     try {
         const result = await getWallpapersCollection().updateOne(
-            { _id: new ObjectId(id) },
+            { _id: new ObjectId(id), publisherId: new ObjectId(userId) },
             { $set: wallpaperUpdate }
         );
 
@@ -24,4 +24,4 @@ async function updateWallpaper(id, wallpaperUpdate) {
     return [error, success];
 }
 
-module.exports = updateWallpaper;
+module.exports = findAndUpdateUserWallpaper;
