@@ -11,7 +11,7 @@ async function updateCategory(categoryId, categoryUpdate, db) {
         };
     }
 
-    let [err, update] = await validateCategory(categoryUpdate);
+    let [err, validUpdate] = await validateCategory(categoryUpdate);
     if (err) return { known: true, status: 400, message: err.message };
 
     let previousCategory;
@@ -26,7 +26,7 @@ async function updateCategory(categoryId, categoryUpdate, db) {
         };
     }
 
-    if (previousCategory.title === update.title) {
+    if (previousCategory.title === validUpdate.title) {
         return {
             known: true,
             status: 400,
@@ -35,7 +35,7 @@ async function updateCategory(categoryId, categoryUpdate, db) {
     }
 
     let sameCategory;
-    [err, sameCategory] = await db.findCategoryByTitle(update.title);
+    [err, sameCategory] = await db.findCategoryByTitle(validUpdate.title);
     if (err) return err;
 
     if (sameCategory) {
@@ -46,7 +46,7 @@ async function updateCategory(categoryId, categoryUpdate, db) {
         };
     }
 
-    err = await db.updateCategory(categoryId, update);
+    err = await db.updateCategory(categoryId, validUpdate);
     if (err) return err;
 
     return null;

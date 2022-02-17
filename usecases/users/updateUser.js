@@ -2,11 +2,11 @@ const validateUserUpdate = require("../../validation/userUpdate");
 const checkPassword = require("../../utils/checkPassword");
 
 async function updateUser(userUpdate, user, db) {
-    let [err, update] = await validateUserUpdate(userUpdate);
+    let [err, validUpdate] = await validateUserUpdate(userUpdate);
     if (err) return { known: true, status: 400, message: err.message };
 
     const hasCorrectPassword = await checkPassword(
-        update.confirmationPassword,
+        validUpdate.confirmationPassword,
         user.password
     );
     if (!hasCorrectPassword) {
@@ -17,9 +17,9 @@ async function updateUser(userUpdate, user, db) {
         };
     }
 
-    if (update.email) {
+    if (validUpdate.email) {
         let userWithSameEmail;
-        [err, userWithSameEmail] = await db.findUserByEmail(update.email);
+        [err, userWithSameEmail] = await db.findUserByEmail(validUpdate.email);
         if (err) return err;
 
         if (userWithSameEmail) {
@@ -31,7 +31,7 @@ async function updateUser(userUpdate, user, db) {
         }
     }
 
-    err = await db.updateUser(user._id, userUpdate);
+    err = await db.updateUser(user._id, validUpdate);
     if (err) return err;
 
     return null;

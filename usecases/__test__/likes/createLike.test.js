@@ -1,13 +1,13 @@
 const { ObjectId } = require("mongodb");
 const createLike = require("../../likes/createLike");
 
-const mockLike = { postId: String(new ObjectId()) };
-const mockUser = { userId: String(new ObjectId()) };
+const mockWallpaperId = String(new ObjectId());
+const mockUserId = String(new ObjectId());
 const mockDB = {
-    findPostById: jest.fn(() => {
+    findWallpaperById: jest.fn(() => {
         const err = null;
-        const post = { title: "related post" };
-        return [err, post];
+        const wallpaper = { title: "related wallpaper" };
+        return [err, wallpaper];
     }),
     findUserLike: jest.fn(() => {
         const err = null;
@@ -18,108 +18,74 @@ const mockDB = {
         const err = null;
         return err;
     }),
+    incrementWallpaperLikeCount: jest.fn(() => {
+        const err = null;
+        return err;
+    }),
 };
 
 describe("create like", () => {
-    it("should return error with status 400 if postId doesn't exist", async () => {
-        const like = {};
-        const err = await createLike(like);
+    it("should return error with status 400 if wallpaperId is not a valid id", async () => {
+        const wallpaperId = "1";
+        const err = await createLike(wallpaperId);
         expect(err).toMatchObject({
             status: 400,
-            message: expect.stringMatching(/.*(postId).*(required).*/gi),
+            message: "invalid wallpaper id!",
         });
     });
 
-    it("should return error with status 400 if postId is not a string", async () => {
-        const like = { postId: 1 };
-        const err = await createLike(like);
-        expect(err).toMatchObject({
-            status: 400,
-            message: expect.stringMatching(/.*(postId).*(string).*/gi),
-        });
-    });
-
-    it("should return error with status 400 if postId is less than 3 characters", async () => {
-        const like = { postId: "ab" };
-        const err = await createLike(like);
-        expect(err).toMatchObject({
-            status: 400,
-            message: expect.stringMatching(
-                /.*(postId).*(3 characters long).*/gi
-            ),
-        });
-    });
-
-    it("should return error with status 400 if postId is more than 64 characters", async () => {
-        const longString = "a".repeat(65);
-        const like = { postId: longString };
-        const err = await createLike(like);
-        expect(err).toMatchObject({
-            status: 400,
-            message: expect.stringMatching(
-                /.*(postId).*(64 characters long).*/gi
-            ),
-        });
-    });
-
-    it("should return error with status 400 if postId is not a valid id", async () => {
-        const like = { postId: "123456789" };
-        const err = await createLike(like);
-        expect(err).toMatchObject({
-            status: 400,
-            message: expect.stringMatching(/.*(postId).*(not).*(valid).*/gi),
-        });
-    });
-
-    it("should return error with status 400 if like has any extra properties", async () => {
-        const like = { ...mockLike, extraProperty: "extra property" };
-        const err = await createLike(like);
-        expect(err).toMatchObject({
-            status: 400,
-            message: expect.stringMatching(
-                /.*(extraProperty).*(not).*(allowed).*/gi
-            ),
-        });
-    });
-
-    it("should return error with status 400 if related post doesn't exist", async () => {
+    it("should return error with status 400 if related wallpaper doesn't exist", async () => {
         const db = {
-            findPostById: jest.fn(() => {
+            findWallpaperById: jest.fn(() => {
                 const err = null;
-                const post = null;
-                return [err, post];
+                const wallpaper = null;
+                return [err, wallpaper];
             }),
         };
-        const err = await createLike(mockLike, mockUser, db);
+        const err = await createLike(mockWallpaperId, mockUserId, db);
         expect(err).toMatchObject({
             status: 400,
-            message: expect.stringMatching(/.*(post).*(doesn't exist).*/gi),
+            message: expect.stringMatching(
+                /.*(wallpaper).*(doesn't exist).*/gi
+            ),
         });
     });
 
-    it("should return error with status 400 if post has already been liked", async () => {
+    it("should return error with status 400 if wallpaper has already been liked", async () => {
         const db = {
             ...mockDB,
             findUserLike: jest.fn(() => {
                 const err = null;
-                const like = { postId: String(new ObjectId()) };
+                const like = { wallpaperId: String(new ObjectId()) };
                 return [err, like];
             }),
         };
-        const err = await createLike(mockLike, mockUser, db);
+        const err = await createLike(mockWallpaperId, mockUserId, db);
         expect(err).toMatchObject({
             status: 400,
-            message: expect.stringMatching(/.*(post).*(liked).*/gi),
+            message: expect.stringMatching(/.*(wallpaper).*(liked).*/gi),
         });
     });
 
     it("should save the like in database", async () => {
-        await createLike(mockLike, mockUser, mockDB);
+        await createLike(mockWallpaperId, mockUserId, mockDB);
         expect(mockDB.saveLike.mock.calls.length).toBe(1);
     });
 
+    it("should increment wallpaper like count", async () => {
+        const db = {
+            ...mockDB,
+            incrementWallpaperLikeCount: jest.fn(() => {
+                const err = null;
+                return err;
+            }),
+        };
+        await createLike(mockWallpaperId, mockUserId, db);
+        expect(mockDB.incrementWallpaperLikeCount.mock.calls.length).toBe(1);
+    });
+
     it("should return null as error if the operation was successfull", async () => {
-        const err = await createLike(mockLike, mockUser, mockDB);
+        const err = await createLike(mockWallpaperId, mockUserId, mockDB);
         expect(err).toBeNull();
     });
 });
