@@ -4,7 +4,7 @@ const deleteLike = require("../../likes/deleteLike");
 const mockWallpaperId = String(new ObjectId());
 const mockUserId = String(new ObjectId());
 const mockDB = {
-    findUserLike: jest.fn(() => {
+    findAndDeleteUserLike: jest.fn(() => {
         const err = null;
         const like = { postId: new ObjectId() };
         return [err, like];
@@ -15,7 +15,7 @@ const mockDB = {
     }),
 };
 
-describe("create like", () => {
+describe("delete like", () => {
     it("should return error with status 400 if wallpaperId is not a valid id", async () => {
         const wallpaperId = "1";
         const err = await deleteLike(wallpaperId);
@@ -27,7 +27,7 @@ describe("create like", () => {
 
     it("should return error with status 404 if user like doesn't exist", async () => {
         const db = {
-            findUserLike: jest.fn(() => {
+            findAndDeleteUserLike: jest.fn(() => {
                 const err = null;
                 const like = null;
                 return [err, like];

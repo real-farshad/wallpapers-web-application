@@ -1,6 +1,6 @@
 const validateId = require("../../validation/id");
 
-async function createLike(wallpaperId, userId, db) {
+async function createSave(wallpaperId, userId, db) {
     const isValidId = await validateId(wallpaperId);
     if (!isValidId) {
         return {
@@ -10,7 +10,7 @@ async function createLike(wallpaperId, userId, db) {
         };
     }
 
-    let [err, wallpaper] = await db.findWallpaperById(wallpaperId);
+    let [err, wallpaper] = await db.findWallpaperById(wallpaperId, userId);
     if (err) return err;
 
     if (!wallpaper) {
@@ -21,31 +21,28 @@ async function createLike(wallpaperId, userId, db) {
         };
     }
 
-    let previousLike;
-    [err, previousLike] = await db.findUserLike(wallpaperId, userId);
+    let previousSave;
+    [err, previousSave] = await db.findUserSave(wallpaperId, userId);
     if (err) return err;
 
-    if (previousLike) {
+    if (previousSave) {
         return {
             known: true,
             status: 400,
-            message: "wallpaper has already been liked!",
+            message: "wallpaper has already been saved!",
         };
     }
 
-    const like = {
+    const save = {
         wallpaperId,
         userId,
         createdAt: Date.now(),
     };
 
-    err = await db.saveLike(like);
-    if (err) return err;
-
-    err = await db.incrementWallpaperLikeCount(wallpaperId);
+    err = await db.saveWallpaperSave(save);
     if (err) return err;
 
     return null;
 }
 
-module.exports = createLike;
+module.exports = createSave;

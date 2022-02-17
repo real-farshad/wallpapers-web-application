@@ -1,5 +1,5 @@
 const { ObjectId } = require("mongodb");
-const createLike = require("../../likes/createLike");
+const createSave = require("../../saves/createSave");
 
 const mockWallpaperId = String(new ObjectId());
 const mockUserId = String(new ObjectId());
@@ -9,25 +9,21 @@ const mockDB = {
         const wallpaper = { title: "related wallpaper" };
         return [err, wallpaper];
     }),
-    findUserLike: jest.fn(() => {
+    findUserSave: jest.fn(() => {
         const err = null;
-        const like = null;
-        return [err, like];
+        const save = null;
+        return [err, save];
     }),
-    saveLike: jest.fn(() => {
-        const err = null;
-        return err;
-    }),
-    incrementWallpaperLikeCount: jest.fn(() => {
+    saveWallpaperSave: jest.fn(() => {
         const err = null;
         return err;
     }),
 };
 
-describe("create like", () => {
+describe("create save", () => {
     it("should return error with status 400 if wallpaperId is not a valid id", async () => {
         const wallpaperId = "1";
-        const err = await createLike(wallpaperId);
+        const err = await createSave(wallpaperId);
         expect(err).toMatchObject({
             status: 400,
             message: "invalid wallpaper id!",
@@ -42,7 +38,7 @@ describe("create like", () => {
                 return [err, wallpaper];
             }),
         };
-        const err = await createLike(mockWallpaperId, mockUserId, db);
+        const err = await createSave(mockWallpaperId, mockUserId, db);
         expect(err).toMatchObject({
             status: 404,
             message: expect.stringMatching(
@@ -51,41 +47,29 @@ describe("create like", () => {
         });
     });
 
-    it("should return error with status 400 if wallpaper has already been liked", async () => {
+    it("should return error with status 400 if wallpaper has already been saved", async () => {
         const db = {
             ...mockDB,
-            findUserLike: jest.fn(() => {
+            findUserSave: jest.fn(() => {
                 const err = null;
-                const like = { wallpaperId: String(new ObjectId()) };
-                return [err, like];
+                const save = { wallpaperId: String(new ObjectId()) };
+                return [err, save];
             }),
         };
-        const err = await createLike(mockWallpaperId, mockUserId, db);
+        const err = await createSave(mockWallpaperId, mockUserId, db);
         expect(err).toMatchObject({
             status: 400,
-            message: expect.stringMatching(/.*(wallpaper).*(liked).*/gi),
+            message: expect.stringMatching(/.*(wallpaper).*(saved).*/gi),
         });
     });
 
-    it("should save the like in database", async () => {
-        await createLike(mockWallpaperId, mockUserId, mockDB);
-        expect(mockDB.saveLike.mock.calls.length).toBe(1);
-    });
-
-    it("should increment wallpaper like count", async () => {
-        const db = {
-            ...mockDB,
-            incrementWallpaperLikeCount: jest.fn(() => {
-                const err = null;
-                return err;
-            }),
-        };
-        await createLike(mockWallpaperId, mockUserId, db);
-        expect(mockDB.incrementWallpaperLikeCount.mock.calls.length).toBe(1);
+    it("should save the wallpaper save in database", async () => {
+        await createSave(mockWallpaperId, mockUserId, mockDB);
+        expect(mockDB.saveWallpaperSave.mock.calls.length).toBe(1);
     });
 
     it("should return null as error if the operation was successfull", async () => {
-        const err = await createLike(mockWallpaperId, mockUserId, mockDB);
+        const err = await createSave(mockWallpaperId, mockUserId, mockDB);
         expect(err).toBeNull();
     });
 });

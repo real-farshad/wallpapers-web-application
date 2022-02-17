@@ -1,6 +1,6 @@
 const validateId = require("../../validation/id");
 
-async function checkLike(wallpaperId, userId, db) {
+async function checkSave(wallpaperId, userId, db) {
     let err;
     const isValidId = await validateId(wallpaperId);
     if (!isValidId) {
@@ -9,15 +9,16 @@ async function checkLike(wallpaperId, userId, db) {
             status: 400,
             message: "invalid wallpaper id!",
         };
+
         return [err, null];
     }
 
-    let like;
-    [err, like] = await db.findUserLike(wallpaperId, userId);
+    let save;
+    [err, save] = await db.findUserSave(wallpaperId, userId);
     if (err) return [err, null];
 
-    if (!like) return [null, false];
+    if (!save) return [null, false];
     else return [null, true];
 }
 
-module.exports = checkLike;
+module.exports = checkSave;

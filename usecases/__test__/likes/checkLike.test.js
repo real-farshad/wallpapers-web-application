@@ -11,7 +11,7 @@ const mockDB = {
     }),
 };
 
-describe("create like", () => {
+describe("check like", () => {
     it("should return error with status 400 if wallpaperId is not a valid id", async () => {
         const wallpaperId = "1";
         const [err, liked] = await checkLike(wallpaperId);
@@ -21,7 +21,7 @@ describe("create like", () => {
         });
     });
 
-    it("should return false as like if there is a like with related id in database", async () => {
+    it("should return false as like if there is a NOT like with related id in database", async () => {
         const db = {
             findUserLike: jest.fn(() => {
                 const err = null;
