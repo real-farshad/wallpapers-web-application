@@ -1,8 +1,8 @@
-const validateId = require("../../utils/validateId");
+const validateId = require("../../validation/id");
 const validateCategory = require("../../validation/category");
 
 async function updateCategory(categoryId, categoryUpdate, db) {
-    const isValidId = validateId(categoryId);
+    const isValidId = await validateId(categoryId);
     if (!isValidId) {
         return {
             known: true,

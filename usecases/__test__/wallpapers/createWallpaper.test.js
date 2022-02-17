@@ -11,7 +11,7 @@ const mockImageUrl = {
 };
 const mockCategory = { category: "my category" };
 const mockWallpaper = { ...mockTitle, ...mockImageUrl, ...mockCategory };
-const mockUserId = "1";
+const mockUserId = "123";
 const mockDB = {
     findCategoryByTitle: jest.fn(() => {
         const err = null;

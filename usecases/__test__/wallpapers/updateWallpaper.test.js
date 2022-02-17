@@ -1,9 +1,9 @@
 const { ObjectId } = require("mongodb");
 const updateWallpaper = require("../../wallpapers/updateWallpaper");
 
-const mockId = new ObjectId();
+const mockId = String(new ObjectId());
 const mockWallpaperUpdate = { title: "my wallpaper" };
-const mockUserId = "1";
+const mockUserId = "123";
 const mockDB = {
     findCategoryByTitle: jest.fn(() => {
         const err = null;

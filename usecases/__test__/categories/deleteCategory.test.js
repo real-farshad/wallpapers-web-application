@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const deleteCategory = require("../../categories/deleteCategory");
 
-const mockId = new ObjectId();
+const mockId = String(new ObjectId());
 const mockDB = {
     findAndDeleteCategory: jest.fn(() => {
         const err = null;

@@ -1,7 +1,7 @@
-const validateId = require("../../utils/validateId");
+const validateId = require("../../validation/id");
 
 async function findSingleWallpaper(wallpaperId, db) {
-    const isValidId = validateId(wallpaperId);
+    const isValidId = await validateId(wallpaperId);
     if (!isValidId) {
         const knownError = {
             known: true,

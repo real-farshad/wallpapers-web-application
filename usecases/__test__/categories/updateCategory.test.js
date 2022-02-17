@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const updateCategory = require("../../categories/updateCategory");
 
-const mockId = new ObjectId();
+const mockId = String(new ObjectId());
 const mockCategory = { title: "updated category title" };
 const mockDB = {
     findCategoryById: jest.fn(() => {

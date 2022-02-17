@@ -1,8 +1,8 @@
 const { ObjectId } = require("mongodb");
 const deleteWallpaper = require("../../wallpapers/deleteWallpaper");
 
-const mockId = new ObjectId();
-const mockUserId = "1";
+const mockId = String(new ObjectId());
+const mockUserId = "123";
 const mockDB = {
     findAndDeleteUserWallpaper: jest.fn(() => {
         const err = null;

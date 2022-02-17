@@ -1,8 +1,8 @@
-const validateId = require("../../utils/validateId");
+const validateId = require("../../validation/id");
 
 async function checkLike(wallpaperId, userId, db) {
     let err;
-    const isValidId = validateId(wallpaperId);
+    const isValidId = await validateId(wallpaperId);
     if (!isValidId) {
         err = {
             known: true,
