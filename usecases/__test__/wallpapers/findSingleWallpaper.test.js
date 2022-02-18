@@ -16,7 +16,7 @@ describe("find single wallpaper", () => {
         const [err, wallpaper] = await findSingleWallpaper(invalidId);
         expect(err).toMatchObject({
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid wallpaperId!",
         });
     });
 

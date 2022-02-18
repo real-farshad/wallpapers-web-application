@@ -26,7 +26,7 @@ describe("update category", () => {
         const err = await updateCategory(invalidCategoryId);
         expect(err).toMatchObject({
             status: 400,
-            message: "invalid category id!",
+            message: "invalid categoryId!",
         });
     });
 

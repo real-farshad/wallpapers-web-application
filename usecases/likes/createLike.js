@@ -6,7 +6,7 @@ async function createLike(wallpaperId, userId, db) {
         return {
             known: true,
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid wallpaperId!",
         };
     }
 

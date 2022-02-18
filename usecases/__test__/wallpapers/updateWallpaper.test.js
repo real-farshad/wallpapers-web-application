@@ -23,7 +23,7 @@ describe("update wallpaper", () => {
         const err = await updateWallpaper(invalidWallpaperId);
         expect(err).toMatchObject({
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid wallpaperId!",
         });
     });
 

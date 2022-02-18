@@ -17,7 +17,7 @@ describe("delete wallpaper", () => {
         const err = await deleteWallpaper(invalidId);
         expect(err).toMatchObject({
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid wallpaperId!",
         });
     });
 

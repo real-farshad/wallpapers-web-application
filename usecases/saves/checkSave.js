@@ -7,7 +7,7 @@ async function checkSave(wallpaperId, userId, db) {
         err = {
             known: true,
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid wallpaperId!",
         };
 
         return [err, null];

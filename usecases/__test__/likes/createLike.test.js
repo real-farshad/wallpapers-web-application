@@ -30,7 +30,7 @@ describe("create like", () => {
         const err = await createLike(wallpaperId);
         expect(err).toMatchObject({
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid wallpaperId!",
         });
     });
 

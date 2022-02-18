@@ -17,7 +17,7 @@ describe("check like", () => {
         const [err, liked] = await checkLike(wallpaperId);
         expect(err).toMatchObject({
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid wallpaperId!",
         });
     });
 

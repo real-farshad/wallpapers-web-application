@@ -1,16 +1,16 @@
 const validateId = require("../../validation/id");
 
-async function deleteLike(wallpaperId, userId, db) {
-    const isValidId = await validateId(wallpaperId);
+async function deleteLike(likeId, userId, db) {
+    const isValidId = await validateId(likeId);
     if (!isValidId) {
         return {
             known: true,
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid likeId!",
         };
     }
 
-    let [err, like] = await db.findAndDeleteUserLike(wallpaperId, userId);
+    let [err, like] = await db.findAndDeleteUserLike(likeId, userId);
     if (err) return err;
 
     if (!like) {
@@ -21,7 +21,7 @@ async function deleteLike(wallpaperId, userId, db) {
         };
     }
 
-    err = await db.decrementWallpaperLikeCount(wallpaperId);
+    err = await db.decrementWallpaperLikeCount(likeId);
     if (err) return err;
 
     return null;

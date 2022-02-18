@@ -6,7 +6,7 @@ async function updateCategory(categoryId, db) {
         return {
             known: true,
             status: 400,
-            message: "invalid category id!",
+            message: "invalid categoryId!",
         };
     }
 

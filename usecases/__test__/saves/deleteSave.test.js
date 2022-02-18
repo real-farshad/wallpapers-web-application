@@ -1,23 +1,23 @@
 const { ObjectId } = require("mongodb");
 const deleteSave = require("../../saves/deleteSave");
 
-const mockWallpaperId = String(new ObjectId());
+const mockSaveId = String(new ObjectId());
 const mockUserId = String(new ObjectId());
 const mockDB = {
     findAndDeleteUserSave: jest.fn(() => {
         const err = null;
-        const like = { postId: new ObjectId() };
-        return [err, like];
+        const save = { wallpaperId: String(new ObjectId()) };
+        return [err, save];
     }),
 };
 
 describe("delete save", () => {
-    it("should return error with status 400 if wallpaperId is not a valid id", async () => {
-        const wallpaperId = "1";
-        const err = await deleteSave(wallpaperId);
+    it("should return error with status 400 if saveId is not a valid id", async () => {
+        const saveId = "1";
+        const err = await deleteSave(saveId);
         expect(err).toMatchObject({
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid saveId!",
         });
     });
 
@@ -29,7 +29,7 @@ describe("delete save", () => {
                 return [err, save];
             }),
         };
-        const err = await deleteSave(mockWallpaperId, mockUserId, db);
+        const err = await deleteSave(mockSaveId, mockUserId, db);
         expect(err).toMatchObject({
             status: 404,
             message: expect.stringMatching(/.*(save).*(doesn't exist).*/gi),
@@ -37,7 +37,7 @@ describe("delete save", () => {
     });
 
     it("should return null as error if the operation was successfull", async () => {
-        const err = await deleteSave(mockWallpaperId, mockUserId, mockDB);
+        const err = await deleteSave(mockSaveId, mockUserId, mockDB);
         expect(err).toBeNull();
     });
 });

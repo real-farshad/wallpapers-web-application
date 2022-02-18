@@ -16,7 +16,7 @@ describe("delete category", () => {
         const err = await deleteCategory(invalidId);
         expect(err).toMatchObject({
             status: 400,
-            message: "invalid category id!",
+            message: "invalid categoryId!",
         });
     });
 

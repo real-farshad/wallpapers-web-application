@@ -26,7 +26,7 @@ describe("create save", () => {
         const err = await createSave(wallpaperId);
         expect(err).toMatchObject({
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid wallpaperId!",
         });
     });
 

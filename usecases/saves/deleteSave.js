@@ -1,16 +1,16 @@
 const validateId = require("../../validation/id");
 
-async function deleteSave(wallpaperId, userId, db) {
-    const isValidId = await validateId(wallpaperId);
+async function deleteSave(saveId, userId, db) {
+    const isValidId = await validateId(saveId);
     if (!isValidId) {
         return {
             known: true,
             status: 400,
-            message: "invalid wallpaper id!",
+            message: "invalid saveId!",
         };
     }
 
-    let [err, success] = await db.findAndDeleteUserSave(wallpaperId, userId);
+    let [err, success] = await db.findAndDeleteUserSave(saveId, userId);
     if (err) return err;
 
     if (!success) {
