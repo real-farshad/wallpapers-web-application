@@ -20,7 +20,7 @@ describe("find single wallpaper", () => {
         });
     });
 
-    it("should return error with status 404 if there is no post with related id in the database", async () => {
+    it("should return error with status 404 if there is no wallpaper with related id in the database", async () => {
         const db = {
             findWallpaperById: jest.fn(() => {
                 const err = null;
