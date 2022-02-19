@@ -6,6 +6,7 @@ const users = require("./users");
 const likes = require("./likes");
 const saves = require("./saves");
 const comments = require("./comments");
+const collections = require("./collections");
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use("/users", users);
 router.use("/likes", likes);
 router.use("/saves", saves);
 router.use("/comments", comments);
+router.use("/collections", collections);
 
 module.exports = router;
