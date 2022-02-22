@@ -10,12 +10,17 @@ const wallpapersQuerySchema = Joi.object({
 });
 
 async function validateWallpapersQuery(query) {
+    let error, validQuery;
+
     try {
-        const validQuery = await wallpapersQuerySchema.validateAsync(query);
-        return [null, validQuery];
+        validQuery = await wallpapersQuerySchema.validateAsync(query);
+        error = null;
     } catch (err) {
-        return [err, null];
+        error = err;
+        validQuery = null;
     }
+
+    return [error, validQuery];
 }
 
 module.exports = validateWallpapersQuery;

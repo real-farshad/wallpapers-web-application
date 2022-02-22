@@ -2,8 +2,7 @@ const { getDatabase } = require("../../config/mongodb");
 const getCategoriesCollection = () => getDatabase().collection("categories");
 
 async function queryCategories(query) {
-    let error;
-    let categories;
+    let error, categories;
 
     try {
         const { page, limit } = query;

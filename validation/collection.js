@@ -5,8 +5,7 @@ const collectionSchema = Joi.object({
 });
 
 async function validateCollection(collection) {
-    let error;
-    let validCollection;
+    let error, validCollection;
 
     try {
         validCollection = await collectionSchema.validateAsync(collection);

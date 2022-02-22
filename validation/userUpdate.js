@@ -14,8 +14,7 @@ const userUpdateSchema = Joi.object({
 });
 
 async function validateUserUpdate(userUpdate) {
-    let error;
-    let validUserUpdate;
+    let error, validUserUpdate;
 
     try {
         validUserUpdate = await userUpdateSchema.validateAsync(userUpdate);

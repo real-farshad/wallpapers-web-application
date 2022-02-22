@@ -3,8 +3,7 @@ const { getDatabase } = require("../../config/mongodb");
 const getWallpapersCollection = () => getDatabase().collection("wallpapers");
 
 async function findWallpaperById(wallpaperId) {
-    let error;
-    let wallpaper;
+    let error, wallpaper;
 
     try {
         const result = await getWallpapersCollection().findOne({

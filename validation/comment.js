@@ -7,8 +7,7 @@ const commentSchema = Joi.object({
 });
 
 async function validateComment(comment) {
-    let error;
-    let validComment;
+    let error, validComment;
 
     try {
         validComment = await commentSchema.validateAsync(comment);

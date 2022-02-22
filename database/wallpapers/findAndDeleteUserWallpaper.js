@@ -3,8 +3,7 @@ const { getDatabase } = require("../../config/mongodb");
 const getWallpapersCollection = () => getDatabase().collection("wallpapers");
 
 async function findAndDeleteUserWallpaper(wallpaperId, userId) {
-    let error;
-    let success;
+    let error, success;
 
     try {
         const result = await getWallpapersCollection().deleteOne({

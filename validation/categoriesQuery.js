@@ -6,12 +6,17 @@ const categoriesQuerySchema = Joi.object({
 });
 
 async function validateCategoriesQuery(query) {
+    let error, validQuery;
+
     try {
-        const validQuery = await categoriesQuerySchema.validateAsync(query);
-        return [null, validQuery];
+        validQuery = await categoriesQuerySchema.validateAsync(query);
+        error = null;
     } catch (err) {
-        return [err, null];
+        error = err;
+        validQuery = null;
     }
+
+    return [error, validQuery];
 }
 
 module.exports = validateCategoriesQuery;

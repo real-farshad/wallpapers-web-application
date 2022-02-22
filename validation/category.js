@@ -5,12 +5,17 @@ const categorySchema = Joi.object({
 });
 
 async function validateCategory(category) {
+    let error, validCategory;
+
     try {
-        const validCategory = await categorySchema.validateAsync(category);
-        return [null, validCategory];
+        validCategory = await categorySchema.validateAsync(category);
+        error = null;
     } catch (err) {
-        return [err, null];
+        error = err;
+        validCategory = null;
     }
+
+    return [error, validCategory];
 }
 
 module.exports = validateCategory;

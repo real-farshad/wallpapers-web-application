@@ -10,15 +10,20 @@ const wallpaperUpdateSchema = Joi.object({
 }).not({});
 
 async function validateWallpaperUpdate(wallpaperUpdate) {
+    let error, validWallpaperUpdate;
+
     try {
-        const validWallpaperUpdate = await wallpaperUpdateSchema.validateAsync(
+        validWallpaperUpdate = await wallpaperUpdateSchema.validateAsync(
             wallpaperUpdate
         );
 
-        return [null, validWallpaperUpdate];
+        error = null;
     } catch (err) {
-        return [err, null];
+        error = err;
+        validWallpaperUpdate = null;
     }
+
+    return [error, validWallpaperUpdate];
 }
 
 module.exports = validateWallpaperUpdate;

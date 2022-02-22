@@ -6,8 +6,7 @@ const collectionWallpapersQuerySchema = Joi.object({
 });
 
 async function validateCollectionRecordsQuery(query) {
-    let error;
-    let validQuery;
+    let error, validQuery;
 
     try {
         validQuery = await collectionWallpapersQuerySchema.validateAsync(query);

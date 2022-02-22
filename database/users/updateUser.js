@@ -2,13 +2,13 @@ const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getUsersCollection = () => getDatabase().collection("users");
 
-async function deleteUser(userId) {
+async function updateUser(userId, userUpdate) {
     let error;
 
     try {
         await getUsersCollection().updateOne(
             { _id: new ObjectId(userId) },
-            { $set: newUser }
+            { $set: userUpdate }
         );
 
         error = null;
@@ -19,4 +19,4 @@ async function deleteUser(userId) {
     return error;
 }
 
-module.exports = deleteUser;
+module.exports = updateUser;

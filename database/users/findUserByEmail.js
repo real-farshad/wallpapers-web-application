@@ -2,8 +2,7 @@ const { getDatabase } = require("../../config/mongodb");
 const getUsersCollection = () => getDatabase().collection("users");
 
 async function findUserByEmail(email) {
-    let error;
-    let user;
+    let error, user;
 
     try {
         user = await getUsersCollection().findOne({ email });

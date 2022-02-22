@@ -3,8 +3,7 @@ const { getDatabase } = require("../../config/mongodb");
 const getCategoriesCollection = () => getDatabase().collection("categories");
 
 async function findCategoryById(categoryId) {
-    let error;
-    let category;
+    let error, category;
 
     try {
         const result = await getCategoriesCollection().findOne({

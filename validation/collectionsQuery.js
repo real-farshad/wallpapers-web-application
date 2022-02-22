@@ -6,8 +6,7 @@ const collectionsQuerySchema = Joi.object({
 });
 
 async function validateCollectionsQuery(query) {
-    let error;
-    let validQuery;
+    let error, validQuery;
 
     try {
         validQuery = await collectionsQuerySchema.validateAsync(query);

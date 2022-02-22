@@ -6,8 +6,7 @@ const likesQuerySchema = Joi.object({
 });
 
 async function validateLikesQuery(query) {
-    let error;
-    let validQuery;
+    let error, validQuery;
 
     try {
         validQuery = await likesQuerySchema.validateAsync(query);

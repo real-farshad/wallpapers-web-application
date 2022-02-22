@@ -2,8 +2,7 @@ const { getDatabase } = require("../../config/mongodb");
 const getWallpapersCollection = () => getDatabase().collection("wallpapers");
 
 async function queryWallpapers(query) {
-    let error;
-    let wallpapers;
+    let error, wallpapers;
 
     try {
         const { title, categoryId, duration, page, limit } = query;

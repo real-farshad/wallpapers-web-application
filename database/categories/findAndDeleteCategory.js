@@ -3,8 +3,7 @@ const { getDatabase } = require("../../config/mongodb");
 const getCategoriesCollection = () => getDatabase().collection("categories");
 
 async function findAndDeleteCategory(id) {
-    let error;
-    let success;
+    let error, success;
 
     try {
         const result = await getCategoriesCollection().deleteOne({

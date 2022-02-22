@@ -14,8 +14,7 @@ const userSchema = Joi.object({
 });
 
 async function validateUser(user) {
-    let error;
-    let validUser;
+    let error, validUser;
 
     try {
         validUser = await userSchema.validateAsync(user);

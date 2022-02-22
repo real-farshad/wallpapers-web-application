@@ -2,8 +2,7 @@ const { getDatabase } = require("../../config/mongodb");
 const getUsersCollection = () => getDatabase().collection("users");
 
 async function insertOrUpdateUser(query, userUpdate) {
-    let error;
-    let user;
+    let error, user;
 
     try {
         const result = await getUsersCollection().findOneAndUpdate(

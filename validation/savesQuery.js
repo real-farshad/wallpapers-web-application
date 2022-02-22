@@ -6,8 +6,7 @@ const savesQuerySchema = Joi.object({
 });
 
 async function validateSavesQuery(query) {
-    let error;
-    let validQuery;
+    let error, validQuery;
 
     try {
         validQuery = await savesQuerySchema.validateAsync(query);
