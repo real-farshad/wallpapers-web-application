@@ -10,7 +10,7 @@ const mockDB = {
 };
 
 describe("query categories", () => {
-    it("should return error with status 400 if page in query exists and is not a number", async () => {
+    it("should return error with status 400 if query.page exists and is not a number", async () => {
         const query = { page: { index: 1 } };
         const [err, categories] = await queryCategories(query);
         expect(err).toMatchObject({
@@ -19,7 +19,7 @@ describe("query categories", () => {
         });
     });
 
-    it("should return error with status 400 if page in query exists and is not a integer", async () => {
+    it("should return error with status 400 if query.page exists and is not a integer", async () => {
         const query = { page: 2.2 };
         const [err, categories] = await queryCategories(query);
         expect(err).toMatchObject({
@@ -28,7 +28,7 @@ describe("query categories", () => {
         });
     });
 
-    it("should return error with status 400 if page in query exists and is less than 0", async () => {
+    it("should return error with status 400 if query.page exists and is less than 0", async () => {
         const query = { page: -1 };
         const [err, categories] = await queryCategories(query);
         expect(err).toMatchObject({
@@ -37,7 +37,7 @@ describe("query categories", () => {
         });
     });
 
-    it("should return error with status 400 if limit in query exists and is not a number", async () => {
+    it("should return error with status 400 if query.limit exists and is not a number", async () => {
         const query = { limit: { count: 5 } };
         const [err, categories] = await queryCategories(query);
         expect(err).toMatchObject({
@@ -46,7 +46,7 @@ describe("query categories", () => {
         });
     });
 
-    it("should return error with status 400 if limit in query exists and is not a integer", async () => {
+    it("should return error with status 400 if query.limit exists and is not a integer", async () => {
         const query = { limit: 2.2 };
         const [err, categories] = await queryCategories(query);
         expect(err).toMatchObject({
@@ -55,7 +55,7 @@ describe("query categories", () => {
         });
     });
 
-    it("should return error with status 400 if limit in query exists and is less than 0", async () => {
+    it("should return error with status 400 if query.limit exists and is less than 0", async () => {
         const query = { limit: -1 };
         const [err, categories] = await queryCategories(query);
         expect(err).toMatchObject({
@@ -63,6 +63,15 @@ describe("query categories", () => {
             message: expect.stringMatching(
                 /.*(limit).*(greater than).*(0).*/gi
             ),
+        });
+    });
+
+    it("should return error with status 400 if query.limit exists and is greater than 20", async () => {
+        const query = { limit: 21 };
+        const [err, categories] = await queryCategories(query);
+        expect(err).toMatchObject({
+            status: 400,
+            message: expect.stringMatching(/.*(limit).*(less than).*(20).*/gi),
         });
     });
 

@@ -6,7 +6,6 @@ async function findCategoryByTitle(title) {
 
     try {
         const result = await getCategoriesCollection().findOne({ title });
-
         if (!result) category = null;
         else category = result;
 

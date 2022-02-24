@@ -2,13 +2,25 @@ const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getWallpapersCollection = () => getDatabase().collection("wallpapers");
 
-async function findAndUpdateUserWallpaper(id, wallpaperUpdate, userId) {
+async function findAndUpdateUserWallpaper(
+    wallpaperId,
+    wallpaperUpdate,
+    userId
+) {
     let error, success;
 
     try {
         const result = await getWallpapersCollection().updateOne(
-            { _id: new ObjectId(id), publisherId: new ObjectId(userId) },
-            { $set: wallpaperUpdate }
+            {
+                _id: new ObjectId(wallpaperId),
+                publisherId: new ObjectId(userId),
+            },
+            {
+                $set: {
+                    ...wallpaperUpdate,
+                    categoryId: new ObjectId(wallpaperUpdate.categoryId),
+                },
+            }
         );
 
         if (result.matchedCount === 1) success = true;

@@ -8,12 +8,11 @@ async function queryCategories(query) {
         const { page, limit } = query;
         const cursor = await getCategoriesCollection()
             .find()
-            .sort({ createdAt: -1 })
+            .sort({ title: 1 })
             .skip(page > 0 ? (page - 1) * limit : 0)
             .limit(limit > 0 ? limit : 10);
 
-        const result = await cursor.toArray();
-        categories = result;
+        categories = await cursor.toArray();
         error = null;
     } catch (err) {
         error = err;

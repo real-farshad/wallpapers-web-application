@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getWallpapersCollection = () => getDatabase().collection("wallpapers");
 
@@ -8,6 +9,7 @@ async function saveWallpaper(wallpaper) {
         await getWallpapersCollection().insertOne({
             ...wallpaper,
             categoryId: new ObjectId(wallpaper.categoryId),
+            publisherId: new ObjectId(wallpaper.publisherId),
         });
 
         error = null;
