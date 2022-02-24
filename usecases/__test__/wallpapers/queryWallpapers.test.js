@@ -10,7 +10,7 @@ const mockDB = {
 };
 
 describe("query wallpapers", () => {
-    it("should return error with status 400 if title in query exists and is not a string", async () => {
+    it("should return error with status 400 if query.title exists and is not a string", async () => {
         const query = { title: { text: "my title" } };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -19,7 +19,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if title in query exists and is less than 3 characters long", async () => {
+    it("should return error with status 400 if query.title exists and is less than 3 characters long", async () => {
         const query = { title: "ab" };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -30,7 +30,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if title in query exists and is more than 64 characters long", async () => {
+    it("should return error with status 400 if query.title exists and is more than 64 characters long", async () => {
         const longString = "a".repeat(65);
         const query = { title: longString };
         const [err, wallpapers] = await queryWallpapers(query);
@@ -42,7 +42,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if category in query exists and is not a string", async () => {
+    it("should return error with status 400 if query.category exists and is not a string", async () => {
         const query = { category: { text: "my category" } };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -51,7 +51,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if category in query exists and is less than 3 characters long", async () => {
+    it("should return error with status 400 if query.category exists and is less than 3 characters long", async () => {
         const query = { category: "ab" };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -62,7 +62,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if category in query exists and is more than 32 characters long", async () => {
+    it("should return error with status 400 if query.category exists and is more than 32 characters long", async () => {
         const longString = "a".repeat(33);
         const query = { category: longString };
         const [err, wallpapers] = await queryWallpapers(query);
@@ -74,7 +74,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if duration in query exists and is not '2020' or '2021'", async () => {
+    it("should return error with status 400 if query.duration exists and is not '2020' or '2021'", async () => {
         const query = { duration: "2022" };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -83,7 +83,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if sort in query exists and is 'new' or 'popular'", async () => {
+    it("should return error with status 400 if query.sort exists and is 'new' or 'popular'", async () => {
         const query = { sort: "best" };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -92,7 +92,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if page in query exists and is not a number", async () => {
+    it("should return error with status 400 if query.page exists and is not a number", async () => {
         const query = { page: "first" };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -101,7 +101,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if page in query exists and is not an integer", async () => {
+    it("should return error with status 400 if query.page exists and is not an integer", async () => {
         const query = { page: 2.2 };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -110,7 +110,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if page in query exists and is less than 0", async () => {
+    it("should return error with status 400 if query.page exists and is less than 0", async () => {
         const query = { page: -1 };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -119,7 +119,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if limit in query exists and is not a number", async () => {
+    it("should return error with status 400 if query.limit exists and is not a number", async () => {
         const query = { limit: "five" };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -128,7 +128,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if limit in query exists and is not an integer", async () => {
+    it("should return error with status 400 if query.limit exists and is not an integer", async () => {
         const query = { limit: 2.2 };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -137,7 +137,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if limit in query exists and is less than 0", async () => {
+    it("should return error with status 400 if query.limit exists and is less than 0", async () => {
         const query = { limit: -1 };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
@@ -148,7 +148,7 @@ describe("query wallpapers", () => {
         });
     });
 
-    it("should return error with status 400 if limit in query exists and is greater than 20", async () => {
+    it("should return error with status 400 if query.limit exists and is greater than 20", async () => {
         const query = { limit: 21 };
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({

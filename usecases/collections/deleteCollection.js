@@ -21,7 +21,7 @@ async function deleteCollection(collectionId, userId, db) {
         };
     }
 
-    err = await db.deleteCollectionRecords(collectionId);
+    err = await db.deleteManyCollectionRecords(collectionId);
     if (err) return err;
 
     err = await db.deleteCollection(collectionId);

@@ -9,7 +9,7 @@ const mockDB = {
         const collection = [];
         return [err, collection];
     }),
-    deleteCollectionRecords: jest.fn(() => {
+    deleteManyCollectionRecords: jest.fn(() => {
         const err = null;
         return err;
     }),
@@ -48,7 +48,7 @@ describe("find single collection", () => {
 
     it("should delete related collection records from database", async () => {
         await deleteCollection(mockCollectionId, mockUserId, mockDB);
-        expect(mockDB.deleteCollectionRecords.mock.calls.length).toBe(1);
+        expect(mockDB.deleteManyCollectionRecords.mock.calls.length).toBe(1);
     });
 
     it("should delete the collection from database", async () => {

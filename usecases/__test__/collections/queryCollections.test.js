@@ -10,6 +10,38 @@ const mockDB = {
 };
 
 describe("query collections", () => {
+    it("should return error with status 400 if query.title exists and is not a string", async () => {
+        const query = { title: { text: "my title" } };
+        const [err, collections] = await queryCollections(query);
+        expect(err).toMatchObject({
+            status: 400,
+            message: expect.stringMatching(/.*(title).*(string).*/gi),
+        });
+    });
+
+    it("should return error with status 400 if query.title exists and is less than 3 characters long", async () => {
+        const query = { title: "ab" };
+        const [err, collections] = await queryCollections(query);
+        expect(err).toMatchObject({
+            status: 400,
+            message: expect.stringMatching(
+                /.*(title).*(3 characters long).*/gi
+            ),
+        });
+    });
+
+    it("should return error with status 400 if query.title exists and is more than 64 characters long", async () => {
+        const longString = "a".repeat(65);
+        const query = { title: longString };
+        const [err, collections] = await queryCollections(query);
+        expect(err).toMatchObject({
+            status: 400,
+            message: expect.stringMatching(
+                /.*(title).*(64 characters long).*/gi
+            ),
+        });
+    });
+
     it("should return error with status 400 if query.page exists and is not a number", async () => {
         const query = { page: { index: 1 } };
         const [err, collections] = await queryCollections(query);
@@ -63,6 +95,15 @@ describe("query collections", () => {
             message: expect.stringMatching(
                 /.*(limit).*(greater than).*(0).*/gi
             ),
+        });
+    });
+
+    it("should return error with status 400 if query.limit exists and is greater than 20", async () => {
+        const query = { limit: 21 };
+        const [err, collections] = await queryCollections(query);
+        expect(err).toMatchObject({
+            status: 400,
+            message: expect.stringMatching(/.*(limit).*(less than).*(20).*/gi),
         });
     });
 
