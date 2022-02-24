@@ -10,10 +10,10 @@ async function deleteLike(likeId, userId, db) {
         };
     }
 
-    let [err, like] = await db.findAndDeleteUserLike(likeId, userId);
+    let [err, success] = await db.findAndDeleteUserLike(likeId, userId);
     if (err) return err;
 
-    if (!like) {
+    if (!success) {
         return {
             knwon: true,
             status: 404,

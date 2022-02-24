@@ -1,4 +1,3 @@
-const { ObjectId } = require("mongodb");
 const validateComment = require("../../validation/comment");
 
 async function createComment(comment, userId, db) {

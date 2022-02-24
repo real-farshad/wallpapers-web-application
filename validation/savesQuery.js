@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const savesQuerySchema = Joi.object({
     page: Joi.number().integer().min(0),
-    limit: Joi.number().integer().min(0),
+    limit: Joi.number().integer().min(0).max(20),
 });
 
 async function validateSavesQuery(query) {
