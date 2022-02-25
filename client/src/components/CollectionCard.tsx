@@ -8,14 +8,15 @@ interface CollectionCardTypes {
         _id: string;
         user: { username: string };
         createdAt: number;
-        post: { imageUrl: { thumbnail: string } };
+        wallpaper: { imageUrl: { thumbnail: string } };
         title: string;
-        postCount: number;
+        wallpaperCount: number;
     };
 }
 
 function CollectionCard(props: CollectionCardTypes | any) {
-    const { _id, user, createdAt, post, title, postCount } = props.data;
+    const { _id, user, createdAt, wallpaper, title, wallpaperCount } =
+        props.data;
 
     return (
         <div className="collection-card">
@@ -29,8 +30,11 @@ function CollectionCard(props: CollectionCardTypes | any) {
                 </p>
             </div>
 
-            <Link to={`/collection/${_id}`} className="collection-card__image-container">
-                <CoverImage src={post.imageUrl.thumbnail} />
+            <Link
+                to={`/collection/${_id}`}
+                className="collection-card__image-container"
+            >
+                <CoverImage src={wallpaper.imageUrl.thumbnail} />
 
                 <div className="collection-card__image-overlay" />
 
@@ -50,7 +54,8 @@ function CollectionCard(props: CollectionCardTypes | any) {
                     </div>
 
                     <p className="collection-card__wallpaper-count">
-                        {postCount} Wallpaper{postCount > 1 ? "s" : ""}
+                        {wallpaperCount} Wallpaper
+                        {wallpaperCount > 1 ? "s" : ""}
                     </p>
                 </div>
             </div>

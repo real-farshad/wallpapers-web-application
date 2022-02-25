@@ -94,8 +94,7 @@ async function findWallpaperById(wallpaperId) {
         ]);
 
         const result = await cursor.toArray();
-        if (result.length === 0) wallpaper = null;
-        else wallpaper = result;
+        wallpaper = result[0];
 
         error = null;
     } catch (err) {

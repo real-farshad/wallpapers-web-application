@@ -5,7 +5,7 @@ const likes = require("./likes/_index");
 const saves = require("./saves/_index");
 const comments = require("./comments/_index");
 const collections = require("./collections/_index");
-const collectionsRecords = require("./collectionsRecords");
+const collectionsRecords = require("./collectionsRecords/_index");
 
 module.exports = {
     ...categories,

@@ -31,7 +31,10 @@ function CollectionsPreview() {
             {collections.length > 0 &&
                 collections.map((collection: any) => {
                     return (
-                        <div className="collections-preview__card" key={collection._id}>
+                        <div
+                            className="collections-preview__card"
+                            key={collection._id}
+                        >
                             <CollectionCard data={collection} />
                         </div>
                     );

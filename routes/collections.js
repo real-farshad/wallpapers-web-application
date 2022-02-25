@@ -2,7 +2,7 @@ const express = require("express");
 const authenticateUser = require("../middleware/authenticateUser");
 const createCollection = require("../usecases/collections/createCollection");
 const queryCollections = require("../usecases/collections/queryCollections");
-const findSingleCollection = require("../usecases/collections/findSingleCollection");
+const findCollectionInfo = require("../usecases/collections/findCollectionInfo");
 const deleteCollection = require("../usecases/collections/deleteCollection");
 
 const router = express.Router();
@@ -30,14 +30,9 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
     const collectionId = req.params.id;
-    const query = req.query;
     const db = req.database;
 
-    const [err, collection] = await findSingleCollection(
-        collectionId,
-        query,
-        db
-    );
+    const [err, collection] = await findCollectionInfo(collectionId, db);
     if (err) return next(err);
 
     return res.json(collection);

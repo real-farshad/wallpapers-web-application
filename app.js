@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const session = require("express-session");
 const { passportConfig } = require("./config/passport");
@@ -27,6 +28,8 @@ function makeApp(database) {
             saveUninitialized: true,
         })
     );
+
+    app.use(express.static(path.resolve(__dirname, "./public")));
 
     app.use((req, res, next) => {
         req.database = database;

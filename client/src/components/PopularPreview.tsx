@@ -10,7 +10,7 @@ function PopularPreview() {
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("/api/posts/?sort=popular&limit=6");
+            const res = await fetch("/api/wallpapers/?sort=popular&limit=6");
             const wallpapers = await res.json();
             setPopularWallpapers(wallpapers);
         })();
@@ -31,7 +31,10 @@ function PopularPreview() {
             {popularWallpapers.length > 0 &&
                 popularWallpapers.map((wallpaper: any) => {
                     return (
-                        <div className="popular-preview__card" key={wallpaper._id}>
+                        <div
+                            className="popular-preview__card"
+                            key={wallpaper._id}
+                        >
                             <WallpaperCard data={wallpaper} />
                         </div>
                     );

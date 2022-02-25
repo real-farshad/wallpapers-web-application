@@ -24,26 +24,30 @@ function Popular() {
 
     useEffect(() => {
         (async () => {
-            const url = `/api/posts/?duration=${
-                duration ? duration : "2021"
-            }&sort=popular&limit=8`;
+            const url = `/api/wallpapers/?${
+                duration ? `duration=${duration}&` : ""
+            }sort=popular&limit=8`;
 
             const res = await fetch(url);
             const wallpapers = await res.json();
+            console.log(wallpapers);
 
             setPopularWallpapers(wallpapers);
         })();
     }, [searchParams]);
 
     async function loadMoreWallpapers() {
-        const url = `/api/posts/?duration=${
-            duration ? duration : "2021"
-        }&sort=popular&page=${page}&limit=8`;
+        const url = `/api/wallpapers/?${
+            duration ? `duration=${duration}&` : ""
+        }sort=popular&page=${page}&limit=8`;
 
         const res = await fetch(url);
         const wallpapers = await res.json();
 
-        setPopularWallpapers((prevState) => [...prevState, ...(wallpapers as never[])]);
+        setPopularWallpapers((prevState) => [
+            ...prevState,
+            ...(wallpapers as never[]),
+        ]);
         if (wallpapers.length < 8) setWallpapersFinished(true);
         setPage((prevState) => prevState + 1);
     }
@@ -63,7 +67,7 @@ function Popular() {
                                     setSearchParams({ duration: "2021" });
                                 }}
                             >
-                                <ControlBtn active={!duration || duration === "2021"}>
+                                <ControlBtn active={duration === "2021"}>
                                     2021 And After
                                 </ControlBtn>
                             </div>
@@ -80,10 +84,10 @@ function Popular() {
 
                             <div
                                 onClick={() => {
-                                    setSearchParams({ duration: "all-times" });
+                                    setSearchParams({});
                                 }}
                             >
-                                <ControlBtn active={duration === "all-times"}>
+                                <ControlBtn active={!duration}>
                                     All Times
                                 </ControlBtn>
                             </div>

@@ -10,7 +10,7 @@ function NewPreview() {
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("/api/posts/?limit=6");
+            const res = await fetch("/api/wallpapers/?limit=6");
             const wallpapers = await res.json();
             setNewWallpapers(wallpapers);
         })();

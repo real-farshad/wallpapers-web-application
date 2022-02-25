@@ -1,6 +1,7 @@
 const express = require("express");
 const authenticateUser = require("../middleware/authenticateUser");
 const createCollectionRecord = require("../usecases/collectionsRecords/createCollectionRecord");
+const queryCollectionRecords = require("../usecases/collectionsRecords/queryCollectionRecords");
 const deleteCollectionRecord = require("../usecases/collectionsRecords/deleteCollectionRecord");
 
 const router = express.Router();
@@ -14,6 +15,21 @@ router.post("/", authenticateUser, async (req, res, next) => {
     if (err) return next(err);
 
     return res.json({ success: true });
+});
+
+router.get("/:id", async (req, res, next) => {
+    const collectionId = req.params.id;
+    const query = req.query;
+    const db = req.database;
+
+    const [err, collectionRecords] = await queryCollectionRecords(
+        collectionId,
+        query,
+        db
+    );
+    if (err) return next(err);
+
+    return res.json(collectionRecords);
 });
 
 router.delete("/:id", authenticateUser, async (req, res, next) => {

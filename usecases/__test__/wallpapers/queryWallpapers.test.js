@@ -153,7 +153,7 @@ describe("query wallpapers", () => {
         const [err, wallpapers] = await queryWallpapers(query);
         expect(err).toMatchObject({
             status: 400,
-            message: expect.stringMatching(/.*(limit).*(less than).*(0).*/gi),
+            message: expect.stringMatching(/.*(limit).*(less than).*(20).*/gi),
         });
     });
 

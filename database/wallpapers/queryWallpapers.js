@@ -11,7 +11,10 @@ async function queryWallpapers(query) {
         const match = {};
         if (title) match.$text = { $search: title };
         if (categoryId) match.categoryId = new ObjectId(categoryId);
-        if (duration) match.duration = new Date(`1-1-${duration}`).getTime();
+        if (duration) {
+            const standardTime = new Date(`1-1-${duration}`).getTime();
+            match.createdAt = { $gt: standardTime };
+        }
 
         if (sort && sort === "popular") sort = { likeCount: -1 };
         else sort = { createdAt: -1 };

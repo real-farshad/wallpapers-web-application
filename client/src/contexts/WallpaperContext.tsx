@@ -13,7 +13,7 @@ function WallpaperProvider({ children }: any) {
     }, [wallpaperId]);
 
     async function fetchAndSetWallpaper(id: string) {
-        const res = await fetch("/api/posts/" + id);
+        const res = await fetch("/api/wallpapers/" + id);
         const wallpaperObject = await res.json();
         setWallpaper(wallpaperObject);
     }

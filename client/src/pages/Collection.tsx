@@ -25,19 +25,18 @@ function Collection() {
         (async () => {
             const collectionsRes = await fetch(`/api/collections/${id}`);
             const collectionInfo = await collectionsRes.json();
-            console.log(collectionInfo);
             setCollectionInfo(collectionInfo);
 
-            const collectionsPostsRes = await fetch(
-                `/api/collections-posts/${id}?limit=8`
-            );
-            const collectionWallpapers = await collectionsPostsRes.json();
+            const res = await fetch(`/api/collections-records/${id}?limit=8`);
+            const collectionWallpapers = await res.json();
             setWallpapers(collectionWallpapers);
         })();
     }, []);
 
     async function loadMoreWallpapers() {
-        const res = await fetch(`/api/collections-posts/${id}?page=${page}&limit=8`);
+        const res = await fetch(
+            `api/collections-records/${id}?page=${page}&limit=8`
+        );
         const collectionWallpapers = await res.json();
 
         setWallpapers((prevState) => [
@@ -62,7 +61,9 @@ function Collection() {
                     <MainContainer>
                         <SectionGrid>
                             <SectionInfoContainer>
-                                <SectionTitle>{collectionInfo.title}</SectionTitle>
+                                <SectionTitle>
+                                    {collectionInfo.title}
+                                </SectionTitle>
                             </SectionInfoContainer>
 
                             <InfiniteScroll

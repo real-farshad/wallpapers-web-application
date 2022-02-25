@@ -30,8 +30,10 @@ function Search() {
 
         (async () => {
             const url = `/api/${
-                selection === "collections" ? "collections" : "posts"
-            }/?search=${title}&sort=${selection === "new" ? "new" : "popular"}&limit=8`;
+                selection === "collections" ? "collections" : "wallpapers"
+            }/?search=${title}&sort=${
+                selection === "new" ? "new" : "popular"
+            }&limit=8`;
 
             const res = await fetch(url);
             const searchResults = await res.json();
@@ -43,7 +45,7 @@ function Search() {
 
     async function loadMoreResults() {
         const url = `/api/${
-            selection === "collections" ? "collections" : "posts"
+            selection === "collections" ? "collections" : "wallpapers"
         }/?search=${title}&sort=${
             selection === "new" ? "new" : "popular"
         }&page=${page}&limit=8`;
@@ -77,27 +79,42 @@ function Search() {
                             <SectionInfoContainer controls>
                                 <ControlBtnsContainer>
                                     <div
-                                        onClick={() => handleClickOnControlBtn("popular")}
+                                        onClick={() =>
+                                            handleClickOnControlBtn("popular")
+                                        }
                                     >
                                         <ControlBtn
-                                            active={!selection || selection === "popular"}
+                                            active={
+                                                !selection ||
+                                                selection === "popular"
+                                            }
                                         >
                                             Popular First
                                         </ControlBtn>
                                     </div>
 
-                                    <div onClick={() => handleClickOnControlBtn("new")}>
-                                        <ControlBtn active={selection === "new"}>
+                                    <div
+                                        onClick={() =>
+                                            handleClickOnControlBtn("new")
+                                        }
+                                    >
+                                        <ControlBtn
+                                            active={selection === "new"}
+                                        >
                                             New First
                                         </ControlBtn>
                                     </div>
 
                                     <div
                                         onClick={() =>
-                                            handleClickOnControlBtn("collections")
+                                            handleClickOnControlBtn(
+                                                "collections"
+                                            )
                                         }
                                     >
-                                        <ControlBtn active={selection === "collections"}>
+                                        <ControlBtn
+                                            active={selection === "collections"}
+                                        >
                                             Collections
                                         </ControlBtn>
                                     </div>
@@ -107,8 +124,12 @@ function Search() {
                                     {results.length} <br />
                                     MATCHING <br />
                                     {selection === "collections"
-                                        ? `COLLECTION${results.length > 1 ? "S" : ""}`
-                                        : `WALLPAPER${results.length > 1 ? "S" : ""}`}
+                                        ? `COLLECTION${
+                                              results.length > 1 ? "S" : ""
+                                          }`
+                                        : `WALLPAPER${
+                                              results.length > 1 ? "S" : ""
+                                          }`}
                                 </SectionTitle>
                             </SectionInfoContainer>
 
