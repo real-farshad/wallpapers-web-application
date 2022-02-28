@@ -3,8 +3,8 @@ const { getDatabase } = require("../../config/mongodb");
 const getCollectionsRecordsCollection = () =>
     getDatabase().collection("collections-records");
 
-async function queryCollectionRecords(collectionId, query) {
-    let error, collectionRecords;
+async function queryCollectionWallpapers(collectionId, query) {
+    let error, collectionWallpapers;
 
     try {
         let { page, limit } = query;
@@ -61,20 +61,20 @@ async function queryCollectionRecords(collectionId, query) {
 
         const result = await cursor.toArray();
 
-        if (!result[0]) collectionRecords = null;
+        if (!result[0]) collectionWallpapers = null;
         else {
             const wallpapers = [];
             for (let record of result) wallpapers.push(record.wallpaper);
-            collectionRecords = wallpapers;
+            collectionWallpapers = wallpapers;
         }
 
         error = null;
     } catch (err) {
         error = err;
-        collectionRecords = null;
+        collectionWallpapers = null;
     }
 
-    return [error, collectionRecords];
+    return [error, collectionWallpapers];
 }
 
-module.exports = queryCollectionRecords;
+module.exports = queryCollectionWallpapers;

@@ -1,8 +1,7 @@
 const validateId = require("../../validation/id");
-const validateCollectionRecordsQuery = require("../../validation/collectionRecordsQuery");
-const res = require("express/lib/response");
+const validateCollectionWallpapersQuery = require("../../validation/collectionWallpapersQuery");
 
-async function findCollectionRecords(collectionId, query, db) {
+async function queryCollectionWallpapers(collectionId, query, db) {
     const isValidId = await validateId(collectionId);
     if (!isValidId) {
         const knownError = {
@@ -14,20 +13,20 @@ async function findCollectionRecords(collectionId, query, db) {
         return [knownError, null];
     }
 
-    let [err, validQuery] = await validateCollectionRecordsQuery(query);
+    let [err, validQuery] = await validateCollectionWallpapersQuery(query);
     if (err) {
         const knownError = { known: true, status: 400, message: err.message };
         return [knownError, null];
     }
 
-    let collectionRecords;
-    [err, collectionRecords] = await db.queryCollectionRecords(
+    let collectionWallpapers;
+    [err, collectionWallpapers] = await db.queryCollectionWallpapers(
         collectionId,
         validQuery
     );
     if (err) return [err, null];
 
-    if (!collectionRecords) {
+    if (!collectionWallpapers) {
         const knownError = {
             known: true,
             status: 404,
@@ -37,7 +36,7 @@ async function findCollectionRecords(collectionId, query, db) {
         return [knownError, null];
     }
 
-    return [null, collectionRecords];
+    return [null, collectionWallpapers];
 }
 
-module.exports = findCollectionRecords;
+module.exports = queryCollectionWallpapers;

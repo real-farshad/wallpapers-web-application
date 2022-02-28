@@ -1,7 +1,7 @@
 const express = require("express");
 const authenticateUser = require("../middleware/authenticateUser");
 const createCollectionRecord = require("../usecases/collectionsRecords/createCollectionRecord");
-const queryCollectionRecords = require("../usecases/collectionsRecords/queryCollectionRecords");
+const queryCollectionWallpapers = require("../usecases/collectionsRecords/queryCollectionWallpapers");
 const deleteCollectionRecord = require("../usecases/collectionsRecords/deleteCollectionRecord");
 
 const router = express.Router();
@@ -22,14 +22,14 @@ router.get("/:id", async (req, res, next) => {
     const query = req.query;
     const db = req.database;
 
-    const [err, collectionRecords] = await queryCollectionRecords(
+    const [err, collectionWallpapers] = await queryCollectionWallpapers(
         collectionId,
         query,
         db
     );
     if (err) return next(err);
 
-    return res.json(collectionRecords);
+    return res.json(collectionWallpapers);
 });
 
 router.delete("/:id", authenticateUser, async (req, res, next) => {

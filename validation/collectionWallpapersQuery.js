@@ -5,7 +5,7 @@ const collectionWallpapersQuerySchema = Joi.object({
     limit: Joi.number().integer().min(0).max(20),
 });
 
-async function validateCollectionRecordsQuery(query) {
+async function validateCollectionWallpapersQuery(query) {
     let error, validQuery;
 
     try {
@@ -19,4 +19,4 @@ async function validateCollectionRecordsQuery(query) {
     return [error, validQuery];
 }
 
-module.exports = validateCollectionRecordsQuery;
+module.exports = validateCollectionWallpapersQuery;
