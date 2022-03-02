@@ -22,10 +22,16 @@ function App() {
                 <Route path="/popular" element={<Popular />} />
                 <Route path="/new" element={<New />} />
                 <Route path="/collections" element={<Collections />} />
-                <Route path="/search" element={<Search />} />
+                <Route path="/search/:contentType" element={<Search />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/auth/sign-up" element={<Auth option="sign-up" />} />
-                <Route path="/auth/sign-in" element={<Auth option="sign-in" />} />
+                <Route
+                    path="/auth/sign-up"
+                    element={<Auth option="sign-up" />}
+                />
+                <Route
+                    path="/auth/sign-in"
+                    element={<Auth option="sign-in" />}
+                />
                 <Route path="/wallpaper/:id" element={<Wallpaper />} />
                 <Route path="/collection/:id" element={<Collection />} />
             </Routes>

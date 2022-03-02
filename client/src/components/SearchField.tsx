@@ -1,27 +1,28 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import "../styles/SearchField.scss";
 
 function SearchField() {
+    const params = useParams();
     const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
+
+    const contentType = params.contentType;
 
     const title = searchParams.get("title");
+    const [titleInput, setTitleInput] = useState(title ? title : "");
 
-    const [searchInput, setSearchInput] = useState(title ? title : "");
+    const sort = searchParams.get("sort");
 
     async function handleFormSubmit(e: any) {
         e.preventDefault();
 
-        const searchInputIsTooShort = searchInput.length < 3;
-        if (searchInputIsTooShort) return;
+        const hasValidTitle = titleInput.length > 3;
+        if (!hasValidTitle) return;
 
-        const selection = searchParams.get("selection");
-        const url = `/search?title=${searchInput}${
-            selection ? `&selection=${selection}` : ""
-        }`;
+        let url = `/search/${contentType}?title=${titleInput}`;
+        if (contentType === "wallpapers") url += `&sort=${sort}`;
 
-        navigate(url);
+        window.location.replace(url);
     }
 
     return (
@@ -30,8 +31,8 @@ function SearchField() {
                 className="search-field__input"
                 placeholder="SEARCH"
                 maxLength={64}
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
+                value={titleInput}
+                onChange={(e) => setTitleInput(e.target.value)}
             />
         </form>
     );

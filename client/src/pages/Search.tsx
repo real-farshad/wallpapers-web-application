@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import searchCollections from "../api/searchCollections";
+import searchWallpapers from "../api/searchWallpapers";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
 import StandardNavbar from "../components/StandardNavbar";
@@ -16,55 +18,89 @@ import CopyRight from "../components/CopyRight";
 import "../styles/Search.scss";
 
 function Search() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const params = useParams();
+    const [searchParams] = useSearchParams();
 
-    const selection = searchParams.get("selection");
-    const title: any = searchParams.get("title");
+    const contentType = params.contentType;
+    const title = searchParams.get("title");
+    const sort = searchParams.get("sort");
+    const [page, setPage] = useState(1);
+    const resultsLimit = 8;
 
     const [results, setResults] = useState([]);
     const [resultsFinished, setResultsFinished] = useState(false);
-    const [page, setPage] = useState(1);
 
     useEffect(() => {
-        if (!title || title.length < 3 || title.length > 64) return;
-
-        (async () => {
-            const url = `/api/${
-                selection === "collections" ? "collections" : "wallpapers"
-            }/?search=${title}&sort=${
-                selection === "new" ? "new" : "popular"
-            }&limit=8`;
-
-            const res = await fetch(url);
-            const searchResults = await res.json();
-
-            setResults(searchResults);
-            setPage((prevState) => prevState + 1);
-        })();
+        search();
     }, [searchParams]);
 
-    async function loadMoreResults() {
-        const url = `/api/${
-            selection === "collections" ? "collections" : "wallpapers"
-        }/?search=${title}&sort=${
-            selection === "new" ? "new" : "popular"
-        }&page=${page}&limit=8`;
+    function handleClickOnControlBtn(newContentType: string, newSort?: string) {
+        setPage(1);
+        setResults([]);
+        setResultsFinished(false);
 
-        const res = await fetch(url);
-        const results: never[] = await res.json();
+        let url = `/search/${newContentType}?title=${title}`;
+        if (newSort) url += `&sort=${newSort}`;
+        navigate(url);
+    }
 
-        setResults((prevState) => [...prevState, ...results]);
-        if (results.length < 8) setResultsFinished(true);
+    async function search() {
+        let searchResults: never[];
+        if (contentType === "collections") {
+            searchResults = await searchCollections({
+                title,
+                page,
+                limit: resultsLimit,
+            });
+        } else {
+            const wallpapersSort = sort === "new" ? "new" : "popular";
+            searchResults = await searchWallpapers({
+                title,
+                sort: wallpapersSort,
+                page,
+                limit: resultsLimit,
+            });
+        }
+
+        setResults((prevState) => [...prevState, ...searchResults]);
+        if (searchResults.length < resultsLimit) setResultsFinished(true);
         setPage((prevState) => prevState + 1);
     }
 
-    function handleClickOnControlBtn(type: string) {
-        if (selection === type) return;
-        setSearchParams({ title, selection: type });
-        setPage(1);
-    }
-
     if (page === 1) return null;
+
+    const controlBtns = (
+        <ControlBtnsContainer>
+            <div
+                onClick={() => handleClickOnControlBtn("wallpapers", "popular")}
+            >
+                <ControlBtn active={sort === "popular"}>
+                    Popular First
+                </ControlBtn>
+            </div>
+
+            <div onClick={() => handleClickOnControlBtn("wallpapers", "new")}>
+                <ControlBtn active={sort === "new"}>New First</ControlBtn>
+            </div>
+
+            <div onClick={() => handleClickOnControlBtn("collections")}>
+                <ControlBtn active={contentType === "collections"}>
+                    Collections
+                </ControlBtn>
+            </div>
+        </ControlBtnsContainer>
+    );
+
+    const sectionTitle = (
+        <SectionTitle>
+            {results.length} <br />
+            MATCHING <br />
+            {contentType === "collections"
+                ? `COLLECTION${results.length > 1 ? "S" : ""}`
+                : `WALLPAPER${results.length > 1 ? "S" : ""}`}
+        </SectionTitle>
+    );
 
     return (
         <ContentWidthContainer>
@@ -77,68 +113,17 @@ function Search() {
                     <div className="search__result-section">
                         <SectionGrid>
                             <SectionInfoContainer controls>
-                                <ControlBtnsContainer>
-                                    <div
-                                        onClick={() =>
-                                            handleClickOnControlBtn("popular")
-                                        }
-                                    >
-                                        <ControlBtn
-                                            active={
-                                                !selection ||
-                                                selection === "popular"
-                                            }
-                                        >
-                                            Popular First
-                                        </ControlBtn>
-                                    </div>
+                                {controlBtns}
 
-                                    <div
-                                        onClick={() =>
-                                            handleClickOnControlBtn("new")
-                                        }
-                                    >
-                                        <ControlBtn
-                                            active={selection === "new"}
-                                        >
-                                            New First
-                                        </ControlBtn>
-                                    </div>
-
-                                    <div
-                                        onClick={() =>
-                                            handleClickOnControlBtn(
-                                                "collections"
-                                            )
-                                        }
-                                    >
-                                        <ControlBtn
-                                            active={selection === "collections"}
-                                        >
-                                            Collections
-                                        </ControlBtn>
-                                    </div>
-                                </ControlBtnsContainer>
-
-                                <SectionTitle>
-                                    {results.length} <br />
-                                    MATCHING <br />
-                                    {selection === "collections"
-                                        ? `COLLECTION${
-                                              results.length > 1 ? "S" : ""
-                                          }`
-                                        : `WALLPAPER${
-                                              results.length > 1 ? "S" : ""
-                                          }`}
-                                </SectionTitle>
+                                {sectionTitle}
                             </SectionInfoContainer>
 
                             <InfiniteScroll
                                 elements={results}
-                                loadMoreElements={loadMoreResults}
+                                loadMoreElements={search}
                                 elementsFinished={resultsFinished}
                                 template={
-                                    selection === "collections" ? (
+                                    contentType === "collections" ? (
                                         <CollectionCard />
                                     ) : (
                                         <WallpaperCard />
