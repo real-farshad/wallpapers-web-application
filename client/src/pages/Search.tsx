@@ -10,9 +10,7 @@ import SectionInfoContainer from "../components/SectionInfoContainer";
 import ControlBtnsContainer from "../components/ControlBtnsContainer";
 import ControlBtn from "../components/ControlBtn";
 import SectionTitle from "../components/SectionTitle";
-import InfiniteScroll from "../components/InfiniteScroll";
-import WallpaperCard from "../components/WallpaperCard";
-import CollectionCard from "../components/CollectionCard";
+import WallpapersInfiniteScroll from "../components/wallpapersInfiniteScroll";
 import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
 import "../styles/Search.scss";
@@ -41,7 +39,7 @@ function Search() {
         setResultsFinished(false);
 
         let url = `/search/${newContentType}?title=${title}`;
-        if (newSort) url += `&sort=${newSort}`;
+        if (newContentType === "wallpapers") url += `&sort=${newSort}`;
         navigate(url);
     }
 
@@ -118,17 +116,10 @@ function Search() {
                                 {sectionTitle}
                             </SectionInfoContainer>
 
-                            <InfiniteScroll
-                                elements={results}
-                                loadMoreElements={search}
-                                elementsFinished={resultsFinished}
-                                template={
-                                    contentType === "collections" ? (
-                                        <CollectionCard />
-                                    ) : (
-                                        <WallpaperCard />
-                                    )
-                                }
+                            <WallpapersInfiniteScroll
+                                wallpapers={results}
+                                loadMoreWallpapers={search}
+                                wallpapersFinished={resultsFinished}
                             />
                         </SectionGrid>
                     </div>

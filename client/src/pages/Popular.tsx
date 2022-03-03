@@ -13,6 +13,7 @@ import InfiniteScroll from "../components/InfiniteScroll";
 import WallpaperCard from "../components/WallpaperCard";
 import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
+import WallpapersInfiniteScroll from "../components/wallpapersInfiniteScroll";
 
 function Popular() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -30,7 +31,6 @@ function Popular() {
 
             const res = await fetch(url);
             const wallpapers = await res.json();
-            console.log(wallpapers);
 
             setPopularWallpapers(wallpapers);
         })();
@@ -100,11 +100,10 @@ function Popular() {
                         </SectionTitle>
                     </SectionInfoContainer>
 
-                    <InfiniteScroll
-                        elements={popularWallpapers}
-                        loadMoreElements={loadMoreWallpapers}
-                        elementsFinished={wallpapersFinished}
-                        template={<WallpaperCard />}
+                    <WallpapersInfiniteScroll
+                        wallpapers={popularWallpapers}
+                        loadMoreWallpapers={loadMoreWallpapers}
+                        wallpapersFinished={wallpapersFinished}
                     />
                 </SectionGrid>
             </MainContainer>
