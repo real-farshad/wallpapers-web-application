@@ -7,23 +7,20 @@ interface WallpapersInfiniteScrollTypes {
         _id: string;
     }[];
     wallpapersFinished: boolean;
-    loadMoreWallpapers: () => void;
+    setPage: (value: any) => void;
 }
 
 function WallpapersInfiniteScroll(props: WallpapersInfiniteScrollTypes) {
-    const { wallpapers, wallpapersFinished, loadMoreWallpapers } = props;
+    const { wallpapers, wallpapersFinished, setPage } = props;
 
-    const setLastWallpaper: any = useInfiniteScroll(
-        wallpapersFinished,
-        loadMoreWallpapers
-    );
+    const setLastWallpaper: (value: any) => void = useInfiniteScroll(setPage);
 
     return (
         <Fragment>
             {wallpapers.length > 0 &&
                 wallpapers.map((wallpaper, index) => {
                     const isLastWallpaper = index === wallpapers.length - 1;
-                    if (isLastWallpaper) {
+                    if (!wallpapersFinished && isLastWallpaper) {
                         return (
                             <div ref={setLastWallpaper} key={wallpaper._id}>
                                 <WallpaperCard data={wallpaper} />

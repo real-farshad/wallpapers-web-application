@@ -31,7 +31,7 @@ function CollectionCard(props: CollectionCardTypes | any) {
             </div>
 
             <Link
-                to={`/collection/${_id}`}
+                to={`/collections/${_id}`}
                 className="collection-card__image-container"
             >
                 <CoverImage src={wallpaper.imageUrl.thumbnail} />
@@ -50,7 +50,7 @@ function CollectionCard(props: CollectionCardTypes | any) {
 
                 <div className="collection-card__btn">
                     <div className="collection-card__link">
-                        <Link to={`/collection/${_id}`}>SEE COLLECTION</Link>
+                        <Link to={`/collections/${_id}`}>SEE COLLECTION</Link>
                     </div>
 
                     <p className="collection-card__wallpaper-count">

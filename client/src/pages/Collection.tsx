@@ -4,51 +4,49 @@ import ContentWidthContainer from "../components/ContentWidthContainer";
 import CopyRight from "../components/CopyRight";
 import FooterContainer from "../components/FooterContainer";
 import HeaderContainer from "../components/HeaderContainer";
-import InfiniteScroll from "../components/InfiniteScroll";
+import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 import MainContainer from "../components/MainContainer";
 import StandardNavbar from "../components/StandardNavbar";
 import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
 import SectionTitle from "../components/SectionTitle";
-import WallpaperCard from "../components/WallpaperCard";
 import "../styles/Collection.scss";
+import getCollectionWallpapers from "../api/getCollectionWallpapers";
+import getCollectionInfo from "../api/getCollectionInfo";
 
 function Collection() {
     const { id } = useParams();
+    const [page, setPage] = useState(1);
+    const limit = 8;
 
     const [collectionInfo, setCollectionInfo] = useState(null as any);
-    const [wallpapers, setWallpapers] = useState([]);
+    const [collectionWallpapers, setCollectionWallpapers] = useState([]);
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
-    const [page, setPage] = useState(2);
 
     useEffect(() => {
-        (async () => {
-            const collectionsRes = await fetch(`/api/collections/${id}`);
-            const collectionInfo = await collectionsRes.json();
-            setCollectionInfo(collectionInfo);
-
-            const res = await fetch(`/api/collections-records/${id}?limit=8`);
-            const collectionWallpapers = await res.json();
-            setWallpapers(collectionWallpapers);
-        })();
+        addCollectionInfo();
     }, []);
 
-    async function loadMoreWallpapers() {
-        const res = await fetch(
-            `api/collections-records/${id}?page=${page}&limit=8`
-        );
-        const collectionWallpapers = await res.json();
+    useEffect(() => {
+        addCollectionWallpapers();
+    }, [page]);
 
-        setWallpapers((prevState) => [
-            ...prevState,
-            ...(collectionWallpapers as never[]),
-        ]);
-
-        if (collectionWallpapers.length < 8) setWallpapersFinished(true);
-        setPage((prevState) => prevState + 1);
+    async function addCollectionInfo() {
+        const collection = await getCollectionInfo(id as string);
+        setCollectionInfo(collection);
     }
 
-    if (!collectionInfo || wallpapers.length === 0) return null;
+    async function addCollectionWallpapers() {
+        const wallpapers = await getCollectionWallpapers({ id, page, limit });
+        setCollectionWallpapers((prevCollectionWallpapers) => [
+            ...prevCollectionWallpapers,
+            ...(wallpapers as never[]),
+        ]);
+
+        if (wallpapers.length < 8) setWallpapersFinished(true);
+    }
+
+    if (!collectionInfo || collectionWallpapers.length === 0) return null;
 
     return (
         <ContentWidthContainer>
@@ -66,11 +64,10 @@ function Collection() {
                                 </SectionTitle>
                             </SectionInfoContainer>
 
-                            <InfiniteScroll
-                                elements={wallpapers}
-                                loadMoreElements={loadMoreWallpapers}
-                                elementsFinished={wallpapersFinished}
-                                template={<WallpaperCard />}
+                            <WallpapersInfiniteScroll
+                                wallpapers={collectionWallpapers}
+                                wallpapersFinished={wallpapersFinished}
+                                setPage={setPage}
                             />
                         </SectionGrid>
                     </MainContainer>

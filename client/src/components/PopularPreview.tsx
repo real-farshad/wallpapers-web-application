@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import searchWallpapers from "../api/searchWallpapers";
 import SectionGrid from "./SectionGrid";
 import SectionInfoContainer from "./SectionInfoContainer";
 import SectionTitle from "./SectionTitle";
@@ -6,15 +7,20 @@ import WallpaperCard from "./WallpaperCard";
 import "../styles/PopularPreview.scss";
 
 function PopularPreview() {
+    const sort = "popular";
+    const page = 1;
+    const limit = 6;
+
     const [popularWallpapers, setPopularWallpapers] = useState([]);
 
     useEffect(() => {
-        (async () => {
-            const res = await fetch("/api/wallpapers/?sort=popular&limit=6");
-            const wallpapers = await res.json();
-            setPopularWallpapers(wallpapers);
-        })();
+        addPopularWallpapers();
     }, []);
+
+    async function addPopularWallpapers() {
+        const wallpapers = await searchWallpapers({ sort, page, limit });
+        setPopularWallpapers(wallpapers);
+    }
 
     return (
         <SectionGrid>

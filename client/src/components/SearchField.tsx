@@ -6,7 +6,7 @@ function SearchField() {
     const params = useParams();
     const [searchParams] = useSearchParams();
 
-    const contentType = params.contentType;
+    const contentType = params.contentType ? params.contentType : "wallpapers";
 
     const title = searchParams.get("title");
     const [titleInput, setTitleInput] = useState(title ? title : "");
@@ -20,7 +20,7 @@ function SearchField() {
         if (!hasValidTitle) return;
 
         let url = `/search/${contentType}?title=${titleInput}`;
-        if (contentType === "wallpapers") url += `&sort=${sort}`;
+        if (contentType === "wallpapers" && sort) url += `&sort=${sort}`;
 
         window.location.replace(url);
     }

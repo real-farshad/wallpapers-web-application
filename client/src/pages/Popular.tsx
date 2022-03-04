@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import searchWallpapers from "../api/searchWallpapers";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
 import StandardNavbar from "../components/StandardNavbar";
@@ -9,48 +10,72 @@ import SectionInfoContainer from "../components/SectionInfoContainer";
 import ControlBtnsContainer from "../components/ControlBtnsContainer";
 import ControlBtn from "../components/ControlBtn";
 import SectionTitle from "../components/SectionTitle";
-import InfiniteScroll from "../components/InfiniteScroll";
-import WallpaperCard from "../components/WallpaperCard";
+import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
-import WallpapersInfiniteScroll from "../components/wallpapersInfiniteScroll";
 
 function Popular() {
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const sort = "popular";
     const duration = searchParams.get("duration");
+    const [page, setPage] = useState(1);
+    const limit = 8;
 
     const [popularWallpapers, setPopularWallpapers] = useState([]);
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
-    const [page, setPage] = useState(2);
 
     useEffect(() => {
-        (async () => {
-            const url = `/api/wallpapers/?${
-                duration ? `duration=${duration}&` : ""
-            }sort=popular&limit=8`;
+        addPopularWallpapers();
+    }, [searchParams, page]);
 
-            const res = await fetch(url);
-            const wallpapers = await res.json();
+    async function addPopularWallpapers() {
+        const wallpapers = await searchWallpapers({
+            sort,
+            duration: duration ? duration : "",
+            page,
+            limit,
+        });
 
-            setPopularWallpapers(wallpapers);
-        })();
-    }, [searchParams]);
-
-    async function loadMoreWallpapers() {
-        const url = `/api/wallpapers/?${
-            duration ? `duration=${duration}&` : ""
-        }sort=popular&page=${page}&limit=8`;
-
-        const res = await fetch(url);
-        const wallpapers = await res.json();
-
-        setPopularWallpapers((prevState) => [
-            ...prevState,
+        setPopularWallpapers((prevWallpapers) => [
+            ...prevWallpapers,
             ...(wallpapers as never[]),
         ]);
-        if (wallpapers.length < 8) setWallpapersFinished(true);
-        setPage((prevState) => prevState + 1);
+
+        if (wallpapers.length < limit) {
+            setWallpapersFinished(true);
+        }
     }
+
+    function changeDuration(newDuration?: any) {
+        setPage(1);
+        setPopularWallpapers([]);
+        setWallpapersFinished(false);
+
+        const durationObject: any = {};
+        if (newDuration) durationObject.duration = newDuration;
+        setSearchParams(durationObject);
+    }
+
+    const controls = (
+        <ControlBtnsContainer>
+            <div onClick={() => changeDuration("2021")}>
+                <ControlBtn active={duration === "2021"}>
+                    2021 And After
+                </ControlBtn>
+            </div>
+
+            <div onClick={() => changeDuration("2020")}>
+                <ControlBtn active={duration === "2020"}>
+                    2020 And After
+                </ControlBtn>
+            </div>
+
+            <div onClick={() => changeDuration()}>
+                <ControlBtn active={!duration}>All Times</ControlBtn>
+            </div>
+        </ControlBtnsContainer>
+    );
 
     return (
         <ContentWidthContainer>
@@ -61,37 +86,7 @@ function Popular() {
             <MainContainer>
                 <SectionGrid>
                     <SectionInfoContainer controls>
-                        <ControlBtnsContainer>
-                            <div
-                                onClick={() => {
-                                    setSearchParams({ duration: "2021" });
-                                }}
-                            >
-                                <ControlBtn active={duration === "2021"}>
-                                    2021 And After
-                                </ControlBtn>
-                            </div>
-
-                            <div
-                                onClick={() => {
-                                    setSearchParams({ duration: "2020" });
-                                }}
-                            >
-                                <ControlBtn active={duration === "2020"}>
-                                    2020 And After
-                                </ControlBtn>
-                            </div>
-
-                            <div
-                                onClick={() => {
-                                    setSearchParams({});
-                                }}
-                            >
-                                <ControlBtn active={!duration}>
-                                    All Times
-                                </ControlBtn>
-                            </div>
-                        </ControlBtnsContainer>
+                        {controls}
 
                         <SectionTitle>
                             MOST <br />
@@ -102,8 +97,8 @@ function Popular() {
 
                     <WallpapersInfiniteScroll
                         wallpapers={popularWallpapers}
-                        loadMoreWallpapers={loadMoreWallpapers}
                         wallpapersFinished={wallpapersFinished}
+                        setPage={setPage as any}
                     />
                 </SectionGrid>
             </MainContainer>

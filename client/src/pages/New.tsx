@@ -6,36 +6,33 @@ import MainContainer from "../components/MainContainer";
 import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
 import SectionTitle from "../components/SectionTitle";
-import InfiniteScroll from "../components/InfiniteScroll";
-import WallpaperCard from "../components/WallpaperCard";
 import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
+import searchWallpapers from "../api/searchWallpapers";
+import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 
 function New() {
+    const sort = "new";
+    const [page, setPage] = useState(1);
+    const limit = 8;
+
     const [newWallpapers, setNewWallpapers] = useState([]);
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
-    const [page, setPage] = useState(2);
 
     useEffect(() => {
-        (async () => {
-            const res = await fetch("/api/wallpapers/?sort=new&limit=8");
-            const wallpapers = await res.json();
-            setNewWallpapers(wallpapers);
-        })();
-    }, []);
+        addNewWallpapers();
+    }, [page]);
 
-    async function loadMoreWallpapers() {
-        const res = await fetch(
-            `/api/wallpapers/?sort=new&page=${page}&limit=8`
-        );
-        const wallpapers = await res.json();
-
+    async function addNewWallpapers() {
+        const wallpapers = await searchWallpapers({ sort, page, limit });
         setNewWallpapers((prevState) => [
             ...prevState,
             ...(wallpapers as never[]),
         ]);
-        if (wallpapers.length < 8) setWallpapersFinished(true);
-        setPage((prevState) => prevState + 1);
+
+        if (wallpapers.length < limit) {
+            setWallpapersFinished(true);
+        }
     }
 
     return (
@@ -54,11 +51,10 @@ function New() {
                         </SectionTitle>
                     </SectionInfoContainer>
 
-                    <InfiniteScroll
-                        elements={newWallpapers}
-                        loadMoreElements={loadMoreWallpapers}
-                        elementsFinished={wallpapersFinished}
-                        template={<WallpaperCard />}
+                    <WallpapersInfiniteScroll
+                        wallpapers={newWallpapers}
+                        wallpapersFinished={wallpapersFinished}
+                        setPage={setPage}
                     />
                 </SectionGrid>
             </MainContainer>

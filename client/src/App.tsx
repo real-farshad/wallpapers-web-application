@@ -33,7 +33,7 @@ function App() {
                     element={<Auth option="sign-in" />}
                 />
                 <Route path="/wallpaper/:id" element={<Wallpaper />} />
-                <Route path="/collection/:id" element={<Collection />} />
+                <Route path="/collections/:id" element={<Collection />} />
             </Routes>
 
             {wallpaperId && <WallpaperOverlay />}

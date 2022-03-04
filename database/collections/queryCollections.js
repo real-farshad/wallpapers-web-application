@@ -73,6 +73,7 @@ async function queryCollections(query) {
                     title: 1,
                     createdAt: 1,
                     wallpaper: { $first: "$wallpapers" },
+                    wallpaperCount: 1,
                     user: { $first: "$user" },
                 },
             },

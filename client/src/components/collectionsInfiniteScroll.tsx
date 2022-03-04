@@ -7,23 +7,20 @@ interface CollectionsInfiniteScrollTypes {
         _id: string;
     }[];
     collectionsFinished: boolean;
-    loadMoreCollections: () => void;
+    setPage: (value: any) => void;
 }
 
 function CollectionsInfiniteScroll(props: CollectionsInfiniteScrollTypes) {
-    const { collections, collectionsFinished, loadMoreCollections } = props;
+    const { collections, collectionsFinished, setPage } = props;
 
-    const setLastCollection: any = useInfiniteScroll(
-        collectionsFinished,
-        loadMoreCollections
-    );
+    const setLastCollection: (value: any) => void = useInfiniteScroll(setPage);
 
     return (
         <Fragment>
             {collections.length > 0 &&
                 collections.map((collection, index) => {
                     const isLastCollection = index === collections.length - 1;
-                    if (isLastCollection) {
+                    if (!collectionsFinished && isLastCollection) {
                         return (
                             <div ref={setLastCollection} key={collection._id}>
                                 <CollectionCard data={collection} />

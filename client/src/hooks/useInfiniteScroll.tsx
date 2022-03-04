@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 
-function useInfiniteScroll(reachedTheEnd: boolean, loadMoreElements: any) {
+function useInfiniteScroll(setPage: any) {
     const [lastElement, setLastElement] = useState(null as any);
 
     const observer = useRef(
         new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting) {
-                    loadMoreElements();
+                    setPage((prevPage: number) => prevPage + 1);
                 }
             },
             { threshold: 0.7 }
@@ -15,12 +15,12 @@ function useInfiniteScroll(reachedTheEnd: boolean, loadMoreElements: any) {
     );
 
     useEffect(() => {
-        if (!reachedTheEnd && lastElement) {
+        if (lastElement) {
             observer.current.observe(lastElement);
         }
 
         return () => {
-            if (!reachedTheEnd && lastElement) {
+            if (lastElement) {
                 observer.current.unobserve(lastElement);
             }
         };

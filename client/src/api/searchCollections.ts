@@ -1,13 +1,21 @@
-type searchCollectionsTypes = ({ title, page, limit }: any) => Promise<any>;
-const searchCollections: searchCollectionsTypes = async ({
+interface searchCollectionsTypes {
+    title?: string;
+    page: number;
+    limit: number;
+}
+
+async function searchCollections({
     title,
     page,
     limit,
-}) => {
-    const url = `/api/collections/?title=${title}&page=${page}&limit=${limit}`;
+}: searchCollectionsTypes) {
+    let url = `/api/collections/?page=${page}&limit=${limit}`;
+    url += title ? `&title=${title}` : "";
+
     const res = await fetch(url);
     const collections = await res.json();
+
     return collections;
-};
+}
 
 export default searchCollections;

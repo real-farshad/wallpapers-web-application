@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import searchWallpapers from "../api/searchWallpapers";
 import SectionGrid from "./SectionGrid";
 import SectionInfoContainer from "./SectionInfoContainer";
 import SectionTitle from "./SectionTitle";
@@ -6,15 +7,20 @@ import WallpaperCard from "./WallpaperCard";
 import "../styles/NewPreview.scss";
 
 function NewPreview() {
+    const sort = "new";
+    const page = 1;
+    const limit = 1;
+
     const [newWallpapers, setNewWallpapers] = useState([]);
 
     useEffect(() => {
-        (async () => {
-            const res = await fetch("/api/wallpapers/?limit=6");
-            const wallpapers = await res.json();
-            setNewWallpapers(wallpapers);
-        })();
+        addNewWallpapers();
     }, []);
+
+    async function addNewWallpapers() {
+        const wallpapers = await searchWallpapers({ sort, page, limit });
+        setNewWallpapers(wallpapers);
+    }
 
     return (
         <SectionGrid>
