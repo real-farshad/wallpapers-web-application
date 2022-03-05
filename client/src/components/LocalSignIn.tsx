@@ -23,9 +23,7 @@ function LocalSignIn() {
         <div className="local-sign-in">
             <form className="local-sign-in__form" onSubmit={handleFormSubmit}>
                 <FormEmailInput value={email} changeValue={setEmail} />
-
                 <FormPasswordInput value={password} changeValue={setPassword} />
-
                 <FormSubmitBtn value="Sign In" />
             </form>
         </div>

@@ -7,11 +7,11 @@ import WallpaperContent from "../components/WallpaperContent";
 import "../styles/Wallpaper.scss";
 
 function Wallpaper() {
-    const { wallpaper, setWallpaper, fetchAndSetWallpaper } = useWallpaperContext();
+    const { wallpaper, setWallpaper, addWallpaper } = useWallpaperContext();
     const { id } = useParams();
 
     useEffect(() => {
-        fetchAndSetWallpaper(id);
+        addWallpaper(id);
         return () => setWallpaper(null);
     }, []);
 

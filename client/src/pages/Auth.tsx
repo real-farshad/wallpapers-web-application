@@ -4,23 +4,23 @@ import AuthNavbar from "../components/AuthNavbar";
 import AuthOptions from "../components/AuthOptions";
 import authBg from "../assets/auth-bg.jpg";
 import "../styles/Auth.scss";
+import { useParams } from "react-router-dom";
 
-interface AuthTypes {
-    option?: string;
-}
+function Auth() {
+    const params = useParams();
 
-function Auth({ option }: AuthTypes) {
-    const [authOption, setAuthOption] = useState(option);
+    const [animating, setAnimating] = useState(false);
+    const [authOption, setAuthOption] = useState(params.authOption);
 
     function activateSignUp() {
-        if (authOption !== "sign-in") return;
+        if (animating || authOption === "sign-up") return;
 
         setAuthOption("sign-up");
         window.history.pushState("", "", "/auth/sign-up");
     }
 
     function activateSignIn() {
-        if (authOption === "sign-in") return;
+        if (animating || authOption === "sign-in") return;
 
         setAuthOption("sign-in");
         window.history.pushState("", "", "/auth/sign-in");
@@ -52,7 +52,10 @@ function Auth({ option }: AuthTypes) {
                     </header>
 
                     <main>
-                        <AuthOptions activeOption={authOption as string} />
+                        <AuthOptions
+                            activeOption={authOption as string}
+                            setAnimating={setAnimating}
+                        />
                     </main>
                 </div>
             </ContentWidthContainer>

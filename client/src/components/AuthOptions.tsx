@@ -5,9 +5,12 @@ import "../styles/AuthOptions.scss";
 
 interface AuthOptionsTypes {
     activeOption: string;
+    setAnimating: any;
 }
 
-function AuthOptions({ activeOption }: AuthOptionsTypes) {
+function AuthOptions(props: AuthOptionsTypes) {
+    const { activeOption, setAnimating } = props;
+
     const [animationSteps, setAnimationSteps] = useState({
         showSignUp: activeOption !== "sign-in",
         animateSignUp: activeOption !== "sign-in",
@@ -21,19 +24,27 @@ function AuthOptions({ activeOption }: AuthOptionsTypes) {
     }, [activeOption]);
 
     function animateSignUpOptionIn() {
+        setAnimating(true);
+
         updateAnimationSteps("animateSignIn", false);
         setTimeout(() => updateAnimationSteps("showSignIn", false), 500);
 
         setTimeout(() => updateAnimationSteps("showSignUp", true), 500);
         setTimeout(() => updateAnimationSteps("animateSignUp", true), 550);
+
+        setTimeout(() => setAnimating(false), 1050);
     }
 
     function animateSignInOptionIn() {
+        setAnimating(true);
+
         updateAnimationSteps("animateSignUp", false);
         setTimeout(() => updateAnimationSteps("showSignUp", false), 500);
 
         setTimeout(() => updateAnimationSteps("showSignIn", true), 500);
         setTimeout(() => updateAnimationSteps("animateSignIn", true), 550);
+
+        setTimeout(() => setAnimating(false), 1050);
     }
 
     function updateAnimationSteps(key: string, value: boolean): void {

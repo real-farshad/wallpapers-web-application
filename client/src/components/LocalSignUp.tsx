@@ -30,16 +30,9 @@ function LocalSignUp() {
             </h1>
 
             <form className="local-sign-up__form" onSubmit={handleFormSubmit}>
-                <FormUsernameInput
-                    autoFocus={true}
-                    value={username}
-                    changeValue={setUsername}
-                />
-
+                <FormUsernameInput value={username} changeValue={setUsername} />
                 <FormEmailInput value={email} changeValue={setEmail} />
-
                 <FormPasswordInput value={password} changeValue={setPassword} />
-
                 <FormSubmitBtn value="Create A New Account" />
             </form>
         </div>

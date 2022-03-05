@@ -9,7 +9,7 @@ import "../styles/NewPreview.scss";
 function NewPreview() {
     const sort = "new";
     const page = 1;
-    const limit = 1;
+    const limit = 6;
 
     const [newWallpapers, setNewWallpapers] = useState([]);
 

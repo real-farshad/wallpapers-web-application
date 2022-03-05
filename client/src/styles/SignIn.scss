@@ -6,12 +6,17 @@
     gap: 100px;
 
     @include min-width-md {
-        justify-content: space-between;
         gap: 50px;
     }
 
+    @include min-width-lg {
+        gap: 100px;
+    }
+
     @include min-width-xl {
-        gap: 180px;
+        gap: 0;
+        height: 500px;
+        justify-content: space-between;
     }
 }
 

@@ -6,8 +6,13 @@
     gap: 100px;
 
     @include min-width-md {
-        justify-content: space-between;
         gap: 50px;
+    }
+
+    @include min-width-xl {
+        gap: 0;
+        height: 500px;
+        justify-content: space-between;
     }
 }
 
@@ -45,12 +50,8 @@
 
     @include min-width-md {
         flex-direction: row;
-        align-items: flex-start;
-        justify-content: space-between;
-    }
-
-    @include min-width-xl {
         align-items: flex-end;
+        justify-content: space-between;
     }
 }
 

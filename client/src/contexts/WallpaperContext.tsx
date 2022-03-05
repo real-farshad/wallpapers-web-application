@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import findWallpaper from "../api/findWallpaper";
 
 const WallpaperContext = createContext(null as any);
 
@@ -9,13 +10,12 @@ function WallpaperProvider({ children }: any) {
 
     useEffect(() => {
         if (!wallpaperId) return setWallpaper(null);
-        fetchAndSetWallpaper(wallpaperId);
+        addWallpaper(wallpaperId);
     }, [wallpaperId]);
 
-    async function fetchAndSetWallpaper(id: string) {
-        const res = await fetch("/api/wallpapers/" + id);
-        const wallpaperObject = await res.json();
-        setWallpaper(wallpaperObject);
+    async function addWallpaper(id: string) {
+        const relatedWallpaper = await findWallpaper(id);
+        setWallpaper(relatedWallpaper);
     }
 
     return (
@@ -27,7 +27,7 @@ function WallpaperProvider({ children }: any) {
                 setWallpaper,
                 setWallpaperId,
                 setLastUrl,
-                fetchAndSetWallpaper,
+                addWallpaper,
             }}
         >
             {children}
