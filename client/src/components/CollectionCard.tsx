@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
+import makeStandardTimeString from "../utils/makeStandardTimeString";
 import CoverImage from "./CoverImage";
-import StandardTime from "./StandardTime";
 import "../styles/CollectionCard.scss";
 
 interface CollectionCardTypes {
@@ -18,6 +18,8 @@ function CollectionCard(props: CollectionCardTypes | any) {
     const { _id, user, createdAt, wallpaper, title, wallpaperCount } =
         props.data;
 
+    const standardPublishDate = makeStandardTimeString(createdAt);
+
     return (
         <div className="collection-card">
             <div className="collection-card__primary-info">
@@ -26,7 +28,7 @@ function CollectionCard(props: CollectionCardTypes | any) {
                 </p>
 
                 <p className="collection-card__publish-date">
-                    Published At <StandardTime time={createdAt} />
+                    Published At {standardPublishDate}
                 </p>
             </div>
 

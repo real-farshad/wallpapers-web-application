@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import getCollectionWallpapers from "../api/getCollectionWallpapers";
+import getCollectionInfo from "../api/getCollectionInfo";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import CopyRight from "../components/CopyRight";
 import FooterContainer from "../components/FooterContainer";
@@ -11,8 +13,6 @@ import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
 import SectionTitle from "../components/SectionTitle";
 import "../styles/Collection.scss";
-import getCollectionWallpapers from "../api/getCollectionWallpapers";
-import getCollectionInfo from "../api/getCollectionInfo";
 
 function Collection() {
     const { id } = useParams();

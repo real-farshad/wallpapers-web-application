@@ -7,8 +7,8 @@ import WallpaperContent from "../components/WallpaperContent";
 import "../styles/Wallpaper.scss";
 
 function Wallpaper() {
-    const { wallpaper, setWallpaper, addWallpaper } = useWallpaperContext();
     const { id } = useParams();
+    const { wallpaper, setWallpaper, addWallpaper } = useWallpaperContext();
 
     useEffect(() => {
         addWallpaper(id);

@@ -28,7 +28,10 @@ function SearchField() {
     return (
         <form className="search-field" onSubmit={handleFormSubmit}>
             <input
-                className="search-field__input"
+                className={`search-field__input${
+                    titleInput.length > 0 ? " search-field__input--active" : ""
+                }`}
+                type="text"
                 placeholder="SEARCH"
                 maxLength={64}
                 value={titleInput}

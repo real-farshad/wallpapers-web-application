@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import searchWallpapers from "../api/searchWallpapers";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
 import StandardNavbar from "../components/StandardNavbar";
@@ -6,10 +7,9 @@ import MainContainer from "../components/MainContainer";
 import SectionGrid from "../components/SectionGrid";
 import SectionInfoContainer from "../components/SectionInfoContainer";
 import SectionTitle from "../components/SectionTitle";
+import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
-import searchWallpapers from "../api/searchWallpapers";
-import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 
 function New() {
     const sort = "new";

@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import AuthNavbar from "../components/AuthNavbar";
 import AuthOptions from "../components/AuthOptions";
 import authBg from "../assets/auth-bg.jpg";
 import "../styles/Auth.scss";
-import { useParams } from "react-router-dom";
 
 function Auth() {
     const params = useParams();

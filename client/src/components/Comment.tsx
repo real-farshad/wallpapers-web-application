@@ -1,6 +1,6 @@
-import "../styles/Comment.scss";
+import calculateElapsedTime from "../utils/calculateElapsedTime";
 import UserAvatar from "./UserAvatar";
-import PassedTime from "./PassedTime";
+import "../styles/Comment.scss";
 
 interface CommentTypes {
     data: {
@@ -17,6 +17,8 @@ interface CommentTypes {
 function Comment(props: CommentTypes) {
     const { description, createdAt, user } = props.data;
 
+    const timeSincePublish = calculateElapsedTime(createdAt as number);
+
     return (
         <div className="comment">
             <div className="comment__primary-container">
@@ -31,7 +33,7 @@ function Comment(props: CommentTypes) {
 
                     {createdAt ? (
                         <p className="comment__publisher-secondary-info">
-                            Published <PassedTime time={createdAt} />
+                            Published {timeSincePublish}
                         </p>
                     ) : (
                         <p className="comment__publisher-secondary-info">

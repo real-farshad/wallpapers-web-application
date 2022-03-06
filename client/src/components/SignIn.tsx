@@ -1,7 +1,7 @@
 import SectionTitle from "./SectionTitle";
+import LocalSignIn from "./LocalSignIn";
 import GoogleSignIn from "./GoogleSignIn";
 import "../styles/SignIn.scss";
-import LocalSignIn from "./LocalSignIn";
 
 function SignIn() {
     return (
@@ -14,13 +14,15 @@ function SignIn() {
                     </SectionTitle>
                 </div>
 
-                <p className="sign-in__title-description">And Enjoy Your Stay</p>
+                <p className="sign-in__title-description">
+                    And Enjoy Your Stay
+                </p>
             </div>
 
             <div className="sign-in__options-container">
                 <p className="sign-in__description">
-                    You can use your email and password to sign into your account or you
-                    cant sign in with your google account.
+                    You can use your email and password to sign into your
+                    account or you cant sign in with your google account.
                 </p>
 
                 <div className="sign-in__local">

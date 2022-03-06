@@ -13,12 +13,15 @@ function GoogleSignUp() {
             </h1>
 
             <p className="google-sign-up__description">
-                We recommend using this method, when you sign up with your google account,
-                you don't need to worry about forgetting your password and you can sign in
-                much faster and easier.
+                We recommend using this method, when you sign up with your
+                google account, you don't need to worry about forgetting your
+                password and you can sign in much faster and easier.
             </p>
 
-            <button className="google-sing-up__btn" onClick={handleClickOnSignUpBtn}>
+            <button
+                className="google-sing-up__btn"
+                onClick={handleClickOnSignUpBtn}
+            >
                 Sign Up With Google
             </button>
         </div>

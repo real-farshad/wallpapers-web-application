@@ -1,3 +1,5 @@
+@import "breakpoints";
+
 .search-field__input {
     font-weight: var(--medium-font-weight);
     color: var(--white);
@@ -6,5 +8,19 @@
     &::placeholder {
         color: var(--white);
         opacity: 0.4;
+        border-bottom: none;
     }
+
+    &:focus {
+        outline: none;
+        border-bottom: 1px solid var(--white);
+    }
+
+    @include min-width-xl {
+        width: 200px;
+    }
+}
+
+.search-field__input--active {
+    border-bottom: 1px solid var(--white);
 }

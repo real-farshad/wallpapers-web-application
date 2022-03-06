@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
-import StandardTime from "./StandardTime";
+import makeStandardTimeString from "../utils/makeStandardTimeString";
+import makeStandardCountString from "../utils/makeStandardCountString";
 import CoverImage from "./CoverImage";
-import StandardCount from "./StandardCount";
 import "../styles/WallpaperCard.scss";
 
 interface WallpaperCardTypes {
@@ -19,7 +19,11 @@ interface WallpaperCardTypes {
 function WallpaperCard(props: WallpaperCardTypes | any) {
     const { setWallpaperId } = useWallpaperContext();
 
-    const { _id, publisher, createdAt, imageUrl, title, likeCount } = props.data;
+    const { _id, publisher, createdAt, imageUrl, title, likeCount } =
+        props.data;
+
+    const standardPublishDate = makeStandardTimeString(createdAt);
+    const standardLikeCount = makeStandardCountString(likeCount);
 
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -40,7 +44,7 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
                 </p>
 
                 <p className="wallpaper-card__publish-date">
-                    Published At <StandardTime time={createdAt} />
+                    Published At {standardPublishDate}
                 </p>
             </div>
 
@@ -72,7 +76,7 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
                         </p>
 
                         <p className="wallpaper-card__like-count">
-                            <StandardCount count={likeCount} />
+                            {standardLikeCount}
                         </p>
                     </button>
 
