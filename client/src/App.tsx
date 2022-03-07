@@ -1,6 +1,7 @@
 import { Fragment } from "react";
-import { useWallpaperContext } from "./contexts/WallpaperContext";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useUserContext } from "./contexts/userContext";
+import { useWallpaperContext } from "./contexts/WallpaperContext";
 import Home from "./pages/Home";
 import Popular from "./pages/Popular";
 import New from "./pages/New";
@@ -13,6 +14,7 @@ import WallpaperOverlay from "./components/WallpaperOverlay";
 import "./styles/App.scss";
 
 function App() {
+    const { isLoggedIn } = useUserContext();
     const { wallpaperId } = useWallpaperContext();
 
     return (
@@ -24,7 +26,10 @@ function App() {
                 <Route path="/collections" element={<Collections />} />
                 <Route path="/search/:contentType" element={<Search />} />
                 <Route path="/auth" element={<Navigate to="/auth/sign-up" />} />
-                <Route path="/auth/:authOption" element={<Auth />} />
+                <Route
+                    path="/auth/:authOption"
+                    element={isLoggedIn ? <Navigate to="/" /> : <Auth />}
+                />
                 <Route path="/wallpaper/:id" element={<Wallpaper />} />
                 <Route path="/collections/:id" element={<Collection />} />
             </Routes>

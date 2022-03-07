@@ -43,8 +43,20 @@ router.get(
 router.get(
     "/google/callback",
     passport.authenticate("google", { failureRedirect: "/" }),
-    (req, res) => res.redirect("/")
+    (req, res) => res.redirect("http://localhost:3000/")
 );
+
+router.get("/check", authenticateUser, (req, res) => {
+    const user = req.user;
+
+    const userInfo = {
+        username: user.username,
+        avatar: user.avatar ? user.avatar : null,
+        local: user.local,
+    };
+
+    return res.json(userInfo);
+});
 
 router.get("/sign-out", authenticateUser, (req, res) => {
     req.logout();
