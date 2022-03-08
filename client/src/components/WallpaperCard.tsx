@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
 import makeStandardTimeString from "../utils/makeStandardTimeString";
-import makeStandardCountString from "../utils/makeStandardCountString";
 import CoverImage from "./CoverImage";
+import LikeBtn from "./LikeBtn";
+import SaveBtn from "./SaveBtn";
 import "../styles/WallpaperCard.scss";
 
 interface WallpaperCardTypes {
@@ -23,18 +23,6 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
         props.data;
 
     const standardPublishDate = makeStandardTimeString(createdAt);
-    const standardLikeCount = makeStandardCountString(likeCount);
-
-    const [liked, setLiked] = useState(false);
-    const [saved, setSaved] = useState(false);
-
-    function handleClickOnLike() {
-        setLiked((prevState) => !prevState);
-    }
-
-    function handleClickOnSave() {
-        setSaved((prevState) => !prevState);
-    }
 
     return (
         <div className="wallpaper-card">
@@ -67,25 +55,16 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
                 </h1>
 
                 <div className="wallpaper-card__btns-container">
-                    <button
-                        className="wallpaper-card__like-btn"
-                        onClick={handleClickOnLike}
-                    >
-                        <p className="wallpaper-card__like-text">
-                            {liked ? "LIKED" : "LIKE"}
-                        </p>
+                    <div className="wallpaper-card__like-btn">
+                        <LikeBtn
+                            wallpaperId={_id}
+                            isLiked={false}
+                            likeCount={likeCount}
+                            secondaryStyle
+                        />
+                    </div>
 
-                        <p className="wallpaper-card__like-count">
-                            {standardLikeCount}
-                        </p>
-                    </button>
-
-                    <button
-                        className="wallpaper-card__save-btn"
-                        onClick={handleClickOnSave}
-                    >
-                        {saved ? "SAVED" : "SAVE"}
-                    </button>
+                    <SaveBtn wallpaperId={_id} isSaved={false} secondaryStyle />
                 </div>
             </div>
         </div>

@@ -1,16 +1,16 @@
 import { useWallpaperContext } from "../contexts/WallpaperContext";
 import makeStandardTimeString from "../utils/makeStandardTimeString";
-import makeStandardCountString from "../utils/makeStandardCountString";
 import UserAvatar from "./UserAvatar";
+import LikeBtn from "./LikeBtn";
+import SaveBtn from "./SaveBtn";
 import "../styles/WallpaperInfo.scss";
 
 function WallpaperInfo() {
     const { wallpaper } = useWallpaperContext();
-    const { imageUrl, title, category, publisher, createdAt, likeCount } =
+    const { _id, imageUrl, title, category, publisher, createdAt, likeCount } =
         wallpaper;
 
     const standardPublishDate = makeStandardTimeString(createdAt);
-    const standardLikeCount = makeStandardCountString(likeCount);
 
     async function handleClickOnDownload(e: any) {
         const res = await fetch(imageUrl.large);
@@ -66,14 +66,13 @@ function WallpaperInfo() {
                         </span>
                     </button>
 
-                    <button className="wallpaper-info__like-btn">
-                        Like
-                        <span className="wallpaper-info__like-count">
-                            {standardLikeCount}
-                        </span>
-                    </button>
+                    <LikeBtn
+                        wallpaperId={_id}
+                        isLiked={false}
+                        likeCount={likeCount}
+                    />
 
-                    <button className="wallpaper-info__save-btn">Save</button>
+                    <SaveBtn wallpaperId={_id} isSaved={false} />
                 </div>
             </div>
         </div>

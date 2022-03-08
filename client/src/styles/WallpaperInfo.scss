@@ -96,24 +96,3 @@
     font-weight: var(--medium-font-weight);
     opacity: 0.6;
 }
-
-.wallpaper-info__like-btn {
-    font-weight: var(--medium-font-weight);
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    opacity: var(--primary-opacity);
-}
-
-.wallpaper-info__like-count {
-    font-size: 10px;
-    font-weight: var(--medium-font-weight);
-    width: 100%;
-    text-align: center;
-    opacity: 0.6;
-}
-
-.wallpaper-info__save-btn {
-    font-weight: var(--medium-font-weight);
-    opacity: var(--primary-opacity);
-}

@@ -1,0 +1,25 @@
+.like-btn {
+    font-weight: var(--medium-font-weight);
+    text-align: center;
+    cursor: pointer;
+}
+
+.like-btn__text {
+    display: flex;
+    flex-direction: column;
+    opacity: var(--primary-opacity);
+    margin-bottom: 3px;
+
+    &--all-caps {
+        text-transform: uppercase;
+    }
+}
+
+.like-btn__count {
+    font-size: 10px;
+    opacity: 0.6;
+
+    &--low-opacity {
+        opacity: 0.4;
+    }
+}
