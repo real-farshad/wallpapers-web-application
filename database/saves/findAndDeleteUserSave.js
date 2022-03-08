@@ -2,12 +2,12 @@ const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getSavesCollection = () => getDatabase().collection("saves");
 
-async function findAndDeleteUserSave(saveId, userId) {
+async function findAndDeleteUserSave(wallpaperId, userId) {
     let error, success;
 
     try {
         const result = await getSavesCollection().deleteOne({
-            _id: new ObjectId(saveId),
+            wallpaperId: new ObjectId(wallpaperId),
             userId: new ObjectId(userId),
         });
 

@@ -2,12 +2,12 @@ const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getLikesCollection = () => getDatabase().collection("likes");
 
-async function findAndDeleteUserLike(likeId, userId) {
+async function findAndDeleteUserLike(wallpaperId, userId) {
     let error, success;
 
     try {
         const result = await getLikesCollection().deleteOne({
-            _id: new ObjectId(likeId),
+            wallpaperId: new ObjectId(wallpaperId),
             userId: new ObjectId(userId),
         });
 

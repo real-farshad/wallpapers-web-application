@@ -1,7 +1,8 @@
 const { ObjectId } = require("mongodb");
 const findSingleWallpaper = require("../../wallpapers/findSingleWallpaper");
 
-const mockId = String(new ObjectId());
+const mockWallpaperId = String(new ObjectId());
+const mockUserId = String(new ObjectId());
 const mockDB = {
     findWallpaperById: jest.fn(() => {
         const err = null;
@@ -28,7 +29,11 @@ describe("find single wallpaper", () => {
                 return [err, wallpaper];
             }),
         };
-        const [err, wallpaper] = await findSingleWallpaper(mockId, db);
+        const [err, wallpaper] = await findSingleWallpaper(
+            mockWallpaperId,
+            mockUserId,
+            db
+        );
         expect(err).toMatchObject({
             status: 404,
             message: expect.stringMatching(
@@ -38,7 +43,11 @@ describe("find single wallpaper", () => {
     });
 
     it("should return null as error if the operation was successfull", async () => {
-        const [err, wallpaper] = await findSingleWallpaper(mockId, mockDB);
+        const [err, wallpaper] = await findSingleWallpaper(
+            mockWallpaperId,
+            mockUserId,
+            mockDB
+        );
         expect(err).toBeNull();
     });
 });

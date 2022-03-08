@@ -1,6 +1,7 @@
 import { useState } from "react";
 import saveWallpaper from "../api/saveWallpaper";
 import unsaveWallpaper from "../api/unsaveWallpaper";
+import { useUserContext } from "../contexts/userContext";
 import "../styles/SaveBtn.scss";
 
 interface SaveBtnTypes {
@@ -10,11 +11,15 @@ interface SaveBtnTypes {
 }
 
 function SaveBtn(props: SaveBtnTypes) {
+    const { isLoggedIn } = useUserContext();
+
     const { wallpaperId, isSaved, secondaryStyle } = props;
 
     const [saved, setSaved] = useState(isSaved);
 
     function handleClickOnSave() {
+        if (!isLoggedIn) return (window.location.href = "/auth/sing-up");
+
         if (saved) handleUnsave();
         else handleSave();
     }

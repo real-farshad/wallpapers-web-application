@@ -21,9 +21,10 @@ router.post("/", authenticateUser, async (req, res, next) => {
 
 router.get("/", async (req, res, next) => {
     const query = req.query;
+    const userId = req.user ? req.user._id : null;
     const db = req.database;
 
-    const [err, wallpapers] = await queryWallpapers(query, db);
+    const [err, wallpapers] = await queryWallpapers(query, userId, db);
     if (err) return next(err);
 
     return res.json(wallpapers);
@@ -31,9 +32,10 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
     const wallpaperId = req.params.id;
+    const userId = req.user ? req.user._id : null;
     const db = req.database;
 
-    const [err, wallpaper] = await findSingleWallpaper(wallpaperId, db);
+    const [err, wallpaper] = await findSingleWallpaper(wallpaperId, userId, db);
     if (err) return next(err);
 
     return res.json(wallpaper);

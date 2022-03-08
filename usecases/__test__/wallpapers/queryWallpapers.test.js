@@ -1,6 +1,8 @@
+const { ObjectId } = require("mongodb");
 const queryWallpapers = require("../../wallpapers/queryWallpapers");
 
 const mockQuery = {};
+const mockUserId = String(new ObjectId());
 const mockDB = {
     queryWallpapers: jest.fn(() => {
         const err = null;
@@ -169,12 +171,16 @@ describe("query wallpapers", () => {
     });
 
     it("should query the database for related wallpapers", async () => {
-        await queryWallpapers(mockQuery, mockDB);
+        await queryWallpapers(mockQuery, mockUserId, mockDB);
         expect(mockDB.queryWallpapers.mock.calls.length).toBe(1);
     });
 
     it("should return null as error if the operation was successfull", async () => {
-        const [err, wallpapers] = await queryWallpapers(mockQuery, mockDB);
+        const [err, wallpapers] = await queryWallpapers(
+            mockQuery,
+            mockUserId,
+            mockDB
+        );
         expect(err).toBeNull();
     });
 });

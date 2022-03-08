@@ -41,11 +41,11 @@ router.get("/check/:id", authenticateUser, async (req, res, next) => {
 });
 
 router.delete("/:id", authenticateUser, async (req, res, next) => {
-    const likeId = req.params.id;
+    const wallpaperId = req.params.id;
     const userId = req.user._id;
     const db = req.database;
 
-    const err = await deleteLike(likeId, userId, db);
+    const err = await deleteLike(wallpaperId, userId, db);
     if (err) return next(err);
 
     return res.json({ success: true });

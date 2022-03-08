@@ -1,6 +1,6 @@
 const validateWallpapersQuery = require("../../validation/wallpapersQuery");
 
-async function queryWallpapers(query, db) {
+async function queryWallpapers(query, userId, db) {
     let [err, validQuery] = await validateWallpapersQuery(query);
     if (err) {
         const knownError = { known: true, status: 400, message: err.message };
@@ -8,8 +8,8 @@ async function queryWallpapers(query, db) {
     }
 
     let wallpapers;
-    [err, wallpapers] = await db.queryWallpapers(validQuery);
-    if (err) return err;
+    [err, wallpapers] = await db.queryWallpapers(validQuery, userId);
+    if (err) return [err, wallpapers];
 
     return [null, wallpapers];
 }

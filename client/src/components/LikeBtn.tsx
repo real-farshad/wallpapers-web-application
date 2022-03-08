@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { useUserContext } from "../contexts/userContext";
 import likeWallpaper from "../api/likeWallpaper";
+import unlikeWallpaper from "../api/unlikeWallpaper";
 import makeStandardCountString from "../utils/makeStandardCountString";
 import "../styles/LikeBtn.scss";
-import unlikeWallpaper from "../api/unlikeWallpaper";
 
 interface LikeBtnTypes {
     wallpaperId: string;
@@ -12,12 +13,16 @@ interface LikeBtnTypes {
 }
 
 function LikeBtn(props: LikeBtnTypes) {
+    const { isLoggedIn } = useUserContext();
+
     const { wallpaperId, isLiked, likeCount, secondaryStyle } = props;
     const standardLikeCount = makeStandardCountString(likeCount);
 
     const [liked, setLiked] = useState(isLiked);
 
     function handleClickOnLike() {
+        if (!isLoggedIn) return (window.location.href = "/auth/sign-up");
+
         if (liked) handleUnlike();
         else handleLike();
     }

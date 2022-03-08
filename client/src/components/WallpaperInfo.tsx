@@ -7,8 +7,19 @@ import "../styles/WallpaperInfo.scss";
 
 function WallpaperInfo() {
     const { wallpaper } = useWallpaperContext();
-    const { _id, imageUrl, title, category, publisher, createdAt, likeCount } =
-        wallpaper;
+    const {
+        _id,
+        imageUrl,
+        title,
+        category,
+        publisher,
+        createdAt,
+        likeCount,
+        liked,
+        saved,
+    } = wallpaper;
+
+    console.log(wallpaper);
 
     const standardPublishDate = makeStandardTimeString(createdAt);
 
@@ -68,11 +79,11 @@ function WallpaperInfo() {
 
                     <LikeBtn
                         wallpaperId={_id}
-                        isLiked={false}
+                        isLiked={liked}
                         likeCount={likeCount}
                     />
 
-                    <SaveBtn wallpaperId={_id} isSaved={false} />
+                    <SaveBtn wallpaperId={_id} isSaved={saved} />
                 </div>
             </div>
         </div>

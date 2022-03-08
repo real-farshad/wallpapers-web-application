@@ -2,7 +2,7 @@ const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getWallpapersCollection = () => getDatabase().collection("wallpapers");
 
-async function queryWallpapers(query) {
+async function queryWallpapers(query, userId) {
     let error, wallpapers;
 
     try {
@@ -19,7 +19,7 @@ async function queryWallpapers(query) {
         if (sort && sort === "popular") sort = { likeCount: -1 };
         else sort = { createdAt: -1 };
 
-        const cursor = await getWallpapersCollection().aggregate([
+        const pipeline = [
             { $match: match },
             { $sort: sort },
             { $skip: page > 0 ? (page - 1) * limit : 0 },
@@ -35,19 +35,70 @@ async function queryWallpapers(query) {
                     as: "publisher",
                 },
             },
-            {
-                $project: {
-                    imageUrl: { thumbnail: 1 },
-                    title: 1,
-                    likeCount: 1,
-                    createdAt: 1,
-                    publisher: { $first: "$publisher" },
-                },
-            },
-        ]);
+        ];
 
-        const result = await cursor.toArray();
-        wallpapers = result;
+        if (userId) {
+            const likeLookup = {
+                $lookup: {
+                    from: "likes",
+                    let: { id: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ["$wallpaperId", "$$id"] },
+                                userId,
+                            },
+                        },
+                    ],
+                    as: "like",
+                },
+            };
+            pipeline.push(likeLookup);
+        }
+
+        if (userId) {
+            const saveLookup = {
+                $lookup: {
+                    from: "saves",
+                    let: { id: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ["$wallpaperId", "$$id"] },
+                                userId,
+                            },
+                        },
+                    ],
+                    as: "save",
+                },
+            };
+            pipeline.push(saveLookup);
+        }
+
+        pipeline.push({
+            $project: {
+                imageUrl: { thumbnail: 1 },
+                title: 1,
+                likeCount: 1,
+                createdAt: 1,
+                publisher: { $first: "$publisher" },
+                like: { $first: "$like" },
+                save: { $first: "$save" },
+            },
+        });
+
+        const cursor = await getWallpapersCollection().aggregate(pipeline);
+        wallpapers = await cursor.toArray();
+
+        for (let wallpaper of wallpapers) {
+            if (wallpaper.like) wallpaper.liked = true;
+            else wallpaper.liked = false;
+            delete wallpaper.like;
+
+            if (wallpaper.save) wallpaper.saved = true;
+            else wallpaper.saved = false;
+            delete wallpaper.save;
+        }
 
         error = null;
     } catch (err) {

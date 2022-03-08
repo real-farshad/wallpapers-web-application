@@ -2,7 +2,7 @@ const express = require("express");
 const authenticateUser = require("../middleware/authenticateUser");
 const createSave = require("../usecases/saves/createSave");
 const queryUserSaves = require("../usecases/saves/queryUserSaves");
-const deleteLike = require("../usecases/likes/deleteLike");
+const deleteSave = require("../usecases/saves/deleteSave");
 
 const router = express.Router();
 
@@ -29,11 +29,11 @@ router.get("/:id", authenticateUser, async (req, res, next) => {
 });
 
 router.delete("/:id", authenticateUser, async (req, res, next) => {
-    const saveId = req.params.id;
+    const wallpaperId = req.params.id;
     const userId = req.user._id;
     const db = req.database;
 
-    const err = await deleteLike(saveId, userId, db);
+    const err = await deleteSave(wallpaperId, userId, db);
     if (err) return next(err);
 
     return res.json({ success: true });

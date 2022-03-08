@@ -1,6 +1,9 @@
 async function unlikeWallpaper(wallpaperId: string) {
     const url = "/api/likes/" + wallpaperId;
-    const result: any = await fetch(url, { method: "DELETE" });
+
+    const res = await fetch(url, { method: "DELETE" });
+    const result: any = await res.json();
+
     const success = result.success ? true : false;
     return success;
 }

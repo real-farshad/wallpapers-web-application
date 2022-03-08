@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb");
 const deleteLike = require("../../likes/deleteLike");
 
-const mockLikeId = String(new ObjectId());
+const mockWallpaperId = String(new ObjectId());
 const mockUserId = String(new ObjectId());
 const mockDB = {
     findAndDeleteUserLike: jest.fn(() => {
@@ -16,12 +16,12 @@ const mockDB = {
 };
 
 describe("delete like", () => {
-    it("should return error with status 400 if likeId is not a valid id", async () => {
-        const likeId = "1";
-        const err = await deleteLike(likeId);
+    it("should return error with status 400 if wallpaperId is not a valid id", async () => {
+        const wallpaperId = "1";
+        const err = await deleteLike(wallpaperId);
         expect(err).toMatchObject({
             status: 400,
-            message: "invalid likeId!",
+            message: "invalid wallpaperId!",
         });
     });
 
@@ -33,7 +33,7 @@ describe("delete like", () => {
                 return [err, like];
             }),
         };
-        const err = await deleteLike(mockLikeId, mockUserId, db);
+        const err = await deleteLike(mockWallpaperId, mockUserId, db);
         expect(err).toMatchObject({
             status: 404,
             message: expect.stringMatching(/.*(like).*(doesn't exist).*/gi),
@@ -41,12 +41,12 @@ describe("delete like", () => {
     });
 
     it("should decrement wallpapers like", async () => {
-        await deleteLike(mockLikeId, mockUserId, mockDB);
+        await deleteLike(mockWallpaperId, mockUserId, mockDB);
         expect(mockDB.decrementWallpaperLikeCount.mock.calls.length).toBe(1);
     });
 
     it("should return null as error if the operation was successfull", async () => {
-        const err = await deleteLike(mockLikeId, mockUserId, mockDB);
+        const err = await deleteLike(mockWallpaperId, mockUserId, mockDB);
         expect(err).toBeNull();
     });
 });
