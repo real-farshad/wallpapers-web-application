@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "server-test": "jest",
+        "server-test": "jest --watchAll ./usecases/__test__/likes/getUserLikesCount.test.js",
         "server-dev": "nodemon ./server.js",
         "client-dev": "cd client && npm run start",
         "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",

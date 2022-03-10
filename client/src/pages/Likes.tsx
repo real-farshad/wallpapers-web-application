@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import getLikedWallpapers from "../api/getLikedWallpapers";
+import getUserLikesCount from "../api/getUserLikesCount";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import CopyRight from "../components/CopyRight";
 import FooterContainer from "../components/FooterContainer";
@@ -15,13 +16,19 @@ function Likes() {
     const [page, setPage] = useState(1);
     const limit = 8;
 
-    const [likedWallpapersCount, setLikedWallpapersCount] = useState(5);
+    const [userLikesCount, setUserLikesCount] = useState(0);
     const [wallpapers, setWallpapers] = useState([]);
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
+        if (page === 1) addLikedWallpapersCount();
         addLikedWallpapers();
     }, [page]);
+
+    async function addLikedWallpapersCount() {
+        const count = await getUserLikesCount();
+        setUserLikesCount(count);
+    }
 
     async function addLikedWallpapers() {
         const wallpapers = await getLikedWallpapers(page, limit);
@@ -45,7 +52,7 @@ function Likes() {
                 <SectionGrid>
                     <SectionInfoContainer>
                         <SectionTitle>
-                            {likedWallpapersCount} <br />
+                            {userLikesCount} <br />
                             LIKED <br />
                             WALLPAPERS
                         </SectionTitle>

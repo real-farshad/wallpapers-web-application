@@ -1,6 +1,7 @@
 const express = require("express");
 const authenticateUser = require("../middleware/authenticateUser");
 const createLike = require("../usecases/likes/createLike");
+const getUserLikesCount = require("../usecases/likes/getUserLikesCount");
 const queryUserLikes = require("../usecases/likes/queryUserLikes");
 const checkLike = require("../usecases/likes/checkLike");
 const deleteLike = require("../usecases/likes/deleteLike");
@@ -16,6 +17,16 @@ router.post("/:id", authenticateUser, async (req, res, next) => {
     if (err) return next(err);
 
     return res.json({ success: true });
+});
+
+router.get("/count", authenticateUser, async (req, res, next) => {
+    const userId = req.user._id;
+    const db = req.database;
+
+    const [err, userLikesCount] = await getUserLikesCount(userId, db);
+    if (err) return next(err);
+
+    return res.json({ count: userLikesCount });
 });
 
 router.get("/", authenticateUser, async (req, res, next) => {
