@@ -18,7 +18,7 @@ router.post("/:id", authenticateUser, async (req, res, next) => {
     return res.json({ success: true });
 });
 
-router.get("/:id", authenticateUser, async (req, res, next) => {
+router.get("/", authenticateUser, async (req, res, next) => {
     const query = req.query;
     const userId = req.user._id;
     const db = req.database;

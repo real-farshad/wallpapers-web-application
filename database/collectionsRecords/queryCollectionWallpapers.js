@@ -61,12 +61,9 @@ async function queryCollectionWallpapers(collectionId, query) {
 
         const result = await cursor.toArray();
 
-        if (!result[0]) collectionWallpapers = null;
-        else {
-            const wallpapers = [];
-            for (let record of result) wallpapers.push(record.wallpaper);
-            collectionWallpapers = wallpapers;
-        }
+        const wallpapers = [];
+        for (let record of result) wallpapers.push(record.wallpaper);
+        collectionWallpapers = wallpapers;
 
         error = null;
     } catch (err) {

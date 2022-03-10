@@ -38,7 +38,10 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
         <div className="wallpaper-card">
             <div className="wallpaper-card__primary-info">
                 <p className="wallpaper-card__publisher">
-                    By <a href="/#">@{publisher.username}</a>
+                    By{" "}
+                    <a href="/#">
+                        @{publisher.username ? publisher.username : publisher}
+                    </a>
                 </p>
 
                 <p className="wallpaper-card__publish-date">

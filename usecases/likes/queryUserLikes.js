@@ -14,7 +14,7 @@ async function queryUserLikes(query, userId, db) {
 
     let likes;
     [err, likes] = await db.queryUserLikes(validQuery, userId);
-    if (err) return err;
+    if (err) return [err, null];
 
     return [null, likes];
 }
