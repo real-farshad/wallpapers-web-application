@@ -3,8 +3,8 @@ async function getUserLikesCount() {
 
     const response = await fetch(url);
     const result = await response.json();
-    const userLikesCount = result.count;
 
+    const userLikesCount = result.count;
     return userLikesCount;
 }
 

@@ -10,7 +10,7 @@ const mockDB = {
     }),
 };
 
-describe("query user likes", () => {
+describe("query user likes count", () => {
     it("should query the database for user likes count", async () => {
         await getUserLikesCount(mockUserId, mockDB);
         expect(mockDB.getUserLikesCount.mock.calls.length).toBe(1);

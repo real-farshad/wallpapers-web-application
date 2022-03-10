@@ -13,8 +13,8 @@ async function queryUserSaves(query, userId, db) {
     }
 
     let saves;
-    [err, saves] = await db.queryUserSaves(query, userId);
-    if (err) return err;
+    [err, saves] = await db.queryUserSaves(validQuery, userId);
+    if (err) return [err, null];
 
     return [null, saves];
 }

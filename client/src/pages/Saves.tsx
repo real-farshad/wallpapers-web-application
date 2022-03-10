@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import getUserLikesCount from "../api/getUserLikesCount";
-import getLikedWallpapers from "../api/getLikedWallpapers";
+import getUserSavesCount from "../api/getUserSavesCount";
+import getSavedWallpapers from "../api/getSavedWallpapers";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import CopyRight from "../components/CopyRight";
 import FooterContainer from "../components/FooterContainer";
@@ -12,26 +12,26 @@ import SectionTitle from "../components/SectionTitle";
 import StandardNavbar from "../components/StandardNavbar";
 import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 
-function Likes() {
+function Saves() {
     const [page, setPage] = useState(1);
     const limit = 8;
 
-    const [userLikesCount, setUserLikesCount] = useState(0);
+    const [userSavesCount, setUserSavesCount] = useState(0);
     const [wallpapers, setWallpapers] = useState([]);
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
-        if (page === 1) addUserLikesCount();
-        addLikedWallpapers();
+        if (page === 1) addUserSavesCount();
+        addSavedWallpapers();
     }, [page]);
 
-    async function addUserLikesCount() {
-        const count = await getUserLikesCount();
-        setUserLikesCount(count);
+    async function addUserSavesCount() {
+        const count = await getUserSavesCount();
+        setUserSavesCount(count);
     }
 
-    async function addLikedWallpapers() {
-        const wallpapers = await getLikedWallpapers(page, limit);
+    async function addSavedWallpapers() {
+        const wallpapers = await getSavedWallpapers(page, limit);
         setWallpapers((prevState) => [
             ...prevState,
             ...(wallpapers as never[]),
@@ -52,8 +52,8 @@ function Likes() {
                 <SectionGrid>
                     <SectionInfoContainer>
                         <SectionTitle>
-                            {userLikesCount} <br />
-                            LIKED <br />
+                            {userSavesCount} <br />
+                            Saved <br />
                             WALLPAPERS
                         </SectionTitle>
                     </SectionInfoContainer>
@@ -73,4 +73,4 @@ function Likes() {
     );
 }
 
-export default Likes;
+export default Saves;

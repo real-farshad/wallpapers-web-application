@@ -12,6 +12,7 @@ import Wallpaper from "./pages/Wallpaper";
 import Collection from "./pages/Collection";
 import WallpaperOverlay from "./components/WallpaperOverlay";
 import Likes from "./pages/Likes";
+import Saves from "./pages/Saves";
 import "./styles/App.scss";
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/wallpaper/:id" element={<Wallpaper />} />
                 <Route path="/collections/:id" element={<Collection />} />
                 <Route path="/user/likes" element={isLoggedIn && <Likes />} />
+                <Route path="/user/saves" element={isLoggedIn && <Saves />} />
             </Routes>
 
             {wallpaperId && <WallpaperOverlay />}

@@ -1,6 +1,7 @@
 const express = require("express");
 const authenticateUser = require("../middleware/authenticateUser");
 const createSave = require("../usecases/saves/createSave");
+const getUserSavesCount = require("../usecases/saves/getUserSavesCount");
 const queryUserSaves = require("../usecases/saves/queryUserSaves");
 const deleteSave = require("../usecases/saves/deleteSave");
 
@@ -17,7 +18,17 @@ router.post("/:id", authenticateUser, async (req, res, next) => {
     return res.json({ success: true });
 });
 
-router.get("/:id", authenticateUser, async (req, res, next) => {
+router.get("/count", authenticateUser, async (req, res, next) => {
+    const userId = req.user._id;
+    const db = req.database;
+
+    const [err, userSavesCount] = await getUserSavesCount(userId, db);
+    if (err) return next(err);
+
+    return res.json({ count: userSavesCount });
+});
+
+router.get("/", authenticateUser, async (req, res, next) => {
     const query = req.query;
     const userId = req.user._id;
     const db = req.database;
