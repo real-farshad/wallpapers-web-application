@@ -19,11 +19,13 @@ router.post("/", authenticateUser, async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
     const collectionId = req.params.id;
+    const userId = req.user ? req.user._id : null;
     const query = req.query;
     const db = req.database;
 
     const [err, collectionWallpapers] = await queryCollectionWallpapers(
         collectionId,
+        userId,
         query,
         db
     );

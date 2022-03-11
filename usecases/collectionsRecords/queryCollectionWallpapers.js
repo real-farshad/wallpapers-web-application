@@ -1,7 +1,7 @@
 const validateId = require("../../validation/id");
 const validateCollectionWallpapersQuery = require("../../validation/collectionWallpapersQuery");
 
-async function queryCollectionWallpapers(collectionId, query, db) {
+async function queryCollectionWallpapers(collectionId, userId, query, db) {
     const isValidId = await validateId(collectionId);
     if (!isValidId) {
         const knownError = {
@@ -22,6 +22,7 @@ async function queryCollectionWallpapers(collectionId, query, db) {
     let collectionWallpapers;
     [err, collectionWallpapers] = await db.queryCollectionWallpapers(
         collectionId,
+        userId,
         validQuery
     );
     if (err) return [err, null];

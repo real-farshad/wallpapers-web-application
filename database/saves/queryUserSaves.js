@@ -7,6 +7,7 @@ async function queryUserSaves(query, userId) {
 
     try {
         const { page, limit } = query;
+
         const pipeline = [
             {
                 $match: {
@@ -34,14 +35,56 @@ async function queryUserSaves(query, userId) {
             },
             {
                 $lookup: {
+                    from: "users",
+                    localField: "wallpaper.0.publisherId",
+                    foreignField: "_id",
+                    as: "publisher",
+                },
+            },
+            {
+                $addFields: {
+                    wallpaper: {
+                        $first: "$wallpaper",
+                    },
+                    publisher: {
+                        $first: "$publisher",
+                    },
+                },
+            },
+            {
+                $lookup: {
                     from: "likes",
-                    localField: "wallpaper.0._id",
-                    foreignField: "wallpaperId",
+                    let: {
+                        wallpaperId: "$wallpaper._id",
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $eq: [
+                                                "$userId",
+                                                new ObjectId(userId),
+                                            ],
+                                        },
+                                        {
+                                            $eq: [
+                                                "$wallpaperId",
+                                                "$$wallpaperId",
+                                            ],
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    ],
                     as: "like",
                 },
             },
             {
                 $addFields: {
+                    saved: true,
                     liked: {
                         $cond: {
                             if: {
@@ -54,40 +97,15 @@ async function queryUserSaves(query, userId) {
                 },
             },
             {
-                $addFields: {
-                    saved: true,
-                },
-            },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "wallpaper.0.publisherId",
-                    foreignField: "_id",
-                    as: "publisher",
-                },
-            },
-            {
                 $project: {
-                    _id: {
-                        $first: "$wallpaper._id",
-                    },
-                    title: {
-                        $first: "$wallpaper.title",
-                    },
-                    "imageUrl.thumbnail": {
-                        $first: "$wallpaper.imageUrl.thumbnail",
-                    },
-                    likeCount: {
-                        $first: "$wallpaper.likeCount",
-                    },
-                    createdAt: {
-                        $first: "$wallpaper.createdAt",
-                    },
-                    publisher: {
-                        $first: "$publisher.username",
-                    },
-                    saved: 1,
+                    _id: "$wallpaper._id",
+                    title: "$wallpaper.title",
+                    "imageUrl.thumbnail": "$wallpaper.imageUrl.thumbnail",
+                    likeCount: "$wallpaper.likeCount",
+                    createdAt: 1,
+                    publisher: "$publisher.username",
                     liked: 1,
+                    saved: 1,
                 },
             },
         ];

@@ -34,12 +34,24 @@ function Search() {
     const [collectionsFinished, setCollectionsFinished] = useState(false);
 
     useEffect(() => {
-        if (contentType === "wallpapers") {
+        if (contentType === "wallpapers" && wallpapers.length === 0) {
             addSearchedWallpapers();
-        } else {
+        }
+
+        if (contentType === "collections" && collections.length === 0) {
             addSearchedCollections();
         }
-    }, [searchParams, page]);
+    }, [wallpapers, collections]);
+
+    useEffect(() => {
+        if (page !== 1) {
+            if (contentType === "wallpapers") {
+                addSearchedWallpapers();
+            } else {
+                addSearchedCollections();
+            }
+        }
+    }, [page]);
 
     async function addSearchedWallpapers() {
         const wallpapersSort = sort === "new" ? "new" : "popular";

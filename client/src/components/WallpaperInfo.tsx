@@ -19,8 +19,6 @@ function WallpaperInfo() {
         saved,
     } = wallpaper;
 
-    console.log(wallpaper);
-
     const standardPublishDate = makeStandardTimeString(createdAt);
 
     async function handleClickOnDownload(e: any) {
@@ -45,7 +43,7 @@ function WallpaperInfo() {
                 <h1 className="wallpaper-info__title">{title}</h1>
 
                 <p className="wallpaper-info__category">
-                    <span>{category.title}</span> Wallpaper
+                    <span>{category}</span> Wallpaper
                 </p>
             </div>
 

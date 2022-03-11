@@ -7,115 +7,172 @@ async function findWallpaperById(wallpaperId, userId) {
 
     try {
         const pipeline = [
-            { $match: { _id: new ObjectId(wallpaperId) } },
+            {
+                $match: {
+                    _id: new ObjectId(wallpaperId),
+                },
+            },
             {
                 $lookup: {
                     from: "categories",
-                    let: { id: "$categoryId" },
-                    pipeline: [
-                        { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
-                        { $project: { _id: 0, title: 1 } },
-                    ],
+                    localField: "categoryId",
+                    foreignField: "_id",
                     as: "category",
                 },
             },
             {
                 $lookup: {
                     from: "users",
-                    let: { id: "$publisherId" },
-                    pipeline: [
-                        { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
-                        {
-                            $project: {
-                                avatar: 1,
-                                username: 1,
-                            },
-                        },
-                    ],
+                    localField: "publisherId",
+                    foreignField: "_id",
                     as: "publisher",
                 },
             },
             {
                 $lookup: {
                     from: "comments",
-                    let: { id: "$_id" },
                     pipeline: [
                         {
                             $match: {
-                                $expr: { $eq: ["$wallpaperId", "$$id"] },
+                                wallpaperId: new ObjectId(wallpaperId),
                             },
                         },
-                        { $sort: { createdAt: -1 } },
-                        { $limit: 2 },
+                        {
+                            $sort: {
+                                createdAt: -1,
+                            },
+                        },
+                        {
+                            $limit: 2,
+                        },
                         {
                             $lookup: {
                                 from: "users",
-                                let: { id: "$userId" },
-                                pipeline: [
-                                    {
-                                        $match: {
-                                            $expr: { $eq: ["$_id", "$$id"] },
-                                        },
-                                    },
-                                    {
-                                        $project: {
-                                            avatar: 1,
-                                            username: 1,
-                                        },
-                                    },
-                                ],
+                                localField: "userId",
+                                foreignField: "_id",
                                 as: "user",
+                            },
+                        },
+                        {
+                            $addFields: {
+                                user: {
+                                    $first: "$user",
+                                },
                             },
                         },
                         {
                             $project: {
                                 description: 1,
                                 createdAt: 1,
-                                user: { $first: "$user" },
+                                user: {
+                                    username: "$user.username",
+                                    avatar: "$user.avatar",
+                                },
                             },
                         },
                     ],
                     as: "comments",
                 },
             },
+            {
+                $addFields: {
+                    category: {
+                        $first: "$category",
+                    },
+                    publisher: {
+                        $first: "$publisher",
+                    },
+                },
+            },
         ];
 
         if (userId) {
-            const likeLookup = {
-                $lookup: {
-                    from: "likes",
-                    let: { id: "$_id" },
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: { $eq: ["$wallpaperId", "$$id"] },
-                                userId,
+            pipeline.push(
+                ...[
+                    {
+                        $lookup: {
+                            from: "likes",
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                {
+                                                    $eq: [
+                                                        "$userId",
+                                                        new ObjectId(userId),
+                                                    ],
+                                                },
+                                                {
+                                                    $eq: [
+                                                        "$wallpaperId",
+                                                        new ObjectId(
+                                                            wallpaperId
+                                                        ),
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                            as: "like",
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "saves",
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                {
+                                                    $eq: [
+                                                        "$userId",
+                                                        new ObjectId(userId),
+                                                    ],
+                                                },
+                                                {
+                                                    $eq: [
+                                                        "$wallpaperId",
+                                                        new ObjectId(
+                                                            wallpaperId
+                                                        ),
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                            as: "save",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            liked: {
+                                $cond: {
+                                    if: {
+                                        $eq: ["$like", []],
+                                    },
+                                    then: false,
+                                    else: true,
+                                },
+                            },
+                            saved: {
+                                $cond: {
+                                    if: {
+                                        $eq: ["$save", []],
+                                    },
+                                    then: false,
+                                    else: true,
+                                },
                             },
                         },
-                    ],
-                    as: "like",
-                },
-            };
-            pipeline.push(likeLookup);
-        }
-
-        if (userId) {
-            const saveLookup = {
-                $lookup: {
-                    from: "saves",
-                    let: { id: "$_id" },
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: { $eq: ["$wallpaperId", "$$id"] },
-                                userId,
-                            },
-                        },
-                    ],
-                    as: "save",
-                },
-            };
-            pipeline.push(saveLookup);
+                    },
+                ]
+            );
         }
 
         pipeline.push({
@@ -126,26 +183,20 @@ async function findWallpaperById(wallpaperId, userId) {
                 title: 1,
                 likeCount: 1,
                 createdAt: 1,
+                category: "$category.title",
+                publisher: {
+                    username: 1,
+                    avatar: 1,
+                },
                 comments: 1,
-                category: { $first: "$category" },
-                publisher: { $first: "$publisher" },
-                like: { $first: "$like" },
-                save: { $first: "$save" },
+                liked: 1,
+                saved: 1,
             },
         });
 
         const cursor = await getWallpapersCollection().aggregate(pipeline);
         const result = await cursor.toArray();
         wallpaper = result[0];
-
-        if (wallpaper.like) wallpaper.liked = true;
-        else wallpaper.liked = false;
-        delete wallpaper.like;
-
-        if (wallpaper.save) wallpaper.saved = true;
-        else wallpaper.saved = false;
-        delete wallpaper.save;
-
         error = null;
     } catch (err) {
         error = err;

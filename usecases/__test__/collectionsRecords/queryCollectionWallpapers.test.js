@@ -2,6 +2,7 @@ const { ObjectId } = require("mongodb");
 const queryCollectionWallpapers = require("../../collectionsRecords/queryCollectionWallpapers");
 
 const mockCollectionId = String(new ObjectId());
+const mockUserId = String(new ObjectId());
 const mockQuery = {};
 const mockDB = {
     queryCollectionWallpapers: jest.fn(() => {
@@ -27,6 +28,7 @@ describe("find single collection", () => {
         const query = { page: { index: 1 } };
         const [err, collectionWallpapers] = await queryCollectionWallpapers(
             mockCollectionId,
+            mockUserId,
             query
         );
         expect(err).toMatchObject({
@@ -39,6 +41,7 @@ describe("find single collection", () => {
         const query = { page: 2.2 };
         const [err, collectionWallpapers] = await queryCollectionWallpapers(
             mockCollectionId,
+            mockUserId,
             query
         );
         expect(err).toMatchObject({
@@ -51,6 +54,7 @@ describe("find single collection", () => {
         const query = { page: -1 };
         const [err, collectionWallpapers] = await queryCollectionWallpapers(
             mockCollectionId,
+            mockUserId,
             query
         );
         expect(err).toMatchObject({
@@ -63,6 +67,7 @@ describe("find single collection", () => {
         const query = { limit: { count: 5 } };
         const [err, collectionWallpapers] = await queryCollectionWallpapers(
             mockCollectionId,
+            mockUserId,
             query
         );
         expect(err).toMatchObject({
@@ -75,6 +80,7 @@ describe("find single collection", () => {
         const query = { limit: 2.2 };
         const [err, collectionWallpapers] = await queryCollectionWallpapers(
             mockCollectionId,
+            mockUserId,
             query
         );
         expect(err).toMatchObject({
@@ -87,6 +93,7 @@ describe("find single collection", () => {
         const query = { limit: -1 };
         const [err, collectionWallpapers] = await queryCollectionWallpapers(
             mockCollectionId,
+            mockUserId,
             query
         );
         expect(err).toMatchObject({
@@ -101,6 +108,7 @@ describe("find single collection", () => {
         const query = { limit: 21 };
         const [err, collectionWallpapers] = await queryCollectionWallpapers(
             mockCollectionId,
+            mockUserId,
             query
         );
         expect(err).toMatchObject({
@@ -113,6 +121,7 @@ describe("find single collection", () => {
         const query = { extraProperty: "extra property" };
         const [err, collectionWallpapers] = await queryCollectionWallpapers(
             mockCollectionId,
+            mockUserId,
             query
         );
         expect(err).toMatchObject({
@@ -133,6 +142,7 @@ describe("find single collection", () => {
         };
         const [err, collectionWallpapers] = await queryCollectionWallpapers(
             mockCollectionId,
+            mockUserId,
             mockQuery,
             db
         );
@@ -147,6 +157,7 @@ describe("find single collection", () => {
     it("should return null as error if the operation was successfull", async () => {
         const [err, collectionWallpapers] = await queryCollectionWallpapers(
             mockCollectionId,
+            mockUserId,
             mockQuery,
             mockDB
         );

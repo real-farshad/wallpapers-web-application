@@ -13,24 +13,19 @@ interface WallpaperCardTypes {
         imageUrl: { thumbnail: string };
         title: string;
         likeCount: number;
-        liked: boolean;
-        saved: boolean;
+        liked?: boolean;
+        saved?: boolean;
     };
 }
 
 function WallpaperCard(props: WallpaperCardTypes | any) {
     const { setWallpaperId } = useWallpaperContext();
 
-    const {
-        _id,
-        publisher,
-        createdAt,
-        imageUrl,
-        title,
-        likeCount,
-        liked,
-        saved,
-    } = props.data;
+    const { _id, publisher, createdAt, imageUrl, title, likeCount } =
+        props.data;
+
+    const liked = props.data.liked ? props.data.liked : false;
+    const saved = props.data.saved ? props.data.saved : false;
 
     const standardPublishDate = makeStandardTimeString(createdAt);
 

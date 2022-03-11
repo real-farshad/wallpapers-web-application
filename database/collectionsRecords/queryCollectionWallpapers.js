@@ -3,68 +3,160 @@ const { getDatabase } = require("../../config/mongodb");
 const getCollectionsRecordsCollection = () =>
     getDatabase().collection("collections-records");
 
-async function queryCollectionWallpapers(collectionId, query) {
+async function queryCollectionWallpapers(collectionId, userId, query) {
     let error, collectionWallpapers;
 
     try {
-        let { page, limit } = query;
-        const cursor = await getCollectionsRecordsCollection().aggregate([
-            { $match: { collectionId: new ObjectId(collectionId) } },
-            { $sort: { createdAt: -1 } },
-            { $skip: page > 0 ? (page - 1) * limit : 0 },
-            { $limit: limit > 0 ? limit : 10 },
+        const { page, limit } = query;
+        const pipeline = [
+            {
+                $match: {
+                    collectionId: new ObjectId(collectionId),
+                },
+            },
+            {
+                $sort: {
+                    createdAt: -1,
+                },
+            },
+            {
+                $skip: page > 0 ? (page - 1) * limit : 0,
+            },
+            {
+                $limit: limit > 0 ? limit : 10,
+            },
             {
                 $lookup: {
                     from: "wallpapers",
-                    let: { id: "$wallpaperId" },
-                    pipeline: [
-                        { $match: { $expr: { $eq: ["$_id", "$$id"] } } },
-                        {
-                            $lookup: {
-                                from: "users",
-                                let: { id: "$publisherId" },
-                                pipeline: [
-                                    {
-                                        $match: {
-                                            $expr: { $eq: ["$_id", "$$id"] },
-                                        },
-                                    },
-                                    {
-                                        $project: {
-                                            username: 1,
-                                        },
-                                    },
-                                ],
-                                as: "publisher",
-                            },
-                        },
-                        {
-                            $project: {
-                                imageUrl: { thumbnail: 1 },
-                                title: 1,
-                                likeCount: 1,
-                                createdAt: 1,
-                                publisher: { $first: "$publisher" },
-                            },
-                        },
-                    ],
+                    localField: "wallpaperId",
+                    foreignField: "_id",
                     as: "wallpaper",
                 },
             },
             {
-                $project: {
-                    _id: 0,
-                    wallpaper: { $first: "$wallpaper" },
+                $lookup: {
+                    from: "users",
+                    localField: "wallpaper.0.publisherId",
+                    foreignField: "_id",
+                    as: "publisher",
                 },
             },
-        ]);
+            {
+                $addFields: {
+                    wallpaper: {
+                        $first: "$wallpaper",
+                    },
+                    publisher: {
+                        $first: "$publisher",
+                    },
+                },
+            },
+        ];
 
-        const result = await cursor.toArray();
+        if (userId) {
+            pipeline.push(
+                ...[
+                    {
+                        $lookup: {
+                            from: "likes",
+                            let: { wallpaperId: "$wallpaperId" },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                {
+                                                    $eq: [
+                                                        "$userId",
+                                                        new ObjectId(userId),
+                                                    ],
+                                                },
+                                                {
+                                                    $eq: [
+                                                        "$wallpaperId",
+                                                        "$$wallpaperId",
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                            as: "like",
+                        },
+                    },
+                    {
+                        $lookup: {
+                            from: "saves",
+                            let: { wallpaperId: "$wallpaperId" },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $and: [
+                                                {
+                                                    $eq: [
+                                                        "$userId",
+                                                        new ObjectId(userId),
+                                                    ],
+                                                },
+                                                {
+                                                    $eq: [
+                                                        "$wallpaperId",
+                                                        "$$wallpaperId",
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                },
+                            ],
+                            as: "save",
+                        },
+                    },
+                    {
+                        $addFields: {
+                            liked: {
+                                $cond: {
+                                    if: {
+                                        $eq: ["$like", []],
+                                    },
+                                    then: false,
+                                    else: true,
+                                },
+                            },
+                            saved: {
+                                $cond: {
+                                    if: {
+                                        $eq: ["$save", []],
+                                    },
+                                    then: false,
+                                    else: true,
+                                },
+                            },
+                        },
+                    },
+                ]
+            );
+        }
 
-        const wallpapers = [];
-        for (let record of result) wallpapers.push(record.wallpaper);
-        collectionWallpapers = wallpapers;
+        pipeline.push({
+            $project: {
+                _id: "$wallpaper._id",
+                createdAt: 1,
+                title: "$wallpaper.title",
+                publisher: "$publisher.username",
+                "imageUrl.thumbnail": "$wallpaper.imageUrl.thumbnail",
+                likeCount: "$wallpaper.likeCount",
+                liked: 1,
+                saved: 1,
+            },
+        });
 
+        const cursor = await getCollectionsRecordsCollection().aggregate(
+            pipeline
+        );
+        collectionWallpapers = await cursor.toArray();
         error = null;
     } catch (err) {
         error = err;
