@@ -3,7 +3,7 @@
 .navbar {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .navbar__open-menu {
@@ -24,7 +24,7 @@
     left: 0;
     width: 100%;
     min-height: 100vh;
-    z-index: 1;
+    z-index: 99;
 
     &--show {
         display: block;
@@ -95,4 +95,8 @@
         display: block;
         padding-left: 0;
     }
+}
+
+.navbar__secondary-container {
+    position: relative;
 }

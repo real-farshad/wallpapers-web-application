@@ -12,27 +12,38 @@ function Navbar({ children }: any) {
         if (menu.isOpen) return;
 
         setMenu({ isOpen: true, showAnimateElements: false });
-        setTimeout(() => setMenu({ isOpen: true, showAnimateElements: true }), 0);
+        setTimeout(
+            () => setMenu({ isOpen: true, showAnimateElements: true }),
+            0
+        );
     }
 
     function closeMenu() {
         if (!menu.showAnimateElements) return;
 
         setMenu({ isOpen: true, showAnimateElements: false });
-        setTimeout(() => setMenu({ isOpen: false, showAnimateElements: false }), 500);
+        setTimeout(
+            () => setMenu({ isOpen: false, showAnimateElements: false }),
+            500
+        );
     }
 
     return (
         <nav className="navbar">
             <div>
                 <div className="navbar__open-menu">
-                    <button className="navbar__open-menu-btn" onClick={openMenu}>
+                    <button
+                        className="navbar__open-menu-btn"
+                        onClick={openMenu}
+                    >
                         MENU
                     </button>
                 </div>
 
                 <div
-                    className={`navbar__menu${menu.isOpen ? " navbar__menu--show" : ""}`}
+                    className={`navbar__menu${
+                        menu.isOpen ? " navbar__menu--show" : ""
+                    }`}
                 >
                     <div
                         className={`navbar__dark-menu-background${
@@ -60,12 +71,14 @@ function Navbar({ children }: any) {
                             menu.isOpen ? " navbar__navigation--show" : ""
                         }`}
                     >
-                        <Navigation showAnimateElements={menu.showAnimateElements} />
+                        <Navigation
+                            showAnimateElements={menu.showAnimateElements}
+                        />
                     </div>
                 </div>
             </div>
 
-            <div>{children}</div>
+            <div className="navbar__secondary-container">{children}</div>
         </nav>
     );
 }
