@@ -1,6 +1,6 @@
 import { useWallpaperContext } from "../contexts/WallpaperContext";
 import makeStandardTimeString from "../utils/makeStandardTimeString";
-import UserAvatar from "./UserAvatar";
+import UserInfo from "./UserInfo";
 import LikeBtn from "./LikeBtn";
 import SaveBtn from "./SaveBtn";
 import "../styles/WallpaperInfo.scss";
@@ -37,6 +37,8 @@ function WallpaperInfo() {
         document.body.removeChild(link);
     }
 
+    if (!wallpaper) return null;
+
     return (
         <div className="wallpaper-info">
             <div className="wallpaper-info__primary-container">
@@ -49,21 +51,12 @@ function WallpaperInfo() {
 
             <div className="wallpaper-info__secondary-container">
                 <div className="wallpaper-info__publisher">
-                    <div className="wallpaper-info__publisher-avatar">
-                        <UserAvatar src={publisher.avatar} />
-                    </div>
-
-                    <div className="wallpaper-info__publisher-info">
-                        <p className="wallpaper-info__username">
-                            By <button>@{publisher.username}</button>
-                        </p>
-
-                        <p className="wallpaper-info__publish-date">
-                            Published At {standardPublishDate}
-                        </p>
-                    </div>
+                    <UserInfo
+                        avatar={publisher.avatar}
+                        username={publisher.username}
+                        timeString={`Published At ${standardPublishDate}`}
+                    />
                 </div>
-
                 <div className="wallpaper-info__action-btns">
                     <button
                         className="wallpaper-info__download-btn"

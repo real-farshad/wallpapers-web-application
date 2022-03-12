@@ -24,8 +24,6 @@ async function searchWallpapers({
     const res = await fetch(url);
     const wallpapers = await res.json();
 
-    console.log(wallpapers);
-
     return wallpapers;
 }
 

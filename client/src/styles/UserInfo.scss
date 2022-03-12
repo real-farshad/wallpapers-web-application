@@ -1,0 +1,27 @@
+.user-info {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.user-info__avatar {
+    width: 50px;
+    height: 50px;
+}
+
+.user-info__username {
+    font-weight: var(--medium-font-weight);
+    opacity: var(--primary-opacity);
+    margin-bottom: 5px;
+
+    button {
+        text-decoration: underline;
+    }
+}
+
+.user-info__time {
+    font-size: 10px;
+    font-weight: var(--medium-font-weight);
+    text-transform: capitalize;
+    opacity: 0.6;
+}

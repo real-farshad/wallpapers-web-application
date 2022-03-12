@@ -1,38 +1,41 @@
+import { Link } from "react-router-dom";
+import { useUserContext } from "../contexts/userContext";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
+import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import "../styles/WallpaperComments.scss";
 
 function WallpaperComments() {
+    const { isLoggedIn } = useUserContext();
     const { wallpaper } = useWallpaperContext();
-    const comments = wallpaper.comments;
 
-    const currentUser = {
-        user: {
-            username: "ellie",
-            avatar: "/images/ellie.jpg",
-        },
-    };
+    const comments = wallpaper.comments;
 
     return (
         <div className="wallpaper-comments">
-            <div className="wallpaper-comments__comment">
-                <Comment data={currentUser}>
-                    <form className="wallpaper-comments__message-form">
-                        <input
-                            className="wallpaper-comments__message-input"
-                            placeholder="Say Something"
-                        />
-
-                        <button className="wallpaper-comments__send-btn">SEND</button>
-                    </form>
-                </Comment>
+            <div className="wallpaper-comments__user-comment">
+                {isLoggedIn ? (
+                    <CommentForm wallpaperId={wallpaper._id} />
+                ) : (
+                    <div className="wallpaper-comments__auth">
+                        <p className="wallpaper-comments__auth-message">
+                            To leave a comment, first you need to log into your
+                            account.
+                        </p>
+                        <Link
+                            to="/auth/sign-in"
+                            className="wallpaper-comments__auth-link"
+                        >
+                            Log into your account.
+                        </Link>
+                    </div>
+                )}
             </div>
 
-            <div className="commments-container__comment-messages-container">
-                {comments.map((comment: any, index: number) => {
-                    if (index > 1) return;
-                    return <Comment data={comment} key={comment._id} />;
-                })}
+            <div className="commments-container__comments-container">
+                {comments.map((comment: any) => (
+                    <Comment comment={comment} key={comment._id} />
+                ))}
             </div>
         </div>
     );

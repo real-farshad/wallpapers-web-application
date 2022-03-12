@@ -1,9 +1,9 @@
 import calculateElapsedTime from "../utils/calculateElapsedTime";
-import UserAvatar from "./UserAvatar";
+import UserInfo from "./UserInfo";
 import "../styles/Comment.scss";
 
 interface CommentTypes {
-    data: {
+    comment: {
         description?: string;
         createdAt?: number;
         user: {
@@ -11,44 +11,26 @@ interface CommentTypes {
             username: string;
         };
     };
-    children?: any;
 }
 
 function Comment(props: CommentTypes) {
-    const { description, createdAt, user } = props.data;
+    const { description, createdAt, user } = props.comment;
+    const { avatar, username } = user;
 
     const timeSincePublish = calculateElapsedTime(createdAt as number);
 
     return (
         <div className="comment">
             <div className="comment__primary-container">
-                <div className="comment__user-avatar">
-                    <UserAvatar src={user.avatar} />
-                </div>
-
-                <div>
-                    <p className="comment__username">
-                        By <button>@{user.username}</button>
-                    </p>
-
-                    {createdAt ? (
-                        <p className="comment__publisher-secondary-info">
-                            Published {timeSincePublish}
-                        </p>
-                    ) : (
-                        <p className="comment__publisher-secondary-info">
-                            Currently Active User
-                        </p>
-                    )}
-                </div>
+                <UserInfo
+                    avatar={avatar}
+                    username={username}
+                    timeString={`Published ${timeSincePublish}`}
+                />
             </div>
 
             <div className="comment__secondary-container">
-                {!description ? (
-                    props.children
-                ) : (
-                    <p className="comment__message">{description}</p>
-                )}
+                <p className="comment__message">{description}</p>
             </div>
         </div>
     );

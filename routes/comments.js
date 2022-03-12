@@ -5,7 +5,7 @@ const deleteComment = require("../usecases/comments/deleteComment");
 
 const router = express.Router();
 
-router.post("/:id", authenticateUser, async (req, res, next) => {
+router.post("/", authenticateUser, async (req, res, next) => {
     const comment = req.body;
     const userId = req.user._id;
     const db = req.database;
