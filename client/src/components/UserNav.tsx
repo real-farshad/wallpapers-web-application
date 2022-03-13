@@ -90,7 +90,9 @@ function UserNav() {
 
                 <div className="user-nav__avatar-container">
                     <div className="user-nav__avatar">
-                        <CoverImage src={avatar} />
+                        <div className="user-nav__avatar-image">
+                            <CoverImage src={avatar} />
+                        </div>
                     </div>
 
                     <div

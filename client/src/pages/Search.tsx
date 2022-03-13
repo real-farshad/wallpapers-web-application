@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import countMatchingWallpapers from "../api/countMatchingWallpapers";
 import searchWallpapers from "../api/searchWallpapers";
+import countMatchingCollections from "../api/countMatchingCollections";
 import searchCollections from "../api/searchCollections";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
@@ -27,31 +29,36 @@ function Search() {
     const [page, setPage] = useState(1);
     const limit = 8;
 
-    const [wallpapers, setWallpapers] = useState([]);
-    const [wallpapersFinished, setWallpapersFinished] = useState(false);
-
-    const [collections, setCollections] = useState([]);
-    const [collectionsFinished, setCollectionsFinished] = useState(false);
+    const [matchingResultsCount, setMatchingResultsCount] = useState(0);
+    const [results, setResults] = useState([]);
+    const [resultsFinished, setResultsFinished] = useState(false);
 
     useEffect(() => {
-        if (contentType === "wallpapers" && wallpapers.length === 0) {
-            addSearchedWallpapers();
-        }
-
-        if (contentType === "collections" && collections.length === 0) {
-            addSearchedCollections();
-        }
-    }, [wallpapers, collections]);
-
-    useEffect(() => {
-        if (page !== 1) {
+        if (page === 1 && !resultsFinished) {
             if (contentType === "wallpapers") {
+                addMatchingWallpapersCount();
                 addSearchedWallpapers();
             } else {
+                addMatchingCollectionsCount();
                 addSearchedCollections();
             }
         }
+    }, [results]);
+
+    useEffect(() => {
+        if (page !== 1 && !resultsFinished) {
+            if (contentType === "wallpapers") addSearchedWallpapers();
+            else addSearchedCollections();
+        }
     }, [page]);
+
+    async function addMatchingWallpapersCount() {
+        const count = await countMatchingWallpapers({
+            title: title ? title : "",
+        });
+
+        setMatchingResultsCount(count);
+    }
 
     async function addSearchedWallpapers() {
         const wallpapersSort = sort === "new" ? "new" : "popular";
@@ -62,14 +69,16 @@ function Search() {
             limit,
         });
 
-        setWallpapers((prevWallpapers) => [
-            ...prevWallpapers,
-            ...relatedWallpapers,
-        ]);
+        if (relatedWallpapers.length < limit) setResultsFinished(true);
+        setResults((prevResults) => [...prevResults, ...relatedWallpapers]);
+    }
 
-        if (relatedWallpapers.length < limit) {
-            setWallpapersFinished(true);
-        }
+    async function addMatchingCollectionsCount() {
+        const count = await countMatchingCollections({
+            title: title ? title : "",
+        });
+
+        setMatchingResultsCount(count);
     }
 
     async function addSearchedCollections() {
@@ -79,25 +88,15 @@ function Search() {
             limit,
         });
 
-        setCollections((prevCollections) => [
-            ...prevCollections,
-            ...relatedCollections,
-        ]);
-
-        if (relatedCollections.length < limit) {
-            setCollectionsFinished(true);
-        }
+        if (relatedCollections.length < limit) setResultsFinished(true);
+        setResults((prevResults) => [...prevResults, ...relatedCollections]);
     }
 
     function changeQuery(newContentType: string, newSort?: string) {
         setPage(1);
-        if (contentType === "wallpapers") {
-            setWallpapers([]);
-            setWallpapersFinished(false);
-        } else {
-            setCollections([]);
-            setCollectionsFinished(false);
-        }
+        setMatchingResultsCount(0);
+        setResults([]);
+        setResultsFinished(false);
 
         let url = `/search/${newContentType}?title=${title}`;
         if (newContentType === "wallpapers") url += `&sort=${newSort}`;
@@ -132,15 +131,15 @@ function Search() {
     const sectionTitle =
         contentType === "wallpapers" ? (
             <SectionTitle>
-                {wallpapers.length} <br />
+                {matchingResultsCount} <br />
                 MATCHING <br />
-                WALLPAPER{wallpapers.length > 1 ? "S" : ""}
+                WALLPAPER{results.length > 1 ? "S" : ""}
             </SectionTitle>
         ) : (
             <SectionTitle>
-                {collections.length} <br />
+                {results.length} <br />
                 MATCHING <br />
-                COLLECTION{collections.length > 1 ? "S" : ""}
+                COLLECTION{results.length > 1 ? "S" : ""}
             </SectionTitle>
         );
 
@@ -162,14 +161,14 @@ function Search() {
 
                             {contentType === "wallpapers" ? (
                                 <WallpapersInfiniteScroll
-                                    wallpapers={wallpapers}
-                                    wallpapersFinished={wallpapersFinished}
+                                    wallpapers={results}
+                                    wallpapersFinished={resultsFinished}
                                     setPage={setPage}
                                 />
                             ) : (
                                 <CollectionsInfiniteScroll
-                                    collections={collections}
-                                    collectionsFinished={collectionsFinished}
+                                    collections={results}
+                                    collectionsFinished={resultsFinished}
                                     setPage={setPage}
                                 />
                             )}

@@ -10,6 +10,12 @@
     }
 }
 
+.wallpaper-comments__auth {
+    @include min-width-xl {
+        margin-left: 60px;
+    }
+}
+
 .wallpaper-comments__auth-message {
     max-width: 280px;
     opacity: var(--primary-opacity);

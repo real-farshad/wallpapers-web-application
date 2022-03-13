@@ -1,6 +1,7 @@
 const express = require("express");
 const authenticateUser = require("../middleware/authenticateUser");
 const createCollection = require("../usecases/collections/createCollection");
+const getCollectionsCount = require("../usecases/collections/getCollectionsCount");
 const queryCollections = require("../usecases/collections/queryCollections");
 const findCollectionInfo = require("../usecases/collections/findCollectionInfo");
 const deleteCollection = require("../usecases/collections/deleteCollection");
@@ -16,6 +17,16 @@ router.post("/", authenticateUser, async (req, res, next) => {
     if (err) return next(err);
 
     return res.json({ success: true });
+});
+
+router.get("/count", async (req, res, next) => {
+    const query = req.query;
+    const db = req.database;
+
+    const [err, collectionsCount] = await getCollectionsCount(query, db);
+    if (err) return next(err);
+
+    return res.json({ count: collectionsCount });
 });
 
 router.get("/", async (req, res, next) => {
