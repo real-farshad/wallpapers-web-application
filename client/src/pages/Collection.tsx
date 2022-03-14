@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useLoadingContext } from "../contexts/loadingContext";
 import getCollectionWallpapers from "../api/getCollectionWallpapers";
 import getCollectionInfo from "../api/getCollectionInfo";
 import ContentWidthContainer from "../components/ContentWidthContainer";
@@ -16,6 +17,9 @@ import "../styles/Collection.scss";
 
 function Collection() {
     const { id } = useParams();
+
+    const { startLoading, finishLoading } = useLoadingContext();
+
     const [page, setPage] = useState(1);
     const limit = 8;
 
@@ -24,7 +28,9 @@ function Collection() {
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
+        startLoading();
         addCollectionInfo();
+        finishLoading();
     }, []);
 
     useEffect(() => {

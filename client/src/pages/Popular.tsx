@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useLoadingContext } from "../contexts/loadingContext";
 import searchWallpapers from "../api/searchWallpapers";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
@@ -17,6 +18,8 @@ import CopyRight from "../components/CopyRight";
 function Popular() {
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const { startLoading, finishLoading } = useLoadingContext();
+
     const sort = "popular";
     const duration = searchParams.get("duration");
     const [page, setPage] = useState(1);
@@ -26,8 +29,14 @@ function Popular() {
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
+        startLoading();
         addPopularWallpapers();
-    }, [searchParams, page]);
+        finishLoading();
+    }, [searchParams]);
+
+    useEffect(() => {
+        if (page !== 1) addPopularWallpapers();
+    }, [page]);
 
     async function addPopularWallpapers() {
         const wallpapers = await searchWallpapers({

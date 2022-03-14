@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLoadingContext } from "../contexts/loadingContext";
 import countMatchingWallpapers from "../api/countMatchingWallpapers";
 import searchWallpapers from "../api/searchWallpapers";
 import countMatchingCollections from "../api/countMatchingCollections";
@@ -23,6 +24,8 @@ function Search() {
     const params = useParams();
     const [searchParams] = useSearchParams();
 
+    const { startLoading, finishLoading } = useLoadingContext();
+
     const contentType = params.contentType;
     const title = searchParams.get("title");
     const sort = searchParams.get("sort");
@@ -35,6 +38,8 @@ function Search() {
 
     useEffect(() => {
         if (page === 1 && !resultsFinished) {
+            startLoading();
+
             if (contentType === "wallpapers") {
                 addMatchingWallpapersCount();
                 addSearchedWallpapers();
@@ -42,6 +47,8 @@ function Search() {
                 addMatchingCollectionsCount();
                 addSearchedCollections();
             }
+
+            finishLoading();
         }
     }, [results]);
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLoadingContext } from "../contexts/loadingContext";
 import getUserLikesCount from "../api/getUserLikesCount";
 import getLikedWallpapers from "../api/getLikedWallpapers";
 import ContentWidthContainer from "../components/ContentWidthContainer";
@@ -13,6 +14,8 @@ import StandardNavbar from "../components/StandardNavbar";
 import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 
 function Likes() {
+    const { startLoading, finishLoading } = useLoadingContext();
+
     const [page, setPage] = useState(1);
     const limit = 8;
 
@@ -21,8 +24,16 @@ function Likes() {
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
-        if (page === 1) addUserLikesCount();
+        startLoading();
+
+        addUserLikesCount();
         addLikedWallpapers();
+
+        finishLoading();
+    }, []);
+
+    useEffect(() => {
+        if (page !== 1) addLikedWallpapers();
     }, [page]);
 
     async function addUserLikesCount() {

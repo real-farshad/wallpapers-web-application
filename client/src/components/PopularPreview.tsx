@@ -1,27 +1,10 @@
-import { useEffect, useState } from "react";
-import searchWallpapers from "../api/searchWallpapers";
 import SectionGrid from "./SectionGrid";
 import SectionInfoContainer from "./SectionInfoContainer";
 import SectionTitle from "./SectionTitle";
 import WallpaperCard from "./WallpaperCard";
 import "../styles/PopularPreview.scss";
 
-function PopularPreview() {
-    const sort = "popular";
-    const page = 1;
-    const limit = 6;
-
-    const [popularWallpapers, setPopularWallpapers] = useState([]);
-
-    useEffect(() => {
-        addPopularWallpapers();
-    }, []);
-
-    async function addPopularWallpapers() {
-        const wallpapers = await searchWallpapers({ sort, page, limit });
-        setPopularWallpapers(wallpapers);
-    }
-
+function PopularPreview({ wallpapers }: any) {
     return (
         <SectionGrid>
             <div className="popular-preview__title">
@@ -34,8 +17,8 @@ function PopularPreview() {
                 </SectionInfoContainer>
             </div>
 
-            {popularWallpapers.length > 0 &&
-                popularWallpapers.map((wallpaper: any) => {
+            {wallpapers.length > 0 &&
+                wallpapers.map((wallpaper: any) => {
                     return (
                         <div
                             className="popular-preview__card"

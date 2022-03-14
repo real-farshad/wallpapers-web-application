@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLoadingContext } from "../contexts/loadingContext";
 import searchCollections from "../api/searchCollections";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
@@ -12,6 +13,8 @@ import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
 
 function Collections() {
+    const { startLoading, finishLoading } = useLoadingContext();
+
     const [page, setPage] = useState(1);
     const limit = 8;
 
@@ -19,7 +22,13 @@ function Collections() {
     const [collectionsFinished, setCollectionsFinished] = useState(false);
 
     useEffect(() => {
+        startLoading();
         addNewCollections();
+        finishLoading();
+    }, []);
+
+    useEffect(() => {
+        if (page !== 1) addNewCollections();
     }, [page]);
 
     async function addNewCollections() {

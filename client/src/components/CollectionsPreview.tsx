@@ -1,26 +1,10 @@
-import { useEffect, useState } from "react";
-import searchCollections from "../api/searchCollections";
 import SectionGrid from "./SectionGrid";
 import SectionInfoContainer from "./SectionInfoContainer";
 import SectionTitle from "./SectionTitle";
 import CollectionCard from "./CollectionCard";
 import "../styles/CollectionsPreview.scss";
 
-function CollectionsPreview() {
-    const page = 1;
-    const limit = 6;
-
-    const [collections, setCollections] = useState([]);
-
-    useEffect(() => {
-        addNewCollections();
-    }, []);
-
-    async function addNewCollections() {
-        const collections = await searchCollections({ page, limit });
-        setCollections(collections);
-    }
-
+function CollectionsPreview({ collections }: any) {
     return (
         <SectionGrid>
             <div className="collections-preview__title">

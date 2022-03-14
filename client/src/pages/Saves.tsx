@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLoadingContext } from "../contexts/loadingContext";
 import getUserSavesCount from "../api/getUserSavesCount";
 import getSavedWallpapers from "../api/getSavedWallpapers";
 import ContentWidthContainer from "../components/ContentWidthContainer";
@@ -13,6 +14,8 @@ import StandardNavbar from "../components/StandardNavbar";
 import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 
 function Saves() {
+    const { startLoading, finishLoading } = useLoadingContext();
+
     const [page, setPage] = useState(1);
     const limit = 8;
 
@@ -21,8 +24,16 @@ function Saves() {
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
-        if (page === 1) addUserSavesCount();
+        startLoading();
+
+        addUserSavesCount();
         addSavedWallpapers();
+
+        finishLoading();
+    }, []);
+
+    useEffect(() => {
+        if (page !== 1) addSavedWallpapers();
     }, [page]);
 
     async function addUserSavesCount() {

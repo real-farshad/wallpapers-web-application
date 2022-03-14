@@ -1,4 +1,7 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { useLoadingContext } from "../contexts/loadingContext";
+import searchWallpapers from "../api/searchWallpapers";
+import searchCollections from "../api/searchCollections";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import homepageBackground from "../assets/homepage-background.jpg";
 import CoverImage from "../components/CoverImage";
@@ -12,6 +15,47 @@ import FooterContainer from "../components/FooterContainer";
 import "../styles/Home.scss";
 
 function Home() {
+    const { startLoading, finishLoading } = useLoadingContext();
+
+    const [popularWallpapers, setPopularWallpapers] = useState([]);
+    const [newWallpapers, setNewWallpapers] = useState([]);
+    const [collections, setCollections] = useState([]);
+
+    useEffect(() => {
+        startLoading();
+
+        addPopularWallpapers();
+        addNewWallpapers();
+        addNewCollections();
+
+        finishLoading();
+    }, []);
+
+    async function addPopularWallpapers() {
+        const wallpapers = await searchWallpapers({
+            sort: "popular",
+            page: 1,
+            limit: 6,
+        });
+
+        setPopularWallpapers(wallpapers);
+    }
+
+    async function addNewWallpapers() {
+        const wallpapers = await searchWallpapers({
+            sort: "new",
+            page: 1,
+            limit: 6,
+        });
+
+        setNewWallpapers(wallpapers);
+    }
+
+    async function addNewCollections() {
+        const collections = await searchCollections({ page: 1, limit: 6 });
+        setCollections(collections);
+    }
+
     return (
         <Fragment>
             <div className="home__background">
@@ -27,14 +71,14 @@ function Home() {
 
                 <MainContainer>
                     <div className="home__content-section">
-                        <PopularPreview />
+                        <PopularPreview wallpapers={popularWallpapers} />
                     </div>
 
                     <div className="home__content-section">
-                        <NewPreview />
+                        <NewPreview wallpapers={newWallpapers} />
                     </div>
 
-                    <CollectionsPreview />
+                    <CollectionsPreview collections={collections} />
                 </MainContainer>
 
                 <FooterContainer>

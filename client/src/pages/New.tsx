@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLoadingContext } from "../contexts/loadingContext";
 import searchWallpapers from "../api/searchWallpapers";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";
@@ -12,6 +13,8 @@ import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
 
 function New() {
+    const { startLoading, finishLoading } = useLoadingContext();
+
     const sort = "new";
     const [page, setPage] = useState(1);
     const limit = 8;
@@ -20,7 +23,13 @@ function New() {
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
+        startLoading();
         addNewWallpapers();
+        finishLoading();
+    }, []);
+
+    useEffect(() => {
+        if (page !== 1) addNewWallpapers();
     }, [page]);
 
     async function addNewWallpapers() {
