@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUserContext } from "../contexts/userContext";
+import { useUserContext } from "../contexts/UserContext";
 import likeWallpaper from "../api/likeWallpaper";
 import unlikeWallpaper from "../api/unlikeWallpaper";
 import makeStandardCountString from "../utils/makeStandardCountString";

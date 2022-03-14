@@ -1,7 +1,7 @@
 import { useState } from "react";
 import saveWallpaper from "../api/saveWallpaper";
 import unsaveWallpaper from "../api/unsaveWallpaper";
-import { useUserContext } from "../contexts/userContext";
+import { useUserContext } from "../contexts/UserContext";
 import "../styles/SaveBtn.scss";
 
 interface SaveBtnTypes {

@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useUserContext } from "./contexts/userContext";
+import { useLoadingContext } from "./contexts/loadingContext";
+import { useUserContext } from "./contexts/UserContext";
 import { useWallpaperContext } from "./contexts/WallpaperContext";
 import Home from "./pages/Home";
 import Popular from "./pages/Popular";
@@ -10,12 +11,14 @@ import Search from "./pages/Search";
 import Auth from "./pages/Auth";
 import Wallpaper from "./pages/Wallpaper";
 import Collection from "./pages/Collection";
-import WallpaperOverlay from "./components/WallpaperOverlay";
 import Likes from "./pages/Likes";
 import Saves from "./pages/Saves";
+import WallpaperOverlay from "./components/WallpaperOverlay";
+import LoadingOverlay from "./components/LoadingOverlay";
 import "./styles/App.scss";
 
 function App() {
+    const { loading } = useLoadingContext();
     const { isLoggedIn } = useUserContext();
     const { wallpaperId } = useWallpaperContext();
 
@@ -39,6 +42,7 @@ function App() {
             </Routes>
 
             {wallpaperId && <WallpaperOverlay />}
+            {loading && <LoadingOverlay />}
         </Fragment>
     );
 }

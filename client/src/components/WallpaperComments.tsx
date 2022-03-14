@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useUserContext } from "../contexts/userContext";
+import { useUserContext } from "../contexts/UserContext";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";

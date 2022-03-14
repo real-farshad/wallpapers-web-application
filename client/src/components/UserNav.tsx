@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useUserContext } from "../contexts/userContext";
+import { useUserContext } from "../contexts/UserContext";
 import signOutUser from "../api/signOutUser";
 import CoverImage from "./CoverImage";
 import "../styles/UserNav.scss";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUserContext } from "../contexts/userContext";
+import { useUserContext } from "../contexts/UserContext";
 import addNewComment from "../api/addNewComment";
 import UserInfo from "./UserInfo";
 import "../styles/CommentForm.scss";
