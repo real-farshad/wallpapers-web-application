@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useLoadingContext } from "../contexts/loadingContext";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
 import { useParams } from "react-router-dom";
 import WallpaperLayout from "../components/WallpaperLayout";
@@ -7,11 +8,18 @@ import WallpaperContent from "../components/WallpaperContent";
 import "../styles/Wallpaper.scss";
 
 function Wallpaper() {
+    const { startLoading, finishLoading } = useLoadingContext();
+
     const { id } = useParams();
     const { wallpaper, setWallpaper, addWallpaper } = useWallpaperContext();
 
     useEffect(() => {
-        addWallpaper(id);
+        (async () => {
+            startLoading();
+            await addWallpaper(id);
+            finishLoading();
+        })();
+
         return () => setWallpaper(null);
     }, []);
 

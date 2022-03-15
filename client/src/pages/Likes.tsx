@@ -24,12 +24,14 @@ function Likes() {
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
-        startLoading();
+        (async () => {
+            startLoading();
 
-        addUserLikesCount();
-        addLikedWallpapers();
+            await addUserLikesCount();
+            await addLikedWallpapers();
 
-        finishLoading();
+            finishLoading();
+        })();
     }, []);
 
     useEffect(() => {

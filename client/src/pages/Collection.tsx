@@ -28,9 +28,11 @@ function Collection() {
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
-        startLoading();
-        addCollectionInfo();
-        finishLoading();
+        (async () => {
+            startLoading();
+            await addCollectionInfo();
+            finishLoading();
+        })();
     }, []);
 
     useEffect(() => {

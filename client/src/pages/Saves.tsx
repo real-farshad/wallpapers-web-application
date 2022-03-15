@@ -24,12 +24,14 @@ function Saves() {
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
-        startLoading();
+        (async () => {
+            startLoading();
 
-        addUserSavesCount();
-        addSavedWallpapers();
+            await addUserSavesCount();
+            await addSavedWallpapers();
 
-        finishLoading();
+            finishLoading();
+        })();
     }, []);
 
     useEffect(() => {

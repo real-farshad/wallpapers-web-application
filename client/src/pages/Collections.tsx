@@ -22,9 +22,11 @@ function Collections() {
     const [collectionsFinished, setCollectionsFinished] = useState(false);
 
     useEffect(() => {
-        startLoading();
-        addNewCollections();
-        finishLoading();
+        (async () => {
+            startLoading();
+            await addNewCollections();
+            finishLoading();
+        })();
     }, []);
 
     useEffect(() => {

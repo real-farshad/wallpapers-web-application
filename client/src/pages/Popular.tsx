@@ -29,9 +29,11 @@ function Popular() {
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
-        startLoading();
-        addPopularWallpapers();
-        finishLoading();
+        (async () => {
+            startLoading();
+            await addPopularWallpapers();
+            finishLoading();
+        })();
     }, [searchParams]);
 
     useEffect(() => {

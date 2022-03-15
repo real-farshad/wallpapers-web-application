@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useLoadingContext } from "../contexts/loadingContext";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import AuthNavbar from "../components/AuthNavbar";
 import AuthOptions from "../components/AuthOptions";
@@ -9,8 +10,15 @@ import "../styles/Auth.scss";
 function Auth() {
     const params = useParams();
 
+    const { startLoading, finishLoading } = useLoadingContext();
+
     const [animating, setAnimating] = useState(false);
     const [authOption, setAuthOption] = useState(params.authOption);
+
+    useEffect(() => {
+        startLoading();
+        finishLoading();
+    }, []);
 
     function activateSignUp() {
         if (animating || authOption === "sign-up") return;

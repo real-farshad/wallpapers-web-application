@@ -23,9 +23,11 @@ function New() {
     const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
     useEffect(() => {
-        startLoading();
-        addNewWallpapers();
-        finishLoading();
+        (async () => {
+            startLoading();
+            await addNewWallpapers();
+            finishLoading();
+        })();
     }, []);
 
     useEffect(() => {

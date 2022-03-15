@@ -4,6 +4,7 @@ import CoverImage from "./CoverImage";
 import LikeBtn from "./LikeBtn";
 import SaveBtn from "./SaveBtn";
 import "../styles/WallpaperCard.scss";
+import { useEffect, useState } from "react";
 
 interface WallpaperCardTypes {
     data: {
@@ -19,13 +20,29 @@ interface WallpaperCardTypes {
 }
 
 function WallpaperCard(props: WallpaperCardTypes | any) {
-    const { setWallpaperId } = useWallpaperContext();
-
     const { _id, publisher, createdAt, imageUrl, title, likeCount } =
         props.data;
 
-    const liked = props.data.liked ? props.data.liked : false;
-    const saved = props.data.saved ? props.data.saved : false;
+    const { setWallpaperId } = useWallpaperContext();
+
+    const [liked, setLiked] = useState(
+        props.data.liked ? props.data.liked : false
+    );
+
+    const [saved, setSaved] = useState(
+        props.data.saved ? props.data.saved : false
+    );
+
+    const [loading, setLoading] = useState(false);
+    const [prompt, setPrompt] = useState(null as null | string);
+
+    useEffect(() => {
+        if (prompt) {
+            setTimeout(() => {
+                setPrompt(null);
+            }, 1000);
+        }
+    }, [prompt]);
 
     const standardPublishDate = makeStandardTimeString(createdAt);
 
@@ -49,6 +66,15 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
 
                 <div className="wallpaper-card__image-overlay" />
 
+                {loading && <div className="wallpaper-card__loading" />}
+
+                {prompt && (
+                    <div className="wallpaper-card__prompt">
+                        <div className="wallpaper-card__prompt-background" />
+                        <p className="wallpaper-card__prompt-text">{prompt}</p>
+                    </div>
+                )}
+
                 <h1 className="wallpaper-card__title wallpaper-card__title--lg">
                     {title}
                 </h1>
@@ -63,13 +89,27 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
                     <div className="wallpaper-card__like-btn">
                         <LikeBtn
                             wallpaperId={_id}
-                            isLiked={liked}
+                            liked={liked}
+                            setLiked={setLiked}
                             likeCount={likeCount}
+                            loading={loading}
+                            setLoading={setLoading}
+                            prompt={prompt}
+                            setPrompt={setPrompt}
                             secondaryStyle
                         />
                     </div>
 
-                    <SaveBtn wallpaperId={_id} isSaved={saved} secondaryStyle />
+                    <SaveBtn
+                        wallpaperId={_id}
+                        saved={saved}
+                        setSaved={setSaved}
+                        loading={loading}
+                        setLoading={setLoading}
+                        prompt={prompt}
+                        setPrompt={setPrompt}
+                        secondaryStyle
+                    />
                 </div>
             </div>
         </div>

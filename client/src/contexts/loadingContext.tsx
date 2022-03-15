@@ -10,7 +10,6 @@ function LoadingProvider({ children }: any) {
     });
 
     function startLoading() {
-        setAnimation({ firstStep: false, secondStep: false });
         setLoading(true);
     }
 
@@ -29,7 +28,10 @@ function LoadingProvider({ children }: any) {
             300
         );
 
-        setTimeout(() => setLoading(false), 1000);
+        setTimeout(() => {
+            setLoading(false);
+            setAnimation({ firstStep: false, secondStep: false });
+        }, 1000);
     }
 
     return (

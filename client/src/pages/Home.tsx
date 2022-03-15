@@ -22,13 +22,15 @@ function Home() {
     const [collections, setCollections] = useState([]);
 
     useEffect(() => {
-        startLoading();
+        (async () => {
+            startLoading();
 
-        addPopularWallpapers();
-        addNewWallpapers();
-        addNewCollections();
+            await addPopularWallpapers();
+            await addNewWallpapers();
+            await addNewCollections();
 
-        finishLoading();
+            finishLoading();
+        })();
     }, []);
 
     async function addPopularWallpapers() {

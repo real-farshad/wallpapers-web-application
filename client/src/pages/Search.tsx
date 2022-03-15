@@ -37,19 +37,21 @@ function Search() {
     const [resultsFinished, setResultsFinished] = useState(false);
 
     useEffect(() => {
-        if (page === 1 && !resultsFinished) {
-            startLoading();
+        (async () => {
+            if (page === 1 && !resultsFinished) {
+                startLoading();
 
-            if (contentType === "wallpapers") {
-                addMatchingWallpapersCount();
-                addSearchedWallpapers();
-            } else {
-                addMatchingCollectionsCount();
-                addSearchedCollections();
+                if (contentType === "wallpapers") {
+                    await addMatchingWallpapersCount();
+                    await addSearchedWallpapers();
+                } else {
+                    await addMatchingCollectionsCount();
+                    await addSearchedCollections();
+                }
+
+                finishLoading();
             }
-
-            finishLoading();
-        }
+        })();
     }, [results]);
 
     useEffect(() => {
