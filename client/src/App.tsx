@@ -1,8 +1,8 @@
 import { Fragment } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useLoadingContext } from "./contexts/loadingContext";
 import { useUserContext } from "./contexts/UserContext";
 import { useWallpaperContext } from "./contexts/WallpaperContext";
+import { useLoadingContext } from "./contexts/loadingContext";
 import Home from "./pages/Home";
 import Popular from "./pages/Popular";
 import New from "./pages/New";
@@ -18,9 +18,9 @@ import LoadingOverlay from "./components/LoadingOverlay";
 import "./styles/App.scss";
 
 function App() {
-    const { loading } = useLoadingContext();
     const { isLoggedIn } = useUserContext();
     const { wallpaperId } = useWallpaperContext();
+    const { loading } = useLoadingContext();
 
     return (
         <Fragment>

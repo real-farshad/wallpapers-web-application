@@ -12,7 +12,6 @@ interface CollectionsInfiniteScrollTypes {
 
 function CollectionsInfiniteScroll(props: CollectionsInfiniteScrollTypes) {
     const { collections, collectionsFinished, setPage } = props;
-
     const setLastCollection: (value: any) => void = useInfiniteScroll(setPage);
 
     return (

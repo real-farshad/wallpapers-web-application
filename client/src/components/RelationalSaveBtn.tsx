@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/UserContext";
 import saveWallpaper from "../api/saveWallpaper";
 import unsaveWallpaper from "../api/unsaveWallpaper";
@@ -15,8 +14,6 @@ interface RelationalSaveBtnTypes {
 }
 
 function RelationalSaveBtn(props: RelationalSaveBtnTypes) {
-    const navigate = useNavigate();
-
     const {
         wallpaperId,
         initialState,
@@ -30,7 +27,7 @@ function RelationalSaveBtn(props: RelationalSaveBtnTypes) {
     const [saved, setSaved] = useState(initialState);
 
     function handleClickOnSave() {
-        if (!isLoggedIn) return navigate("/auth/sign-up");
+        if (!isLoggedIn) return (window.location.href = "/auth/sign-up");
         if (loading || prompt) return;
 
         (async () => {

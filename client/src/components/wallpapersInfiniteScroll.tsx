@@ -12,7 +12,6 @@ interface WallpapersInfiniteScrollTypes {
 
 function WallpapersInfiniteScroll(props: WallpapersInfiniteScrollTypes) {
     const { wallpapers, wallpapersFinished, setPage } = props;
-
     const setLastWallpaper: (value: any) => void = useInfiniteScroll(setPage);
 
     return (

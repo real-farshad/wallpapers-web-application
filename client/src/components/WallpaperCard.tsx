@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
 import makeStandardTimeString from "../utils/makeStandardTimeString";
 import CoverImage from "./CoverImage";
@@ -23,10 +23,19 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
     const { _id, publisher, createdAt, imageUrl, title, likeCount } =
         props.data;
 
-    const { setWallpaperId } = useWallpaperContext();
+    const { wallpaper, setWallpaperId } = useWallpaperContext();
 
     const [loading, setLoading] = useState(false);
     const [prompt, setPrompt] = useState(null as null | string);
+
+    useEffect(() => {
+        setLoading(false);
+    }, [wallpaper]);
+
+    function handleClickOnWallpaperCard() {
+        setLoading(true);
+        setWallpaperId(_id);
+    }
 
     const standardPublishDate = makeStandardTimeString(createdAt);
     const initialLikeState = props.data.liked ? props.data.liked : false;
@@ -46,7 +55,7 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
 
             <div
                 className="wallpaper-card__image-container"
-                onClick={() => setWallpaperId(_id)}
+                onClick={handleClickOnWallpaperCard}
             >
                 <CoverImage src={imageUrl.thumbnail} />
 

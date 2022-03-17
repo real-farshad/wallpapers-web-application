@@ -2,7 +2,12 @@ import "../styles/GoogleSignUp.scss";
 
 function GoogleSignUp() {
     function handleClickOnSignUpBtn() {
-        window.open("http://localhost:5000/api/auth/google", "_self");
+        let url = "/api/auth/google";
+        if (process.env.NODE_ENV === "development") {
+            url = `http://localhost:${process.env.REACT_APP_SERVER_PORT}` + url;
+        }
+
+        window.open(url, "_self");
     }
 
     return (

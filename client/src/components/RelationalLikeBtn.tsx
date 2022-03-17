@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../contexts/UserContext";
 import likeWallpaper from "../api/likeWallpaper";
 import unlikeWallpaper from "../api/unlikeWallpaper";
@@ -17,8 +16,6 @@ interface RelationalLikeBtnTypes {
 }
 
 function RelationalLikeBtn(props: RelationalLikeBtnTypes) {
-    const navigate = useNavigate();
-
     const {
         wallpaperId,
         initialState,
@@ -33,7 +30,7 @@ function RelationalLikeBtn(props: RelationalLikeBtnTypes) {
     const [liked, setLiked] = useState(initialState);
 
     function handleClickOnLikeBtn() {
-        if (!isLoggedIn) return navigate("/auth/sign-up");
+        if (!isLoggedIn) return (window.location.href = "/auth/sign-up");
         if (loading || prompt) return;
 
         (async () => {
