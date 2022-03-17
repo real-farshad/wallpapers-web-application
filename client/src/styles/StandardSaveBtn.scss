@@ -1,0 +1,29 @@
+.standard-save-btn {
+    overflow: hidden;
+
+    &--loading {
+        animation: blink 1s infinite;
+    }
+}
+
+.standard-save-btn__container {
+    position: relative;
+    font-weight: var(--medium-font-weight);
+    text-align: center;
+    margin-bottom: 3px;
+    cursor: pointer;
+    opacity: var(--primary-opacity);
+    transform: translateY(-110%);
+    transition: 0.5s;
+
+    &--saved {
+        transform: translateY(0);
+    }
+}
+
+.standard-save-btn__save-text {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+}

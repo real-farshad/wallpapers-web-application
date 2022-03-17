@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
 import makeStandardTimeString from "../utils/makeStandardTimeString";
 import UserInfo from "./UserInfo";
-import LikeBtn from "./LikeBtn";
-import SaveBtn from "./SaveBtn";
+import StandardLikeBtn from "./StandardLikeBtn";
+import StandardSaveBtn from "./StandardSaveBtn";
 import "../styles/WallpaperInfo.scss";
 
 function WallpaperInfo() {
@@ -12,14 +11,8 @@ function WallpaperInfo() {
         wallpaper;
 
     const standardPublishDate = makeStandardTimeString(createdAt);
-
-    const [liked, setLiked] = useState(
-        wallpaper.liked ? wallpaper.liked : false
-    );
-
-    const [saved, setSaved] = useState(
-        wallpaper.saved ? wallpaper.saved : false
-    );
+    const initialLikeState = wallpaper.liked ? wallpaper.liked : false;
+    const initialSaveState = wallpaper.saved ? wallpaper.saved : false;
 
     async function handleClickOnDownload(e: any) {
         const res = await fetch(imageUrl.large);
@@ -68,17 +61,15 @@ function WallpaperInfo() {
                         </span>
                     </button>
 
-                    <LikeBtn
+                    <StandardLikeBtn
                         wallpaperId={_id}
-                        liked={liked}
-                        setLiked={setLiked}
+                        initialState={initialLikeState}
                         likeCount={likeCount}
                     />
 
-                    <SaveBtn
+                    <StandardSaveBtn
                         wallpaperId={_id}
-                        saved={saved}
-                        setSaved={setSaved}
+                        initialState={initialSaveState}
                     />
                 </div>
             </div>

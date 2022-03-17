@@ -1,0 +1,35 @@
+.standard-like-btn__primary-container {
+    overflow: hidden;
+
+    &--loading {
+        animation: blink 1s infinite;
+    }
+}
+
+.standard-like-btn__secondary-container {
+    position: relative;
+    font-weight: var(--medium-font-weight);
+    text-align: center;
+    margin-bottom: 3px;
+    cursor: pointer;
+    opacity: var(--primary-opacity);
+    transform: translateY(-110%);
+    transition: 0.5s;
+
+    &--liked {
+        transform: translateY(0);
+    }
+}
+
+.standard-like-btn__like-text {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.standard-like-btn__count {
+    font-size: 10px;
+    font-weight: var(--medium-font-weight);
+    opacity: 0.6;
+}

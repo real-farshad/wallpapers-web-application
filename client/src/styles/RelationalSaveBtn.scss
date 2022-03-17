@@ -1,9 +1,6 @@
-.save-btn {
+.relational-save-btn {
     font-weight: var(--medium-font-weight);
+    text-transform: uppercase;
     opacity: var(--primary-opacity);
     cursor: pointer;
-
-    &--all-caps {
-        text-transform: uppercase;
-    }
 }

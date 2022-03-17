@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
 import makeStandardTimeString from "../utils/makeStandardTimeString";
 import CoverImage from "./CoverImage";
-import LikeBtn from "./LikeBtn";
-import SaveBtn from "./SaveBtn";
+import RelationalLikeBtn from "./RelationalLikeBtn";
+import RelationalSaveBtn from "./RelationalSaveBtn";
 import "../styles/WallpaperCard.scss";
-import { useEffect, useState } from "react";
 
 interface WallpaperCardTypes {
     data: {
@@ -25,26 +25,12 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
 
     const { setWallpaperId } = useWallpaperContext();
 
-    const [liked, setLiked] = useState(
-        props.data.liked ? props.data.liked : false
-    );
-
-    const [saved, setSaved] = useState(
-        props.data.saved ? props.data.saved : false
-    );
-
     const [loading, setLoading] = useState(false);
     const [prompt, setPrompt] = useState(null as null | string);
 
-    useEffect(() => {
-        if (prompt) {
-            setTimeout(() => {
-                setPrompt(null);
-            }, 1000);
-        }
-    }, [prompt]);
-
     const standardPublishDate = makeStandardTimeString(createdAt);
+    const initialLikeState = props.data.liked ? props.data.liked : false;
+    const initialSaveState = props.data.saved ? props.data.saved : false;
 
     return (
         <div className="wallpaper-card">
@@ -87,28 +73,24 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
 
                 <div className="wallpaper-card__btns-container">
                     <div className="wallpaper-card__like-btn">
-                        <LikeBtn
+                        <RelationalLikeBtn
                             wallpaperId={_id}
-                            liked={liked}
-                            setLiked={setLiked}
+                            initialState={initialLikeState}
                             likeCount={likeCount}
                             loading={loading}
                             setLoading={setLoading}
                             prompt={prompt}
                             setPrompt={setPrompt}
-                            secondaryStyle
                         />
                     </div>
 
-                    <SaveBtn
+                    <RelationalSaveBtn
                         wallpaperId={_id}
-                        saved={saved}
-                        setSaved={setSaved}
+                        initialState={initialSaveState}
                         loading={loading}
                         setLoading={setLoading}
                         prompt={prompt}
                         setPrompt={setPrompt}
-                        secondaryStyle
                     />
                 </div>
             </div>
