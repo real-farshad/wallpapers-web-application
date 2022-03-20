@@ -4,6 +4,7 @@ import checkUserSignedIn from "../api/checkUserSignedIn";
 const UserContext = createContext(null as any);
 
 function UserProvider({ children }: any) {
+    const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
     const [user, setUser] = useState(null as null | object);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -18,14 +19,15 @@ function UserProvider({ children }: any) {
 
         setUser(user);
         setIsLoggedIn(true);
+        setHasCheckedAuth(true);
     }
 
     return (
         <UserContext.Provider
             value={{
+                hasCheckedAuth,
                 user,
                 isLoggedIn,
-                checkAuth,
             }}
         >
             {children}
