@@ -18,7 +18,7 @@ import LoadingOverlay from "./components/LoadingOverlay";
 import "./styles/App.scss";
 
 function App() {
-    const { hasCheckedAuth, isLoggedIn } = useUserContext();
+    const { hasCheckedAuth, isSignedIn } = useUserContext();
     const { wallpaperId } = useWallpaperContext();
     const { loading } = useLoadingContext();
 
@@ -33,14 +33,14 @@ function App() {
                 <Route path="/auth" element={<Navigate to="/auth/sign-up" />} />
                 <Route
                     path="/auth/:authOption"
-                    element={isLoggedIn ? <Navigate to="/" /> : <Auth />}
+                    element={isSignedIn ? <Navigate to="/" /> : <Auth />}
                 />
                 <Route path="/wallpaper/:id" element={<Wallpaper />} />
                 <Route path="/collections/:id" element={<Collection />} />
                 <Route
                     path="/user/likes"
                     element={
-                        hasCheckedAuth && isLoggedIn ? (
+                        hasCheckedAuth && isSignedIn ? (
                             <Likes />
                         ) : (
                             <Navigate to="/auth/sign-in" />
@@ -50,7 +50,7 @@ function App() {
                 <Route
                     path="/user/saves"
                     element={
-                        hasCheckedAuth && isLoggedIn ? (
+                        hasCheckedAuth && isSignedIn ? (
                             <Saves />
                         ) : (
                             <Navigate to="/auth/sign-in" />

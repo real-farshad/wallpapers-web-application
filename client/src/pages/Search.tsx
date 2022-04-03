@@ -38,74 +38,85 @@ function Search() {
 
     useEffect(() => {
         (async () => {
-            if (page === 1 && !resultsFinished) {
-                startLoading();
+            startLoading();
 
-                if (contentType === "wallpapers") {
-                    await addMatchingWallpapersCount();
-                    await addSearchedWallpapers();
-                } else {
-                    await addMatchingCollectionsCount();
-                    await addSearchedCollections();
-                }
-
-                finishLoading();
+            if (contentType === "wallpapers") {
+                await addMatchingWallpapersCount({ title });
+                await addSearchedWallpapers({ title, sort, page, limit });
+            } else {
+                await addMatchingCollectionsCount({ title });
+                await addSearchedCollections({ title, page, limit });
             }
+
+            finishLoading();
         })();
-    }, [results]);
+    }, []);
 
     useEffect(() => {
         if (page !== 1 && !resultsFinished) {
-            if (contentType === "wallpapers") addSearchedWallpapers();
-            else addSearchedCollections();
+            if (contentType === "wallpapers") {
+                addSearchedWallpapers({ title, sort, page, limit });
+            } else {
+                addSearchedCollections({ title, page, limit });
+            }
         }
     }, [page]);
 
-    async function addMatchingWallpapersCount() {
+    async function addMatchingWallpapersCount(query: any) {
         const count = await countMatchingWallpapers({
-            title: title ? title : "",
+            title: query.title ? query.title : "",
         });
 
         setMatchingResultsCount(count);
     }
 
-    async function addSearchedWallpapers() {
-        const wallpapersSort = sort === "new" ? "new" : "popular";
+    async function addSearchedWallpapers(query: any) {
+        const wallpapersSort = query.sort === "new" ? "new" : "popular";
         const relatedWallpapers: never[] = await searchWallpapers({
-            title: title ? title : "",
+            title: query.title ? query.title : "",
             sort: wallpapersSort,
-            page,
-            limit,
+            page: query.page,
+            limit: query.limit,
         });
 
-        if (relatedWallpapers.length < limit) setResultsFinished(true);
+        if (relatedWallpapers.length < query.limit) setResultsFinished(true);
         setResults((prevResults) => [...prevResults, ...relatedWallpapers]);
     }
 
-    async function addMatchingCollectionsCount() {
+    async function addMatchingCollectionsCount(query: any) {
         const count = await countMatchingCollections({
-            title: title ? title : "",
+            title: query.title ? query.title : "",
         });
 
         setMatchingResultsCount(count);
     }
 
-    async function addSearchedCollections() {
+    async function addSearchedCollections(query: any) {
         const relatedCollections: never[] = await searchCollections({
-            title: title as string,
-            page,
-            limit,
+            title: query.title as string,
+            page: query.page,
+            limit: query.limit,
         });
 
-        if (relatedCollections.length < limit) setResultsFinished(true);
+        if (relatedCollections.length < query.limit) setResultsFinished(true);
         setResults((prevResults) => [...prevResults, ...relatedCollections]);
     }
 
-    function changeQuery(newContentType: string, newSort?: string) {
+    async function changeQuery(newContentType: string, newSort?: string) {
+        startLoading();
         setPage(1);
-        setMatchingResultsCount(0);
         setResults([]);
         setResultsFinished(false);
+
+        if (newContentType === "wallpapers") {
+            await addMatchingWallpapersCount({ title });
+            await addSearchedWallpapers({ title, sort: newSort, page, limit });
+        } else {
+            await addMatchingCollectionsCount({ title });
+            await addSearchedCollections({ title, page, limit });
+        }
+
+        finishLoading();
 
         let url = `/search/${newContentType}?title=${title}`;
         if (newContentType === "wallpapers") url += `&sort=${newSort}`;

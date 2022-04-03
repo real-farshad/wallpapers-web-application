@@ -25,12 +25,12 @@ function RelationalLikeBtn(props: RelationalLikeBtnTypes) {
         prompt,
         setPrompt,
     } = props;
-    const { isLoggedIn } = useUserContext();
+    const { isSignedIn } = useUserContext();
 
     const [liked, setLiked] = useState(initialState);
 
     function handleClickOnLikeBtn() {
-        if (!isLoggedIn) return (window.location.href = "/auth/sign-up");
+        if (!isSignedIn) return (window.location.href = "/auth/sign-up");
         if (loading || prompt) return;
 
         (async () => {

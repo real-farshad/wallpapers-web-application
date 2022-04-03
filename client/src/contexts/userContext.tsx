@@ -6,7 +6,7 @@ const UserContext = createContext(null as any);
 function UserProvider({ children }: any) {
     const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
     const [user, setUser] = useState(null as null | object);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isSignedIn, setIsSignedIn] = useState(false);
 
     useEffect(() => {
         checkAuth();
@@ -18,7 +18,7 @@ function UserProvider({ children }: any) {
         if (!user) return;
 
         setUser(user);
-        setIsLoggedIn(true);
+        setIsSignedIn(true);
         setHasCheckedAuth(true);
     }
 
@@ -27,7 +27,7 @@ function UserProvider({ children }: any) {
             value={{
                 hasCheckedAuth,
                 user,
-                isLoggedIn,
+                isSignedIn,
             }}
         >
             {children}

@@ -22,12 +22,12 @@ function RelationalSaveBtn(props: RelationalSaveBtnTypes) {
         prompt,
         setPrompt,
     } = props;
-    const { isLoggedIn } = useUserContext();
+    const { isSignedIn } = useUserContext();
 
     const [saved, setSaved] = useState(initialState);
 
     function handleClickOnSave() {
-        if (!isLoggedIn) return (window.location.href = "/auth/sign-up");
+        if (!isSignedIn) return (window.location.href = "/auth/sign-up");
         if (loading || prompt) return;
 
         (async () => {
