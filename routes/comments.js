@@ -16,15 +16,15 @@ router.post("/", authenticateUser, async (req, res, next) => {
     return res.json({ success: true });
 });
 
-router.delete("/:id", authenticateUser, async (req, res, next) => {
-    const commentId = req.params.id;
-    const userId = req.user._id;
-    const db = req.database;
+// router.delete("/:id", authenticateUser, async (req, res, next) => {
+//     const commentId = req.params.id;
+//     const userId = req.user._id;
+//     const db = req.database;
 
-    const err = await deleteComment(commentId, userId, db);
-    if (err) return next(err);
+//     const err = await deleteComment(commentId, userId, db);
+//     if (err) return next(err);
 
-    return res.json({ success: true });
-});
+//     return res.json({ success: true });
+// });
 
 module.exports = router;

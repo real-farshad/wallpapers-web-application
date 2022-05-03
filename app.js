@@ -39,6 +39,13 @@ function makeApp(database) {
     app.use("/api", routes);
     app.use(errorHandler);
 
+    app.use(express.static(path.resolve(__dirname, "./client/build")));
+    app.get("*", (req, res) => {
+        return res.sendFile(
+            path.resolve(__dirname, "./client/build/index.html")
+        );
+    });
+
     return app;
 }
 

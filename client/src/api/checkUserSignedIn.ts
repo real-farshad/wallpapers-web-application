@@ -1,5 +1,6 @@
 async function checkUserSignedIn() {
-    const response = await fetch("/api/auth/check", { credentials: "include" });
+    const url = "/api/auth/check";
+    const response = await fetch(url, { credentials: "include" });
     const result = await response.json();
 
     if (result.error) return null;

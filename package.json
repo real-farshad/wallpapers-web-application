@@ -8,7 +8,9 @@
         "server-dev": "nodemon ./server.js",
         "client-dev": "cd client && npm run start",
         "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
-        "populate-database": "node ./populate/script.js"
+        "build": "cd client && npm install && npm run build",
+        "populate-database": "node ./populate/script.js",
+        "start": "set NODE_ENV=production&& node server.js"
     },
     "keywords": [],
     "author": "",

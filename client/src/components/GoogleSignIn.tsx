@@ -2,9 +2,11 @@ import "../styles/GoogleSignIn.scss";
 
 function GoogleSignIn() {
     function handleClickOnSignInBtn() {
-        let url = "/api/auth/google";
+        let url;
         if (process.env.NODE_ENV === "development") {
             url = `http://localhost:${process.env.REACT_APP_SERVER_PORT}` + url;
+        } else {
+            url = "/api/auth/google";
         }
 
         window.open(url, "_self");

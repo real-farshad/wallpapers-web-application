@@ -8,16 +8,16 @@ const deleteCollection = require("../usecases/collections/deleteCollection");
 
 const router = express.Router();
 
-router.post("/", authenticateUser, async (req, res, next) => {
-    const collection = req.body;
-    const userId = req.user._id;
-    const db = req.database;
+// router.post("/", authenticateUser, async (req, res, next) => {
+//     const collection = req.body;
+//     const userId = req.user._id;
+//     const db = req.database;
 
-    const err = await createCollection(collection, userId, db);
-    if (err) return next(err);
+//     const err = await createCollection(collection, userId, db);
+//     if (err) return next(err);
 
-    return res.json({ success: true });
-});
+//     return res.json({ success: true });
+// });
 
 router.get("/count", async (req, res, next) => {
     const query = req.query;
@@ -49,15 +49,15 @@ router.get("/:id", async (req, res, next) => {
     return res.json(collection);
 });
 
-router.delete("/:id", authenticateUser, async (req, res, next) => {
-    const collectionId = req.params.id;
-    const userId = req.user._id;
-    const db = req.database;
+// router.delete("/:id", authenticateUser, async (req, res, next) => {
+//     const collectionId = req.params.id;
+//     const userId = req.user._id;
+//     const db = req.database;
 
-    const err = await deleteCollection(collectionId, userId, db);
-    if (err) return next(err);
+//     const err = await deleteCollection(collectionId, userId, db);
+//     if (err) return next(err);
 
-    return res.json({ success: true });
-});
+//     return res.json({ success: true });
+// });
 
 module.exports = router;

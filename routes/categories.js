@@ -26,25 +26,25 @@ router.get("/", async (req, res, next) => {
     return res.json(categories);
 });
 
-router.put("/:id", async (req, res, next) => {
-    const db = req.database;
-    const categoryId = req.params.id;
-    const categoryUpdate = req.body;
+// router.put("/:id", async (req, res, next) => {
+//     const db = req.database;
+//     const categoryId = req.params.id;
+//     const categoryUpdate = req.body;
 
-    const err = await updateCategory(categoryId, categoryUpdate, db);
-    if (err) return next(err);
+//     const err = await updateCategory(categoryId, categoryUpdate, db);
+//     if (err) return next(err);
 
-    return res.json({ success: true });
-});
+//     return res.json({ success: true });
+// });
 
-router.delete("/:id", async (req, res, next) => {
-    const db = req.database;
-    const categoryId = req.params.id;
+// router.delete("/:id", async (req, res, next) => {
+//     const db = req.database;
+//     const categoryId = req.params.id;
 
-    const err = await deleteCategory(categoryId, db);
-    if (err) return next(err);
+//     const err = await deleteCategory(categoryId, db);
+//     if (err) return next(err);
 
-    return res.json({ success: true });
-});
+//     return res.json({ success: true });
+// });
 
 module.exports = router;

@@ -6,16 +6,16 @@ const deleteCollectionRecord = require("../usecases/collectionsRecords/deleteCol
 
 const router = express.Router();
 
-router.post("/", authenticateUser, async (req, res, next) => {
-    const collectionRecord = req.body;
-    const userId = req.user._id;
-    const db = req.database;
+// router.post("/", authenticateUser, async (req, res, next) => {
+//     const collectionRecord = req.body;
+//     const userId = req.user._id;
+//     const db = req.database;
 
-    const err = await createCollectionRecord(collectionRecord, userId, db);
-    if (err) return next(err);
+//     const err = await createCollectionRecord(collectionRecord, userId, db);
+//     if (err) return next(err);
 
-    return res.json({ success: true });
-});
+//     return res.json({ success: true });
+// });
 
 router.get("/:id", async (req, res, next) => {
     const collectionId = req.params.id;
@@ -34,15 +34,15 @@ router.get("/:id", async (req, res, next) => {
     return res.json(collectionWallpapers);
 });
 
-router.delete("/:id", authenticateUser, async (req, res, next) => {
-    const collectionRecordId = req.params.id;
-    const userId = req.user._id;
-    const db = req.database;
+// router.delete("/:id", authenticateUser, async (req, res, next) => {
+//     const collectionRecordId = req.params.id;
+//     const userId = req.user._id;
+//     const db = req.database;
 
-    const err = await deleteCollectionRecord(collectionRecordId, userId, db);
-    if (err) return next(err);
+//     const err = await deleteCollectionRecord(collectionRecordId, userId, db);
+//     if (err) return next(err);
 
-    return res.json({ success: true });
-});
+//     return res.json({ success: true });
+// });
 
 module.exports = router;
