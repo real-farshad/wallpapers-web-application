@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useLoadingContext } from "../contexts/loadingContext";
+import { useLoadingContext } from "../contexts/LoadingContext";
 import countMatchingWallpapers from "../api/countMatchingWallpapers";
 import searchWallpapers from "../api/searchWallpapers";
 import countMatchingCollections from "../api/countMatchingCollections";

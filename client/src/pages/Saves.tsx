@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLoadingContext } from "../contexts/loadingContext";
+import { useLoadingContext } from "../contexts/LoadingContext";
 import getUserSavesCount from "../api/getUserSavesCount";
 import getSavedWallpapers from "../api/getSavedWallpapers";
 import ContentWidthContainer from "../components/ContentWidthContainer";

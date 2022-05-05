@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useLoadingContext } from "../contexts/loadingContext";
+import { useLoadingContext } from "../contexts/LoadingContext";
 import getCollectionWallpapers from "../api/getCollectionWallpapers";
 import getCollectionInfo from "../api/getCollectionInfo";
 import ContentWidthContainer from "../components/ContentWidthContainer";

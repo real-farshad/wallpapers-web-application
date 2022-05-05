@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useUserContext } from "./contexts/UserContext";
 import { useWallpaperContext } from "./contexts/WallpaperContext";
-import { useLoadingContext } from "./contexts/loadingContext";
+import { useLoadingContext } from "./contexts/LoadingContext";
 import Home from "./pages/Home";
 import Popular from "./pages/Popular";
 import New from "./pages/New";

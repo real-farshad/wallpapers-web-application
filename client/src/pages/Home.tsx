@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import { useLoadingContext } from "../contexts/loadingContext";
+import { useLoadingContext } from "../contexts/LoadingContext";
 import searchWallpapers from "../api/searchWallpapers";
 import searchCollections from "../api/searchCollections";
 import ContentWidthContainer from "../components/ContentWidthContainer";

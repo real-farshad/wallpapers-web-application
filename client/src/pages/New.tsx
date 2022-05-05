@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLoadingContext } from "../contexts/loadingContext";
+import { useLoadingContext } from "../contexts/LoadingContext";
 import searchWallpapers from "../api/searchWallpapers";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import HeaderContainer from "../components/HeaderContainer";

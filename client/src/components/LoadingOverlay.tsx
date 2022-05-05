@@ -1,4 +1,4 @@
-import { useLoadingContext } from "../contexts/loadingContext";
+import { useLoadingContext } from "../contexts/LoadingContext";
 import "../styles/LoadingOverlay.scss";
 
 function LoadingOverlay() {

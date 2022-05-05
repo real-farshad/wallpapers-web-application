@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLoadingContext } from "../contexts/loadingContext";
+import { useLoadingContext } from "../contexts/LoadingContext";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
 import { useParams } from "react-router-dom";
 import WallpaperLayout from "../components/WallpaperLayout";

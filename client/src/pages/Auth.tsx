@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useLoadingContext } from "../contexts/loadingContext";
+import { useLoadingContext } from "../contexts/LoadingContext";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import AuthNavbar from "../components/AuthNavbar";
 import AuthOptions from "../components/AuthOptions";
