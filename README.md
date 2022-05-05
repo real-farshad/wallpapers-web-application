@@ -1,6 +1,6 @@
 # Full-Stack Wallpapers Web Application
 
-Live demo: [full-stack-wallpapers-app.herokuapp.com](https://full-stack-wallpapers-app.herokuapp.com)<br>
+Live demo: [full-stack-wallpaper-app.herokuapp.com](https://full-stack-wallpaper-app.herokuapp.com)<br>
 Tech stack for front-end: typescript, react react router, context, sass<br>
 Tech stack for back-end: javascript, node.js, express, mongodb-nodejs-driver, passport, express-session, joi, bcrypt, dotenv
 
