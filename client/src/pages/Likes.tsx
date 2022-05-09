@@ -12,6 +12,7 @@ import SectionInfoContainer from "../components/SectionInfoContainer";
 import SectionTitle from "../components/SectionTitle";
 import StandardNavbar from "../components/StandardNavbar";
 import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
+import "../styles/Likes.scss";
 
 function Likes() {
     const { startLoading, finishLoading } = useLoadingContext();
@@ -57,31 +58,35 @@ function Likes() {
 
     return (
         <ContentWidthContainer>
-            <HeaderContainer>
-                <StandardNavbar />
-            </HeaderContainer>
+            <div className="likes">
+                <HeaderContainer>
+                    <StandardNavbar />
+                </HeaderContainer>
 
-            <MainContainer>
-                <SectionGrid>
-                    <SectionInfoContainer>
-                        <SectionTitle>
-                            {userLikesCount} <br />
-                            LIKED <br />
-                            WALLPAPERS
-                        </SectionTitle>
-                    </SectionInfoContainer>
+                <div className="likes__container">
+                    <MainContainer>
+                        <SectionGrid>
+                            <SectionInfoContainer>
+                                <SectionTitle>
+                                    {userLikesCount} <br />
+                                    LIKED <br />
+                                    WALLPAPERS
+                                </SectionTitle>
+                            </SectionInfoContainer>
 
-                    <WallpapersInfiniteScroll
-                        wallpapers={wallpapers}
-                        wallpapersFinished={wallpapersFinished}
-                        setPage={setPage}
-                    />
-                </SectionGrid>
-            </MainContainer>
+                            <WallpapersInfiniteScroll
+                                wallpapers={wallpapers}
+                                wallpapersFinished={wallpapersFinished}
+                                setPage={setPage}
+                            />
+                        </SectionGrid>
+                    </MainContainer>
 
-            <FooterContainer>
-                <CopyRight />
-            </FooterContainer>
+                    <FooterContainer>
+                        <CopyRight />
+                    </FooterContainer>
+                </div>
+            </div>
         </ContentWidthContainer>
     );
 }

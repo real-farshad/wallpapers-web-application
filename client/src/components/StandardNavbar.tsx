@@ -4,8 +4,8 @@ import UserNavBtn from "./UserNav";
 import AuthNavigation from "./AuthNavigation";
 
 function StandardNavbar() {
-    const { isLoggedIn } = useUserContext();
-    return <Navbar>{isLoggedIn ? <UserNavBtn /> : <AuthNavigation />}</Navbar>;
+    const { isSignedIn } = useUserContext();
+    return <Navbar>{isSignedIn ? <UserNavBtn /> : <AuthNavigation />}</Navbar>;
 }
 
 export default StandardNavbar;
