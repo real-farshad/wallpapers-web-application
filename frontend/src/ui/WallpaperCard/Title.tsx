@@ -13,4 +13,5 @@ const StyledTitle = styled.h1`
   font-weight: 700;
   opacity: 0.87;
 `
+
 export default Title

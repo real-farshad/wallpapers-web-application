@@ -2,15 +2,15 @@ import type { Meta, StoryObj } from "@storybook/react"
 import Title from "./Title"
 
 const meta = {
-  title: "Example/Title",
+  title: "Wallpaper Card/Title",
   component: Title,
 } satisfies Meta<typeof Title>
 
 type Story = StoryObj<typeof meta>
 
-export const Primary: Story = {
+export const Default: Story = {
   args: {
-    text: "Your Title Here",
+    text: "Pellentesque Ligula Magna",
   },
 }
 
