@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 interface MutedSubtitleProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const MutedSubtitle: React.FC<MutedSubtitleProps> = (props) => {

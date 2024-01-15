@@ -16,6 +16,7 @@ const Avatar: React.FC<AvatarProps> = (props) => {
 }
 
 const StyledAvatar = styled.div`
+  background-color: #ffffff;
   width: 100%;
   height: 100%;
   border: 1px solid #000;

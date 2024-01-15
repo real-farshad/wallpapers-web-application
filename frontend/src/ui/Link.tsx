@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 interface LinkProps {
   href: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const Link: React.FC<LinkProps> = (props) => {
