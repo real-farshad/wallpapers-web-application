@@ -1,16 +1,16 @@
 import styled from "styled-components"
 
-interface ThumbnailProps {
+interface CoverImageProps {
   src: string
 }
 
-const Thumbnail: React.FC<ThumbnailProps> = (props) => {
+const CoverImage: React.FC<CoverImageProps> = (props) => {
   const { src } = props
 
-  return <StyledThumbnail src={src} />
+  return <StyledCoverImage src={src} />
 }
 
-const StyledThumbnail = styled.div<{ src: string }>`
+const StyledCoverImage = styled.div<{ src: string }>`
   width: 100%;
   height: 100%;
   background-image: url(${({ src }) => src});
@@ -19,4 +19,4 @@ const StyledThumbnail = styled.div<{ src: string }>`
   background-size: cover;
 `
 
-export default Thumbnail
+export default CoverImage

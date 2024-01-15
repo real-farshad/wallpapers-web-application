@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import DisplayTitle from "./DisplayTitle"
+import StrongTitle from "./StrongTitle"
 
 const meta = {
-  title: "UI/DisplayTitle",
-  component: DisplayTitle,
-} satisfies Meta<typeof DisplayTitle>
+  title: "UI/StrongTitle",
+  component: StrongTitle,
+} satisfies Meta<typeof StrongTitle>
 
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    text: "MOST POPULAR WALLPAPERS",
+    children: "Pellentesque Ligula Magna",
   },
 }
 

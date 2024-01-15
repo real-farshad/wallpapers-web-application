@@ -41,6 +41,7 @@ const GlobalStyle = createGlobalStyle<DefaultTheme>`
   }
 
   a {
+    text-decoration: none;
     display: inline-block;
     color: inherit;
   }

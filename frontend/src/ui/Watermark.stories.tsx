@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import PublishDate from "./PublishDate"
+import Watermark from "./Watermark"
 
 const meta = {
-  title: "Wallpaper Card/PublishDate",
-  component: PublishDate,
-} satisfies Meta<typeof PublishDate>
+  title: "UI/Watermark",
+  component: Watermark,
+} satisfies Meta<typeof Watermark>
 
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    dateInMS: 1633811400000,
+    children: "SAVED",
   },
 }
 

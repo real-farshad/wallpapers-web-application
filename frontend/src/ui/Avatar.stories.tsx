@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import Thumbnail from "./Thumbnail"
+import Avatar from "./Avatar"
 import styled from "styled-components"
-import thumbnailSample from "../assets/thumbnail-sample.jpg"
+import avatarSample from "./assets/avatar.jpg"
 
 const meta = {
-  title: "Wallpaper Card/Thumbnail",
-  component: Thumbnail,
+  title: "UI/Avatar",
+  component: Avatar,
   decorators: [
     (Story) => (
       <Container>
@@ -13,18 +13,18 @@ const meta = {
       </Container>
     ),
   ],
-} satisfies Meta<typeof Thumbnail>
+} satisfies Meta<typeof Avatar>
 
 const Container = styled.div`
-  width: 382px;
-  height: 220px;
+  width: 50px;
+  height: 50px;
 `
 
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    src: thumbnailSample,
+    src: avatarSample,
   },
 }
 

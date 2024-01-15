@@ -1,16 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import Title from "./Title"
+import Link from "./Link"
 
 const meta = {
-  title: "Wallpaper Card/Title",
-  component: Title,
-} satisfies Meta<typeof Title>
+  title: "UI/Link",
+  component: Link,
+} satisfies Meta<typeof Link>
 
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    text: "Pellentesque Ligula Magna",
+    href: "/#",
+    children: "@Charlotte",
   },
 }
 
