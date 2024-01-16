@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 interface StrongTitleProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const StrongTitle: React.FC<StrongTitleProps> = (props) => {

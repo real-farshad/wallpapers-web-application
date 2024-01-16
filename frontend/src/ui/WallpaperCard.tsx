@@ -111,42 +111,12 @@ const ImageOverlayContainer = styled.div`
   cursor: pointer;
 `
 
-const TitleBackground = styled.div<{ show: boolean }>`
+const LoadingContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #000000;
-  opacity: 0;
-  transition: 0.3s;
-
-  ${({ show }) =>
-    show &&
-    css`
-      ${ImageOverlayContainer}:hover & {
-        opacity: 0.5;
-      }
-    `}
-`
-
-const TitleTextContainer = styled.div<{ show: boolean }>`
-  position: absolute;
-  bottom: -15px;
-  left: 25px;
-  width: 250px;
-  opacity: 0;
-  transform: translateX(30px);
-  transition: 0.3s;
-
-  ${({ show }) =>
-    show &&
-    css`
-      ${ImageOverlayContainer}:hover & {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    `}
 `
 
 const blinkAnimation = keyframes`
@@ -163,14 +133,6 @@ const blinkAnimation = keyframes`
   }
 `
 
-const LoadingContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-`
-
 const Loading = styled.div<{ show?: boolean }>`
   width: 100%;
   height: 100%;
@@ -183,6 +145,7 @@ const Loading = styled.div<{ show?: boolean }>`
       animation: ${blinkAnimation} 1s infinite;
     `}
 `
+
 const fadeInOutAnimation = keyframes`
   0% {
       opacity: 0;
@@ -227,6 +190,44 @@ const WatermarkTextContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+`
+
+const TitleBackground = styled.div<{ show: boolean }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 0;
+  transition: 0.3s;
+
+  ${({ show }) =>
+    show &&
+    css`
+      ${ImageOverlayContainer}:hover & {
+        opacity: 0.5;
+      }
+    `}
+`
+
+const TitleTextContainer = styled.div<{ show: boolean }>`
+  position: absolute;
+  bottom: -15px;
+  left: 25px;
+  width: 250px;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: 0.3s;
+
+  ${({ show }) =>
+    show &&
+    css`
+      ${ImageOverlayContainer}:hover & {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    `}
 `
 
 const ActionButtonCountContainer = styled.div`

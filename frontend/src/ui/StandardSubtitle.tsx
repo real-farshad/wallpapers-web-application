@@ -1,13 +1,14 @@
 import styled from "styled-components"
 
 interface StandardSubtitleProps {
-  children: React.ReactNode
+  children?: React.ReactNode
+  className?: string
 }
 
 const StandardSubtitle: React.FC<StandardSubtitleProps> = (props) => {
-  const { children } = props
+  const { children, className } = props
 
-  return <StyledStandardSubtitle>{children}</StyledStandardSubtitle>
+  return <StyledStandardSubtitle className={className}>{children}</StyledStandardSubtitle>
 }
 
 const StyledStandardSubtitle = styled.p`

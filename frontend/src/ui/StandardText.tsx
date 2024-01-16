@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 interface StandardTextProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const StandardText: React.FC<StandardTextProps> = (props) => {

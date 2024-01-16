@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 interface MutedTextProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const MutedText: React.FC<MutedTextProps> = (props) => {

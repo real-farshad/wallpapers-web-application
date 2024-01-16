@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 interface PlainTextProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const PlainText: React.FC<PlainTextProps> = (props) => {

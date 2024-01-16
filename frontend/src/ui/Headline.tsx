@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 interface HeadlineProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const Headline: React.FC<HeadlineProps> = (props) => {

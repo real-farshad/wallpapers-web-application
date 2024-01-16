@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 interface SegmentTitleProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const SegmentTitle: React.FC<SegmentTitleProps> = (props) => {

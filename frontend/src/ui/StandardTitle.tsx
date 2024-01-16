@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 interface StandardTitleProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const StandardTitle: React.FC<StandardTitleProps> = (props) => {

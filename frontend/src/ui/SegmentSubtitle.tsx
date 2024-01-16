@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 interface SegmentSubtitleProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const SegmentSubtitle: React.FC<SegmentSubtitleProps> = (props) => {
