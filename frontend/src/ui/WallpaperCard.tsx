@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components"
+import styled, { css, keyframes } from "styled-components"
 import StandardText from "./StandardText"
 import Link from "./Link"
 import MutedSubtitle from "./MutedSubtitle"
@@ -38,6 +38,10 @@ const WallpaperCard: React.FC<WallpaperCardProps> = (props) => {
   const dateString = convertMSToDateString(publishDate)
   const likesCountString = formatNumber(likeCount)
 
+  const showLoading = loading && !watermark
+  const showWatermark = !!watermark
+  const showTitle = !loading && !watermark
+
   return (
     <StyledWallpaperCard>
       <PublisherPublishDateContainer>
@@ -49,31 +53,29 @@ const WallpaperCard: React.FC<WallpaperCardProps> = (props) => {
       </PublisherPublishDateContainer>
 
       <Link href={`/collections/${id}`}>
-        <ImageTitleContainer>
+        <ImageOverlayContainer>
           <CoverImage src={wallpaperImage} />
 
-          {loading && !watermark && <LoadingOverlay />}
+          <LoadingContainer>
+            <Loading show={showLoading} />
+          </LoadingContainer>
 
-          {watermark && (
-            <WatermarkContainer>
-              <WatermarkOverlay />
+          <WatermarkContainer show={showWatermark}>
+            <WatermarkBackground />
 
-              <WatermarkTextContainer>
-                <Watermark>SAVED</Watermark>
-              </WatermarkTextContainer>
-            </WatermarkContainer>
-          )}
+            <WatermarkTextContainer>
+              <Watermark>{watermark}</Watermark>
+            </WatermarkTextContainer>
+          </WatermarkContainer>
 
-          {!loading && !watermark && (
-            <>
-              <ImageOverlay />
+          <div>
+            <TitleBackground show={showTitle} />
 
-              <TitleContainer>
-                <StandardTitle>{title}</StandardTitle>
-              </TitleContainer>
-            </>
-          )}
-        </ImageTitleContainer>
+            <TitleTextContainer show={showTitle}>
+              <StandardTitle>{title}</StandardTitle>
+            </TitleTextContainer>
+          </div>
+        </ImageOverlayContainer>
       </Link>
 
       <ActionButtonCountContainer>
@@ -102,14 +104,14 @@ const PublisherPublishDateContainer = styled.div`
   gap: 5px;
 `
 
-const ImageTitleContainer = styled.div`
+const ImageOverlayContainer = styled.div`
   position: relative;
   width: 100%;
   height: 220px;
   cursor: pointer;
 `
 
-const ImageOverlay = styled.div`
+const TitleBackground = styled.div<{ show: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -119,12 +121,16 @@ const ImageOverlay = styled.div`
   opacity: 0;
   transition: 0.3s;
 
-  ${ImageTitleContainer}:hover & {
-    opacity: 0.5;
-  }
+  ${({ show }) =>
+    show &&
+    css`
+      ${ImageOverlayContainer}:hover & {
+        opacity: 0.5;
+      }
+    `}
 `
 
-const TitleContainer = styled.div`
+const TitleTextContainer = styled.div<{ show: boolean }>`
   position: absolute;
   bottom: -15px;
   left: 25px;
@@ -133,10 +139,14 @@ const TitleContainer = styled.div`
   transform: translateX(30px);
   transition: 0.3s;
 
-  ${ImageTitleContainer}:hover & {
-    transform: translateX(0);
-    opacity: 1;
-  }
+  ${({ show }) =>
+    show &&
+    css`
+      ${ImageOverlayContainer}:hover & {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    `}
 `
 
 const blinkAnimation = keyframes`
@@ -153,15 +163,25 @@ const blinkAnimation = keyframes`
   }
 `
 
-const LoadingOverlay = styled.div`
+const LoadingContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+`
+
+const Loading = styled.div<{ show?: boolean }>`
+  width: 100%;
+  height: 100%;
   background-color: #000000;
   opacity: 0;
-  animation: ${blinkAnimation} 1s infinite;
+
+  ${({ show }) =>
+    show &&
+    css`
+      animation: ${blinkAnimation} 1s infinite;
+    `}
 `
 const fadeInOutAnimation = keyframes`
   0% {
@@ -180,17 +200,22 @@ const fadeInOutAnimation = keyframes`
   }
 `
 
-const WatermarkContainer = styled.div`
+const WatermarkContainer = styled.div<{ show?: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   opacity: 0;
-  animation: ${fadeInOutAnimation} 1s both;
+
+  ${({ show }) =>
+    show &&
+    css`
+      animation: ${fadeInOutAnimation} 1s both;
+    `}
 `
 
-const WatermarkOverlay = styled.div`
+const WatermarkBackground = styled.div`
   width: 100%;
   height: 100%;
   background-color: #000000;
