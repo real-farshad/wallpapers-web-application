@@ -2,9 +2,9 @@ import styled from "styled-components"
 import StandardText from "./StandardText"
 import Link from "./Link"
 import MutedSubtitle from "./MutedSubtitle"
-import DateString from "./DateString"
 import CoverImage from "./CoverImage"
 import StandardTitle from "./StandardTitle"
+import convertMSToDateString from "../utils/convertMSToDateString"
 
 interface CollectionCardProps {
   id: string
@@ -18,6 +18,8 @@ interface CollectionCardProps {
 const CollectionCard: React.FC<CollectionCardProps> = (props) => {
   const { id, publisher, publishDate, wallpaperImage, title, wallpaperCount } = props
 
+  const dateString = convertMSToDateString(publishDate)
+
   return (
     <StyledCollectionCard>
       <PublisherPublishDateContainer>
@@ -25,9 +27,7 @@ const CollectionCard: React.FC<CollectionCardProps> = (props) => {
           By <Link href="/#">@{publisher}</Link>
         </StandardText>
 
-        <MutedSubtitle>
-          Published At <DateString dateInMS={publishDate} />
-        </MutedSubtitle>
+        <MutedSubtitle>Published At {dateString}</MutedSubtitle>
       </PublisherPublishDateContainer>
 
       <Link href={`/collections/${id}`}>
@@ -106,6 +106,7 @@ const ActionButtonCountContainer = styled.div`
   flex-direction: column;
   align-items: flex-end;
   gap: 3px;
+  width: 100%;
 `
 
 export default CollectionCard

@@ -1,4 +1,4 @@
-const convertMillisToDateString = (millis: number): string => {
+const convertMSToDateString = (millis: number): string => {
   const date = new Date(millis)
   const day = date.getDate().toString().padStart(2, "0")
   const month = date.toLocaleString("default", { month: "short" })
@@ -7,4 +7,4 @@ const convertMillisToDateString = (millis: number): string => {
   return `${day} ${month} ${year}`
 }
 
-export default convertMillisToDateString
+export default convertMSToDateString

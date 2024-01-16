@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 interface WatermarkProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const Watermark: React.FC<WatermarkProps> = (props) => {
