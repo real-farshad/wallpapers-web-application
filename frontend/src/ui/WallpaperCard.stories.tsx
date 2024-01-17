@@ -45,7 +45,7 @@ export const Loading: Story = {
   },
 }
 
-export const WithWatermark: any = ({ args }: any) => {
+export const WithWatermark: any = (args: any) => {
   const [watermark, setWatermark] = useState<undefined | string>("UNSAVED")
 
   useEffect(() => {
@@ -62,14 +62,12 @@ export const WithWatermark: any = ({ args }: any) => {
 }
 
 WithWatermark.args = {
-  args: {
-    id: "65a27f999702bbfcfcc78397",
-    publisher: "Charlotte",
-    publishDate: 1633811400000,
-    wallpaperImage: wallpaperSample,
-    title: "Pellentesque Ligula Magna",
-    likeCount: 5839,
-  },
+  id: "65a27f999702bbfcfcc78397",
+  publisher: "Charlotte",
+  publishDate: 1633811400000,
+  wallpaperImage: wallpaperSample,
+  title: "Pellentesque Ligula Magna",
+  likeCount: 5839,
 }
 
 export default meta
