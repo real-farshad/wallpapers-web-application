@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import type { Decorator, Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from "@storybook/react"
 import WallpaperCard from "./WallpaperCard"
 import styled from "styled-components"
 import wallpaperSample from "./assets/wallpaper.jpg"
