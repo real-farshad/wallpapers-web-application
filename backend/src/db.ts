@@ -1,32 +1,31 @@
-import { MongoClient, Db } from "mongodb"
+import { MongoClient } from 'mongodb';
+import { CustomError } from '@src/utils/CustomError';
 
-interface DBConfig {
-  uri: string
-  dbName: string
-}
+let dbInstance: any = null;
 
-class MongoDB {
-  private static db: Db
-  private static config: DBConfig
+export const connectDB = async () => {
+  const uri = process.env.MONGODB_URI;
+  const dbName = process.env.DB_NAME;
 
-  static initialize(config: DBConfig): void {
-    this.config = config
+  try {
+    const client = new MongoClient(uri || '');
+    await client.connect();
+
+    dbInstance = client.db(dbName);
+    console.log('Connected to Mongodb...');
+  } catch (error) {
+    throw new Error('Could not connect to MongoDB');
   }
+};
 
-  static async getDb(): Promise<Db> {
-    if (!this.db) {
-      try {
-        const client = new MongoClient(this.config.uri)
-        await client.connect()
-        this.db = client.db(this.config.dbName)
-        console.log("Connected to MongoDB")
-      } catch (error) {
-        console.error("Could not connect to MongoDB", error)
-        throw error
-      }
+export const getDB = async () => {
+  if (!dbInstance) {
+    try {
+      await connectDB();
+    } catch (error) {
+      throw new CustomError(500, 'Unable to initialize DB isntance.');
     }
-    return this.db
   }
-}
 
-export default MongoDB
+  return dbInstance;
+};
