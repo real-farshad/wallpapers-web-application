@@ -1,7 +1,10 @@
 import express, { Router } from 'express';
+import { authenticateUser } from '@middleware/authenticateUser';
+import { handleDeleteAccountRequest, handleUserProfileRequest } from '@controllers/userController';
 
 const router: Router = express.Router();
 
-router.get('/hello', (req, res) => res.send('Hi there, this is user routes!'));
+router.get('/profile', authenticateUser, handleUserProfileRequest);
+router.delete('/', authenticateUser, handleDeleteAccountRequest);
 
 export default router;

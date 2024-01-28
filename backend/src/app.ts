@@ -1,6 +1,6 @@
 import express, { Express } from 'express';
-import sessionConfig from './config/sessionConfig';
-import passport from './config/passportConfig';
+import sessionConfig from '@config/sessionConfig';
+import passport from '@config/passportConfig';
 import routes from '@routes/index';
 import { errorHandler } from '@api/middleware/errorHandler';
 

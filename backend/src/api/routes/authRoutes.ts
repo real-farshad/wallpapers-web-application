@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { authenticateUser } from '../middleware/authenticateUser';
+import { authenticateUser } from '@middleware/authenticateUser';
 import {
   handleGoogleOauthCallbackRequest,
   handleGoogleOauthRequest,
@@ -7,7 +7,7 @@ import {
   handleSignInRequest,
   handleSignOutRequest,
   handleSignUpRequest,
-} from '../controllers/authController';
+} from '@controllers/authController';
 
 const router: Router = express.Router();
 

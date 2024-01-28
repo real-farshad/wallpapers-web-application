@@ -1,15 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { getDB } from '@src/db';
-
-interface User {
-  _id?: ObjectId;
-  avatar?: string;
-  username: string;
-  email?: string;
-  password?: string;
-  provider: string;
-  providerId?: string;
-}
+import { User } from './userModel';
 
 const getUsersCollection = async () => {
   const db = await getDB();
@@ -36,5 +27,4 @@ const createUser = async (user: User) => {
   return usersCollection.insertOne(user);
 };
 
-export { User };
 export { findUserById, findUserByEmail, findUserByProviderId, createUser };
