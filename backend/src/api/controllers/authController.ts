@@ -4,14 +4,14 @@ import { signUp } from '@services/authService';
 import passport from '@config/passportConfig';
 import { CustomError } from '@src/utils/CustomError';
 
-const handleSignUpRequest = catchAsync(async (req: Request, res: Response) => {
+const handlePostSignUp = catchAsync(async (req: Request, res: Response) => {
   const user = req.body;
   const newUser = await signUp(user);
 
   res.send(newUser);
 });
 
-const handleSignInRequest = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+const handlePostSignIn = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate('local', (err: any, user: any, info: any) => {
     if (err) return next(err);
     if (!user) return next(new CustomError(400, info.message));
@@ -23,16 +23,16 @@ const handleSignInRequest = catchAsync(async (req: Request, res: Response, next:
   })(req, res, next);
 });
 
-const handleGoogleOauthRequest = passport.authenticate('google', { scope: ['profile'] });
+const handleGetGoogleOauth = passport.authenticate('google', { scope: ['profile'] });
 
-const handleGoogleOauthCallbackRequest = passport.authenticate('google', {
+const handleGetGoogleOauthCallback = passport.authenticate('google', {
   failureRedirect: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : '/',
 });
 
-const handleGoogleOauthSuccess = (req: Request, res: Response) =>
+const handleGetGoogleOauthSuccess = (req: Request, res: Response) =>
   res.redirect(process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : '/');
 
-const handleSignOutRequest = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+const handleGetSignOut = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   req.logout({ keepSessionInfo: false }, (err) => {
     if (err) next(new CustomError(500, 'Logout failed, please try again.'));
 
@@ -47,10 +47,10 @@ const handleSignOutRequest = catchAsync(async (req: Request, res: Response, next
 });
 
 export {
-  handleSignUpRequest,
-  handleSignInRequest,
-  handleGoogleOauthRequest,
-  handleGoogleOauthCallbackRequest,
-  handleGoogleOauthSuccess,
-  handleSignOutRequest,
+  handlePostSignUp,
+  handlePostSignIn,
+  handleGetGoogleOauth,
+  handleGetGoogleOauthCallback,
+  handleGetGoogleOauthSuccess,
+  handleGetSignOut,
 };

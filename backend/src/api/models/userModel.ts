@@ -16,10 +16,10 @@ const getUsersCollection = async () => {
   return db.collection('users');
 };
 
-const deleteUser = async (id: string) => {
+const deleteUserById = async (id: string) => {
   const usersCollection = await getUsersCollection();
   return usersCollection.deleteOne({ _id: id });
 };
 
 export { User };
-export { deleteUser };
+export { deleteUserById };

@@ -22,9 +22,9 @@ const findUserByProviderId = async (providerId: string) => {
   return usersCollection.findOne({ providerId: providerId });
 };
 
-const createUser = async (user: User) => {
+const saveUser = async (user: User) => {
   const usersCollection = await getUsersCollection();
   return usersCollection.insertOne(user);
 };
 
-export { findUserById, findUserByEmail, findUserByProviderId, createUser };
+export { findUserById, findUserByEmail, findUserByProviderId, saveUser };

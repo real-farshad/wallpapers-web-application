@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '@src/utils/catchAsync';
-import { deleteUserAccount } from '../services/userService';
+import { deleteUser } from '@services/userService';
 
-const handleUserProfileRequest = (req: Request, res: Response) => {
+const handleGetUserProfile = (req: Request, res: Response) => {
   const user: any = req.user;
 
   const userProfile = {
@@ -15,13 +15,13 @@ const handleUserProfileRequest = (req: Request, res: Response) => {
   return res.json(userProfile);
 };
 
-const handleDeleteAccountRequest = catchAsync(async (req: Request, res: Response) => {
+const handleDeleteUser = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   const confirmation = req.body;
 
-  await deleteUserAccount(user, confirmation);
+  await deleteUser(user, confirmation);
 
   return res.json({ success: true });
 });
 
-export { handleUserProfileRequest, handleDeleteAccountRequest };
+export { handleGetUserProfile, handleDeleteUser };

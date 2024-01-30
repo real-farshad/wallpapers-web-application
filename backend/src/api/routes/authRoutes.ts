@@ -1,20 +1,20 @@
 import express, { Router } from 'express';
 import { authenticateUser } from '@middleware/authenticateUser';
 import {
-  handleGoogleOauthCallbackRequest,
-  handleGoogleOauthRequest,
-  handleGoogleOauthSuccess,
-  handleSignInRequest,
-  handleSignOutRequest,
-  handleSignUpRequest,
+  handlePostSignUp,
+  handlePostSignIn,
+  handleGetGoogleOauth,
+  handleGetGoogleOauthCallback,
+  handleGetGoogleOauthSuccess,
+  handleGetSignOut,
 } from '@controllers/authController';
 
 const router: Router = express.Router();
 
-router.post('/signup', handleSignUpRequest);
-router.post('/signin', handleSignInRequest);
-router.get('/google', handleGoogleOauthRequest);
-router.get('/google/callback', handleGoogleOauthCallbackRequest, handleGoogleOauthSuccess);
-router.get('/signout', authenticateUser, handleSignOutRequest);
+router.post('/signup', handlePostSignUp);
+router.post('/signin', handlePostSignIn);
+router.get('/google', handleGetGoogleOauth);
+router.get('/google/callback', handleGetGoogleOauthCallback, handleGetGoogleOauthSuccess);
+router.get('/signout', authenticateUser, handleGetSignOut);
 
 export default router;
