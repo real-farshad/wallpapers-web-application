@@ -1,5 +1,5 @@
 import { getDB } from '@src/db';
-import { ObjectId } from 'mongodb';
+import { Collection, ObjectId } from 'mongodb';
 
 interface User {
   _id?: ObjectId;
@@ -11,14 +11,14 @@ interface User {
   providerId?: string;
 }
 
-const getUsersCollection = async () => {
+const getUsersCollection = async (): Promise<Collection<any>> => {
   const db = await getDB();
   return db.collection('users');
 };
 
-const deleteUserById = async (id: string) => {
+const deleteUserById = async (id: ObjectId) => {
   const usersCollection = await getUsersCollection();
-  return usersCollection.deleteOne({ _id: id });
+  return await usersCollection.deleteOne({ _id: id });
 };
 
 export { User };

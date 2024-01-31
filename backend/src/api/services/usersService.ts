@@ -1,7 +1,7 @@
 import { CustomError } from '@src/utils/CustomError';
-import { validateDeleteAcount } from '@validations/userValidation';
+import { validateDeleteAcount } from '@src/api/validations/usersValidation';
 import { checkPassword } from '@src/utils/checkPassword';
-import { deleteUserById } from '@models/userModel';
+import { deleteUserById } from '@src/api/models/users';
 
 interface deleteUser {
   user: {

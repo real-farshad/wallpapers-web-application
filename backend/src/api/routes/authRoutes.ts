@@ -7,7 +7,7 @@ import {
   handleGetGoogleOauthCallback,
   handleGetGoogleOauthSuccess,
   handleGetSignOut,
-} from '@controllers/authController';
+} from '@src/api/controllers/authController';
 
 const router: Router = express.Router();
 

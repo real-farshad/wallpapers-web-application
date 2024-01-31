@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { catchAsync } from '@src/utils/catchAsync';
-import { signUp } from '@services/authService';
+import { signUp } from '@src/api/services/authService';
 import passport from '@config/passportConfig';
 import { CustomError } from '@src/utils/CustomError';
 

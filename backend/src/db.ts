@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, Db } from 'mongodb';
 import { CustomError } from '@src/utils/CustomError';
 
 let dbInstance: any = null;
@@ -18,7 +18,7 @@ export const connectDB = async () => {
   }
 };
 
-export const getDB = async () => {
+export const getDB = async (): Promise<Db> => {
   if (!dbInstance) {
     try {
       await connectDB();

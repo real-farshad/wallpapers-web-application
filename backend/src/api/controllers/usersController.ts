@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '@src/utils/catchAsync';
-import { deleteUser } from '@services/userService';
+import { deleteUser } from '@src/api/services/usersService';
 
 const handleGetUserProfile = (req: Request, res: Response) => {
   const user: any = req.user;

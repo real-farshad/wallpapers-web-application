@@ -1,6 +1,12 @@
 import { CustomError } from '@src/utils/CustomError';
-import { validateSignUp } from '@validations/authValidation';
-import { saveUser, findUserByEmail, findUserById, findUserByProviderId } from '@models/authModel';
+import { validateSignUp } from '@src/api/validations/authValidation';
+import {
+  saveUser,
+  findUserByEmail,
+  findUserById,
+  findUserByProviderId,
+  upsertUserByProviderId,
+} from '@src/api/models/auth';
 import { hashPassword } from '@src/utils/hashPassword';
 import { checkPassword } from '@src/utils/checkPassword';
 
@@ -20,8 +26,8 @@ const signUp = async (user: signUpData) => {
   validUser.password = await hashPassword(validUser.password);
   validUser.provider = 'local';
 
-  await saveUser(validUser);
-  return validUser;
+  const savedUser = await saveUser(validUser);
+  return savedUser;
 };
 
 const signInWithLocalStrategy = async (email: string, password: string, done: any) => {
@@ -48,7 +54,7 @@ const authenticateWithGoogleStrategy = async (
     const existingUser = await findUserByProviderId(profile.id);
     if (existingUser) return done(null, existingUser);
 
-    const newUser = {
+    const user = {
       avatar: profile._json.picture,
       username: profile._json.name,
       email: profile.email,
@@ -56,8 +62,8 @@ const authenticateWithGoogleStrategy = async (
       providerId: profile.id,
     };
 
-    const insertedUser = await saveUser(newUser);
-    return done(null, insertedUser.ops[0]);
+    const upsertedUser = await upsertUserByProviderId(profile.id, user);
+    return done(null, upsertedUser);
   } catch (error) {
     done(error);
   }
