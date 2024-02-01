@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
-import { catchAsync } from '@src/utils/catchAsync';
-import { createCategory, deleteCategory, queryCategories } from '@services/categoriesService';
+import { catchAsync } from '@utils/catchAsync';
+import createCategory from '@services/category/createCategory';
+import queryCategories from '@services/category/queryCategories';
+import updateCategory from '@services/category/updateCategory';
+import deleteCategory from '@services/category/deleteCategory';
 
 const handlePostCreateCategory = catchAsync(async (req: Request, res: Response) => {
   const category = req.body;
@@ -20,8 +23,8 @@ const handleUpdateCategory = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const update = req.body;
 
-  const updatedCategory = await handleUpdateCategory(id, update);
-  return res.json(updatedCategory)
+  const updatedCategory = await updateCategory(id, update);
+  return res.json(updatedCategory);
 });
 
 const handleDeleteCategory = catchAsync(async (req: Request, res: Response) => {

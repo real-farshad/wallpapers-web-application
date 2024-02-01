@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '@src/utils/catchAsync';
-import { deleteUser } from '@src/api/services/usersService';
+import { User } from '@src/models/userModel';
+import deleteUser from '@services/user/deleteUser';
 
 const handleGetUserProfile = (req: Request, res: Response) => {
-  const user: any = req.user;
+  const user = req.user as User;
 
   const userProfile = {
-    id: user._id,
+    _id: user._id,
     avatar: user.avatar,
     username: user.username,
     provider: user.provider,
@@ -16,10 +17,10 @@ const handleGetUserProfile = (req: Request, res: Response) => {
 };
 
 const handleDeleteUser = catchAsync(async (req: Request, res: Response) => {
-  const user = req.user;
-  const confirmation = req.body;
+  const credentials = req.body;
+  const user = req.user as User;
 
-  await deleteUser(user, confirmation);
+  await deleteUser(credentials, user);
 
   return res.json({ success: true });
 });

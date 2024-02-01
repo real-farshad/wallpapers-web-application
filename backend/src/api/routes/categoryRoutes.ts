@@ -4,7 +4,7 @@ import {
   handleGetQueryCategories,
   handleUpdateCategory,
   handleDeleteCategory,
-} from '@controllers/categoriesController';
+} from '@src/api/controllers/categoryController';
 
 const router: Router = express.Router();
 

@@ -20,9 +20,9 @@ const signUpSchema = Joi.object({
 
 const validateSignUp = (user: any) => {
   const { error, value } = signUpSchema.validate(user);
-
   if (error) return { error: error.details[0].message };
+
   return { validUser: value };
 };
 
-export { validateSignUp };
+export default validateSignUp;

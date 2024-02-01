@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { authenticateUser } from '@middleware/authenticateUser';
-import { handleGetUserProfile, handleDeleteUser } from '@src/api/controllers/usersController';
+import { handleGetUserProfile, handleDeleteUser } from '@src/api/controllers/userController';
 
 const router: Router = express.Router();
 

@@ -13,12 +13,13 @@
       "@api/*": ["api/*"],
       "@controllers/*": ["api/controllers/*"],
       "@middleware/*": ["api/middleware/*"],
-      "@models/*": ["api/models/*"],
       "@routes/*": ["api/routes/*"],
-      "@services/*": ["api/services/*"],
-      "@validations/*": ["api/validations/*"],
       "@config/*": ["config/*"],
-      "@utils/*": ["utils/*"]
+      "@models/*": ["models/*"],
+      "@repositories/*": ["repositories/*"],
+      "@services/*": ["services/*"],
+      "@utils/*": ["utils/*"],
+      "@validations/*": ["validations/*"]
     }
   },
   "include": ["src/**/*"],
