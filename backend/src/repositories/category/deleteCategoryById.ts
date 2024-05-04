@@ -5,8 +5,9 @@ const deleteCategoryById = async (id: string) => {
   const categoriesCollection = await getCategoriesCollection();
   const result = await categoriesCollection.deleteOne({ _id: new ObjectId(id) });
 
-  if (result.deletedCount === 0) return { success: false };
-  return { success: true };
+  const success = result.deletedCount === 1;
+  if (success) return true;
+  return false;
 };
 
 export default deleteCategoryById;

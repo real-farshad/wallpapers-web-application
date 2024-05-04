@@ -1,5 +1,6 @@
+import { ObjectId } from 'mongodb';
 interface Category {
-  _id: string;
+  _id?: ObjectId;
   title: string;
 }
 

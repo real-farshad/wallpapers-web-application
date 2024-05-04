@@ -5,11 +5,11 @@ const querySchema = Joi.object({
   limit: Joi.number().integer().min(0).max(20),
 });
 
-const validateQueryCategories = (query: any) => {
+const validateQuery = (query: any) => {
   const { error, value } = querySchema.validate(query);
   if (error) return { error: error.details[0].message };
 
   return { validQuery: value };
 };
 
-export default validateQueryCategories;
+export default validateQuery;

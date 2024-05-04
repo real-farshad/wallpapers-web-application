@@ -6,8 +6,8 @@ const deleteAccountSchema = Joi.object({
   password: passwordSchema,
 });
 
-const validateDeleteAcount = (confirmation: any) => {
-  const { error, value } = deleteAccountSchema.validate(confirmation);
+const validateDeleteAcount = (credentials: any) => {
+  const { error, value } = deleteAccountSchema.validate(credentials);
   if (error) return { error: error.details[0].message };
 
   return { validCredentials: value };

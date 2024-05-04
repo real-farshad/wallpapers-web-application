@@ -7,13 +7,13 @@ import deleteCategory from '@services/category/deleteCategory';
 
 const handlePostCreateCategory = catchAsync(async (req: Request, res: Response) => {
   const category = req.body;
-  const savedCategory = await createCategory(category);
 
+  const savedCategory = await createCategory(category);
   return res.json(savedCategory);
 });
 
 const handleGetQueryCategories = catchAsync(async (req: Request, res: Response) => {
-  const query = req.body;
+  const query = req.query;
 
   const categories = await queryCategories(query);
   return res.json(categories);
@@ -30,8 +30,8 @@ const handleUpdateCategory = catchAsync(async (req: Request, res: Response) => {
 const handleDeleteCategory = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  await deleteCategory(id);
-  return res.json({ success: true });
+  const result = await deleteCategory(id);
+  return res.json(result);
 });
 
 export {
