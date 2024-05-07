@@ -1,28 +1,31 @@
 import { Request, Response } from 'express';
-import { catchAsync } from '@src/utils/catchAsync';
-import { User } from '@src/models/userModel';
+import { catchAsync } from '@utils/catchAsync';
+import { User } from '@models/userModel';
+import extractUserProfile from '@src/services/user/extractUserProfile';
 import deleteUser from '@services/user/deleteUser';
+import updateUser from '@src/services/user/updateUser';
 
 const handleGetUserProfile = (req: Request, res: Response) => {
   const user = req.user as User;
-
-  const userProfile = {
-    _id: user._id,
-    avatar: user.avatar,
-    username: user.username,
-    provider: user.provider,
-  };
+  const userProfile = extractUserProfile(user);
 
   return res.json(userProfile);
 };
 
-const handleDeleteUser = catchAsync(async (req: Request, res: Response) => {
-  const credentials = req.body;
-  const user = req.user as User;
+const handleUpdateUser = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user as any;
+  const update = req.body;
+  const updatedUser = await updateUser(user, update);
 
-  await deleteUser(credentials, user);
-
-  return res.json({ success: true });
+  return res.json(updatedUser);
 });
 
-export { handleGetUserProfile, handleDeleteUser };
+const handleDeleteUser = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user as any;
+  const credentials = req.body;
+
+  const result = await deleteUser(user, credentials);
+  return res.json(result);
+});
+
+export { handleGetUserProfile, handleUpdateUser, handleDeleteUser };
