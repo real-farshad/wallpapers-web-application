@@ -1,26 +1,20 @@
-import passport from '@config/passportConfig';
-import { Request, Response, NextFunction } from 'express';
 import { catchAsync } from '@utils/catchAsync';
-import { CustomError } from '@utils/CustomError';
-import signUp from '@services/auth/signUp';
+import { Request, Response, NextFunction } from 'express';
+import passport from '@config/passportConfig';
+import signupLocalUser from '@src/services/auth/signupLocalUser';
+import signinLocalUser from '@src/services/auth/signinLocalUser';
+import signout from '@src/services/auth/signout';
 
 const handlePostSignUp = catchAsync(async (req: Request, res: Response) => {
   const user = req.body;
-  const newUser = await signUp(user);
+  const savedUser = await signupLocalUser(user);
 
-  res.send(newUser);
+  res.send(savedUser);
 });
 
 const handlePostSignIn = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate('local', (err: any, user: any, info: any) => {
-    if (err) return next(err);
-    if (!user) return next(new CustomError(400, info.message));
-
-    req.logIn(user, (err) => {
-      if (err) return next(err);
-      return res.json({ success: true });
-    });
-  })(req, res, next);
+  const result = await signinLocalUser(req, res, next);
+  res.send(result);
 });
 
 const handleGetGoogleOauth = passport.authenticate('google', { scope: ['profile'] });
@@ -29,21 +23,17 @@ const handleGetGoogleOauthCallback = passport.authenticate('google', {
   failureRedirect: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : '/',
 });
 
-const handleGetGoogleOauthSuccess = (req: Request, res: Response) =>
-  res.redirect(process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : '/');
+const handleGetGoogleOauthSuccess = (req: Request, res: Response) => {
+  const devRedirectURL = 'http://localhost:3000/';
+  const prodRedirectURL = '/';
 
-const handleGetSignOut = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  req.logout({ keepSessionInfo: false }, (err) => {
-    if (err) next(new CustomError(500, 'Logout failed, please try again.'));
+  const isDevEnvironment = process.env.NODE_ENV === 'development';
+  res.redirect(isDevEnvironment ? devRedirectURL : prodRedirectURL);
+};
 
-    req.session.destroy((err) => {
-      if (err) next(new CustomError(500, 'Logout failed, please try again.'));
-
-      res.clearCookie('connect.sid');
-
-      res.status(200).json({ message: 'Successfully logged out.' });
-    });
-  });
+const handleGetSignOut = catchAsync(async (req: Request, res: Response) => {
+  const result = await signout(req, res);
+  res.send(result);
 });
 
 export {
