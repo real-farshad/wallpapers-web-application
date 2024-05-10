@@ -17,9 +17,9 @@ const handlePostSignIn = catchAsync(async (req: Request, res: Response, next: Ne
   res.send(result);
 });
 
-const handleGetGoogleOauth = passport.authenticate('google', { scope: ['profile'] });
+const handleGetGoogleOauth: () => void = passport.authenticate('google', { scope: ['profile'] });
 
-const handleGetGoogleOauthCallback = passport.authenticate('google', {
+const handleGetGoogleOauthCallback: () => void = passport.authenticate('google', {
   failureRedirect: process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : '/',
 });
 

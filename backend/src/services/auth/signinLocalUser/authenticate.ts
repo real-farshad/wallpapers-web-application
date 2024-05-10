@@ -8,7 +8,7 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
     const { user } = await authenticatePromise(req, res, next);
     return user;
   } catch (err: any) {
-    const errorStatus = err.status;
+    const errorStatus = 400;
     const errorMessage = err.message;
     throw new CustomError(errorStatus, errorMessage);
   }
@@ -20,9 +20,9 @@ const authenticatePromise = (
   next: NextFunction
 ): Promise<{ user: User }> =>
   new Promise((resolve, reject) => {
-    passport.authenticate('local', (err: Error, user: User, info: any, status: any) => {
+    passport.authenticate('local', (err: Error, user: User, info: any) => {
       if (err) reject(err);
-      else if (!user) reject({ status: status, message: info.message });
+      else if (!user) reject({ message: info.message });
       else resolve({ user });
     })(req, res, next);
   });

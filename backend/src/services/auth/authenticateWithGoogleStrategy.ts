@@ -4,6 +4,13 @@ import { User } from '@models/userModel';
 import findUserByProviderId from '@repositories/auth/findUserByProviderId';
 import upsertUserByProviderId from '@repositories/auth/upsertUserByProviderId';
 
+const googleStrategyOptions = {
+  clientID: process.env.GOOGLE_CLIENT_ID || '',
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+  callbackURL: '/api/auth/google/callback',
+  scope: ['profile', 'email'],
+};
+
 const authenticateWithGoogleStrategy = async (
   accessToken: string,
   refreshToken: string,
@@ -30,4 +37,4 @@ const authenticateWithGoogleStrategy = async (
   }
 };
 
-export default authenticateWithGoogleStrategy;
+export { googleStrategyOptions, authenticateWithGoogleStrategy };

@@ -8,8 +8,9 @@ const findAndDeleteUserWallpaper = async (wallpaperId: string, publisherId: stri
     publisherId: new ObjectId(publisherId),
   });
 
-  if (result.deletedCount === 0) return { success: false };
-  return { success: true };
+  const success = result.deletedCount === 1;
+  if (success) return true;
+  return false;
 };
 
 export default findAndDeleteUserWallpaper;

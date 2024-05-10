@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 
 interface Wallpaper {
   _id?: ObjectId;
-  imageUrl: {
+  image: {
     thumbnail: string;
     large: string;
   };
