@@ -1,4 +1,4 @@
-import validateWallpaperId from './validateWallpaperId';
+import validateWallpaperId from '../validateWallpaperId';
 import deleteSaveFromDatabase from './deleteSaveFromDatabase';
 
 const deleteSave = async (wallpaperId: string, user: any) => {
