@@ -1,0 +1,13 @@
+import { ObjectId } from 'mongodb';
+import getSavesCollection from './getSavesCollection';
+
+const findAndDeleteUserSave = async (wallpaperId: ObjectId, userId: ObjectId) => {
+  const savesCollection = await getSavesCollection();
+  const result = await savesCollection.deleteOne({ wallpaperId, userId });
+
+  const success = result.deletedCount === 1;
+  if (success) return true;
+  return false;
+};
+
+export default findAndDeleteUserSave;

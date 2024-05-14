@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 
 interface Collection {
-  _id: ObjectId;
+  _id?: ObjectId;
   title: string;
   createdAt: number;
   wallpaperCount: number;

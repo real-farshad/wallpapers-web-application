@@ -1,10 +1,10 @@
 import { ObjectId } from 'mongodb';
 
-interface CollectionWallpaper {
-  _id: ObjectId;
+interface CollectionItem {
+  _id?: ObjectId;
   createdAt: number;
   collectionId: ObjectId;
   wallpaperId: ObjectId;
 }
 
-export { CollectionWallpaper };
+export { CollectionItem };

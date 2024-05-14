@@ -1,6 +1,5 @@
 import { Comment } from '@src/models/commentModel';
 import getCommentsCollection from './getCommentsCollection';
-import { ObjectId } from 'mongodb';
 
 const saveComment = async (comment: Comment) => {
   const commentsCollection = await getCommentsCollection();
