@@ -4,6 +4,7 @@ import checkWallpaperExists from './checkWallpaperExists';
 import validateCollectionItem from './validateCollectionItem';
 import saveCollectionItem from '@src/repositories/collectionItems/saveCollectionItem';
 import checkUserIsCollectionPublisher from './checkUserIsCollectionPublisher';
+import incCollectionWallpaperCount from './incCollectionWallpaperCount';
 
 interface collectionItemInput {
   collectionId: string;
@@ -24,6 +25,9 @@ const createCollectionItem = async (collectionItem: collectionItemInput, user: a
   const newCollectionItem = await addNewFields(collectionItem);
 
   const savedCollectionItem = await saveCollectionItem(newCollectionItem);
+
+  await incCollectionWallpaperCount(collectionId);
+
   return savedCollectionItem;
 };
 
