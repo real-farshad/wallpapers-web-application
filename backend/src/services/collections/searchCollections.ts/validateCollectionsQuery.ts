@@ -17,7 +17,7 @@ const endDate = Joi.string()
     return value;
   }, 'Valid MM-DD-YYYY date');
 
-const wallpapersQuerySchema = Joi.object({
+const collectionsQuerySchema = Joi.object({
   title: Joi.string().trim().min(3).max(64),
   startDate,
   endDate,
@@ -26,7 +26,7 @@ const wallpapersQuerySchema = Joi.object({
 });
 
 const validateCollectionsQuery = (query: any) => {
-  const { error, value } = wallpapersQuerySchema.validate(query);
+  const { error, value } = collectionsQuerySchema.validate(query);
 
   if (error) {
     const errorStatus = 400;

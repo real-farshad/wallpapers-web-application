@@ -1,8 +1,32 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '@utils/catchAsync';
+import createCollectionItem from '@src/services/collectionItems/createCollectionItem';
+import searchCollectionWallpapers from '@src/services/collectionItems/searchCollectionWallpapers';
+import deleteCollectionItem from '@src/services/collectionItems/deleteCollectionItem';
 
 const handlePostCollectionItem = catchAsync(async (req: Request, res: Response) => {
-  return res.json({ ok: true });
+  const collectionItem = req.body;
+  const user = req.user;
+
+  const savedUser = await createCollectionItem(collectionItem, user);
+  return savedUser;
 });
 
-export { handlePostCollectionItem };
+const handleGetCollectionItemsSearch = catchAsync(async (req: Request, res: Response) => {
+  const collectionId = req.params.id;
+  const query = req.query;
+  const user = req.user;
+
+  const collectionWallpapers = await searchCollectionWallpapers(collectionId, query, user);
+  return collectionWallpapers;
+});
+
+const handleDeleteCollectionItem = catchAsync(async (req: Request, res: Response) => {
+  const collectionItemId = req.params.id;
+  const user = req.user;
+
+  const result = await deleteCollectionItem(collectionItemId, user);
+  return result;
+});
+
+export { handlePostCollectionItem, handleGetCollectionItemsSearch, handleDeleteCollectionItem };

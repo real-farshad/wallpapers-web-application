@@ -1,94 +1,53 @@
 import { Document, ObjectId } from 'mongodb';
-import getWallpapersCollection from './getWallpapersCollection';
+import getCollectionItemsCollection from './getCollectionItemsCollection';
 
-const queryWallpapers = async (query: any, userId: ObjectId) => {
-  let { title, category, startDate, endDate, sort, skip, limit } = query;
+const queryCollectionItems = async (collectionId: ObjectId, query: any, userId: ObjectId) => {
+  let { skip, limit } = query;
 
-  const pipeline: Document[] = [];
-
-  if (title) {
-    pipeline.push({
+  const pipeline: Document[] = [
+    {
       $match: {
-        title: {
-          $regex: title,
-          $options: 'i',
+        collectionId: collectionId,
+      },
+    },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+    {
+      $skip: skip,
+    },
+    {
+      $limit: limit,
+    },
+    {
+      $lookup: {
+        from: 'wallpapers',
+        localField: 'wallpaperId',
+        foreignField: '_id',
+        as: 'wallpaper',
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'wallpaper.0.publisherId',
+        foreignField: '_id',
+        as: 'publisher',
+      },
+    },
+    {
+      $addFields: {
+        wallpaper: {
+          $first: '$wallpaper',
+        },
+        publisher: {
+          $first: '$publisher',
         },
       },
-    });
-  }
-
-  if (category) {
-    pipeline.push(
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'categoryId',
-          foreignField: '_id',
-          as: 'category',
-        },
-      },
-      {
-        $unwind: '$category',
-      },
-      {
-        $match: {
-          'category.title': {
-            $regex: category,
-            $options: 'i',
-          },
-        },
-      }
-    );
-  }
-
-  if (startDate) {
-    pipeline.push({
-      $match: {
-        createdAt: {
-          $gte: startDate,
-        },
-      },
-    });
-  }
-
-  if (endDate) {
-    pipeline.push({
-      $match: {
-        createdAt: {
-          $lte: endDate,
-        },
-      },
-    });
-  }
-
-  pipeline.push(
-    ...[
-      {
-        $sort: sort,
-      },
-      {
-        $skip: skip,
-      },
-      {
-        $limit: limit,
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'publisherId',
-          foreignField: '_id',
-          as: 'publisher',
-        },
-      },
-      {
-        $addFields: {
-          publisher: {
-            $first: '$publisher',
-          },
-        },
-      },
-    ]
-  );
+    },
+  ];
 
   if (userId) {
     pipeline.push(
@@ -96,7 +55,7 @@ const queryWallpapers = async (query: any, userId: ObjectId) => {
         {
           $lookup: {
             from: 'likes',
-            let: { wallpaperId: '$_id' },
+            let: { wallpaperId: '$wallpaperId' },
             pipeline: [
               {
                 $match: {
@@ -119,7 +78,7 @@ const queryWallpapers = async (query: any, userId: ObjectId) => {
         {
           $lookup: {
             from: 'saves',
-            let: { wallpaperId: '$_id' },
+            let: { wallpaperId: '$wallpaperId' },
             pipeline: [
               {
                 $match: {
@@ -167,23 +126,22 @@ const queryWallpapers = async (query: any, userId: ObjectId) => {
 
   pipeline.push({
     $project: {
-      image: {
-        thumbnail: 1,
-      },
-      title: 1,
-      likeCount: 1,
+      _id: '$wallpaper._id',
       createdAt: 1,
+      title: '$wallpaper.title',
       publisher: '$publisher.username',
+      'image.thumbnail': '$wallpaper.image.thumbnail',
+      likeCount: '$wallpaper.likeCount',
       liked: 1,
       saved: 1,
     },
   });
 
-  const wallpapersCollection = await getWallpapersCollection();
-  const cursor = await wallpapersCollection.aggregate(pipeline);
+  const collectionItemsCollection = await getCollectionItemsCollection();
+  const cursor = await collectionItemsCollection.aggregate(pipeline);
   const wallpapers = await cursor.toArray();
 
   return wallpapers;
 };
 
-export default queryWallpapers;
+export default queryCollectionItems;

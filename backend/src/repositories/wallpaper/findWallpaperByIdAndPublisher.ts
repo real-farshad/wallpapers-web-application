@@ -128,7 +128,7 @@ const findWallpaperByIdAndPublisher = async (wallpaperId: string, userId?: strin
 
   pipeline.push({
     $project: {
-      imageUrl: { large: 1 },
+      image: { large: 1 },
       title: 1,
       likeCount: 1,
       createdAt: 1,

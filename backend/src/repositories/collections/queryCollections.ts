@@ -86,7 +86,7 @@ const queryCollections = async (query: any) => {
           wallpaperCount: 1,
           createdAt: 1,
           'user.username': '$user.username',
-          'wallpaper.imageUrl.thumbnail': '$wallpaper.imageUrl.thumbnail',
+          'wallpaper.image.thumbnail': '$wallpaper.image.thumbnail',
         },
       },
     ]
