@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import authRoute from './authRoute';
 import userRoute from './userRoute';
-import categoryRoute from './categoryRoute';
+import categoriesRoute from './categoriesRoute';
 import wallpapersRoute from './wallpapersRoute';
 import collectionsRoute from './collectionsRoute';
 import collectionItemsRoute from './collectionItemsRoute';
@@ -13,7 +13,7 @@ const router: Router = express.Router();
 
 router.use('/auth', authRoute);
 router.use('/user', userRoute);
-router.use('/category', categoryRoute);
+router.use('/categories', categoriesRoute);
 router.use('/wallpapers', wallpapersRoute);
 router.use('/collections', collectionsRoute);
 router.use('/collection-items', collectionItemsRoute);

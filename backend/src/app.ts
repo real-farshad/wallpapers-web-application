@@ -1,3 +1,4 @@
+import path from 'path';
 import express, { Express } from 'express';
 import sessionConfig from '@config/sessionConfig';
 import passport from '@config/passportConfig';
@@ -13,6 +14,8 @@ const createApp = (): Express => {
 
   app.use(passport.initialize());
   app.use(passport.session());
+
+  app.use('/assets', express.static(path.join(__dirname, '../assets')));
 
   app.use('/api', routes);
 
