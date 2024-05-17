@@ -1,11 +1,11 @@
 import { ObjectId } from 'mongodb';
 import getWallpapersCollection from './getWallpapersCollection';
 
-const findAndDeleteUserWallpaper = async (wallpaperId: string, publisherId: string) => {
+const findAndDeleteUserWallpaper = async (wallpaperId: string, publisherId: ObjectId) => {
   const usersCollection = await getWallpapersCollection();
   const result = await usersCollection.deleteOne({
     _id: new ObjectId(wallpaperId),
-    publisherId: new ObjectId(publisherId),
+    publisherId: publisherId,
   });
 
   const success = result.deletedCount === 1;

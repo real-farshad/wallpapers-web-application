@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 
-interface Comment {
+export interface Comment {
   _id?: ObjectId;
   text: string;
   createdAt: number;
@@ -8,4 +8,11 @@ interface Comment {
   publisherId: ObjectId;
 }
 
-export { Comment };
+export interface CommentPayload {
+  wallpaperId: string;
+  text: string;
+}
+
+export interface CommentUpdate {
+  text: string;
+}

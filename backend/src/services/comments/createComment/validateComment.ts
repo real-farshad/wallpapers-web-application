@@ -1,12 +1,13 @@
-import { CustomError } from '@src/utils/CustomError';
 import Joi from 'joi';
+import { CommentPayload } from '@src/models/commentModel';
+import { CustomError } from '@src/utils/CustomError';
 import { ObjectId } from 'mongodb';
 
 const commentSchema = Joi.object({
   text: Joi.string().trim().min(3).max(256).required(),
 });
 
-const validateComment = (comment: any) => {
+const validateComment = (comment: CommentPayload) => {
   const text = comment.text;
   const wallpaperId = comment.wallpaperId;
 

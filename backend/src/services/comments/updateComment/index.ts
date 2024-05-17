@@ -1,3 +1,5 @@
+import { CommentUpdate } from '@src/models/commentModel';
+import { User } from '@src/models/userModel';
 import validateCommentId from './validateCommentId';
 import validateCommentUpdate from './validateCommentUpdate';
 import checkCommentExist from './checkCommentExist';
@@ -5,11 +7,7 @@ import checkUserIsPublisher from './checkUserIsPublisher';
 import refineCommentUpdate from './refineCommentUpdate';
 import updateCommentInDatabase from './updateCommentInDatabase';
 
-export interface updateInput {
-  text: string;
-}
-
-const updateComment = async (commentId: string, update: any, user: any) => {
+const updateComment = async (commentId: string, update: CommentUpdate, user: User) => {
   commentId = validateCommentId(commentId);
 
   update = validateCommentUpdate(update);

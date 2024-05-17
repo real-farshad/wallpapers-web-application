@@ -1,7 +1,6 @@
-import { Comment } from '@src/models/commentModel';
-import { updateInput } from '.';
+import { Comment, CommentUpdate } from '@src/models/commentModel';
 
-const refineCommentUpdate = (comment: Comment, update: updateInput) => {
+const refineCommentUpdate = (comment: Comment, update: CommentUpdate) => {
   const { text } = update;
 
   const finalizedUpdate = {

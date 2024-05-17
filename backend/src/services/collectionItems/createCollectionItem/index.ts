@@ -1,3 +1,4 @@
+import { CollectionItemPayload } from '@src/models/collectionItemModel';
 import addNewFields from '@src/services/auth/signupLocalUser/addNewFields';
 import checkCollectionExists from './checkCollectionExists';
 import checkWallpaperExists from './checkWallpaperExists';
@@ -5,13 +6,9 @@ import validateCollectionItem from './validateCollectionItem';
 import saveCollectionItem from '@src/repositories/collectionItems/saveCollectionItem';
 import checkUserIsCollectionPublisher from './checkUserIsCollectionPublisher';
 import incCollectionWallpaperCount from './incCollectionWallpaperCount';
+import { User } from '@src/models/userModel';
 
-interface collectionItemInput {
-  collectionId: string;
-  wallpaperId: string;
-}
-
-const createCollectionItem = async (collectionItem: collectionItemInput, user: any) => {
+const createCollectionItem = async (collectionItem: CollectionItemPayload, user: User) => {
   validateCollectionItem(collectionItem);
 
   const wallpaperId = collectionItem.wallpaperId;

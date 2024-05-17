@@ -8,7 +8,7 @@ export interface queryInput {
   endDate?: string;
 }
 
-const countMatchingCollections = async (query: any) => {
+const countMatchingCollections = async (query: queryInput) => {
   query = validateQuery(query);
 
   query = refineQueryFields(query);

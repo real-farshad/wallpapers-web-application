@@ -1,22 +1,19 @@
+import { CategoryUpdate } from '@src/models/categoryModel';
 import updateCategoryById from '@repositories/category/updateCategoryById';
 import validateCategoryId from './validateCategoryId';
 import verifyUniqueNewCategoryTitle from './verifyUniqueNewCategoryTitle';
 import checkCategoryExists from './checkCatagoryExists';
 import validateCategoryUpdate from './validateCategoryUpdate';
 
-interface updateCategoryInput {
-  title: string;
-}
+const updateCategory = async (categoryId: string, udpate: CategoryUpdate) => {
+  categoryId = validateCategoryId(categoryId);
+  udpate = validateCategoryUpdate(udpate);
 
-const updateCategory = async (id: string, categoryUpdate: updateCategoryInput) => {
-  id = validateCategoryId(id);
-  categoryUpdate = validateCategoryUpdate(categoryUpdate);
+  await checkCategoryExists(categoryId);
 
-  await checkCategoryExists(id);
+  await verifyUniqueNewCategoryTitle(udpate.title);
 
-  await verifyUniqueNewCategoryTitle(categoryUpdate.title);
-
-  const updatedCategory = await updateCategoryById(id, categoryUpdate);
+  const updatedCategory = await updateCategoryById(categoryId, udpate);
   return updatedCategory;
 };
 

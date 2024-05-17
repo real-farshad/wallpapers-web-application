@@ -1,12 +1,9 @@
+import { CategoryPayload } from '@models/categoryModel';
 import validateCategory from './validateCategory';
 import checkCategoryExists from './checkCategoryExists';
 import saveCategory from '@repositories/category/saveCategory';
 
-interface CategoryInput {
-  title: string;
-}
-
-const createCategory = async (category: CategoryInput) => {
+const createCategory = async (category: CategoryPayload) => {
   category = validateCategory(category);
 
   await checkCategoryExists(category.title);

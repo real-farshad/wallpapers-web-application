@@ -1,15 +1,16 @@
+import { CollectionItemsQuery } from '@src/models/collectionItemModel';
 import refineQueryFields from './refineQueryFields';
 import validateCollectionId from './validateCollectionItemId';
 import validateQuery from './validateQuery';
 import queryWallpapersInDatabase from './queryWallpapersInDatabase';
 import checkCollectionExists from './checkCollectionExists';
+import { User } from '@src/models/userModel';
 
-export interface queryInput {
-  page?: number;
-  limit?: number;
-}
-
-const searchCollectionWallpapers = async (collectionId: string, query: queryInput, user: any) => {
+const searchCollectionWallpapers = async (
+  collectionId: string,
+  query: CollectionItemsQuery,
+  user: User
+) => {
   collectionId = validateCollectionId(collectionId);
 
   query = validateQuery(query);

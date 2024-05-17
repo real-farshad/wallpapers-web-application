@@ -2,11 +2,9 @@ import findSaveByWallpaperAndUserIds from '@src/repositories/saves/findSaveByWal
 import { CustomError } from '@src/utils/CustomError';
 import { ObjectId } from 'mongodb';
 
-const checkWallpaperNotAlreadyLiked = async (wallpaperId: string, userId: string) => {
+const checkWallpaperNotAlreadyLiked = async (wallpaperId: string, userId: ObjectId) => {
   const wallpaperObjectId = new ObjectId(wallpaperId);
-  const userObjectId = new ObjectId(userId);
-
-  const like = await findSaveByWallpaperAndUserIds(wallpaperObjectId, userObjectId);
+  const like = await findSaveByWallpaperAndUserIds(wallpaperObjectId, userId);
 
   if (like) {
     const errorStatus = 400;

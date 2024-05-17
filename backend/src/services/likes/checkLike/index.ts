@@ -1,10 +1,12 @@
+import { User } from '@src/models/userModel';
+import { ObjectId } from 'mongodb';
 import validateWallpaperId from '../validateWallpaperId';
 import findUserLikeInDatabase from './findUserLikeInDatabase';
 
-const checkLike = async (wallpaperId: string, user: any) => {
+const checkLike = async (wallpaperId: string, user: User) => {
   validateWallpaperId(wallpaperId);
 
-  const userId = user._id;
+  const userId = user._id as ObjectId;
   const result = await findUserLikeInDatabase(wallpaperId, userId);
 
   return result;

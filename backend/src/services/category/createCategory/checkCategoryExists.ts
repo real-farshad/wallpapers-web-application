@@ -1,5 +1,5 @@
-import findCategoryByTitle from '@src/repositories/category/findCategoryByTitle';
-import { CustomError } from '@src/utils/CustomError';
+import findCategoryByTitle from '@repositories/category/findCategoryByTitle';
+import { CustomError } from '@utils/CustomError';
 
 const checkCategoryExists = async (title: string) => {
   const sameCategory = await findCategoryByTitle(title);

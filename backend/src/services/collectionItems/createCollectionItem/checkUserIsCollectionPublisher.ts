@@ -1,8 +1,13 @@
+import { Collection } from '@src/models/collectionModel';
+import { User } from '@src/models/userModel';
 import { CustomError } from '@src/utils/CustomError';
+import { ObjectId } from 'mongodb';
 
-const checkUserIsCollectionPublisher = (colleciton: any, user: any) => {
-  const userIsPublisher = colleciton.publisherId.toString() === user._id.toString();
+const checkUserIsCollectionPublisher = (colleciton: Collection, user: User) => {
+  const publiserhId = colleciton.userId;
+  const userId = user._id as ObjectId;
 
+  const userIsPublisher = publiserhId.toString() === userId.toString();
   if (userIsPublisher) {
     const errorStatus = 401;
     const errorMessage = 'Only Collection publisher can add collection items to the collection!';

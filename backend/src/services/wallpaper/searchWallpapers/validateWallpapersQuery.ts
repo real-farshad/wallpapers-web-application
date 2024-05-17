@@ -1,3 +1,4 @@
+import { WallpapersQuery } from '@src/models/wallpaperModel';
 import { CustomError } from '@src/utils/CustomError';
 import Joi from 'joi';
 
@@ -27,7 +28,7 @@ const wallpapersQuerySchema = Joi.object({
   limit: Joi.number().integer().min(0).max(20),
 });
 
-const validateWallpapersQuery = (query: any) => {
+const validateWallpapersQuery = (query: WallpapersQuery) => {
   const { error, value } = wallpapersQuerySchema.validate(query);
 
   if (error) {

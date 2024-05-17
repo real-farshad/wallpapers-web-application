@@ -1,4 +1,11 @@
-const replaceUpdatedFields = (wallpaper: any, update: any) => {
+import { Wallpaper, WallpaperUpdate } from '@src/models/wallpaperModel';
+import { ObjectId } from 'mongodb';
+
+interface WallpaperUpdateFinal extends WallpaperUpdate {
+  categoryId?: ObjectId;
+}
+
+const replaceUpdatedFields = (wallpaper: Wallpaper, update: WallpaperUpdateFinal) => {
   const updatedWallpaper = { ...wallpaper };
 
   if (update.title) updatedWallpaper.title = update.title;

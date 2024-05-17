@@ -1,3 +1,4 @@
+import { UserUpdate } from '@src/models/userModel';
 import { CustomError } from '@src/utils/CustomError';
 import Joi from 'joi';
 
@@ -18,7 +19,7 @@ const localUpdateSchema = Joi.object().or('username', 'email', 'password').keys(
   password: passwordSchema,
 });
 
-const validateLocalUserUpdate = (user: any) => {
+const validateLocalUserUpdate = (user: UserUpdate) => {
   const { error, value } = localUpdateSchema.validate(user);
 
   if (error) {

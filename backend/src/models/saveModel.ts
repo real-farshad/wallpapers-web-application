@@ -1,10 +1,17 @@
 import { ObjectId } from 'mongodb';
 
-interface Save {
+export interface Save {
   _id?: ObjectId;
   wallpaperId: ObjectId;
   userId: ObjectId;
   createdAt: number;
 }
 
-export { Save };
+export interface SavePayload {
+  wallpaperId: string;
+}
+
+export interface SavesQuery {
+  page?: number;
+  limit?: number;
+}

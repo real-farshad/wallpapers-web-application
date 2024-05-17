@@ -1,4 +1,6 @@
-const replaceLocalFields = (user: any, update: any) => {
+import { User, UserUpdate } from '@src/models/userModel';
+
+const replaceLocalFields = (user: User, update: UserUpdate) => {
   const updatedUser = { ...user };
 
   if (update.username) updatedUser.username = update.username;

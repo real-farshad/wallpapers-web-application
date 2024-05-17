@@ -1,6 +1,6 @@
-import { queryInput } from '.';
+import { CollectionItemsQuery } from '@src/models/collectionItemModel';
 
-const refineQueryFields = (query: queryInput) => {
+const refineQueryFields = (query: CollectionItemsQuery) => {
   const standardQuery: any = {};
 
   const page = query.page ? query.page : 1;

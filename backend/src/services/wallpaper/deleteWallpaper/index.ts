@@ -1,10 +1,12 @@
 import validateWallpaperId from './validateWallpaperId';
 import deleteWallpaperFromDatabase from './deleteWallpaperFromDatabase';
+import { User } from '@src/models/userModel';
+import { ObjectId } from 'mongodb';
 
-const deleteWallpaper = async (wallpaperId: any, user: any) => {
+const deleteWallpaper = async (wallpaperId: string, user: User) => {
   validateWallpaperId(wallpaperId);
 
-  const publisherId = user._id;
+  const publisherId = user._id as ObjectId;
   const result = await deleteWallpaperFromDatabase(wallpaperId, publisherId);
 
   return result;

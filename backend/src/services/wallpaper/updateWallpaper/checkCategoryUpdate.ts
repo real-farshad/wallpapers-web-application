@@ -1,11 +1,14 @@
+import { Wallpaper, WallpaperUpdate } from '@src/models/wallpaperModel';
 import findCategoryByTitle from '@src/repositories/category/findCategoryByTitle';
 import { CustomError } from '@src/utils/CustomError';
 
-const checkCategoryUpdate = async (update: any) => {
+const checkCategoryUpdate = async (update: WallpaperUpdate) => {
   if (!update.category) return update;
 
-  const newUpdate = { ...update };
-  const category = await findCategoryByTitle(newUpdate.category);
+  const newUpdate: any = { ...update };
+
+  const categoryTitle = newUpdate.category;
+  const category = await findCategoryByTitle(categoryTitle);
 
   if (!category) {
     const errorStatus = 404;

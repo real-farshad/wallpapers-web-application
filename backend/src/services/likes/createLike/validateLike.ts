@@ -1,8 +1,8 @@
 import { CustomError } from '@src/utils/CustomError';
-import { likeInput } from '.';
 import { ObjectId } from 'mongodb';
+import { LikePayload } from '@src/models/likeModel';
 
-const validateLike = (like: likeInput) => {
+const validateLike = (like: LikePayload) => {
   const wallpaperId = like.wallpaperId;
   if (!wallpaperId) {
     const errorStatus = 400;

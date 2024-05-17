@@ -1,11 +1,12 @@
-import { CustomError } from '@src/utils/CustomError';
 import Joi from 'joi';
+import { CategoryPayload } from '@src/models/categoryModel';
+import { CustomError } from '@utils/CustomError';
 
 const categorySchema = Joi.object({
   title: Joi.string().lowercase().trim().min(3).max(32).required(),
 });
 
-const validateCategory = (category: any) => {
+const validateCategory = (category: CategoryPayload) => {
   const { error, value } = categorySchema.validate(category);
 
   if (error) {

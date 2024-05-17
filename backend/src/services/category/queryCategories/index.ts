@@ -1,12 +1,8 @@
+import { CategoriesQuery } from '@src/models/categoryModel';
 import findCategoriesByQuery from '@repositories/category/findCategoriesByQuery';
 import validateCategoriesQuery from './validateCategoriesQuery';
 
-interface queryCategoriesInput {
-  page?: number;
-  limit?: number;
-}
-
-const queryCategories = async (query: queryCategoriesInput) => {
+const queryCategories = async (query: CategoriesQuery) => {
   query = validateCategoriesQuery(query);
 
   const categories = await findCategoriesByQuery(query);

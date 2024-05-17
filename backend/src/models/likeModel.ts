@@ -1,10 +1,17 @@
 import { ObjectId } from 'mongodb';
 
-interface Like {
+export interface Like {
   _id?: ObjectId;
   wallpaperId: ObjectId;
   userId: ObjectId;
   createdAt: number;
 }
 
-export { Like };
+export interface LikePayload {
+  wallpaperId: string;
+}
+
+export interface LikesQuery {
+  page?: number;
+  limit?: number;
+}

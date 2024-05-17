@@ -1,7 +1,18 @@
 import { ObjectId } from 'mongodb';
-interface Category {
+export interface Category {
   _id?: ObjectId;
   title: string;
 }
 
-export { Category };
+export interface CategoryPayload {
+  title: string;
+}
+
+export interface CategoryUpdate {
+  title: string;
+}
+
+export interface CategoriesQuery {
+  page?: number;
+  limit?: number;
+}

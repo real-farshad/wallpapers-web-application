@@ -1,7 +1,7 @@
+import { LikePayload } from '@src/models/likeModel';
 import { ObjectId } from 'mongodb';
-import { likeInput } from '.';
 
-const refineLikeData = (like: likeInput, userId: ObjectId) => {
+const refineLikeData = (like: LikePayload, userId: ObjectId) => {
   const finalizedLike = {
     ...like,
     wallpaperId: new ObjectId(like.wallpaperId),

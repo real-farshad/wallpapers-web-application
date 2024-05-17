@@ -1,8 +1,8 @@
 import { CustomError } from '@src/utils/CustomError';
-import { saveInput } from '.';
 import { ObjectId } from 'mongodb';
+import { SavePayload } from '@src/models/saveModel';
 
-const validateSave = (save: saveInput) => {
+const validateSave = (save: SavePayload) => {
   const wallpaperId = save.wallpaperId;
   if (!wallpaperId) {
     const errorStatus = 400;

@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { wallpaperInput } from '.';
 import { CustomError } from '@src/utils/CustomError';
+import { WallpaperPayload } from '@src/models/wallpaperModel';
 
 const titleSchema = Joi.string().trim().min(3).max(64).required();
 
@@ -18,7 +18,7 @@ const wallpaperSchema = Joi.object({
   category: categorySchema,
 });
 
-const validateWallpaper = (wallpaper: wallpaperInput) => {
+const validateWallpaper = (wallpaper: WallpaperPayload) => {
   const { error, value } = wallpaperSchema.validate(wallpaper);
 
   if (error) {

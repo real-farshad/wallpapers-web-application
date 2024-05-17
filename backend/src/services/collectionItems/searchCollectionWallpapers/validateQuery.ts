@@ -1,13 +1,13 @@
 import Joi from 'joi';
 import { CustomError } from '@src/utils/CustomError';
-import { queryInput } from '.';
+import { CollectionItemsQuery } from '@src/models/collectionItemModel';
 
 const querySchema = Joi.object({
   page: Joi.number().integer().min(0),
   limit: Joi.number().integer().min(0).max(20),
 });
 
-const validateQuery = (query: queryInput) => {
+const validateQuery = (query: CollectionItemsQuery) => {
   const { error, value } = querySchema.validate(query);
 
   if (error) {

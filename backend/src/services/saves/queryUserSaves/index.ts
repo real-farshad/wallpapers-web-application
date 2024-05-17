@@ -1,15 +1,13 @@
+import { SavesQuery } from '@src/models/saveModel';
+import { User } from '@src/models/userModel';
+import { ObjectId } from 'mongodb';
 import findUserSaves from '@src/repositories/saves/findUserSaves';
 import validateQuery from './validateQuery';
 
-export interface queryInput {
-  page?: number;
-  limit?: number;
-}
-
-const queryUserSaves = async (query: queryInput, user: any) => {
+const queryUserSaves = async (query: SavesQuery, user: User) => {
   query = validateQuery(query);
 
-  const userId = user._id;
+  const userId = user._id as ObjectId;
   const savedWallpapers = await findUserSaves(userId, query);
 
   return savedWallpapers;

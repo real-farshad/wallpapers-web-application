@@ -1,7 +1,8 @@
 import findAndDeleteUserWallpaper from '@src/repositories/wallpaper/findAndDeleteUserWallpaper';
 import { CustomError } from '@src/utils/CustomError';
+import { ObjectId } from 'mongodb';
 
-const deleteWallpaperFromDatabase = async (wallpaperId: string, publisherId: string) => {
+const deleteWallpaperFromDatabase = async (wallpaperId: string, publisherId: ObjectId) => {
   const sucess = await findAndDeleteUserWallpaper(wallpaperId, publisherId);
 
   if (!sucess) {

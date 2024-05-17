@@ -1,4 +1,6 @@
-const extractUserProfile = (user: any) => {
+import { User } from '@src/models/userModel';
+
+const extractUserProfile = (user: User) => {
   if (user.provider === 'local') {
     const localUserProfile = {
       _id: user._id,

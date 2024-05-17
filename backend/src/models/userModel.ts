@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 
-interface User {
+export interface User {
   _id?: ObjectId;
   avatar?: string;
   username: string;
@@ -10,4 +10,8 @@ interface User {
   providerId?: string;
 }
 
-export { User };
+export interface UserUpdate {
+  username?: string;
+  email?: string;
+  password?: string;
+}

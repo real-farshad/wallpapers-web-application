@@ -6,6 +6,7 @@ import updateWallpaper from '@src/services/wallpaper/updateWallpaper';
 import getWallpaperDetails from '@src/services/wallpaper/getWallpaperDetails';
 import searchWallpapers from '@src/services/wallpaper/searchWallpapers';
 import countMatchingWallpapers from '@src/services/wallpaper/countMatchingWallpapers';
+import { User } from '@src/models/userModel';
 
 const handlePostWallpaper = catchAsync(async (req: Request, res: Response) => {
   const wallpaper = req.body;
@@ -24,7 +25,7 @@ const handleGetWallpapersCount = catchAsync(async (req: Request, res: Response) 
 
 const handleGetWallpapersSearch = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
-  const user = req.user as any;
+  const user = req.user as User;
 
   const wallpapers = await searchWallpapers(query, user);
   return res.json(wallpapers);
@@ -32,18 +33,16 @@ const handleGetWallpapersSearch = catchAsync(async (req: Request, res: Response)
 
 const handleGetWallpaper = catchAsync(async (req: Request, res: Response) => {
   const wallpaperId = req.params.id;
+  const user = req.user as User;
 
-  const user: any = req.user;
-  const userId = user?._id;
-
-  const wallpaper = await getWallpaperDetails(wallpaperId, userId);
+  const wallpaper = await getWallpaperDetails(wallpaperId, user);
   return res.json(wallpaper);
 });
 
 const hadnleUpdateWallpaper = catchAsync(async (req: Request, res: Response) => {
   const wallpaperId = req.params.id;
   const update = req.body;
-  const user = req.user as any;
+  const user = req.user as User;
 
   const updatedWallpaper = await updateWallpaper(wallpaperId, update, user);
   return res.json(updatedWallpaper);
@@ -51,7 +50,7 @@ const hadnleUpdateWallpaper = catchAsync(async (req: Request, res: Response) => 
 
 const handleDeleteWallpaper = catchAsync(async (req: Request, res: Response) => {
   const wallpaperId = req.params.id;
-  const user = req.user as any;
+  const user = req.user as User;
 
   const result = await deleteWallpaper(wallpaperId, user);
   return res.json(result);

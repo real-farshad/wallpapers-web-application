@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 
-interface Collection {
+export interface Collection {
   _id?: ObjectId;
   title: string;
   createdAt: number;
@@ -8,4 +8,18 @@ interface Collection {
   userId: ObjectId;
 }
 
-export { Collection };
+export interface CollectionPayload {
+  title: string;
+}
+
+export interface CollectionUpdate {
+  title: string;
+}
+
+export interface CollectionsQuery {
+  title?: string;
+  startDate?: string;
+  endDate?: string;
+  page?: number;
+  limit?: number;
+}

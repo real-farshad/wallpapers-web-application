@@ -9,7 +9,7 @@ export interface queryInput {
   endDate?: string;
 }
 
-const countMatchingWallpapers = async (query: any) => {
+const countMatchingWallpapers = async (query: queryInput) => {
   query = validateQuery(query);
 
   query = refineQueryFields(query);

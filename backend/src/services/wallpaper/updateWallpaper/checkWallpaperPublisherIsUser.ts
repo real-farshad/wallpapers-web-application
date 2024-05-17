@@ -1,10 +1,13 @@
+import { User } from '@src/models/userModel';
+import { Wallpaper } from '@src/models/wallpaperModel';
 import { CustomError } from '@src/utils/CustomError';
+import { ObjectId } from 'mongodb';
 
-const checkWallpaperPublisherIsUser = (wallpaper: any, user: any) => {
-  const publisherId = wallpaper.publisherId.toString();
-  const userId = user._id.toString();
+const checkWallpaperPublisherIsUser = (wallpaper: Wallpaper, user: User) => {
+  const publisherId = wallpaper.publisherId;
+  const userId = user._id as ObjectId;
 
-  const hasCorrectPublisher = publisherId === userId;
+  const hasCorrectPublisher = publisherId.toString() === userId.toString();
 
   if (!hasCorrectPublisher) {
     const errorStatus = 401;

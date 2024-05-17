@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
-import { saveInput } from '.';
+import { SavePayload } from '@src/models/saveModel';
 
-const refineSaveData = (save: saveInput, userId: ObjectId) => {
+const refineSaveData = (save: SavePayload, userId: ObjectId) => {
   const finalizedSave = {
     ...save,
     wallpaperId: new ObjectId(save.wallpaperId),

@@ -1,16 +1,14 @@
 import { ObjectId } from 'mongodb';
-import { userInput, wallpaperInput } from '.';
+import { User } from '@src/models/userModel';
+import { WallpaperPayload } from '@src/models/wallpaperModel';
+import { Category } from '@src/models/categoryModel';
 
-interface categoryInput {
-  _id: ObjectId;
-}
-
-const addNewFields = (wallpaper: wallpaperInput, category: categoryInput, user: userInput) => {
+const addNewFields = (wallpaper: WallpaperPayload, category: Category, user: User) => {
   const newWallpaper = {
     title: wallpaper.title,
     image: wallpaper.image,
-    publisherId: new ObjectId(user._id),
-    categoryId: category._id,
+    publisherId: user._id as ObjectId,
+    categoryId: category._id as ObjectId,
     likeCount: 0,
     createdAt: Date.now(),
   };

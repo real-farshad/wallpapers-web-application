@@ -1,6 +1,6 @@
-import { queryInput } from '.';
+import { WallpapersQuery } from '@src/models/wallpaperModel';
 
-const refineQueryFields = (query: queryInput) => {
+const refineQueryFields = (query: WallpapersQuery) => {
   const { title, category, startDate, endDate, sort } = query;
 
   const standardQuery: any = {};

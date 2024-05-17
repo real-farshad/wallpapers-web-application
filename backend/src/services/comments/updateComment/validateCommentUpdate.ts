@@ -1,11 +1,12 @@
 import Joi from 'joi';
 import { CustomError } from '@src/utils/CustomError';
+import { CommentUpdate } from '@src/models/commentModel';
 
 const commentSchema = Joi.object({
   text: Joi.string().trim().min(3).max(256).required(),
 });
 
-const validateCommentUpdate = (update: any) => {
+const validateCommentUpdate = (update: CommentUpdate) => {
   const { error, value } = commentSchema.validate(update);
 
   if (error) {

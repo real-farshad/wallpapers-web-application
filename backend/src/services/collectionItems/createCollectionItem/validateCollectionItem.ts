@@ -1,6 +1,7 @@
+import { CollectionItemPayload } from '@src/models/collectionItemModel';
 import { CustomError } from '@src/utils/CustomError';
 
-const validateCollectionItem = (collectionItem: any) => {
+const validateCollectionItem = (collectionItem: CollectionItemPayload) => {
   const wallpaperId = collectionItem.wallpaperId;
   if (!wallpaperId) {
     const errorStatus = 400;
