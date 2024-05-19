@@ -3,7 +3,6 @@ import validateCommentId from './validateCommentId';
 import validateCommentUpdate from './validateCommentUpdate';
 import checkCommentExist from './checkCommentExist';
 import checkUserIsPublisher from './checkUserIsPublisher';
-import refineCommentUpdate from './refineCommentUpdate';
 import updateCommentInDatabase from './updateCommentInDatabase';
 
 export interface CommentUpdate {
@@ -19,9 +18,7 @@ const updateComment = async (commentId: string, update: CommentUpdate, user: Use
 
   checkUserIsPublisher(comment, user);
 
-  const finalizedUpdate = refineCommentUpdate(comment, update);
-
-  const updatedComment = await updateCommentInDatabase(finalizedUpdate);
+  const updatedComment = await updateCommentInDatabase(commentId, update);
   return updatedComment;
 };
 

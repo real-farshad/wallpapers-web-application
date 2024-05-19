@@ -1,7 +1,6 @@
 import { User } from '@src/models/userModel';
 import validateWallpaperId from './validateWallpaperId';
 import validateWallpaperUpdate from './validateWallpaperUpdate';
-import replaceUpdatedFields from './replaceUpdatedFields';
 import checkCategoryUpdate from './checkCategoryUpdate';
 import checkWallpaperPublisherIsUser from './checkWallpaperPublisherIsUser';
 import findWallpaperToUpdate from './findWallpaperToUpdate';
@@ -27,9 +26,7 @@ const updateWallpaper = async (wallpaperId: string, update: WallpaperUpdate, use
 
   update = await checkCategoryUpdate(update);
 
-  const finalizedUpdate = replaceUpdatedFields(wallpaper, update);
-
-  const updatedWallpaper = await updateWallpaperInDatabase(wallpaperId, finalizedUpdate);
+  const updatedWallpaper = await updateWallpaperInDatabase(wallpaperId, update);
   return updatedWallpaper;
 };
 

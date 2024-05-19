@@ -1,10 +1,14 @@
+import { ObjectId } from 'mongodb';
 import getCommentsCollection from './getCommentsCollection';
-import { Comment } from '@src/models/commentModel';
+import { CommentUpdate } from '@src/services/comments/updateComment';
 
-const updateCommentById = async (update: Comment): Promise<Comment | undefined> => {
+const updateCommentById = async (
+  commentId: ObjectId,
+  update: CommentUpdate
+): Promise<Comment | undefined> => {
   const commentsCollection = await getCommentsCollection();
   const result = await commentsCollection.findOneAndUpdate(
-    { _id: update._id },
+    { _id: commentId },
     { $set: update },
     { returnDocument: 'after' }
   );

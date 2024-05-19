@@ -1,19 +1,11 @@
 import { Wallpaper } from '@src/models/wallpaperModel';
 import getWallpapersCollection from './getWallpapersCollection';
 import { ObjectId } from 'mongodb';
-
-interface wallpaperUpdate {
-  title?: string;
-  image?: {
-    thumbnail?: string;
-    large?: string;
-  };
-  category?: string;
-}
+import { WallpaperUpdate } from '@src/services/wallpaper/updateWallpaper';
 
 const updateWallpaperById = async (
   id: ObjectId,
-  update: wallpaperUpdate
+  update: WallpaperUpdate
 ): Promise<Wallpaper | undefined> => {
   const wallpapersCollection = await getWallpapersCollection();
   const result = await wallpapersCollection.findOneAndUpdate(
