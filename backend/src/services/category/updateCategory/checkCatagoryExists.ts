@@ -1,8 +1,10 @@
 import findCategoryById from '@repositories/category/findCategoryById';
 import { CustomError } from '@utils/CustomError';
+import { ObjectId } from 'mongodb';
 
 const checkCategoryExists = async (categoryId: string) => {
-  const category = await findCategoryById(categoryId);
+  const categoryObjectId = new ObjectId(categoryId);
+  const category = await findCategoryById(categoryObjectId);
 
   if (!category) {
     const errorStatus = 404;

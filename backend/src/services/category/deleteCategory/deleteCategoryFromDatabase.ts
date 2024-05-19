@@ -1,8 +1,10 @@
 import deleteCategoryById from '@src/repositories/category/deleteCategoryById';
 import { CustomError } from '@src/utils/CustomError';
+import { ObjectId } from 'mongodb';
 
 const deleteCategoryFromDatabase = async (categoryId: string) => {
-  const success = await deleteCategoryById(categoryId);
+  const categoryObjectId = new ObjectId(categoryId);
+  const success = await deleteCategoryById(categoryObjectId);
 
   if (!success) {
     const errorStatus = 400;

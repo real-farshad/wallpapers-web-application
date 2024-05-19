@@ -12,8 +12,8 @@ const upsertUserByProviderId = async (
     { $set: userUpdate },
     { upsert: true, returnDocument: 'after' }
   );
-  const user = result.value;
 
+  const user = result.value;
   return user;
 };
 

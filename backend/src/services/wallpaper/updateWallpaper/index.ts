@@ -1,11 +1,11 @@
 import { User } from '@src/models/userModel';
 import validateWallpaperId from './validateWallpaperId';
 import validateWallpaperUpdate from './validateWallpaperUpdate';
-import updateWallpaperById from '@src/repositories/wallpaper/updateWallpaperById';
 import replaceUpdatedFields from './replaceUpdatedFields';
 import checkCategoryUpdate from './checkCategoryUpdate';
 import checkWallpaperPublisherIsUser from './checkWallpaperPublisherIsUser';
 import findWallpaperToUpdate from './findWallpaperToUpdate';
+import updateWallpaperInDatabase from './updateWallpaperInDatabase';
 
 export interface WallpaperUpdate {
   image?: {
@@ -29,7 +29,7 @@ const updateWallpaper = async (wallpaperId: string, update: WallpaperUpdate, use
 
   const finalizedUpdate = replaceUpdatedFields(wallpaper, update);
 
-  const updatedWallpaper = await updateWallpaperById(wallpaperId, finalizedUpdate);
+  const updatedWallpaper = await updateWallpaperInDatabase(wallpaperId, finalizedUpdate);
   return updatedWallpaper;
 };
 

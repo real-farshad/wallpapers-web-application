@@ -1,8 +1,10 @@
 import findWallpaperById from '@src/repositories/wallpaper/findWallpaperById';
 import { CustomError } from '@src/utils/CustomError';
+import { ObjectId } from 'mongodb';
 
-const findWallpaperToUpdate = async (id: string) => {
-  const wallpaper = await findWallpaperById(id);
+const findWallpaperToUpdate = async (wallpaperId: string) => {
+  const wallpaperObjectId = new ObjectId(wallpaperId);
+  const wallpaper = await findWallpaperById(wallpaperObjectId);
 
   if (!wallpaper) {
     const errorStatus = 404;

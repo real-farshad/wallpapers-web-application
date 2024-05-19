@@ -12,12 +12,12 @@ interface wallpaperUpdate {
 }
 
 const updateWallpaperById = async (
-  id: string,
+  id: ObjectId,
   update: wallpaperUpdate
 ): Promise<Wallpaper | undefined> => {
   const wallpapersCollection = await getWallpapersCollection();
   const result = await wallpapersCollection.findOneAndUpdate(
-    { _id: new ObjectId(id) },
+    { _id: id },
     { $set: update },
     { returnDocument: 'after' }
   );

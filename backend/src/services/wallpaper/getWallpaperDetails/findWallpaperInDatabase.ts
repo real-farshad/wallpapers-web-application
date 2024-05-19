@@ -3,7 +3,8 @@ import { CustomError } from '@src/utils/CustomError';
 import { ObjectId } from 'mongodb';
 
 const findWallpaperInDatabase = async (wallpaperId: string, userId?: ObjectId) => {
-  const wallpaper = await findWallpaperByIdAndPublisher(wallpaperId, userId);
+  const wallpaperObjectId = new ObjectId(wallpaperId);
+  const wallpaper = await findWallpaperByIdAndPublisher(wallpaperObjectId, userId);
 
   if (!wallpaper) {
     const errorStatus = 404;

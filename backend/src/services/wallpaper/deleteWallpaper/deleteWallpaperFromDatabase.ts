@@ -3,7 +3,8 @@ import { CustomError } from '@src/utils/CustomError';
 import { ObjectId } from 'mongodb';
 
 const deleteWallpaperFromDatabase = async (wallpaperId: string, publisherId: ObjectId) => {
-  const sucess = await findAndDeleteUserWallpaper(wallpaperId, publisherId);
+  const wallpaperObjectId = new ObjectId(wallpaperId);
+  const sucess = await findAndDeleteUserWallpaper(wallpaperObjectId, publisherId);
 
   if (!sucess) {
     const errorStatus = 404;

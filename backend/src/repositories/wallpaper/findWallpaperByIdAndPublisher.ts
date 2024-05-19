@@ -2,15 +2,13 @@ import { Document, ObjectId } from 'mongodb';
 import getWallpapersCollection from './getWallpapersCollection';
 
 const findWallpaperByIdAndPublisher = async (
-  wallpaperId: string,
+  wallpaperId: ObjectId,
   userId?: ObjectId
 ): Promise<Document> => {
-  const wallpaperObjectId = new ObjectId(wallpaperId);
-
   const pipeline: Document[] = [
     {
       $match: {
-        _id: wallpaperObjectId,
+        _id: wallpaperId,
       },
     },
     {
@@ -35,7 +33,7 @@ const findWallpaperByIdAndPublisher = async (
         pipeline: [
           {
             $match: {
-              wallpaperId: wallpaperObjectId,
+              wallpaperId: wallpaperId,
             },
           },
           {
@@ -89,10 +87,7 @@ const findWallpaperByIdAndPublisher = async (
               {
                 $match: {
                   $expr: {
-                    $and: [
-                      { $eq: ['$userId', userId] },
-                      { $eq: ['$wallpaperId', wallpaperObjectId] },
-                    ],
+                    $and: [{ $eq: ['$userId', userId] }, { $eq: ['$wallpaperId', wallpaperId] }],
                   },
                 },
               },
@@ -107,10 +102,7 @@ const findWallpaperByIdAndPublisher = async (
               {
                 $match: {
                   $expr: {
-                    $and: [
-                      { $eq: ['$userId', userId] },
-                      { $eq: ['$wallpaperId', wallpaperObjectId] },
-                    ],
+                    $and: [{ $eq: ['$userId', userId] }, { $eq: ['$wallpaperId', wallpaperId] }],
                   },
                 },
               },
