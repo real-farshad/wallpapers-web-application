@@ -1,10 +1,14 @@
-import { CommentPayload } from '@src/models/commentModel';
 import { User } from '@src/models/userModel';
 import { ObjectId } from 'mongodb';
 import validateComment from './validateComment';
 import checkWallpaperExists from './checkWallpaperExists';
 import addNewFields from './addNewFields';
 import saveComment from '@src/repositories/comments/saveComment';
+
+export interface CommentPayload {
+  wallpaperId: string;
+  text: string;
+}
 
 const createComments = async (comment: CommentPayload, user: User) => {
   comment = validateComment(comment);

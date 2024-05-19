@@ -1,34 +1,37 @@
-import { CollectionItemPayload } from '@src/models/collectionItemModel';
 import { CustomError } from '@src/utils/CustomError';
+import { CollectionItemPayload } from '.';
+import Joi from 'joi';
+import { ObjectId } from 'mongodb';
 
-const validateCollectionItem = (collectionItem: CollectionItemPayload) => {
-  const wallpaperId = collectionItem.wallpaperId;
-  if (!wallpaperId) {
+const collectionItemSchema = Joi.object({
+  collectionId: Joi.string().trim().min(3).max(32).required(),
+  wallpaperId: Joi.string().trim().min(3).max(32).required(),
+});
+
+const validateCollectionItem = (collectionItem: CollectionItemPayload): CollectionItemPayload => {
+  const { error, value } = collectionItemSchema.validate(collectionItem);
+
+  if (error) {
     const errorStatus = 400;
-    const errorMessage = 'wallpaperId is required!';
+    const errorMessage = error.details[0].message;
     throw new CustomError(errorStatus, errorMessage);
   }
 
-  const collectionId = collectionItem.collectionId;
-  if (!collectionId) {
-    const errorStatus = 400;
-    const errorMessage = 'collectionId is required!';
-    throw new CustomError(errorStatus, errorMessage);
-  }
-
-  const wallpaperIdTrimmed = wallpaperId.trim();
-  if (!wallpaperIdTrimmed) {
+  const isValidWallpaperId = ObjectId.isValid(value.wallpaperId);
+  if (!isValidWallpaperId) {
     const errorStatus = 400;
     const errorMessage = 'Invalid wallpaperId!';
     throw new CustomError(errorStatus, errorMessage);
   }
 
-  const collectionIdTrimmed = collectionId.trim();
-  if (!collectionIdTrimmed) {
+  const isValidCollectionId = ObjectId.isValid(value.collectionId);
+  if (!isValidCollectionId) {
     const errorStatus = 400;
     const errorMessage = 'Invalid collectionId!';
     throw new CustomError(errorStatus, errorMessage);
   }
+
+  return value;
 };
 
 export default validateCollectionItem;

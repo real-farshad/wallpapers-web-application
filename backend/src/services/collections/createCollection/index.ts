@@ -1,9 +1,12 @@
-import { CollectionPayload } from '@src/models/collectionModel';
 import { User } from '@src/models/userModel';
 import { ObjectId } from 'mongodb';
 import saveCollection from '@src/repositories/collections/saveCollection';
 import addNewFields from './addNewFields';
 import validateCollection from './validateCollection';
+
+export interface CollectionPayload {
+  title: string;
+}
 
 const createCollection = async (collection: CollectionPayload, user: User) => {
   collection = validateCollection(collection);

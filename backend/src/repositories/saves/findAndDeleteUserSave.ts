@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import getSavesCollection from './getSavesCollection';
 
-const findAndDeleteUserSave = async (wallpaperId: ObjectId, userId: ObjectId) => {
+const findAndDeleteUserSave = async (wallpaperId: ObjectId, userId: ObjectId): Promise<boolean> => {
   const savesCollection = await getSavesCollection();
   const result = await savesCollection.deleteOne({ wallpaperId, userId });
 

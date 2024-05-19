@@ -9,7 +9,7 @@ const signInWithLocalStrategy: VerifyFunction = async (email, password, done) =>
   const user = await findUserByEmail(email);
   if (!user) throw new CustomError(400, 'Incorrect email or password.');
 
-  const hasCorrectPassword = await checkPassword(password, user.password);
+  const hasCorrectPassword = await checkPassword(password, user.password as string);
   if (!hasCorrectPassword) throw new CustomError(400, 'Incorrect email or password.');
 
   return done(null, user);

@@ -1,7 +1,7 @@
 import getCommentsCollection from './getCommentsCollection';
 import { Comment } from '@src/models/commentModel';
 
-const updateCommentById = async (update: Comment) => {
+const updateCommentById = async (update: Comment): Promise<Comment | undefined> => {
   const commentsCollection = await getCommentsCollection();
   const result = await commentsCollection.findOneAndUpdate(
     { _id: update._id },

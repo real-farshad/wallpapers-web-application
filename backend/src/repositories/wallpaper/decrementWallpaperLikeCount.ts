@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import getWallpapersCollection from './getWallpapersCollection';
 
-const decrementWallpaperLikeCount = async (wallpaperId: ObjectId) => {
+const decrementWallpaperLikeCount = async (wallpaperId: ObjectId): Promise<boolean> => {
   const wallpapersCollection = await getWallpapersCollection();
   const result = await wallpapersCollection.updateOne(
     { _id: wallpaperId },

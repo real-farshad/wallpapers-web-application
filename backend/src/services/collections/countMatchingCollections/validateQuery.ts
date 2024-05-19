@@ -1,5 +1,6 @@
-import { CustomError } from '@src/utils/CustomError';
 import Joi from 'joi';
+import { CustomError } from '@src/utils/CustomError';
+import { queryInput } from '.';
 
 const startDate = Joi.string()
   .pattern(/^\d{2}-\d{2}-\d{4}$/)
@@ -23,7 +24,7 @@ const wallpapersQuerySchema = Joi.object({
   endDate,
 });
 
-const validateQuery = (query: any) => {
+const validateQuery = (query: queryInput): queryInput => {
   const { error, value } = wallpapersQuerySchema.validate(query);
 
   if (error) {

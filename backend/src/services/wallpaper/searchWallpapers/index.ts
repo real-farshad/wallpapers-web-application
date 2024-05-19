@@ -1,9 +1,18 @@
 import queryWallpapers from '@src/repositories/wallpaper/queryWallpapers';
 import validateWallpapersQuery from './validateWallpapersQuery';
 import refineQueryFields from './refineQueryFields';
-import { WallpapersQuery } from '@src/models/wallpaperModel';
 import { User } from '@src/models/userModel';
 import { ObjectId } from 'mongodb';
+
+export interface WallpapersQuery {
+  title?: string;
+  category?: string;
+  startDate?: string;
+  endDate?: string;
+  sort?: string;
+  page?: number;
+  limit?: number;
+}
 
 const searchWallpapers = async (query: WallpapersQuery, user?: User) => {
   query = validateWallpapersQuery(query);

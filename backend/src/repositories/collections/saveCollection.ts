@@ -1,7 +1,7 @@
 import { Collection } from '@src/models/collectionModel';
 import getCollectionsCollection from './getCollectionsCollection';
 
-const saveCollection = async (collection: Collection) => {
+const saveCollection = async (collection: Collection): Promise<Collection> => {
   const collectionsCollection = await getCollectionsCollection();
   const result = await collectionsCollection.insertOne(collection);
 

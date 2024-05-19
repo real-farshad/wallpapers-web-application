@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { SavePayload } from '@src/models/saveModel';
+import { SavePayload } from '.';
 
 const refineSaveData = (save: SavePayload, userId: ObjectId) => {
   const finalizedSave = {

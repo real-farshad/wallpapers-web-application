@@ -1,7 +1,7 @@
-import { CollectionItem } from '@src/models/collectionItemModel';
 import { ObjectId } from 'mongodb';
+import { CollectionItemPayload } from '.';
 
-const addNewCollectionItemFields = async (collectionItem: CollectionItem) => {
+const addNewCollectionItemFields = async (collectionItem: CollectionItemPayload) => {
   const newCollectionItem = {
     ...collectionItem,
     createdAt: Date.now(),

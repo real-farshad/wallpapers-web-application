@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import getCategoriesCollection from './getCategoriesCollection';
 
-const deleteCategoryById = async (id: string) => {
+const deleteCategoryById = async (id: string): Promise<boolean> => {
   const categoriesCollection = await getCategoriesCollection();
   const result = await categoriesCollection.deleteOne({ _id: new ObjectId(id) });
 

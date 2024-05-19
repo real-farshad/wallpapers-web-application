@@ -1,7 +1,7 @@
 import { Document } from 'mongodb';
 import getCollectionsCollection from './getCollectionsCollection';
 
-const countQueryResults = async (query: any) => {
+const countQueryResults = async (query: any): Promise<{ count: number }> => {
   let { title, startDate, endDate } = query;
 
   const pipeline: Document[] = [];

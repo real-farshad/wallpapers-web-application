@@ -1,6 +1,6 @@
-import { WallpapersQuery } from '@src/models/wallpaperModel';
 import { CustomError } from '@src/utils/CustomError';
 import Joi from 'joi';
+import { WallpapersQuery } from '.';
 
 const startDate = Joi.string()
   .pattern(/^\d{2}-\d{2}-\d{4}$/)
@@ -28,7 +28,7 @@ const wallpapersQuerySchema = Joi.object({
   limit: Joi.number().integer().min(0).max(20),
 });
 
-const validateWallpapersQuery = (query: WallpapersQuery) => {
+const validateWallpapersQuery = (query: WallpapersQuery): WallpapersQuery => {
   const { error, value } = wallpapersQuerySchema.validate(query);
 
   if (error) {

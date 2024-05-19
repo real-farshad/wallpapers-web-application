@@ -1,24 +1,27 @@
-import { SavePayload } from '@src/models/saveModel';
 import { User } from '@src/models/userModel';
 import { ObjectId } from 'mongodb';
-import saveLike from '@src/repositories/likes/saveLike';
 import checkWallpaperExists from './checkWallpaperExists';
 import checkWallpaperNotAlreadySaved from './checkWallpaperNotAlreadySaved';
 import validateSave from './validateSave';
 import refineSaveData from './refineSaveData';
+import saveWallpaperSave from '@src/repositories/saves/saveWallpaperSave';
 
-const createSave = async (like: SavePayload, user: User) => {
-  validateSave(like);
+export interface SavePayload {
+  wallpaperId: string;
+}
 
-  const wallpaperId = like.wallpaperId;
+const createSave = async (save: SavePayload, user: User) => {
+  save = validateSave(save);
+
+  const wallpaperId = save.wallpaperId;
   await checkWallpaperExists(wallpaperId);
 
   const userId = user._id as ObjectId;
   await checkWallpaperNotAlreadySaved(wallpaperId, userId);
 
-  const finalizedSave = refineSaveData(like, userId);
+  const finalizedSave = refineSaveData(save, userId);
 
-  const savedWallpaperSave = await saveLike(finalizedSave);
+  const savedWallpaperSave = await saveWallpaperSave(finalizedSave);
   return savedWallpaperSave;
 };
 

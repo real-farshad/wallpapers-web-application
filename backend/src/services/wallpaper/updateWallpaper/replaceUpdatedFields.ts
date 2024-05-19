@@ -1,5 +1,6 @@
-import { Wallpaper, WallpaperUpdate } from '@src/models/wallpaperModel';
+import { Wallpaper } from '@src/models/wallpaperModel';
 import { ObjectId } from 'mongodb';
+import { WallpaperUpdate } from '.';
 
 interface WallpaperUpdateFinal extends WallpaperUpdate {
   categoryId?: ObjectId;

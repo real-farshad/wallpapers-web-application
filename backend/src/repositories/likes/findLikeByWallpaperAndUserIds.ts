@@ -1,7 +1,11 @@
 import { ObjectId } from 'mongodb';
 import getLikesCollection from './getLikesCollection';
+import { Like } from '@src/models/likeModel';
 
-const findLikeByWallpaperAndUserIds = async (wallpaperId: ObjectId, userId: ObjectId) => {
+const findLikeByWallpaperAndUserIds = async (
+  wallpaperId: ObjectId,
+  userId: ObjectId
+): Promise<Like | undefined> => {
   const likesColleciton = await getLikesCollection();
   const like = await likesColleciton.findOne({ wallpaperId, userId });
   return like;

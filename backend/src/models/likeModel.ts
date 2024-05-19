@@ -6,12 +6,3 @@ export interface Like {
   userId: ObjectId;
   createdAt: number;
 }
-
-export interface LikePayload {
-  wallpaperId: string;
-}
-
-export interface LikesQuery {
-  page?: number;
-  limit?: number;
-}

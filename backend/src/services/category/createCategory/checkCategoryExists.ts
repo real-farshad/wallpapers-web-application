@@ -1,8 +1,8 @@
 import findCategoryByTitle from '@repositories/category/findCategoryByTitle';
 import { CustomError } from '@utils/CustomError';
 
-const checkCategoryExists = async (title: string) => {
-  const sameCategory = await findCategoryByTitle(title);
+const checkCategoryExists = async (categoryTitle: string) => {
+  const sameCategory = await findCategoryByTitle(categoryTitle);
 
   if (sameCategory) {
     const errorStatus = 400;

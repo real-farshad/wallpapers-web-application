@@ -1,7 +1,7 @@
 import { Category } from '@src/models/categoryModel';
 import getCategoriesCollection from './getCategoriesCollection';
 
-const saveCategory = async (category: Category) => {
+const saveCategory = async (category: Category): Promise<Category> => {
   const categoriesCollection = await getCategoriesCollection();
   const result = await categoriesCollection.insertOne(category);
 

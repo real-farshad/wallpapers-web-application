@@ -1,11 +1,14 @@
-import { CategoryUpdate } from '@src/models/categoryModel';
 import { User } from '@src/models/userModel';
 import { ObjectId } from 'mongodb';
 import validateCollectionId from './validateCollectionId';
 import validateCollectionUpdate from './validateCollectionUpdate';
 import updateCollectionInDatabase from './updateCollectionInDatabase';
 
-const updateCollection = async (collectionId: string, update: CategoryUpdate, user: User) => {
+export interface CollectionUpdate {
+  title: string;
+}
+
+const updateCollection = async (collectionId: string, update: CollectionUpdate, user: User) => {
   collectionId = validateCollectionId(collectionId);
 
   update = validateCollectionUpdate(update);

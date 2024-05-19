@@ -1,5 +1,3 @@
-import { CollectionItemPayload } from '@src/models/collectionItemModel';
-import addNewFields from '@src/services/auth/signupLocalUser/addNewFields';
 import checkCollectionExists from './checkCollectionExists';
 import checkWallpaperExists from './checkWallpaperExists';
 import validateCollectionItem from './validateCollectionItem';
@@ -7,9 +5,15 @@ import saveCollectionItem from '@src/repositories/collectionItems/saveCollection
 import checkUserIsCollectionPublisher from './checkUserIsCollectionPublisher';
 import incCollectionWallpaperCount from './incCollectionWallpaperCount';
 import { User } from '@src/models/userModel';
+import addNewCollectionItemFields from './addNewCollectionItemFields';
+
+export interface CollectionItemPayload {
+  collectionId: string;
+  wallpaperId: string;
+}
 
 const createCollectionItem = async (collectionItem: CollectionItemPayload, user: User) => {
-  validateCollectionItem(collectionItem);
+  collectionItem = validateCollectionItem(collectionItem);
 
   const wallpaperId = collectionItem.wallpaperId;
   await checkWallpaperExists(wallpaperId);
@@ -19,7 +23,7 @@ const createCollectionItem = async (collectionItem: CollectionItemPayload, user:
 
   await checkUserIsCollectionPublisher(collection, user);
 
-  const newCollectionItem = await addNewFields(collectionItem);
+  const newCollectionItem = await addNewCollectionItemFields(collectionItem);
 
   const savedCollectionItem = await saveCollectionItem(newCollectionItem);
 

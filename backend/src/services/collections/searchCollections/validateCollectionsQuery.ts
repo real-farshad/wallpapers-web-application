@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { CollectionsQuery } from '@src/models/collectionModel';
 import { CustomError } from '@src/utils/CustomError';
+import { CollectionsQuery } from '.';
 
 const startDate = Joi.string()
   .pattern(/^\d{2}-\d{2}-\d{4}$/)
@@ -26,7 +26,7 @@ const collectionsQuerySchema = Joi.object({
   limit: Joi.number().integer().min(0).max(20),
 });
 
-const validateCollectionsQuery = (query: CollectionsQuery) => {
+const validateCollectionsQuery = (query: CollectionsQuery): CollectionsQuery => {
   const { error, value } = collectionsQuerySchema.validate(query);
 
   if (error) {

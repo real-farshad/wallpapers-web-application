@@ -1,7 +1,7 @@
 import { Comment } from '@src/models/commentModel';
 import getCommentsCollection from './getCommentsCollection';
 
-const saveComment = async (comment: Comment) => {
+const saveComment = async (comment: Comment): Promise<Comment> => {
   const commentsCollection = await getCommentsCollection();
   const result = await commentsCollection.insertOne(comment);
 

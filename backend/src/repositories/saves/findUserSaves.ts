@@ -1,7 +1,7 @@
 import getSavesCollection from './getSavesCollection';
 import { Document, ObjectId } from 'mongodb';
 
-const findUserSaves = async (userId: ObjectId, query: any) => {
+const findUserSaves = async (userId: ObjectId, query: any): Promise<Document[]> => {
   const page = parseInt(query.page, 10) > 0 ? parseInt(query.page, 10) : 1;
   const limit = parseInt(query.limit, 10) > 0 ? parseInt(query.limit, 10) : 10;
 

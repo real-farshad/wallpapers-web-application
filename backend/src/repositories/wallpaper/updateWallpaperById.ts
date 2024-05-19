@@ -1,5 +1,5 @@
-import getWallpapersCollection from './getWallpapersCollection';
 import { Wallpaper } from '@src/models/wallpaperModel';
+import getWallpapersCollection from './getWallpapersCollection';
 import { ObjectId } from 'mongodb';
 
 interface wallpaperUpdate {
@@ -11,7 +11,10 @@ interface wallpaperUpdate {
   category?: string;
 }
 
-const updateWallpaperById = async (id: string, update: wallpaperUpdate) => {
+const updateWallpaperById = async (
+  id: string,
+  update: wallpaperUpdate
+): Promise<Wallpaper | undefined> => {
   const wallpapersCollection = await getWallpapersCollection();
   const result = await wallpapersCollection.findOneAndUpdate(
     { _id: new ObjectId(id) },

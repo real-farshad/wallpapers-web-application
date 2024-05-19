@@ -1,4 +1,3 @@
-import { LikePayload } from '@src/models/likeModel';
 import saveLike from '@src/repositories/likes/saveLike';
 import checkWallpaperExists from './checkWallpaperExists';
 import checkWallpaperNotAlreadyLiked from './checkWallpaperNotAlreadyLiked';
@@ -8,8 +7,12 @@ import incrementWallpaperLikes from './incrementWallpaperLikes';
 import { User } from '@src/models/userModel';
 import { ObjectId } from 'mongodb';
 
+export interface LikePayload {
+  wallpaperId: string;
+}
+
 const createLike = async (like: LikePayload, user: User) => {
-  validateLike(like);
+  like = validateLike(like);
 
   const wallpaperId = like.wallpaperId;
   await checkWallpaperExists(wallpaperId);

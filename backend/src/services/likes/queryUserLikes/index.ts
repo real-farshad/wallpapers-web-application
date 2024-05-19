@@ -1,8 +1,12 @@
-import { LikesQuery } from '@src/models/likeModel';
 import { User } from '@src/models/userModel';
 import { ObjectId } from 'mongodb';
 import findUserLikes from '@src/repositories/likes/findUserLikes';
 import validateQuery from './validateQuery';
+
+export interface LikesQuery {
+  page?: number;
+  limit?: number;
+}
 
 const queryUserLikes = async (query: LikesQuery, user: User) => {
   query = validateQuery(query);

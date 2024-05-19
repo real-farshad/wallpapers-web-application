@@ -1,10 +1,10 @@
-import { CategoryUpdate } from '@src/models/categoryModel';
 import updateUserCollection from '@src/repositories/collections/updateUserCollection';
 import { ObjectId } from 'mongodb';
+import { CollectionUpdate } from '.';
 
 const updateCollectionInDatabase = async (
   collectionId: string,
-  update: CategoryUpdate,
+  update: CollectionUpdate,
   userId: ObjectId
 ) => {
   const collectionObjectId = new ObjectId(collectionId);

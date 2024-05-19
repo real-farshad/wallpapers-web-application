@@ -1,7 +1,7 @@
-import { CollectionItemsQuery } from '@src/models/collectionItemModel';
 import { User } from '@src/models/userModel';
 import { ObjectId } from 'mongodb';
 import queryCollectionItems from '@src/repositories/collectionItems/queryCollectionItems';
+import { CollectionItemsQuery } from '.';
 
 const queryWallpapersInDatabase = async (
   collectionId: string,

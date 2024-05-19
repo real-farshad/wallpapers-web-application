@@ -4,10 +4,11 @@ import { User } from '@src/models/userModel';
 import { ObjectId } from 'mongodb';
 
 const getWallpaperDetails = async (wallpaperId: string, user?: User) => {
-  validateWallpaperId(wallpaperId);
+  wallpaperId = validateWallpaperId(wallpaperId);
 
   const userId = user && (user._id as ObjectId);
   const wallpaper = await findWallpaperInDatabase(wallpaperId, userId);
+
   return wallpaper;
 };
 

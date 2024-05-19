@@ -1,5 +1,5 @@
-import { CollectionPayload } from '@src/models/collectionModel';
 import { ObjectId } from 'mongodb';
+import { CollectionPayload } from '.';
 
 const addNewFields = (collection: CollectionPayload, userId: ObjectId) => {
   const newCollection: any = { ...collection };

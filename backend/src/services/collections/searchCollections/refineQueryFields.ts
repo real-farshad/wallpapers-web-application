@@ -1,4 +1,4 @@
-import { CollectionsQuery } from '@src/models/collectionModel';
+import { CollectionsQuery } from '.';
 
 const refineQueryFields = (query: CollectionsQuery) => {
   const { title, startDate, endDate } = query;

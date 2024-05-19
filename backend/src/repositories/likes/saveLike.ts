@@ -1,7 +1,7 @@
 import { Like } from '@src/models/likeModel';
 import getLikesCollection from './getLikesCollection';
 
-const saveLike = async (like: Like) => {
+const saveLike = async (like: Like): Promise<Like> => {
   const likesCollection = await getLikesCollection();
   const result = await likesCollection.insertOne(like);
 

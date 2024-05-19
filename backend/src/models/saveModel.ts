@@ -6,12 +6,3 @@ export interface Save {
   userId: ObjectId;
   createdAt: number;
 }
-
-export interface SavePayload {
-  wallpaperId: string;
-}
-
-export interface SavesQuery {
-  page?: number;
-  limit?: number;
-}

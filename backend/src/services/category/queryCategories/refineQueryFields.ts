@@ -1,6 +1,6 @@
-import { CollectionItemsQuery } from '.';
+import { CategoriesQuery } from '.';
 
-const refineQueryFields = (query: CollectionItemsQuery) => {
+const refineQueryFields = (query: CategoriesQuery) => {
   const standardQuery: any = {};
 
   const page = query.page ? query.page : 1;

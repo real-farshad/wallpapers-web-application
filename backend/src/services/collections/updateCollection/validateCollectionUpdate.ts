@@ -1,12 +1,12 @@
 import Joi from 'joi';
 import { CustomError } from '@src/utils/CustomError';
-import { CollectionUpdate } from '@src/models/collectionModel';
+import { CollectionUpdate } from '.';
 
 const collectionUpdateSchema = Joi.object({
   title: Joi.string().trim().min(3).max(64).required(),
 });
 
-const validateCollectionUpdate = (collection: CollectionUpdate) => {
+const validateCollectionUpdate = (collection: CollectionUpdate): CollectionUpdate => {
   const { error, value } = collectionUpdateSchema.validate(collection);
 
   if (error) {

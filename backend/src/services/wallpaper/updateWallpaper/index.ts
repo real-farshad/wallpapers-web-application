@@ -1,5 +1,4 @@
 import { User } from '@src/models/userModel';
-import { WallpaperUpdate } from '@src/models/wallpaperModel';
 import validateWallpaperId from './validateWallpaperId';
 import validateWallpaperUpdate from './validateWallpaperUpdate';
 import updateWallpaperById from '@src/repositories/wallpaper/updateWallpaperById';
@@ -8,8 +7,17 @@ import checkCategoryUpdate from './checkCategoryUpdate';
 import checkWallpaperPublisherIsUser from './checkWallpaperPublisherIsUser';
 import findWallpaperToUpdate from './findWallpaperToUpdate';
 
+export interface WallpaperUpdate {
+  image?: {
+    thumbnail?: string;
+    large?: string;
+  };
+  title?: string;
+  category?: string;
+}
+
 const updateWallpaper = async (wallpaperId: string, update: WallpaperUpdate, user: User) => {
-  validateWallpaperId(wallpaperId);
+  wallpaperId = validateWallpaperId(wallpaperId);
 
   update = validateWallpaperUpdate(update);
 

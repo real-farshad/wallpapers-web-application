@@ -7,12 +7,3 @@ export interface Comment {
   wallpaperId: ObjectId;
   publisherId: ObjectId;
 }
-
-export interface CommentPayload {
-  wallpaperId: string;
-  text: string;
-}
-
-export interface CommentUpdate {
-  text: string;
-}

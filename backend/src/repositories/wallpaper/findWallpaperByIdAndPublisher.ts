@@ -1,7 +1,10 @@
 import { Document, ObjectId } from 'mongodb';
 import getWallpapersCollection from './getWallpapersCollection';
 
-const findWallpaperByIdAndPublisher = async (wallpaperId: string, userId?: ObjectId) => {
+const findWallpaperByIdAndPublisher = async (
+  wallpaperId: string,
+  userId?: ObjectId
+): Promise<Document> => {
   const wallpaperObjectId = new ObjectId(wallpaperId);
 
   const pipeline: Document[] = [

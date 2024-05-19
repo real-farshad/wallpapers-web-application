@@ -1,9 +1,12 @@
-import { CategoryUpdate } from '@src/models/categoryModel';
 import updateCategoryById from '@repositories/category/updateCategoryById';
 import validateCategoryId from './validateCategoryId';
 import verifyUniqueNewCategoryTitle from './verifyUniqueNewCategoryTitle';
 import checkCategoryExists from './checkCatagoryExists';
 import validateCategoryUpdate from './validateCategoryUpdate';
+
+export interface CategoryUpdate {
+  title: string;
+}
 
 const updateCategory = async (categoryId: string, udpate: CategoryUpdate) => {
   categoryId = validateCategoryId(categoryId);

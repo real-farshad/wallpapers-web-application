@@ -1,4 +1,5 @@
-import { Comment, CommentUpdate } from '@src/models/commentModel';
+import { Comment } from '@src/models/commentModel';
+import { CommentUpdate } from '.';
 
 const refineCommentUpdate = (comment: Comment, update: CommentUpdate) => {
   const { text } = update;

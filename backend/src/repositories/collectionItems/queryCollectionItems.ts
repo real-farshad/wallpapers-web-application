@@ -1,7 +1,11 @@
 import { Document, ObjectId } from 'mongodb';
 import getCollectionItemsCollection from './getCollectionItemsCollection';
 
-const queryCollectionItems = async (collectionId: ObjectId, query: any, userId: ObjectId) => {
+const queryCollectionItems = async (
+  collectionId: ObjectId,
+  query: any,
+  userId: ObjectId
+): Promise<Document[]> => {
   let { skip, limit } = query;
 
   const pipeline: Document[] = [

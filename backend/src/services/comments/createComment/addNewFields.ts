@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { CommentPayload } from '@src/models/commentModel';
+import { CommentPayload } from '.';
 
 const addNewFields = (comment: CommentPayload, userId: ObjectId) => {
   const newComment = {

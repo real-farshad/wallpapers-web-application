@@ -1,4 +1,5 @@
-import { User, UserUpdate } from '@src/models/userModel';
+import { User } from '@src/models/userModel';
+import { UserUpdate } from '.';
 
 const replaceLocalFields = (user: User, update: UserUpdate) => {
   const updatedUser = { ...user };

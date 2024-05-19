@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import getLikesCollection from './getLikesCollection';
 
-const findAndDeleteUserLike = async (wallpaperId: ObjectId, userId: ObjectId) => {
+const findAndDeleteUserLike = async (wallpaperId: ObjectId, userId: ObjectId): Promise<boolean> => {
   const likesCollection = await getLikesCollection();
   const result = await likesCollection.deleteOne({ wallpaperId, userId });
 

@@ -9,9 +9,3 @@ export interface User {
   provider: string;
   providerId?: string;
 }
-
-export interface UserUpdate {
-  username?: string;
-  email?: string;
-  password?: string;
-}

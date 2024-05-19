@@ -3,9 +3,15 @@ import replaceNoneLocalFields from './replaceNoneLocalFields';
 import validateLocalUserUpdate from './validateLocalUserUpdate';
 import validateNoneLocalUserUpdate from './validateNoneLocalUserUpdate';
 import updateUserInDatabase from './updateUserInDatabase';
-import { User, UserUpdate } from '@src/models/userModel';
+import { User } from '@src/models/userModel';
 
-const updateUser = async (user: User, update: UserUpdate) => {
+export interface UserUpdate {
+  username?: string;
+  email?: string;
+  password?: string;
+}
+
+const updateUser = async (update: UserUpdate, user: User) => {
   const isLocalUser = user.provider === 'local';
   let updatedUser;
 

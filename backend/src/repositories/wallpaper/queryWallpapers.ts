@@ -1,7 +1,7 @@
 import { Document, ObjectId } from 'mongodb';
 import getWallpapersCollection from './getWallpapersCollection';
 
-const queryWallpapers = async (query: any, userId?: ObjectId) => {
+const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Document[]> => {
   let { title, category, startDate, endDate, sort, skip, limit } = query;
 
   const pipeline: Document[] = [];

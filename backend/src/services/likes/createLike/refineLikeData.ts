@@ -1,5 +1,5 @@
-import { LikePayload } from '@src/models/likeModel';
 import { ObjectId } from 'mongodb';
+import { LikePayload } from '.';
 
 const refineLikeData = (like: LikePayload, userId: ObjectId) => {
   const finalizedLike = {

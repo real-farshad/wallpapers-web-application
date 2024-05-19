@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { User } from '@src/models/userModel';
-import { WallpaperPayload } from '@src/models/wallpaperModel';
 import { Category } from '@src/models/categoryModel';
+import { WallpaperPayload } from '.';
 
 const addNewFields = (wallpaper: WallpaperPayload, category: Category, user: User) => {
   const newWallpaper = {

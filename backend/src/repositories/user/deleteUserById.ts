@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 import getUsersCollection from './getUsersCollection';
 
-const deleteUserById = async (id: ObjectId) => {
+const deleteUserById = async (id: ObjectId): Promise<boolean> => {
   const usersCollection = await getUsersCollection();
   const result = await usersCollection.deleteOne({ _id: id });
 

@@ -2,7 +2,7 @@ import { Wallpaper } from '@src/models/wallpaperModel';
 import getWallpapersCollection from './getWallpapersCollection';
 import { ObjectId } from 'mongodb';
 
-const saveWallpaper = async (wallpaper: Wallpaper) => {
+const saveWallpaper = async (wallpaper: Wallpaper): Promise<Wallpaper> => {
   const newWallpaper: Wallpaper = {
     ...wallpaper,
     publisherId: new ObjectId(wallpaper.publisherId),

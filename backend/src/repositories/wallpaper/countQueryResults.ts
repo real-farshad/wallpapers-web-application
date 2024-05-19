@@ -1,7 +1,7 @@
-import { Document, ObjectId } from 'mongodb';
+import { Document } from 'mongodb';
 import getWallpapersCollection from './getWallpapersCollection';
 
-const countQueryResults = async (query: any) => {
+const countQueryResults = async (query: any): Promise<{ count: number }> => {
   let { title, category, startDate, endDate } = query;
 
   const pipeline: Document[] = [];

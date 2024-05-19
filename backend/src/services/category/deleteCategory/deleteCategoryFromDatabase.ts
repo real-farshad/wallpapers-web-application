@@ -1,8 +1,8 @@
 import deleteCategoryById from '@src/repositories/category/deleteCategoryById';
 import { CustomError } from '@src/utils/CustomError';
 
-const deleteCategoryFromDatabase = async (id: string) => {
-  const success = await deleteCategoryById(id);
+const deleteCategoryFromDatabase = async (categoryId: string) => {
+  const success = await deleteCategoryById(categoryId);
 
   if (!success) {
     const errorStatus = 400;

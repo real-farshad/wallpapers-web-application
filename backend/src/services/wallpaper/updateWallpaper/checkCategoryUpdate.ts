@@ -1,6 +1,6 @@
-import { Wallpaper, WallpaperUpdate } from '@src/models/wallpaperModel';
 import findCategoryByTitle from '@src/repositories/category/findCategoryByTitle';
 import { CustomError } from '@src/utils/CustomError';
+import { WallpaperUpdate } from '.';
 
 const checkCategoryUpdate = async (update: WallpaperUpdate) => {
   if (!update.category) return update;
