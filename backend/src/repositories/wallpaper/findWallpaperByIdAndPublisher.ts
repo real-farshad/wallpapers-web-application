@@ -1,10 +1,11 @@
 import { Document, ObjectId } from 'mongodb';
 import getWallpapersCollection from './getWallpapersCollection';
+import { Wallpaper } from '@src/models/wallpaperModel';
 
 const findWallpaperByIdAndPublisher = async (
   wallpaperId: ObjectId,
   userId?: ObjectId
-): Promise<Document> => {
+): Promise<Wallpaper> => {
   const pipeline: Document[] = [
     {
       $match: {
@@ -143,7 +144,7 @@ const findWallpaperByIdAndPublisher = async (
   const result = await cursor.toArray();
   const wallpaper = result[0];
 
-  return wallpaper;
+  return wallpaper as Wallpaper;
 };
 
 export default findWallpaperByIdAndPublisher;

@@ -1,11 +1,12 @@
 import { Document, ObjectId } from 'mongodb';
 import getCollectionItemsCollection from './getCollectionItemsCollection';
+import { Wallpaper } from '@src/models/wallpaperModel';
 
 const queryCollectionItems = async (
   collectionId: ObjectId,
   query: any,
   userId: ObjectId
-): Promise<Document[]> => {
+): Promise<Wallpaper[]> => {
   let { skip, limit } = query;
 
   const pipeline: Document[] = [
@@ -145,7 +146,7 @@ const queryCollectionItems = async (
   const cursor = await collectionItemsCollection.aggregate(pipeline);
   const wallpapers = await cursor.toArray();
 
-  return wallpapers;
+  return wallpapers as Wallpaper[];
 };
 
 export default queryCollectionItems;

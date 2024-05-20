@@ -1,7 +1,8 @@
 import { Document, ObjectId } from 'mongodb';
 import getWallpapersCollection from './getWallpapersCollection';
+import { Wallpaper } from '@src/models/wallpaperModel';
 
-const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Document[]> => {
+const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Wallpaper[]> => {
   let { title, category, startDate, endDate, sort, skip, limit } = query;
 
   const pipeline: Document[] = [];
@@ -183,7 +184,7 @@ const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Document[
   const cursor = await wallpapersCollection.aggregate(pipeline);
   const wallpapers = await cursor.toArray();
 
-  return wallpapers;
+  return wallpapers as Wallpaper[];
 };
 
 export default queryWallpapers;

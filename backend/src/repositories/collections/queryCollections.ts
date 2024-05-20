@@ -1,7 +1,8 @@
 import { Document } from 'mongodb';
 import getCollectionsCollection from './getCollectionsCollection';
+import { Collection } from '@src/models/collectionModel';
 
-const queryCollections = async (query: any): Promise<Document[]> => {
+const queryCollections = async (query: any): Promise<Collection[]> => {
   let { title, startDate, endDate, skip, limit } = query;
 
   const pipeline: Document[] = [];
@@ -96,7 +97,7 @@ const queryCollections = async (query: any): Promise<Document[]> => {
   const cursor = await collectionsCollection.aggregate(pipeline);
   const collections = await cursor.toArray();
 
-  return collections;
+  return collections as Collection[];
 };
 
 export default queryCollections;

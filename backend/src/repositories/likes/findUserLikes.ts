@@ -1,7 +1,8 @@
+import { Like } from '@src/models/likeModel';
 import getLikesCollection from './getLikesCollection';
 import { Document, ObjectId } from 'mongodb';
 
-const findUserLikes = async (userId: ObjectId, query: any): Promise<Document[]> => {
+const findUserLikes = async (userId: ObjectId, query: any): Promise<Like[]> => {
   const page = parseInt(query.page, 10) > 0 ? parseInt(query.page, 10) : 1;
   const limit = parseInt(query.limit, 10) > 0 ? parseInt(query.limit, 10) : 10;
 
@@ -105,7 +106,7 @@ const findUserLikes = async (userId: ObjectId, query: any): Promise<Document[]> 
   const cursor = await likesCollection.aggregate(pipeline);
   const likes = await cursor.toArray();
 
-  return likes;
+  return likes as Like[];
 };
 
 export default findUserLikes;
