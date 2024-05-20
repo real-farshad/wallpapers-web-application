@@ -4,7 +4,7 @@ import validateWallpaperId from '../validateWallpaperId';
 import deleteSaveFromDatabase from './deleteSaveFromDatabase';
 
 const deleteSave = async (wallpaperId: string, user: User) => {
-  validateWallpaperId(wallpaperId);
+  wallpaperId = validateWallpaperId(wallpaperId);
 
   const userId = user._id as ObjectId;
   const result = await deleteSaveFromDatabase(wallpaperId, userId);

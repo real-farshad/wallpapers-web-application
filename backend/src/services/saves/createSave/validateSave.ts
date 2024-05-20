@@ -7,8 +7,8 @@ const saveSchema = Joi.object({
   wallpaperId: Joi.string().trim().min(3).max(32).required(),
 });
 
-const validateSave = (like: SavePayload): SavePayload => {
-  const { error, value } = saveSchema.validate(like);
+const validateSave = (save: SavePayload): SavePayload => {
+  const { error, value } = saveSchema.validate(save);
 
   if (error) {
     const errorStatus = 400;
@@ -19,7 +19,7 @@ const validateSave = (like: SavePayload): SavePayload => {
   const isValidWallpaperId = ObjectId.isValid(value.wallpaperId);
   if (!isValidWallpaperId) {
     const errorStatus = 400;
-    const errorMessage = 'Invalid wallpaperId!';
+    const errorMessage = 'Invalid wallpaper id!';
     throw new CustomError(errorStatus, errorMessage);
   }
 

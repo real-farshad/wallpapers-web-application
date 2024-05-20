@@ -1,5 +1,5 @@
 import refineQueryFields from './refineQueryFields';
-import validateCollectionId from './validateCollectionItemId';
+import validateCollectionId from './validateCollectionId';
 import validateQuery from './validateQuery';
 import queryWallpapersInDatabase from './queryWallpapersInDatabase';
 import checkCollectionExists from './checkCollectionExists';

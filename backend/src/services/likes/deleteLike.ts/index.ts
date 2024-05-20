@@ -5,7 +5,7 @@ import deleteSaveFromDatabase from './deleteLikeFromDatabase';
 import decrementWallpaperLikes from './decrementWallpaperLikes';
 
 const deleteLike = async (wallpaperId: string, user: User) => {
-  validateWallpaperId(wallpaperId);
+  wallpaperId = validateWallpaperId(wallpaperId);
 
   const userId = user._id as ObjectId;
   const result = await deleteSaveFromDatabase(wallpaperId, userId);

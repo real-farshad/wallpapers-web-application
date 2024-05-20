@@ -4,39 +4,28 @@ import { ObjectId } from 'mongodb';
 import { CommentPayload } from '.';
 
 const commentSchema = Joi.object({
+  wallpaperId: Joi.string().trim().min(3).max(32).required(),
   text: Joi.string().trim().min(3).max(256).required(),
 });
 
 const validateComment = (comment: CommentPayload): CommentPayload => {
-  const text = comment.text;
-  const wallpaperId = comment.wallpaperId;
-
-  const { error, value } = commentSchema.validate({ text });
+  const { error, value } = commentSchema.validate(comment);
   if (error) {
     const errorStatus = 400;
     const errorMessage = error.details[0].message;
     throw new CustomError(errorStatus, errorMessage);
   }
 
-  if (!wallpaperId) {
-    const errorStatus = 400;
-    const errorMessage = '"wallpaperId" is required!';
-    throw new CustomError(errorStatus, errorMessage);
-  }
-
+  const wallpaperId = value.wallpaperId;
   const isValidWallpaperId = ObjectId.isValid(wallpaperId);
+
   if (!isValidWallpaperId) {
     const errorStatus = 400;
-    const errorMessage = 'Invalid wallpaper id';
+    const errorMessage = 'Invalid wallpaper id!';
     throw new CustomError(errorStatus, errorMessage);
   }
 
-  const validComment = {
-    ...value,
-    wallpaperId,
-  };
-
-  return validComment;
+  return value;
 };
 
 export default validateComment;

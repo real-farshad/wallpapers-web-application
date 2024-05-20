@@ -1,19 +1,17 @@
 import { CustomError } from '@src/utils/CustomError';
 import { ObjectId } from 'mongodb';
 
-const validateWallpaperId = (wallpaperId: string) => {
-  if (!wallpaperId) {
+const validateWallpaperId = (id: string) => {
+  const trimmedId = id.trim();
+  const isValidId = ObjectId.isValid(id);
+
+  if (!isValidId) {
     const errorStatus = 400;
-    const errorMessage = 'wallpaperId is required!';
+    const errorMessage = 'Invalid wallpaper id!';
     throw new CustomError(errorStatus, errorMessage);
   }
 
-  const isValidWallpaperId = ObjectId.isValid(wallpaperId);
-  if (!isValidWallpaperId) {
-    const errorStatus = 400;
-    const errorMessage = 'Invalid wallpaperId!';
-    throw new CustomError(errorStatus, errorMessage);
-  }
+  return trimmedId;
 };
 
 export default validateWallpaperId;

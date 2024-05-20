@@ -19,7 +19,7 @@ const validateLike = (like: LikePayload): LikePayload => {
   const isValidWallpaperId = ObjectId.isValid(value.wallpaperId);
   if (!isValidWallpaperId) {
     const errorStatus = 400;
-    const errorMessage = 'Invalid wallpaperId!';
+    const errorMessage = 'Invalid wallpaper id!';
     throw new CustomError(errorStatus, errorMessage);
   }
 

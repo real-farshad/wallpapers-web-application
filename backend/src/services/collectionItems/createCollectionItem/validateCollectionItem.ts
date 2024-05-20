@@ -20,14 +20,14 @@ const validateCollectionItem = (collectionItem: CollectionItemPayload): Collecti
   const isValidWallpaperId = ObjectId.isValid(value.wallpaperId);
   if (!isValidWallpaperId) {
     const errorStatus = 400;
-    const errorMessage = 'Invalid wallpaperId!';
+    const errorMessage = 'Invalid wallpaper id!';
     throw new CustomError(errorStatus, errorMessage);
   }
 
   const isValidCollectionId = ObjectId.isValid(value.collectionId);
   if (!isValidCollectionId) {
     const errorStatus = 400;
-    const errorMessage = 'Invalid collectionId!';
+    const errorMessage = 'Invalid collection id!';
     throw new CustomError(errorStatus, errorMessage);
   }
 
