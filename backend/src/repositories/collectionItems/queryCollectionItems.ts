@@ -5,7 +5,7 @@ import { Wallpaper } from '@src/models/wallpaperModel';
 const queryCollectionItems = async (
   collectionId: ObjectId,
   query: any,
-  userId: ObjectId
+  userId?: ObjectId
 ): Promise<Wallpaper[]> => {
   let { skip, limit } = query;
 

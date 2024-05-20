@@ -6,10 +6,10 @@ import { CollectionItemsQuery } from '.';
 const queryWallpapersInDatabase = async (
   collectionId: string,
   query: CollectionItemsQuery,
-  user: User
+  user?: User
 ) => {
   const collectionObjectId = new ObjectId(collectionId);
-  const userId = user._id as ObjectId;
+  const userId = user?._id as ObjectId;
 
   const collectionWallpapers = await queryCollectionItems(collectionObjectId, query, userId);
 

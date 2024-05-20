@@ -13,7 +13,7 @@ export interface CollectionItemsQuery {
 const searchCollectionWallpapers = async (
   collectionId: string,
   query: CollectionItemsQuery,
-  user: User
+  user?: User
 ) => {
   collectionId = validateCollectionId(collectionId);
 
