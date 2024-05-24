@@ -3,7 +3,7 @@ import { CustomError } from '@src/utils/CustomError';
 import { CategoryUpdate } from '.';
 
 const categorySchema = Joi.object({
-  title: Joi.string().lowercase().trim().min(3).max(32).required(),
+  title: Joi.string().trim().min(3).max(32).required(),
 });
 
 const validateCategoryUpdate = (update: CategoryUpdate): CategoryUpdate => {

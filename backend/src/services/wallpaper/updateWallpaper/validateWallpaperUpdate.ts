@@ -10,7 +10,7 @@ const imageSchema = Joi.object().or('thumbnail', 'large').keys({
   large: srcUrlSchema,
 });
 
-const categorySchema = Joi.string().lowercase().trim().min(3).max(32);
+const categorySchema = Joi.string().trim().min(3).max(32);
 
 const updateSchema = Joi.object().or('title', 'image', 'category').keys({
   title: titleSchema,

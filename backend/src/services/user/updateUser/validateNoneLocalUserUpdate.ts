@@ -2,9 +2,9 @@ import { CustomError } from '@src/utils/CustomError';
 import Joi from 'joi';
 import { UserUpdate } from '.';
 
-const usernameSchema = Joi.string().trim().alphanum().min(3).max(32);
+const usernameSchema = Joi.string().trim().min(3).max(32);
 
-const noneLocalUpdateSchema = Joi.object().or('username', 'email', 'password').keys({
+const noneLocalUpdateSchema = Joi.object({
   username: usernameSchema,
 });
 

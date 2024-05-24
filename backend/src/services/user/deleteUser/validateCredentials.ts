@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { CustomError } from '@src/utils/CustomError';
+import { UserCredentials } from '.';
 
 const passwordSchema = Joi.string().min(8).max(32).required();
 
@@ -7,7 +8,7 @@ const deleteAccountSchema = Joi.object({
   password: passwordSchema,
 });
 
-const validateCredentials = (credentials: any) => {
+const validateCredentials = (credentials: UserCredentials) => {
   const { error, value } = deleteAccountSchema.validate(credentials);
 
   if (error) {

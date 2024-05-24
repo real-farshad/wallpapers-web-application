@@ -10,7 +10,7 @@ const imageSchema = Joi.object({
   large: srcUrlSchema,
 }).required();
 
-const categorySchema = Joi.string().lowercase().trim().min(3).max(32).required();
+const categorySchema = Joi.string().trim().min(3).max(32).required();
 
 const wallpaperSchema = Joi.object({
   title: titleSchema,

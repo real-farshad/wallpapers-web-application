@@ -1,16 +1,16 @@
 import path from 'path';
 import express, { Express } from 'express';
-import sessionConfig from '@config/sessionConfig';
-import passport from '@config/passportConfig';
+import configureSession from '@src/config/session';
+import passport from '@config/passport';
 import routes from '@routes/index';
 import { errorHandler } from '@api/middleware/errorHandler';
 
 const createApp = (): Express => {
   const app = express();
 
-  app.use(sessionConfig);
-
   app.use(express.json());
+
+  configureSession(app);
 
   app.use(passport.initialize());
   app.use(passport.session());

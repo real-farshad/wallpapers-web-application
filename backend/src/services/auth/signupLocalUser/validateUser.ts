@@ -7,6 +7,7 @@ const emailSchema = Joi.string()
   .trim()
   .min(3)
   .max(128)
+  .lowercase()
   .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
   .required();
 

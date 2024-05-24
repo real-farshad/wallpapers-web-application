@@ -1,9 +1,9 @@
 import { User } from '@src/models/userModel';
 import getUsersCollection from './getUsersCollection';
 
-const findUserByProviderId = async (providerId: string): Promise<User | undefined> => {
+const findUserByProviderId = async (id: string): Promise<User | undefined> => {
   const usersCollection = await getUsersCollection();
-  const user = await usersCollection.findOne({ providerId: providerId });
+  const user = await usersCollection.findOne({ providerId: id });
   return user;
 };
 

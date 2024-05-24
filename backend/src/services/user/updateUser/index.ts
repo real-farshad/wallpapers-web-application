@@ -12,6 +12,7 @@ export interface UserUpdate {
 
 const updateUser = async (update: UserUpdate, user: User) => {
   const isLocalUser = user.provider === 'local';
+
   if (isLocalUser) update = validateLocalUserUpdate(update);
   else update = validateNoneLocalUserUpdate(update);
 

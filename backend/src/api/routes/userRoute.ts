@@ -1,14 +1,14 @@
 import express, { Router } from 'express';
 import { authenticateUser } from '@middleware/authenticateUser';
 import {
-  handleGetUserProfile,
+  handleGetUserInfo,
   handleDeleteUser,
   handleUpdateUser,
 } from '@src/api/controllers/userController';
 
 const router: Router = express.Router();
 
-router.get('/profile', authenticateUser, handleGetUserProfile);
+router.get('/info', authenticateUser, handleGetUserInfo);
 router.put('/', authenticateUser, handleUpdateUser);
 router.delete('/', authenticateUser, handleDeleteUser);
 

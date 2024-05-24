@@ -3,15 +3,21 @@ import checkUniqueUser from './checkUniqueUser';
 import addNewFields from './addNewFields';
 import validateUser from './validateUser';
 
-const signupLocalUser = async (user: any) => {
+export interface UserPayload {
+  username: string;
+  email: string;
+  password: string;
+}
+
+const signupLocalUser = async (user: UserPayload) => {
   user = validateUser(user);
 
   const userEmail = user.email;
   await checkUniqueUser(userEmail);
 
-  user = await addNewFields(user);
+  const finalizedUser = await addNewFields(user);
+  const savedUser = await saveUser(finalizedUser);
 
-  const savedUser = await saveUser(user);
   return savedUser;
 };
 

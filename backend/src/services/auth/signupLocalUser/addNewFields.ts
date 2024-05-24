@@ -1,15 +1,15 @@
 import { hashPassword } from '@src/utils/hashPassword';
+import { UserPayload } from '.';
 
-const addNewFields = async (user: any) => {
-  console.log('Before: ', user);
+const addNewFields = async (user: UserPayload) => {
   const userPassword = user.password;
   const hashedPassword = await hashPassword(userPassword);
 
-  const finalUser = { ...user };
-  finalUser.password = hashedPassword;
-  finalUser.provider = 'local';
-
-  console.log('After:', finalUser);
+  const finalUser = {
+    ...user,
+    password: hashedPassword,
+    provider: 'local',
+  };
 
   return finalUser;
 };

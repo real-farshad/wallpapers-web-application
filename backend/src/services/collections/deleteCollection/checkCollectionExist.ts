@@ -1,10 +1,10 @@
-import findUserCollection from '@src/repositories/collections/findUserCollection';
+import findUserCollectionById from '@src/repositories/collections/findUserCollectionById';
 import { CustomError } from '@src/utils/CustomError';
 import { ObjectId } from 'mongodb';
 
 const checkCollectionExist = async (collectionId: string, userId: ObjectId) => {
   const collectionObjectId = new ObjectId(collectionId);
-  const collection = await findUserCollection(collectionObjectId, userId);
+  const collection = await findUserCollectionById(collectionObjectId, userId);
 
   if (!collection) {
     const errorStatus = 404;

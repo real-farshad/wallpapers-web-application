@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '@utils/catchAsync';
 import { User } from '@models/userModel';
-import extractUserProfile from '@src/services/user/extractUserProfile';
+import getUserInfo from '@src/services/user/getUserInfo';
 import deleteUser from '@services/user/deleteUser';
 import updateUser from '@src/services/user/updateUser';
 
-const handleGetUserProfile = (req: Request, res: Response) => {
+const handleGetUserInfo = (req: Request, res: Response) => {
   const user = req.user as User;
-  const userProfile = extractUserProfile(user);
+  const userProfile = getUserInfo(user);
 
   return res.json(userProfile);
 };
@@ -28,4 +28,4 @@ const handleDeleteUser = catchAsync(async (req: Request, res: Response) => {
   return res.json(result);
 });
 
-export { handleGetUserProfile, handleUpdateUser, handleDeleteUser };
+export { handleGetUserInfo, handleUpdateUser, handleDeleteUser };

@@ -2,13 +2,13 @@ import { ObjectId } from 'mongodb';
 import getCollectionsCollection from './getCollectionsCollection';
 import { Collection } from '@src/models/collectionModel';
 
-const findUserCollection = async (
-  collectionId: ObjectId,
+const findUserCollectionByTitle = async (
+  collectionTitle: string,
   userId: ObjectId
 ): Promise<Collection | undefined> => {
   const collectionsCollection = await getCollectionsCollection();
-  const collection = await collectionsCollection.findOne({ _id: collectionId, userId });
+  const collection = await collectionsCollection.findOne({ title: collectionTitle, userId });
   return collection;
 };
 
-export default findUserCollection;
+export default findUserCollectionByTitle;
