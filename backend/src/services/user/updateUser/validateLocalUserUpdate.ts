@@ -13,14 +13,14 @@ const emailSchema = Joi.string()
 const passwordPattern = `^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=[\\]{};':"\\|,.<>/?]).{8,32}$`;
 const passwordSchema = Joi.string().pattern(new RegExp(passwordPattern));
 
-const localUpdateSchema = Joi.object().or('username', 'email', 'password').keys({
+const localUserUpdateSchema = Joi.object().or('username', 'email', 'password').keys({
   username: usernameSchema,
   email: emailSchema,
   password: passwordSchema,
 });
 
 const validateLocalUserUpdate = (user: UserUpdate): UserUpdate => {
-  const { error, value } = localUpdateSchema.validate(user);
+  const { error, value } = localUserUpdateSchema.validate(user);
 
   if (error) {
     const errorStatus = 400;

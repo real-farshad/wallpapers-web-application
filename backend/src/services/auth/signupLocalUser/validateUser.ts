@@ -1,5 +1,6 @@
 import { CustomError } from '@src/utils/CustomError';
 import Joi from 'joi';
+import { UserPayload } from '.';
 
 const usernameSchema = Joi.string().trim().alphanum().min(3).max(32).required();
 
@@ -14,14 +15,14 @@ const emailSchema = Joi.string()
 const passwordPattern = `^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=[\\]{};':"\\|,.<>/?]).{8,32}$`;
 const passwordSchema = Joi.string().pattern(new RegExp(passwordPattern)).required();
 
-const signUpSchema = Joi.object({
+const userPayloadSchema = Joi.object({
   username: usernameSchema,
   email: emailSchema,
   password: passwordSchema,
 });
 
-const validateUser = (user: any) => {
-  const { error, value } = signUpSchema.validate(user);
+const validateUser = (user: UserPayload) => {
+  const { error, value } = userPayloadSchema.validate(user);
 
   if (error) {
     const errorStatus = 400;

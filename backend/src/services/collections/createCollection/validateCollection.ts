@@ -2,12 +2,12 @@ import Joi from 'joi';
 import { CustomError } from '@src/utils/CustomError';
 import { CollectionPayload } from '.';
 
-const collectionSchema = Joi.object({
+const collectionPayloadSchema = Joi.object({
   title: Joi.string().trim().min(3).max(64).required(),
 });
 
 const validateCollection = (collection: CollectionPayload): CollectionPayload => {
-  const { error, value } = collectionSchema.validate(collection);
+  const { error, value } = collectionPayloadSchema.validate(collection);
 
   if (error) {
     const errorStatus = 400;

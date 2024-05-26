@@ -2,13 +2,13 @@ import Joi from 'joi';
 import { CustomError } from '@src/utils/CustomError';
 import { SavesQuery } from '.';
 
-const querySchema = Joi.object({
+const savesQuerySchema = Joi.object({
   page: Joi.number().integer().min(0),
   limit: Joi.number().integer().min(0).max(20),
 });
 
 const validateQuery = (query: SavesQuery): SavesQuery => {
-  const { error, value } = querySchema.validate(query);
+  const { error, value } = savesQuerySchema.validate(query);
 
   if (error) {
     const errorStatus = 400;

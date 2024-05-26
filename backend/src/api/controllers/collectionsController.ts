@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '@utils/catchAsync';
 import createCollection from '@src/services/collections/createCollection';
-import countMatchingCollections from '@src/services/collections/countMatchingCollections';
 import searchCollections from '@src/services/collections/searchCollections';
 import deleteCollection from '@src/services/collections/deleteCollection';
 import updateCollection from '@src/services/collections/updateCollection';
@@ -15,18 +14,11 @@ const handlePostCollection = catchAsync(async (req: Request, res: Response) => {
   res.json(savedCollection);
 });
 
-const handleGetCollectionsCount = catchAsync(async (req: Request, res: Response) => {
-  const query = req.query;
-
-  const result = await countMatchingCollections(query);
-  res.json(result);
-});
-
 const handleGetCollectionsSearch = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
 
-  const collections = await searchCollections(query);
-  res.json(collections);
+  const result = await searchCollections(query);
+  res.json(result);
 });
 
 const handleUpdateCollection = catchAsync(async (req: Request, res: Response) => {
@@ -48,7 +40,6 @@ const handleDeleteCollection = catchAsync(async (req: Request, res: Response) =>
 
 export {
   handlePostCollection,
-  handleGetCollectionsCount,
   handleGetCollectionsSearch,
   handleUpdateCollection,
   handleDeleteCollection,

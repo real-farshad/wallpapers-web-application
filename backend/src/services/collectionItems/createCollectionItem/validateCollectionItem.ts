@@ -3,13 +3,13 @@ import { CollectionItemPayload } from '.';
 import Joi from 'joi';
 import { ObjectId } from 'mongodb';
 
-const collectionItemSchema = Joi.object({
+const CollectionItemPayloadSchema = Joi.object({
   collectionId: Joi.string().trim().min(3).max(32).required(),
   wallpaperId: Joi.string().trim().min(3).max(32).required(),
 });
 
 const validateCollectionItem = (collectionItem: CollectionItemPayload): CollectionItemPayload => {
-  const { error, value } = collectionItemSchema.validate(collectionItem);
+  const { error, value } = CollectionItemPayloadSchema.validate(collectionItem);
 
   if (error) {
     const errorStatus = 400;

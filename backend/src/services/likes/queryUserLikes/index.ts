@@ -12,9 +12,9 @@ const queryUserLikes = async (query: LikesQuery, user: User) => {
   query = validateQuery(query);
 
   const userId = user._id as ObjectId;
-  const likedWallpapers = await findUserLikes(userId, query);
+  const result = await findUserLikes(userId, query);
 
-  return likedWallpapers;
+  return result;
 };
 
 export default queryUserLikes;

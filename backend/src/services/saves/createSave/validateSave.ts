@@ -3,12 +3,12 @@ import { CustomError } from '@src/utils/CustomError';
 import { ObjectId } from 'mongodb';
 import { SavePayload } from '.';
 
-const saveSchema = Joi.object({
+const savePayloadSchema = Joi.object({
   wallpaperId: Joi.string().trim().min(3).max(32).required(),
 });
 
 const validateSave = (save: SavePayload): SavePayload => {
-  const { error, value } = saveSchema.validate(save);
+  const { error, value } = savePayloadSchema.validate(save);
 
   if (error) {
     const errorStatus = 400;

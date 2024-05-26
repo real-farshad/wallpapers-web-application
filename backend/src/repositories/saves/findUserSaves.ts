@@ -2,18 +2,25 @@ import { Save } from '@src/models/saveModel';
 import getSavesCollection from './getSavesCollection';
 import { Document, ObjectId } from 'mongodb';
 
-const findUserSaves = async (userId: ObjectId, query: any): Promise<Save[]> => {
-  const page = parseInt(query.page, 10) > 0 ? parseInt(query.page, 10) : 1;
-  const limit = parseInt(query.limit, 10) > 0 ? parseInt(query.limit, 10) : 10;
-
-  const skip = (page - 1) * limit;
-
-  const pipeline: Document[] = [
+const findUserSaves = async (
+  userId: ObjectId,
+  query: any
+): Promise<{ saves: Save[]; totalCount: number }> => {
+  const match = [
     {
       $match: {
         userId,
       },
     },
+  ];
+
+  const page = parseInt(query.page, 10) > 0 ? parseInt(query.page, 10) : 1;
+  const limit = parseInt(query.limit, 10) > 0 ? parseInt(query.limit, 10) : 10;
+
+  const skip = (page - 1) * limit;
+
+  const data: Document[] = [
+    ...match,
     {
       $sort: {
         createdAt: -1,
@@ -102,11 +109,34 @@ const findUserSaves = async (userId: ObjectId, query: any): Promise<Save[]> => {
     },
   ];
 
+  const pipeline: Document[] = [
+    {
+      $facet: {
+        data,
+        total: [
+          ...match,
+          {
+            $count: 'count',
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        data: 1,
+        totalCount: { $arrayElemAt: ['$totalCount.count', 0] },
+      },
+    },
+  ];
+
   const savesCollection = await getSavesCollection();
   const cursor = await savesCollection.aggregate(pipeline);
-  const saves = await cursor.toArray();
+  const result = await cursor.toArray();
 
-  return saves as Save[];
+  const saves = result[0]?.data || [];
+  const totalCount = result[0]?.totalCount || 0;
+
+  return { saves, totalCount } as { saves: Save[]; totalCount: number };
 };
 
 export default findUserSaves;

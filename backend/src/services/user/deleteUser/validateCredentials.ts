@@ -4,12 +4,12 @@ import { UserCredentials } from '.';
 
 const passwordSchema = Joi.string().min(8).max(32).required();
 
-const deleteAccountSchema = Joi.object({
+const userCredentialsSchema = Joi.object({
   password: passwordSchema,
 });
 
 const validateCredentials = (credentials: UserCredentials) => {
-  const { error, value } = deleteAccountSchema.validate(credentials);
+  const { error, value } = userCredentialsSchema.validate(credentials);
 
   if (error) {
     const errorStatus = 400;

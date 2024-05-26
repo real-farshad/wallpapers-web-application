@@ -5,7 +5,6 @@ import deleteWallpaper from '@src/services/wallpaper/deleteWallpaper';
 import updateWallpaper from '@src/services/wallpaper/updateWallpaper';
 import getWallpaperDetails from '@src/services/wallpaper/getWallpaperDetails';
 import searchWallpapers from '@src/services/wallpaper/searchWallpapers';
-import countMatchingWallpapers from '@src/services/wallpaper/countMatchingWallpapers';
 import { User } from '@src/models/userModel';
 
 const handlePostWallpaper = catchAsync(async (req: Request, res: Response) => {
@@ -16,19 +15,12 @@ const handlePostWallpaper = catchAsync(async (req: Request, res: Response) => {
   return res.json(savedWallpaper);
 });
 
-const handleGetWallpapersCount = catchAsync(async (req: Request, res: Response) => {
-  const query = req.query;
-
-  const result = await countMatchingWallpapers(query);
-  return res.json(result);
-});
-
 const handleGetWallpapersSearch = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
   const user = req.user as User;
 
-  const wallpapers = await searchWallpapers(query, user);
-  return res.json(wallpapers);
+  const result = await searchWallpapers(query, user);
+  return res.json(result);
 });
 
 const handleGetWallpaper = catchAsync(async (req: Request, res: Response) => {
@@ -58,7 +50,6 @@ const handleDeleteWallpaper = catchAsync(async (req: Request, res: Response) => 
 
 export {
   handlePostWallpaper,
-  handleGetWallpapersCount,
   handleGetWallpapersSearch,
   handleGetWallpaper,
   hadnleUpdateWallpaper,

@@ -12,9 +12,9 @@ const queryUserSaves = async (query: SavesQuery, user: User) => {
   query = validateQuery(query);
 
   const userId = user._id as ObjectId;
-  const savedWallpapers = await findUserSaves(userId, query);
+  const result = await findUserSaves(userId, query);
 
-  return savedWallpapers;
+  return result;
 };
 
 export default queryUserSaves;

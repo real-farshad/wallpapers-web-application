@@ -2,13 +2,16 @@ import { Document, ObjectId } from 'mongodb';
 import getWallpapersCollection from './getWallpapersCollection';
 import { Wallpaper } from '@src/models/wallpaperModel';
 
-const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Wallpaper[]> => {
+const queryWallpapers = async (
+  query: any,
+  userId?: ObjectId
+): Promise<{ wallpapers: Wallpaper[]; totalCount: number }> => {
   let { title, category, startDate, endDate, sort, skip, limit } = query;
 
-  const pipeline: Document[] = [];
+  const match: Document[] = [];
 
   if (title) {
-    pipeline.push({
+    match.push({
       $match: {
         title: {
           $regex: title,
@@ -19,7 +22,7 @@ const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Wallpaper
   }
 
   if (category) {
-    pipeline.push(
+    match.push(
       {
         $lookup: {
           from: 'categories',
@@ -43,7 +46,7 @@ const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Wallpaper
   }
 
   if (startDate) {
-    pipeline.push({
+    match.push({
       $match: {
         createdAt: {
           $gte: startDate,
@@ -53,7 +56,7 @@ const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Wallpaper
   }
 
   if (endDate) {
-    pipeline.push({
+    match.push({
       $match: {
         createdAt: {
           $lte: endDate,
@@ -62,37 +65,36 @@ const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Wallpaper
     });
   }
 
-  pipeline.push(
-    ...[
-      {
-        $sort: sort,
+  const data: Document[] = [
+    ...match,
+    {
+      $sort: sort,
+    },
+    {
+      $skip: skip,
+    },
+    {
+      $limit: limit,
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'publisherId',
+        foreignField: '_id',
+        as: 'publisher',
       },
-      {
-        $skip: skip,
-      },
-      {
-        $limit: limit,
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'publisherId',
-          foreignField: '_id',
-          as: 'publisher',
+    },
+    {
+      $addFields: {
+        publisher: {
+          $first: '$publisher',
         },
       },
-      {
-        $addFields: {
-          publisher: {
-            $first: '$publisher',
-          },
-        },
-      },
-    ]
-  );
+    },
+  ];
 
   if (userId) {
-    pipeline.push(
+    data.push(
       ...[
         {
           $lookup: {
@@ -166,7 +168,7 @@ const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Wallpaper
     );
   }
 
-  pipeline.push({
+  data.push({
     $project: {
       image: {
         thumbnail: 1,
@@ -180,11 +182,34 @@ const queryWallpapers = async (query: any, userId?: ObjectId): Promise<Wallpaper
     },
   });
 
+  const pipeline: Document[] = [
+    {
+      $facet: {
+        data,
+        total: [
+          ...match,
+          {
+            $count: 'count',
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        data: 1,
+        totalCount: { $arrayElemAt: ['$totalCount.count', 0] },
+      },
+    },
+  ];
+
   const wallpapersCollection = await getWallpapersCollection();
   const cursor = await wallpapersCollection.aggregate(pipeline);
-  const wallpapers = await cursor.toArray();
+  const result = await cursor.toArray();
 
-  return wallpapers as Wallpaper[];
+  const wallpapers = result[0]?.data || [];
+  const totalCount = result[0]?.totalCount || 0;
+
+  return { wallpapers, totalCount } as { wallpapers: Wallpaper[]; totalCount: number };
 };
 
 export default queryWallpapers;

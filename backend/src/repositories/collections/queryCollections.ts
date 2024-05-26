@@ -2,13 +2,15 @@ import { Document } from 'mongodb';
 import getCollectionsCollection from './getCollectionsCollection';
 import { Collection } from '@src/models/collectionModel';
 
-const queryCollections = async (query: any): Promise<Collection[]> => {
+const queryCollections = async (
+  query: any
+): Promise<{ collections: Collection[]; totalCount: number }> => {
   let { title, startDate, endDate, skip, limit } = query;
 
-  const pipeline: Document[] = [];
+  const match: Document[] = [];
 
   if (title) {
-    pipeline.push({
+    match.push({
       $match: {
         title: {
           $regex: title,
@@ -19,7 +21,7 @@ const queryCollections = async (query: any): Promise<Collection[]> => {
   }
 
   if (startDate) {
-    pipeline.push({
+    match.push({
       $match: {
         createdAt: {
           $gte: startDate,
@@ -29,7 +31,7 @@ const queryCollections = async (query: any): Promise<Collection[]> => {
   }
 
   if (endDate) {
-    pipeline.push({
+    match.push({
       $match: {
         createdAt: {
           $lte: endDate,
@@ -38,66 +40,88 @@ const queryCollections = async (query: any): Promise<Collection[]> => {
     });
   }
 
-  pipeline.push(
-    ...[
-      {
-        $skip: skip,
+  const data: Document[] = [
+    ...match,
+    {
+      $skip: skip,
+    },
+    {
+      $limit: limit,
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'userId',
+        foreignField: '_id',
+        as: 'user',
       },
-      {
-        $limit: limit,
+    },
+    {
+      $lookup: {
+        from: 'collections-records',
+        localField: '_id',
+        foreignField: 'collectionId',
+        as: 'record',
       },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'userId',
-          foreignField: '_id',
-          as: 'user',
+    },
+    {
+      $lookup: {
+        from: 'wallpapers',
+        localField: 'record.0.wallpaperId',
+        foreignField: '_id',
+        as: 'wallpaper',
+      },
+    },
+    {
+      $addFields: {
+        user: {
+          $first: '$user',
+        },
+        wallpaper: {
+          $first: '$wallpaper',
         },
       },
-      {
-        $lookup: {
-          from: 'collections-records',
-          localField: '_id',
-          foreignField: 'collectionId',
-          as: 'record',
-        },
+    },
+    {
+      $project: {
+        _id: 1,
+        title: 1,
+        wallpaperCount: 1,
+        createdAt: 1,
+        'user.username': '$user.username',
+        'wallpaper.image.thumbnail': '$wallpaper.image.thumbnail',
       },
-      {
-        $lookup: {
-          from: 'wallpapers',
-          localField: 'record.0.wallpaperId',
-          foreignField: '_id',
-          as: 'wallpaper',
-        },
-      },
-      {
-        $addFields: {
-          user: {
-            $first: '$user',
+    },
+  ];
+
+  const pipeline: Document[] = [
+    {
+      $facet: {
+        data,
+        total: [
+          ...match,
+          {
+            $count: 'count',
           },
-          wallpaper: {
-            $first: '$wallpaper',
-          },
-        },
+        ],
       },
-      {
-        $project: {
-          _id: 1,
-          title: 1,
-          wallpaperCount: 1,
-          createdAt: 1,
-          'user.username': '$user.username',
-          'wallpaper.image.thumbnail': '$wallpaper.image.thumbnail',
-        },
+    },
+    {
+      $project: {
+        data: 1,
+        totalCount: { $arrayElemAt: ['$totalCount.count', 0] },
       },
-    ]
-  );
+    },
+  ];
 
   const collectionsCollection = await getCollectionsCollection();
   const cursor = await collectionsCollection.aggregate(pipeline);
-  const collections = await cursor.toArray();
+  const result = await cursor.toArray();
 
-  return collections as Collection[];
+  const collections = result[0]?.data || [];
+  const totalCount = result[0]?.totalCount || 0;
+
+  return { collections, totalCount } as { collections: Collection[]; totalCount: number };
 };
 
 export default queryCollections;

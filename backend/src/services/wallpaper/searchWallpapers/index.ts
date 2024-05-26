@@ -20,9 +20,9 @@ const searchWallpapers = async (query: WallpapersQuery, user?: User) => {
   query = refineQueryFields(query);
 
   const userId = user && (user._id as ObjectId);
-  const wallpapers = await queryWallpapers(query, userId);
+  const result = await queryWallpapers(query, userId);
 
-  return wallpapers;
+  return result;
 };
 
 export default searchWallpapers;

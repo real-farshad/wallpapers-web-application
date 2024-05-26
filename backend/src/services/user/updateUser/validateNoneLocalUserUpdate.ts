@@ -4,12 +4,12 @@ import { UserUpdate } from '.';
 
 const usernameSchema = Joi.string().trim().min(3).max(32);
 
-const noneLocalUpdateSchema = Joi.object({
+const noneLocalUserUpdateSchema = Joi.object({
   username: usernameSchema,
 });
 
 const validateNoneLocalUserUpdate = (user: UserUpdate): UserUpdate => {
-  const { error, value } = noneLocalUpdateSchema.validate(user);
+  const { error, value } = noneLocalUserUpdateSchema.validate(user);
 
   if (error) {
     const errorStatus = 400;

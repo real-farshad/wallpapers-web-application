@@ -2,7 +2,6 @@ import express, { Router } from 'express';
 import { authenticateUser } from '../middleware/authenticateUser';
 import {
   handleDeleteCollection,
-  handleGetCollectionsCount,
   handleGetCollectionsSearch,
   handleUpdateCollection,
   handlePostCollection,
@@ -11,7 +10,6 @@ import {
 const router: Router = express.Router();
 
 router.post('/', authenticateUser, handlePostCollection);
-router.get('/count', handleGetCollectionsCount);
 router.get('/', handleGetCollectionsSearch);
 router.put('/:id', handleUpdateCollection);
 router.delete('/:id', authenticateUser, handleDeleteCollection);

@@ -15,8 +15,8 @@ const searchCollections = async (query: CollectionsQuery) => {
 
   query = refineQueryFields(query);
 
-  const collections = await queryCollections(query);
-  return collections;
+  const result = await queryCollections(query);
+  return result;
 };
 
 export default searchCollections;

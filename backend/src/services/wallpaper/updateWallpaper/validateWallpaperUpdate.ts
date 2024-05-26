@@ -12,14 +12,14 @@ const imageSchema = Joi.object().or('thumbnail', 'large').keys({
 
 const categorySchema = Joi.string().trim().min(3).max(32);
 
-const updateSchema = Joi.object().or('title', 'image', 'category').keys({
+const wallpaperUpdateSchema = Joi.object().or('title', 'image', 'category').keys({
   title: titleSchema,
   image: imageSchema,
   category: categorySchema,
 });
 
 const validateWallpaperUpdate = (update: WallpaperUpdate): WallpaperUpdate => {
-  const { error, value } = updateSchema.validate(update);
+  const { error, value } = wallpaperUpdateSchema.validate(update);
 
   if (error) {
     const errorStatus = 400;
