@@ -1,57 +1,51 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '@utils/catchAsync';
-import createWallpaper from '@src/services/wallpaper/createWallpaper';
-import deleteWallpaper from '@src/services/wallpaper/deleteWallpaper';
-import updateWallpaper from '@src/services/wallpaper/updateWallpaper';
-import getWallpaperDetails from '@src/services/wallpaper/getWallpaperDetails';
-import searchWallpapers from '@src/services/wallpaper/searchWallpapers';
+import create from '@src/services/wallpaper/create';
+import remove from '@src/services/wallpaper/remove';
+import update from '@src/services/wallpaper/update';
+import findOne from '@src/services/wallpaper/findOne';
+import search from '@src/services/wallpaper/search';
 import { User } from '@src/models/userModel';
 
-const handlePostWallpaper = catchAsync(async (req: Request, res: Response) => {
+const createWallpaper = catchAsync(async (req: Request, res: Response) => {
   const wallpaper = req.body;
   const user = req.user as any;
 
-  const savedWallpaper = await createWallpaper(wallpaper, user);
-  return res.json(savedWallpaper);
+  const savedWallpaper = await create(wallpaper, user);
+  return res.status(201).json(savedWallpaper);
 });
 
-const handleGetWallpapersSearch = catchAsync(async (req: Request, res: Response) => {
+const searchWallpapers = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
   const user = req.user as User;
 
-  const result = await searchWallpapers(query, user);
-  return res.json(result);
+  const result = await search(query, user);
+  return res.status(200).json(result);
 });
 
-const handleGetWallpaper = catchAsync(async (req: Request, res: Response) => {
+const findOneWallpaper = catchAsync(async (req: Request, res: Response) => {
   const wallpaperId = req.params.id;
   const user = req.user as User;
 
-  const wallpaper = await getWallpaperDetails(wallpaperId, user);
-  return res.json(wallpaper);
+  const wallpaper = await findOne(wallpaperId, user);
+  return res.status(200).json(wallpaper);
 });
 
-const hadnleUpdateWallpaper = catchAsync(async (req: Request, res: Response) => {
+const updateWallpaper = catchAsync(async (req: Request, res: Response) => {
   const wallpaperId = req.params.id;
-  const update = req.body;
+  const wallpaperUpdate = req.body;
   const user = req.user as User;
 
-  const updatedWallpaper = await updateWallpaper(wallpaperId, update, user);
-  return res.json(updatedWallpaper);
+  const updatedWallpaper = await update(wallpaperId, wallpaperUpdate, user);
+  return res.status(200).json(updatedWallpaper);
 });
 
-const handleDeleteWallpaper = catchAsync(async (req: Request, res: Response) => {
+const removeWallpaper = catchAsync(async (req: Request, res: Response) => {
   const wallpaperId = req.params.id;
   const user = req.user as User;
 
-  const result = await deleteWallpaper(wallpaperId, user);
-  return res.json(result);
+  const result = await remove(wallpaperId, user);
+  return res.status(204).json(result);
 });
 
-export {
-  handlePostWallpaper,
-  handleGetWallpapersSearch,
-  handleGetWallpaper,
-  hadnleUpdateWallpaper,
-  handleDeleteWallpaper,
-};
+export { createWallpaper, searchWallpapers, findOneWallpaper, updateWallpaper, removeWallpaper };

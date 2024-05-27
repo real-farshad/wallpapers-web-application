@@ -5,5 +5,5 @@ export interface Comment {
   text: string;
   createdAt: number;
   wallpaperId: ObjectId;
-  publisherId: ObjectId;
+  userId: ObjectId;
 }

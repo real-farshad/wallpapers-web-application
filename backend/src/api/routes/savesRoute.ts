@@ -1,15 +1,12 @@
 import express, { Router } from 'express';
 import { authenticateUser } from '../middleware/authenticateUser';
-import {
-  handleDeleteSave,
-  handleGetUserSaves,
-  handlePostSave,
-} from '../controllers/savesController';
+import { removeSave, searchSaves, createSave, findOneSave } from '../controllers/savesController';
 
 const router: Router = express.Router();
 
-router.post('/', authenticateUser, handlePostSave);
-router.get('/', authenticateUser, handleGetUserSaves);
-router.delete('/:id', authenticateUser, handleDeleteSave);
+router.post('/', authenticateUser, createSave);
+router.get('/check/:id', authenticateUser, findOneSave);
+router.get('/', authenticateUser, searchSaves);
+router.delete('/:id', authenticateUser, removeSave);
 
 export default router;

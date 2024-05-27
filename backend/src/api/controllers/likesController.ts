@@ -1,32 +1,41 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '@utils/catchAsync';
-import createLike from '@src/services/likes/createLike';
-import deleteLike from '@src/services/likes/deleteLike.ts';
-import queryUserLikes from '@src/services/likes/queryUserLikes';
+import create from '@src/services/likes/create';
+import remove from '@src/services/likes/remove';
+import search from '@src/services/likes/search';
+import findOne from '@src/services/likes/findOne';
 import { User } from '@src/models/userModel';
 
-const handlePostLike = catchAsync(async (req: Request, res: Response) => {
+const createLike = catchAsync(async (req: Request, res: Response) => {
   const like = req.body;
   const user = req.user as User;
 
-  const savedLike = await createLike(like, user);
+  const savedLike = await create(like, user);
   res.status(201).json(savedLike);
 });
 
-const handleGetUserLikes = catchAsync(async (req: Request, res: Response) => {
-  const query = req.query;
-  const user = req.user as User;
-
-  const result = await queryUserLikes(query, user);
-  res.status(200).json(result);
-});
-
-const handleDeleteLike = catchAsync(async (req: Request, res: Response) => {
+const findOneLike = catchAsync(async (req: Request, res: Response) => {
   const wallpaperId = req.params.id;
   const user = req.user as User;
 
-  const result = await deleteLike(wallpaperId, user);
+  const result = await findOne(wallpaperId, user);
   res.status(200).json(result);
 });
 
-export { handlePostLike, handleGetUserLikes, handleDeleteLike };
+const searchLikes = catchAsync(async (req: Request, res: Response) => {
+  const query = req.query;
+  const user = req.user as User;
+
+  const result = await search(query, user);
+  res.status(200).json(result);
+});
+
+const removeLike = catchAsync(async (req: Request, res: Response) => {
+  const wallpaperId = req.params.id;
+  const user = req.user as User;
+
+  const result = await remove(wallpaperId, user);
+  res.status(204).json(result);
+});
+
+export { createLike, findOneLike, searchLikes, removeLike };

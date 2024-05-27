@@ -1,32 +1,32 @@
 import { Request, Response } from 'express';
 import { catchAsync } from '@utils/catchAsync';
-import createComment from '@services/comments/createComment';
-import deleteComment from '@src/services/comments/deleteComment';
-import updateComment from '@src/services/comments/updateComment';
+import create from '@src/services/comments/create';
+import remove from '@src/services/comments/remove';
+import update from '@src/services/comments/update';
 
-const handlePostComment = catchAsync(async (req: Request, res: Response) => {
+const createComment = catchAsync(async (req: Request, res: Response) => {
   const comment = req.body;
   const user = req.user as any;
 
-  const savedComment = await createComment(comment, user);
-  return res.json(savedComment);
+  const savedComment = await create(comment, user);
+  return res.status(201).json(savedComment);
 });
 
-const handleUpdateComment = catchAsync(async (req: Request, res: Response) => {
+const updateComment = catchAsync(async (req: Request, res: Response) => {
   const commentId = req.params.id;
-  const update = req.body;
+  const commentUpdate = req.body;
   const user = req.user as any;
 
-  const updatedComment = await updateComment(commentId, update, user);
-  return res.json(updatedComment);
+  const updatedComment = await update(commentId, commentUpdate, user);
+  return res.status(200).json(updatedComment);
 });
 
-const handleDeleteComment = catchAsync(async (req: Request, res: Response) => {
+const removeComment = catchAsync(async (req: Request, res: Response) => {
   const commentId = req.params.id;
   const user = req.user as any;
 
-  const result = await deleteComment(commentId, user);
-  return res.json(result);
+  const result = await remove(commentId, user);
+  return res.status(204).json(result);
 });
 
-export { handlePostComment, handleUpdateComment, handleDeleteComment };
+export { createComment, updateComment, removeComment };

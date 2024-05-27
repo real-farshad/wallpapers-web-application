@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 import checkPassword from '@src/utils/checkPassword';
 import findUserByEmail from '@src/repositories/auth/findUserByEmail';
 import findUserByProviderId from '@src/repositories/auth/findUserByProviderId';
-import saveUser from '@src/repositories/auth/saveUser';
+import insertUser from '@src/repositories/auth/insertUser';
 import findUserById from '@src/repositories/auth/findUserById';
 import { User } from '@src/models/userModel';
 
@@ -56,7 +56,7 @@ passport.use(
           if (profile.photos) user.avatar = profile.photos[0].value;
           if (profile.emails) user.email = profile.emails[0].value;
 
-          user = await saveUser(user);
+          user = await insertUser(user);
         }
 
         return done(null, user);

@@ -1,17 +1,17 @@
 import { catchAsync } from '@utils/catchAsync';
 import { Request, Response, NextFunction } from 'express';
 import passport from '@config/passport';
-import signupLocalUser from '@src/services/auth/signupLocalUser';
+import signup from '@src/services/auth/signup';
 import validateSignin from '@src/services/auth/validateSignin';
 
-const handlePostSignUp = catchAsync(async (req: Request, res: Response) => {
+const signupUser = catchAsync(async (req: Request, res: Response) => {
   const user = req.body;
-  const savedUser = await signupLocalUser(user);
+  const savedUser = await signup(user);
 
-  res.send(savedUser);
+  res.status(201).json(savedUser);
 });
 
-const handlePostSignIn = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+const signinUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   let user = req.body;
   user = validateSignin(user);
   req.body = user;
@@ -30,13 +30,13 @@ const handlePostSignIn = catchAsync(async (req: Request, res: Response, next: Ne
           return next(err);
         }
 
-        return res.json({ success: true });
+        return res.status(200).json({ success: true });
       });
     }
   )(req, res, next);
 });
 
-const handleGetSignOut = (req: Request, res: Response, next: NextFunction) => {
+const signoutUser = (req: Request, res: Response, next: NextFunction) => {
   req.logout((err) => {
     if (err) {
       return next(err);
@@ -48,7 +48,7 @@ const handleGetSignOut = (req: Request, res: Response, next: NextFunction) => {
       }
 
       res.clearCookie('connect.sid');
-      res.json({ message: 'User logged out successfully.' });
+      res.status(200).json({ message: 'Successful signout.' });
     });
   });
 };
@@ -72,9 +72,9 @@ const handleGetGoogleOauthSuccess = (req: Request, res: Response) =>
   );
 
 export {
-  handlePostSignUp,
-  handlePostSignIn,
-  handleGetSignOut,
+  signupUser,
+  signinUser,
+  signoutUser,
   handleGetGoogleOauth,
   handleGetGoogleOauthFailure,
   handleGetGoogleOauthSuccess,

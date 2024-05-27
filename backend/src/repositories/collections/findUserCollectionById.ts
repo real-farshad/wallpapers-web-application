@@ -7,7 +7,10 @@ const findUserCollectionById = async (
   userId: ObjectId
 ): Promise<Collection | undefined> => {
   const collectionsCollection = await getCollectionsCollection();
-  const collection = await collectionsCollection.findOne({ _id: collectionId, userId });
+  const collection = await collectionsCollection.findOne({
+    _id: collectionId,
+    publisherId: userId,
+  });
   return collection;
 };
 

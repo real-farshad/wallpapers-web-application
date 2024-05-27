@@ -1,15 +1,16 @@
 import express, { Router } from 'express';
 import { authenticateUser } from '../middleware/authenticateUser';
+
 import {
-  handleDeleteCollectionItem,
-  handleGetCollectionItemsSearch,
-  handlePostCollectionItem,
+  createCollectionItem,
+  searchCollectionItems,
+  removeCollecitonItem,
 } from '../controllers/collectionItemsController';
 
 const router: Router = express.Router();
 
-router.post('/', authenticateUser, handlePostCollectionItem);
-router.get('/:id', handleGetCollectionItemsSearch);
-router.delete('/:id', authenticateUser, handleDeleteCollectionItem);
+router.post('/', authenticateUser, createCollectionItem);
+router.get('/:id', searchCollectionItems);
+router.delete('/:id', authenticateUser, removeCollecitonItem);
 
 export default router;

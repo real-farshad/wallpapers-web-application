@@ -1,6 +1,6 @@
 import getUsersCollection from './getUsersCollection';
 import { User } from '@src/models/userModel';
-import { UserUpdate } from '@src/services/user/updateUser';
+import { UserUpdate } from '@src/services/user/update';
 import { ObjectId } from 'mongodb';
 
 const updateUserById = async (id: ObjectId, user: UserUpdate): Promise<User | undefined> => {

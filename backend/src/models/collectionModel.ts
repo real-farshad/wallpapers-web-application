@@ -5,5 +5,5 @@ export interface Collection {
   title: string;
   createdAt: number;
   wallpaperCount: number;
-  userId: ObjectId;
+  publisherId: ObjectId;
 }

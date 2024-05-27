@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import getCommentsCollection from './getCommentsCollection';
-import { CommentUpdate } from '@src/services/comments/updateComment';
+import { CommentUpdate } from '@src/services/comments/update';
 
 const updateCommentById = async (
   commentId: ObjectId,

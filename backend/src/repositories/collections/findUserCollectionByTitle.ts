@@ -7,7 +7,11 @@ const findUserCollectionByTitle = async (
   userId: ObjectId
 ): Promise<Collection | undefined> => {
   const collectionsCollection = await getCollectionsCollection();
-  const collection = await collectionsCollection.findOne({ title: collectionTitle, userId });
+  const collection = await collectionsCollection.findOne({
+    title: { $regex: new RegExp(`^${collectionTitle}$`, 'i') },
+    publisherId: userId,
+  });
+
   return collection;
 };
 

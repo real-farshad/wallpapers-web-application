@@ -2,19 +2,19 @@ import express, { Router } from 'express';
 import { authenticateUser } from '../middleware/authenticateUser';
 
 import {
-  handlePostWallpaper,
-  handleGetWallpaper,
-  hadnleUpdateWallpaper,
-  handleDeleteWallpaper,
-  handleGetWallpapersSearch,
+  createWallpaper,
+  findOneWallpaper,
+  updateWallpaper,
+  removeWallpaper,
+  searchWallpapers,
 } from '../controllers/wallpapersController';
 
 const router: Router = express.Router();
 
-router.post('/', authenticateUser, handlePostWallpaper);
-router.get('/', handleGetWallpapersSearch);
-router.get('/:id', handleGetWallpaper);
-router.put('/:id', authenticateUser, hadnleUpdateWallpaper);
-router.delete('/:id', authenticateUser, handleDeleteWallpaper);
+router.post('/', authenticateUser, createWallpaper);
+router.get('/:id', findOneWallpaper);
+router.get('/', searchWallpapers);
+router.put('/:id', authenticateUser, updateWallpaper);
+router.delete('/:id', authenticateUser, removeWallpaper);
 
 export default router;
