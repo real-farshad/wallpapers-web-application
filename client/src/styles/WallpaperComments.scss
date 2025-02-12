@@ -1,51 +1,51 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .wallpaper-comments {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 
-    @include min-width-xl {
-        flex-direction: column-reverse;
-    }
+  @include min-width-xl {
+    flex-direction: column-reverse;
+  }
 }
 
 .wallpaper-comments__auth {
-    @include min-width-xl {
-        margin-left: 60px;
-    }
+  @include min-width-xl {
+    margin-left: 60px;
+  }
 }
 
 .wallpaper-comments__auth-message {
-    max-width: 280px;
-    opacity: var(--primary-opacity);
-    margin-bottom: 5px;
+  max-width: 280px;
+  opacity: var(--primary-opacity);
+  margin-bottom: 5px;
 
-    @include min-width-md {
-        max-width: unset;
-        margin-bottom: 3px;
-    }
+  @include min-width-md {
+    max-width: unset;
+    margin-bottom: 3px;
+  }
 }
 
 .wallpaper-comments__auth-link {
-    opacity: 0.6;
-    margin-bottom: 10px;
+  opacity: 0.6;
+  margin-bottom: 10px;
 
-    @include min-width-lg {
-        margin-bottom: 0px;
-    }
+  @include min-width-lg {
+    margin-bottom: 0px;
+  }
 }
 
 .commments-container__comments-container {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 
-    @include min-width-md {
-        flex-direction: row;
-    }
+  @include min-width-md {
+    flex-direction: row;
+  }
 
-    @include min-width-xl {
-        flex-direction: column-reverse;
-    }
+  @include min-width-xl {
+    flex-direction: column-reverse;
+  }
 }

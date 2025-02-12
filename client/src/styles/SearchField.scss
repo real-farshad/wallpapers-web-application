@@ -1,26 +1,26 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .search-field__input {
-    font-weight: var(--medium-font-weight);
+  font-weight: var(--medium-font-weight);
+  color: var(--white);
+  opacity: var(--primary-opacity);
+
+  &::placeholder {
     color: var(--white);
-    opacity: var(--primary-opacity);
+    opacity: 0.4;
+    border-bottom: none;
+  }
 
-    &::placeholder {
-        color: var(--white);
-        opacity: 0.4;
-        border-bottom: none;
-    }
+  &:focus {
+    outline: none;
+    border-bottom: 1px solid var(--white);
+  }
 
-    &:focus {
-        outline: none;
-        border-bottom: 1px solid var(--white);
-    }
-
-    @include min-width-xl {
-        width: 200px;
-    }
+  @include min-width-xl {
+    width: 200px;
+  }
 }
 
 .search-field__input--active {
-    border-bottom: 1px solid var(--white);
+  border-bottom: 1px solid var(--white);
 }

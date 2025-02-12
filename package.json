@@ -1,37 +1,35 @@
 {
-    "name": "full-stack-wallpaper-app",
-    "version": "1.0.0",
-    "engines": {
-        "node": "17.9.0"
-    },
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "server-test": "jest",
-        "server-dev": "nodemon ./server.js",
-        "client-dev": "cd client && npm run start",
-        "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
-        "build": "cd client && npm install && npm run build",
-        "populate-database": "node ./populate/script.js",
-        "start": "set NODE_ENV=production&& node server.js"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "bcrypt": "^5.0.1",
-        "concurrently": "^7.0.0",
-        "dotenv": "^14.2.0",
-        "express": "^4.17.2",
-        "express-session": "^1.17.2",
-        "joi": "^17.5.0",
-        "mongodb": "^4.3.1",
-        "passport": "^0.5.2",
-        "passport-google-oauth": "^2.0.0",
-        "passport-local": "^1.0.0"
-    },
-    "devDependencies": {
-        "jest": "^27.5.0",
-        "supertest": "^6.2.2"
-    }
+  "name": "full-stack-wallpaper-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server-test": "jest",
+    "server-dev": "nodemon ./server.js",
+    "client-dev": "cd client && npm run start",
+    "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
+    "build": "cd client && npm install && npm run build",
+    "populate-database": "node ./populate/script.js",
+    "start": "set NODE_ENV=production&& node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "concurrently": "^9.1.2",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "joi": "^17.13.3",
+    "mongodb": "^6.13.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth": "^2.0.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
+  }
 }

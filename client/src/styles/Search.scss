@@ -1,30 +1,30 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .search {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .search__container {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .search__result-section {
-    min-height: 400px;
+  min-height: 400px;
 
-    @include min-width-md {
-        min-height: 350px;
-    }
+  @include min-width-md {
+    min-height: 350px;
+  }
 
-    @include min-width-lg {
-        min-height: 360px;
-    }
+  @include min-width-lg {
+    min-height: 360px;
+  }
 
-    @include min-width-xl {
-        min-height: 440px;
-    }
+  @include min-width-xl {
+    min-height: 440px;
+  }
 }

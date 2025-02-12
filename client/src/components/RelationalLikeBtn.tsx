@@ -6,72 +6,70 @@ import makeStandardCountString from "../utils/makeStandardCountString";
 import "../styles/RelationalLikeBtn.scss";
 
 interface RelationalLikeBtnTypes {
-    wallpaperId: string;
-    initialState: boolean;
-    likeCount: number;
-    loading: boolean;
-    setLoading: (v: boolean) => any;
-    prompt: null | string;
-    setPrompt: (v: null | string) => any;
+  wallpaperId: string;
+  initialState: boolean;
+  likeCount: number;
+  loading: boolean;
+  setLoading: (v: boolean) => any;
+  prompt: null | string;
+  setPrompt: (v: null | string) => any;
 }
 
 function RelationalLikeBtn(props: RelationalLikeBtnTypes) {
-    const {
-        wallpaperId,
-        initialState,
-        likeCount,
-        loading,
-        setLoading,
-        prompt,
-        setPrompt,
-    } = props;
-    const { isSignedIn } = useUserContext();
+  const {
+    wallpaperId,
+    initialState,
+    likeCount,
+    loading,
+    setLoading,
+    prompt,
+    setPrompt,
+  } = props;
+  const { isSignedIn } = useUserContext();
 
-    const [liked, setLiked] = useState(initialState);
+  const [liked, setLiked] = useState(initialState);
 
-    function handleClickOnLikeBtn() {
-        if (!isSignedIn) return (window.location.href = "/auth/sign-up");
-        if (loading || prompt) return;
+  function handleClickOnLikeBtn() {
+    if (!isSignedIn) return (window.location.href = "/auth/sign-up");
+    if (loading || prompt) return;
 
-        (async () => {
-            setLoading(true);
+    (async () => {
+      setLoading(true);
 
-            if (liked) await handleUnlike();
-            else await handleLike();
+      if (liked) await handleUnlike();
+      else await handleLike();
 
-            setLoading(false);
-        })();
+      setLoading(false);
+    })();
+  }
+
+  async function handleLike() {
+    const success = await likeWallpaper(wallpaperId);
+    if (success) {
+      setLiked(true);
+      setPrompt("LIKED");
+      setTimeout(() => setPrompt(null), 1000);
     }
+  }
 
-    async function handleLike() {
-        const success = await likeWallpaper(wallpaperId);
-        if (success) {
-            setLiked(true);
-            setPrompt("LIKED");
-            setTimeout(() => setPrompt(null), 1000);
-        }
+  async function handleUnlike() {
+    const success = await unlikeWallpaper(wallpaperId);
+    if (success) {
+      setLiked(false);
+      setPrompt("UNLIKED");
+      setTimeout(() => setPrompt(null), 1000);
     }
+  }
 
-    async function handleUnlike() {
-        const success = await unlikeWallpaper(wallpaperId);
-        if (success) {
-            setLiked(false);
-            setPrompt("UNLIKED");
-            setTimeout(() => setPrompt(null), 1000);
-        }
-    }
+  const standardLikeCount = makeStandardCountString(likeCount);
 
-    const standardLikeCount = makeStandardCountString(likeCount);
+  return (
+    <button className="relational-like-btn" onClick={handleClickOnLikeBtn}>
+      <p className="relational-like-btn__text">{liked ? "Liked" : "Like"}</p>
 
-    return (
-        <button className="relational-like-btn" onClick={handleClickOnLikeBtn}>
-            <p className="relational-like-btn__text">
-                {liked ? "Liked" : "Like"}
-            </p>
-
-            <p className="relational-like-btn__count">{standardLikeCount}</p>
-        </button>
-    );
+      <p className="relational-like-btn__count">{standardLikeCount}</p>
+    </button>
+  );
 }
 
 export default RelationalLikeBtn;

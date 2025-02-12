@@ -1,29 +1,29 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .section-info-container {
-    margin-bottom: -20px;
+  margin-bottom: -20px;
+
+  &--two-rows {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  @include min-width-md {
+    height: 255px;
+    display: flex;
+    align-items: flex-end;
+    margin-top: 42px;
+    margin-bottom: 0;
 
     &--two-rows {
-        display: flex;
-        flex-direction: column-reverse;
-        gap: 10px;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: baseline;
     }
+  }
 
-    @include min-width-md {
-        height: 255px;
-        display: flex;
-        align-items: flex-end;
-        margin-top: 42px;
-        margin-bottom: 0;
-
-        &--two-rows {
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-    }
-
-    @include min-width-xl {
-        height: 220px;
-    }
+  @include min-width-xl {
+    height: 220px;
+  }
 }

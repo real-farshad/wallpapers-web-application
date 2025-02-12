@@ -1,77 +1,77 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .sign-up {
-    display: flex;
-    flex-direction: column;
-    gap: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
 
-    @include min-width-md {
-        gap: 50px;
-    }
+  @include min-width-md {
+    gap: 50px;
+  }
 
-    @include min-width-xl {
-        gap: 0;
-        height: 500px;
-        justify-content: space-between;
-    }
+  @include min-width-xl {
+    gap: 0;
+    height: 500px;
+    justify-content: space-between;
+  }
 }
 
 .sign-up__title {
-    max-width: 520px;
-    margin-bottom: 5px;
+  max-width: 520px;
+  margin-bottom: 5px;
 
-    @include min-width-md {
-        max-width: unset;
-        margin-bottom: 10px;
-    }
+  @include min-width-md {
+    max-width: unset;
+    margin-bottom: 10px;
+  }
 }
 
 .sign-up__title-description {
-    font-weight: var(--medium-font-weight);
-    opacity: 0.4;
+  font-weight: var(--medium-font-weight);
+  opacity: 0.4;
 
-    @include min-width-md {
-        max-width: 220px;
-    }
+  @include min-width-md {
+    max-width: 220px;
+  }
 }
 
 .sign-up__title-break {
-    display: none;
+  display: none;
 
-    @include min-width-md {
-        display: block;
-    }
+  @include min-width-md {
+    display: block;
+  }
 }
 
 .sign-up__options-container {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 
-    @include min-width-md {
-        flex-direction: row;
-        align-items: flex-end;
-        justify-content: space-between;
-    }
+  @include min-width-md {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
 }
 
 .sign-up__google {
-    max-width: 600px;
+  max-width: 600px;
 
-    @include min-width-md {
-        max-width: 400px;
-    }
+  @include min-width-md {
+    max-width: 400px;
+  }
 }
 
 .sign-up__local-form-container {
-    @include min-width-md {
-        flex-shrink: 0;
-        width: 50%;
-    }
+  @include min-width-md {
+    flex-shrink: 0;
+    width: 50%;
+  }
 }
 
 .sign-up__local-form {
-    @include min-width-md {
-        max-width: 400px;
-    }
+  @include min-width-md {
+    max-width: 400px;
+  }
 }

@@ -1,39 +1,39 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .navigation {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 
-    @include min-width-lg {
-        flex-direction: row;
-        gap: 50px;
-    }
+  @include min-width-lg {
+    flex-direction: row;
+    gap: 50px;
+  }
 }
 
 .navigation__element-container {
-    overflow: hidden;
+  overflow: hidden;
 
-    &--search-field {
-        @include min-width-lg {
-            order: 2;
-        }
+  &--search-field {
+    @include min-width-lg {
+      order: 2;
     }
+  }
 }
 
 .navigation__element {
-    opacity: 0;
-    transform: translateY(100%);
-    transition: 0.5s;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: 0.5s;
 
-    &--animate-in {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  &--animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-    @include min-width-lg {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  @include min-width-lg {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

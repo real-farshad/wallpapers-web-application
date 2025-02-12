@@ -18,52 +18,52 @@ import LoadingOverlay from "./components/LoadingOverlay";
 import "./styles/App.scss";
 
 function App() {
-    const { hasCheckedAuth, isSignedIn } = useUserContext();
-    const { wallpaperId } = useWallpaperContext();
-    const { loading } = useLoadingContext();
+  const { hasCheckedAuth, isSignedIn } = useUserContext();
+  const { wallpaperId } = useWallpaperContext();
+  const { loading } = useLoadingContext();
 
-    return (
-        <Fragment>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/popular" element={<Popular />} />
-                <Route path="/new" element={<New />} />
-                <Route path="/collections" element={<Collections />} />
-                <Route path="/search/:contentType" element={<Search />} />
-                <Route path="/auth" element={<Navigate to="/auth/sign-up" />} />
-                <Route
-                    path="/auth/:authOption"
-                    element={isSignedIn ? <Navigate to="/" /> : <Auth />}
-                />
-                <Route path="/wallpaper/:id" element={<Wallpaper />} />
-                <Route path="/collections/:id" element={<Collection />} />
-                <Route
-                    path="/user/likes"
-                    element={
-                        hasCheckedAuth && isSignedIn ? (
-                            <Likes />
-                        ) : (
-                            <Navigate to="/auth/sign-in" />
-                        )
-                    }
-                />
-                <Route
-                    path="/user/saves"
-                    element={
-                        hasCheckedAuth && isSignedIn ? (
-                            <Saves />
-                        ) : (
-                            <Navigate to="/auth/sign-in" />
-                        )
-                    }
-                />
-                <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
+  return (
+    <Fragment>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/popular" element={<Popular />} />
+        <Route path="/new" element={<New />} />
+        <Route path="/collections" element={<Collections />} />
+        <Route path="/search/:contentType" element={<Search />} />
+        <Route path="/auth" element={<Navigate to="/auth/sign-up" />} />
+        <Route
+          path="/auth/:authOption"
+          element={isSignedIn ? <Navigate to="/" /> : <Auth />}
+        />
+        <Route path="/wallpaper/:id" element={<Wallpaper />} />
+        <Route path="/collections/:id" element={<Collection />} />
+        <Route
+          path="/user/likes"
+          element={
+            hasCheckedAuth && isSignedIn ? (
+              <Likes />
+            ) : (
+              <Navigate to="/auth/sign-in" />
+            )
+          }
+        />
+        <Route
+          path="/user/saves"
+          element={
+            hasCheckedAuth && isSignedIn ? (
+              <Saves />
+            ) : (
+              <Navigate to="/auth/sign-in" />
+            )
+          }
+        />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
 
-            {wallpaperId && <WallpaperOverlay />}
-            {loading && <LoadingOverlay />}
-        </Fragment>
-    );
+      {wallpaperId && <WallpaperOverlay />}
+      {loading && <LoadingOverlay />}
+    </Fragment>
+  );
 }
 
 export default App;

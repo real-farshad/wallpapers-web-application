@@ -1,34 +1,34 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .google-sign-up__title {
-    font-size: 24px;
-    font-weight: var(--bold-font-weight);
-    max-width: 86%;
-    margin-bottom: 20px;
-    opacity: var(--primary-opacity);
+  font-size: 24px;
+  font-weight: var(--bold-font-weight);
+  max-width: 86%;
+  margin-bottom: 20px;
+  opacity: var(--primary-opacity);
 
-    @include min-width-xl {
-        font-size: 30px;
-        max-width: unset;
-    }
+  @include min-width-xl {
+    font-size: 30px;
+    max-width: unset;
+  }
 }
 
 .google-sign-up__title-break {
-    display: none;
+  display: none;
 
-    @include min-width-md {
-        display: block;
-    }
+  @include min-width-md {
+    display: block;
+  }
 }
 
 .google-sign-up__description {
-    font-weight: var(--medium-font-weight);
-    margin-bottom: 10px;
-    opacity: 0.6;
+  font-weight: var(--medium-font-weight);
+  margin-bottom: 10px;
+  opacity: 0.6;
 }
 
 .google-sing-up__btn {
-    font-weight: var(--medium-font-weight);
-    text-decoration: underline;
-    opacity: var(--primary-opacity);
+  font-weight: var(--medium-font-weight);
+  text-decoration: underline;
+  opacity: var(--primary-opacity);
 }

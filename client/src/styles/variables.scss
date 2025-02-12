@@ -1,34 +1,34 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 :root {
-    /* Font sizes */
-    --standard-font-size: 12px;
+  /* Font sizes */
+  --standard-font-size: 12px;
 
-    /* Font weights */
-    --regular-font-weight: 400;
-    --medium-font-weight: 500;
-    --bold-font-weight: 700;
-    --black-font-weight: 900;
+  /* Font weights */
+  --regular-font-weight: 400;
+  --medium-font-weight: 500;
+  --bold-font-weight: 700;
+  --black-font-weight: 900;
 
-    /* Colors */
-    --black: rgb(0, 0, 0);
-    --white: rgb(255, 255, 255);
-    --background-color: var(--black);
+  /* Colors */
+  --black: rgb(0, 0, 0);
+  --white: rgb(255, 255, 255);
+  --background-color: var(--black);
 
-    /* Text color */
-    --primary-text-color: var(--white);
+  /* Text color */
+  --primary-text-color: var(--white);
 
-    /* Widths */
-    --max-content-width-xl: 1366px;
+  /* Widths */
+  --max-content-width-xl: 1366px;
 
-    /* Paddings */
-    --content-space: 24px;
+  /* Paddings */
+  --content-space: 24px;
 
-    /* Opacities */
-    --primary-opacity: 0.87;
-    --light-opacity: 0.6;
+  /* Opacities */
+  --primary-opacity: 0.87;
+  --light-opacity: 0.6;
 
-    @include min-width-lg {
-        --content-space: 50px;
-    }
+  @include min-width-lg {
+    --content-space: 50px;
+  }
 }

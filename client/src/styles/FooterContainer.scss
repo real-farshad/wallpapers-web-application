@@ -1,9 +1,9 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .footer-container {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 
-    @include min-width-lg {
-        margin-bottom: 40px;
-    }
+  @include min-width-lg {
+    margin-bottom: 40px;
+  }
 }

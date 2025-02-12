@@ -1,75 +1,75 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .auth {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    overflow: hidden;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
 .auth__background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 
-    @include min-width-xl {
-        position: absolute;
-    }
+  @include min-width-xl {
+    position: absolute;
+  }
 }
 
 .auth__background-image {
-    width: 100%;
-    height: 100%;
-    background-position: 40% center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    transition: 1.05s;
+  width: 100%;
+  height: 100%;
+  background-position: 40% center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: 1.05s;
+
+  @include min-width-lg {
+    background-position: left center;
+  }
+
+  &--right-position {
+    background-position: 60% center;
 
     @include min-width-lg {
-        background-position: left center;
+      background-position: right center;
     }
-
-    &--right-position {
-        background-position: 60% center;
-
-        @include min-width-lg {
-            background-position: right center;
-        }
-    }
+  }
 }
 
 .auth__background-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--black);
-    opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--black);
+  opacity: 0.6;
 }
 
 .auth__container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 440px;
-    min-height: 100vh;
-    padding-top: var(--content-space);
-    padding-bottom: 50px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 440px;
+  min-height: 100vh;
+  padding-top: var(--content-space);
+  padding-bottom: 50px;
 
-    @include min-width-md {
-        justify-content: space-between;
-        gap: 80px;
-    }
+  @include min-width-md {
+    justify-content: space-between;
+    gap: 80px;
+  }
 
-    @include min-width-lg {
-        padding-top: 40px;
-        padding-bottom: 75px;
-    }
+  @include min-width-lg {
+    padding-top: 40px;
+    padding-bottom: 75px;
+  }
 
-    @include min-width-xl {
-        padding-bottom: 100px;
-    }
+  @include min-width-xl {
+    padding-bottom: 100px;
+  }
 }

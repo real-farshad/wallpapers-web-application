@@ -1,27 +1,27 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .auth-navbar__navigation {
-    display: flex;
-    padding-bottom: 2px;
+  display: flex;
+  padding-bottom: 2px;
 }
 
 .auth-navbar__navigation-btn {
-    font-weight: var(--medium-font-weight);
-    opacity: 0.4;
-    transition: 0.3s;
+  font-weight: var(--medium-font-weight);
+  opacity: 0.4;
+  transition: 0.3s;
 
-    &:hover,
-    &--active {
-        opacity: var(--primary-opacity);
-    }
+  &:hover,
+  &--active {
+    opacity: var(--primary-opacity);
+  }
 }
 
 .auth-navbar__separator {
-    font-weight: var(--medium-font-weight);
-    opacity: var(--primary-opacity);
-    margin: 0 15px;
+  font-weight: var(--medium-font-weight);
+  opacity: var(--primary-opacity);
+  margin: 0 15px;
 
-    @include min-width-lg {
-        margin: 0 25px;
-    }
+  @include min-width-lg {
+    margin: 0 25px;
+  }
 }

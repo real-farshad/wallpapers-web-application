@@ -1,41 +1,41 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .auth-options__container {
-    opacity: 0;
-    transition: 0.5s;
+  opacity: 0;
+  transition: 0.5s;
 }
 
 .auth-options__container--sign-up {
-    transform: translateX(-50px);
+  transform: translateX(-50px);
 
-    @include min-width-lg {
-        transform: translateX(-100px);
-    }
+  @include min-width-lg {
+    transform: translateX(-100px);
+  }
 }
 
 .auth-options__container--sign-in {
-    transform: translateX(50px);
+  transform: translateX(50px);
 
-    @include min-width-lg {
-        transform: translateX(100px);
-    }
+  @include min-width-lg {
+    transform: translateX(100px);
+  }
 }
 
 .auth-options__container--animate-in {
-    opacity: 1;
-    transform: translateX(0);
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .auth-options__sign-in {
-    width: 100%;
+  width: 100%;
 
-    @include min-width-lg {
-        max-width: 400px;
-        margin-left: auto;
-    }
+  @include min-width-lg {
+    max-width: 400px;
+    margin-left: auto;
+  }
 
-    @include min-width-xl {
-        max-width: 500px;
-        padding-right: 100px;
-    }
+  @include min-width-xl {
+    max-width: 500px;
+    padding-right: 100px;
+  }
 }

@@ -1,44 +1,44 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .local-sign-up {
-    position: relative;
+  position: relative;
 }
 
 .local-sign-up__title {
-    font-size: 24px;
-    font-weight: var(--bold-font-weight);
-    margin-bottom: 30px;
-    opacity: var(--primary-opacity);
+  font-size: 24px;
+  font-weight: var(--bold-font-weight);
+  margin-bottom: 30px;
+  opacity: var(--primary-opacity);
 
-    @include min-width-xl {
-        font-size: 30px;
-    }
+  @include min-width-xl {
+    font-size: 30px;
+  }
 }
 
 .local-sign-up__md-title-break {
-    display: none;
+  display: none;
 
-    @include min-width-md {
-        display: block;
-    }
+  @include min-width-md {
+    display: block;
+  }
 }
 
 .local-sign-up__sm-title-break {
-    @include min-width-md {
-        display: none;
-    }
+  @include min-width-md {
+    display: none;
+  }
 }
 
 .local-sign-up__form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
 }
 
 .local-sign-up__error {
-    position: absolute;
-    bottom: 20px;
-    left: -5px;
-    width: 300px;
+  position: absolute;
+  bottom: 20px;
+  left: -5px;
+  width: 300px;
 }

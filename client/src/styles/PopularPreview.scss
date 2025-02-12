@@ -1,53 +1,53 @@
-@import "breakpoints";
+@use "breakpoints" as *;
 
 .popular-preview__title {
-    @include min-width-md {
-        grid-column: 1/3;
-    }
+  @include min-width-md {
+    grid-column: 1/3;
+  }
 
-    @include min-width-xl {
-        grid-column: 1/2;
-    }
+  @include min-width-xl {
+    grid-column: 1/2;
+  }
 }
 
 .popular-preview__card:nth-child(2) {
-    @include min-width-xl {
-        grid-column: 2/3;
-        grid-row: 1/2;
-    }
+  @include min-width-xl {
+    grid-column: 2/3;
+    grid-row: 1/2;
+  }
 }
 
 .popular-preview__card:nth-child(3) {
-    @include min-width-xl {
-        grid-column: 3/4;
-        grid-row: 1/2;
-    }
+  @include min-width-xl {
+    grid-column: 3/4;
+    grid-row: 1/2;
+  }
 }
 
 .popular-preview__card:nth-child(4) {
-    @include min-width-xl {
-        grid-column: 1/2;
-        grid-row: 2/3;
-    }
+  @include min-width-xl {
+    grid-column: 1/2;
+    grid-row: 2/3;
+  }
 }
 
 .popular-preview__card:nth-child(5) {
-    @include min-width-xl {
-        grid-column: 2/3;
-        grid-row: 2/3;
-    }
+  @include min-width-xl {
+    grid-column: 2/3;
+    grid-row: 2/3;
+  }
 }
 
 .popular-preview__card:nth-child(6) {
-    @include min-width-xl {
-        grid-column: 2/3;
-        grid-row: 3/4;
-    }
+  @include min-width-xl {
+    grid-column: 2/3;
+    grid-row: 3/4;
+  }
 }
 
 .popular-preview__card:nth-child(7) {
-    @include min-width-xl {
-        grid-column: 3/4;
-        grid-row: 3/4;
-    }
+  @include min-width-xl {
+    grid-column: 3/4;
+    grid-row: 3/4;
+  }
 }
