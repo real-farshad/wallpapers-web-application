@@ -1,26 +1,26 @@
-import { Fragment } from "react"
-import { Routes, Route, Navigate } from "react-router-dom"
-import { useUserContext } from "./contexts/UserContext"
-import { useWallpaperContext } from "./contexts/WallpaperContext"
-import { useLoadingContext } from "./contexts/LoadingContext"
-import Home from "./pages/Home"
-import Popular from "./pages/Popular"
-import New from "./pages/New"
-import Collections from "./pages/Collections"
-import Search from "./pages/Search"
-import Auth from "./pages/Auth"
-import Wallpaper from "./pages/Wallpaper"
-import Collection from "./pages/Collection"
-import Likes from "./pages/Likes"
-import Saves from "./pages/Saves"
-import WallpaperOverlay from "./components/WallpaperOverlay"
-import LoadingOverlay from "./components/LoadingOverlay"
-import "./styles/App.scss"
+import { Fragment } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useUserContext } from "./contexts/UserContext";
+import { useWallpaperContext } from "./contexts/WallpaperContext";
+import { useLoadingContext } from "./contexts/LoadingContext";
+import Home from "./pages/Home";
+import Popular from "./pages/Popular";
+import New from "./pages/New";
+import Collections from "./pages/Collections";
+import Search from "./pages/Search";
+import Auth from "./pages/Auth";
+import Wallpaper from "./pages/Wallpaper";
+import Collection from "./pages/Collection";
+import Likes from "./pages/Likes";
+import Saves from "./pages/Saves";
+import WallpaperOverlay from "./components/WallpaperOverlay";
+import LoadingOverlay from "./components/LoadingOverlay";
+import "./styles/App.scss";
 
 function App() {
-    const { hasCheckedAuth, isSignedIn } = useUserContext()
-    const { wallpaperId } = useWallpaperContext()
-    const { loading } = useLoadingContext()
+    const { hasCheckedAuth, isSignedIn } = useUserContext();
+    const { wallpaperId } = useWallpaperContext();
+    const { loading } = useLoadingContext();
 
     return (
         <Fragment>
@@ -40,13 +40,21 @@ function App() {
                 <Route
                     path="/user/likes"
                     element={
-                        hasCheckedAuth && isSignedIn ? <Likes /> : <Navigate to="/auth/sign-in" />
+                        hasCheckedAuth && isSignedIn ? (
+                            <Likes />
+                        ) : (
+                            <Navigate to="/auth/sign-in" />
+                        )
                     }
                 />
                 <Route
                     path="/user/saves"
                     element={
-                        hasCheckedAuth && isSignedIn ? <Saves /> : <Navigate to="/auth/sign-in" />
+                        hasCheckedAuth && isSignedIn ? (
+                            <Saves />
+                        ) : (
+                            <Navigate to="/auth/sign-in" />
+                        )
                     }
                 />
                 <Route path="*" element={<Navigate to="/" />} />
@@ -55,7 +63,7 @@ function App() {
             {wallpaperId && <WallpaperOverlay />}
             {loading && <LoadingOverlay />}
         </Fragment>
-    )
+    );
 }
 
-export default App
+export default App;

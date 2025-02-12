@@ -1,26 +1,27 @@
-import { useEffect } from "react"
-import { useWallpaperContext } from "../contexts/WallpaperContext"
-import WallpaperLayout from "../components/WallpaperLayout"
-import WallpaperContent from "../components/WallpaperContent"
-import "../styles/WallpaperOverlay.scss"
+import { useEffect } from "react";
+import { useWallpaperContext } from "../contexts/WallpaperContext";
+import WallpaperLayout from "../components/WallpaperLayout";
+import WallpaperContent from "../components/WallpaperContent";
+import "../styles/WallpaperOverlay.scss";
 
 function WallpaperOverlay() {
-    const { wallpaper, wallpaperId, lastUrl, setWallpaperId, setLastUrl } = useWallpaperContext()
+    const { wallpaper, wallpaperId, lastUrl, setWallpaperId, setLastUrl } =
+        useWallpaperContext();
 
     useEffect(() => {
         if (wallpaperId) {
-            setLastUrl(window.location.href)
-            window.history.pushState("", "", "/wallpaper/" + wallpaperId)
+            setLastUrl(window.location.href);
+            window.history.pushState("", "", "/wallpaper/" + wallpaperId);
         }
-    }, [wallpaperId])
+    }, [wallpaperId]);
 
     function handleClickOnGoBackBtn() {
-        window.history.pushState("", "", lastUrl)
-        setWallpaperId(null)
-        setLastUrl("")
+        window.history.pushState("", "", lastUrl);
+        setWallpaperId(null);
+        setLastUrl("");
     }
 
-    if (!wallpaper) return null
+    if (!wallpaper) return null;
 
     return (
         <div className="wallpaper-overlay">
@@ -37,7 +38,7 @@ function WallpaperOverlay() {
                 <WallpaperContent />
             </WallpaperLayout>
         </div>
-    )
+    );
 }
 
-export default WallpaperOverlay
+export default WallpaperOverlay;
