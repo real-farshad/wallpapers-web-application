@@ -4,21 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server-test": "jest",
-    "server-dev": "nodemon ./server.js",
-    "client-dev": "cd client && npm run start",
-    "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
-    "build": "cd client && npm install && npm run build",
-    "populate-database": "node ./populate/script.js",
-    "start": "set NODE_ENV=production&& node server.js"
+    "install-all": "npm install && cd client && npm install && cd ..",
+    "build-server": "node ./populate/script.js",
+    "build-client": "cd client && npm run build",
+    "build": "npm run build-server && npm run build-client",
+    "dev-server": "nodemon ./server.js",
+    "dev-client": "cd client && npm run start",
+    "dev": "start npm run dev-server && start npm run dev-client",
+    "start": "set NODE_ENV=production&& node server.js",
+    "server-test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "concurrently": "^9.1.2",
-    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "joi": "^17.13.3",
@@ -28,6 +28,7 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "dotenv": "^16.4.7",
     "jest": "^29.7.0",
     "nodemon": "^3.1.9",
     "supertest": "^7.0.0"
