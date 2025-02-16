@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Fragment, useEffect, useState } from "react";
 import { useLoadingContext } from "../contexts/LoadingContext";
 import searchWallpapers from "../api/searchWallpapers";
@@ -15,80 +16,80 @@ import FooterContainer from "../components/FooterContainer";
 import "../styles/Home.scss";
 
 function Home() {
-    const { startLoading, finishLoading } = useLoadingContext();
+  const { startLoading, finishLoading } = useLoadingContext();
 
-    const [popularWallpapers, setPopularWallpapers] = useState([]);
-    const [newWallpapers, setNewWallpapers] = useState([]);
-    const [collections, setCollections] = useState([]);
+  const [popularWallpapers, setPopularWallpapers] = useState([]);
+  const [newWallpapers, setNewWallpapers] = useState([]);
+  const [collections, setCollections] = useState([]);
 
-    useEffect(() => {
-        (async () => {
-            startLoading();
+  useEffect(() => {
+    (async () => {
+      startLoading();
 
-            await addPopularWallpapers();
-            await addNewWallpapers();
-            await addNewCollections();
+      await addPopularWallpapers();
+      await addNewWallpapers();
+      await addNewCollections();
 
-            finishLoading();
-        })();
-    }, []);
+      finishLoading();
+    })();
+  }, []);
 
-    async function addPopularWallpapers() {
-        const wallpapers = await searchWallpapers({
-            sort: "popular",
-            page: 1,
-            limit: 6,
-        });
+  async function addPopularWallpapers() {
+    const wallpapers = await searchWallpapers({
+      sort: "popular",
+      page: 1,
+      limit: 6,
+    });
 
-        setPopularWallpapers(wallpapers);
-    }
+    setPopularWallpapers(wallpapers);
+  }
 
-    async function addNewWallpapers() {
-        const wallpapers = await searchWallpapers({
-            sort: "new",
-            page: 1,
-            limit: 6,
-        });
+  async function addNewWallpapers() {
+    const wallpapers = await searchWallpapers({
+      sort: "new",
+      page: 1,
+      limit: 6,
+    });
 
-        setNewWallpapers(wallpapers);
-    }
+    setNewWallpapers(wallpapers);
+  }
 
-    async function addNewCollections() {
-        const collections = await searchCollections({ page: 1, limit: 6 });
-        setCollections(collections);
-    }
+  async function addNewCollections() {
+    const collections = await searchCollections({ page: 1, limit: 6 });
+    setCollections(collections);
+  }
 
-    return (
-        <Fragment>
-            <div className="home__background">
-                <CoverImage src={homepageBackground} />
-            </div>
+  return (
+    <Fragment>
+      <div className="home__background">
+        <CoverImage src={homepageBackground} />
+      </div>
 
-            <ContentWidthContainer>
-                <header>
-                    <div className="home__navbar">
-                        <StandardNavbar />
-                    </div>
-                </header>
+      <ContentWidthContainer>
+        <header>
+          <div className="home__navbar">
+            <StandardNavbar />
+          </div>
+        </header>
 
-                <MainContainer>
-                    <div className="home__content-section">
-                        <PopularPreview wallpapers={popularWallpapers} />
-                    </div>
+        <MainContainer>
+          <div className="home__content-section">
+            <PopularPreview wallpapers={popularWallpapers} />
+          </div>
 
-                    <div className="home__content-section">
-                        <NewPreview wallpapers={newWallpapers} />
-                    </div>
+          <div className="home__content-section">
+            <NewPreview wallpapers={newWallpapers} />
+          </div>
 
-                    <CollectionsPreview collections={collections} />
-                </MainContainer>
+          <CollectionsPreview collections={collections} />
+        </MainContainer>
 
-                <FooterContainer>
-                    <CopyRight />
-                </FooterContainer>
-            </ContentWidthContainer>
-        </Fragment>
-    );
+        <FooterContainer>
+          <CopyRight />
+        </FooterContainer>
+      </ContentWidthContainer>
+    </Fragment>
+  );
 }
 
 export default Home;

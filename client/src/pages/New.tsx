@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useLoadingContext } from "../contexts/LoadingContext";
 import searchWallpapers from "../api/searchWallpapers";
@@ -13,68 +14,65 @@ import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
 
 function New() {
-    const { startLoading, finishLoading } = useLoadingContext();
+  const { startLoading, finishLoading } = useLoadingContext();
 
-    const sort = "new";
-    const [page, setPage] = useState(1);
-    const limit = 8;
+  const sort = "new";
+  const [page, setPage] = useState(1);
+  const limit = 8;
 
-    const [newWallpapers, setNewWallpapers] = useState([]);
-    const [wallpapersFinished, setWallpapersFinished] = useState(false);
+  const [newWallpapers, setNewWallpapers] = useState([]);
+  const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
-    useEffect(() => {
-        (async () => {
-            startLoading();
-            await addNewWallpapers();
-            finishLoading();
-        })();
-    }, []);
+  useEffect(() => {
+    (async () => {
+      startLoading();
+      await addNewWallpapers();
+      finishLoading();
+    })();
+  }, []);
 
-    useEffect(() => {
-        if (page !== 1) addNewWallpapers();
-    }, [page]);
+  useEffect(() => {
+    if (page !== 1) addNewWallpapers();
+  }, [page]);
 
-    async function addNewWallpapers() {
-        const wallpapers = await searchWallpapers({ sort, page, limit });
-        setNewWallpapers((prevState) => [
-            ...prevState,
-            ...(wallpapers as never[]),
-        ]);
+  async function addNewWallpapers() {
+    const wallpapers = await searchWallpapers({ sort, page, limit });
+    setNewWallpapers((prevState) => [...prevState, ...(wallpapers as never[])]);
 
-        if (wallpapers.length < limit) {
-            setWallpapersFinished(true);
-        }
+    if (wallpapers.length < limit) {
+      setWallpapersFinished(true);
     }
+  }
 
-    return (
-        <ContentWidthContainer>
-            <HeaderContainer>
-                <StandardNavbar />
-            </HeaderContainer>
+  return (
+    <ContentWidthContainer>
+      <HeaderContainer>
+        <StandardNavbar />
+      </HeaderContainer>
 
-            <MainContainer>
-                <SectionGrid>
-                    <SectionInfoContainer>
-                        <SectionTitle>
-                            MOST <br />
-                            RECENT <br />
-                            WALLPAPERS
-                        </SectionTitle>
-                    </SectionInfoContainer>
+      <MainContainer>
+        <SectionGrid>
+          <SectionInfoContainer>
+            <SectionTitle>
+              MOST <br />
+              RECENT <br />
+              WALLPAPERS
+            </SectionTitle>
+          </SectionInfoContainer>
 
-                    <WallpapersInfiniteScroll
-                        wallpapers={newWallpapers}
-                        wallpapersFinished={wallpapersFinished}
-                        setPage={setPage}
-                    />
-                </SectionGrid>
-            </MainContainer>
+          <WallpapersInfiniteScroll
+            wallpapers={newWallpapers}
+            wallpapersFinished={wallpapersFinished}
+            setPage={setPage}
+          />
+        </SectionGrid>
+      </MainContainer>
 
-            <FooterContainer>
-                <CopyRight />
-            </FooterContainer>
-        </ContentWidthContainer>
-    );
+      <FooterContainer>
+        <CopyRight />
+      </FooterContainer>
+    </ContentWidthContainer>
+  );
 }
 
 export default New;

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useLoadingContext } from "../contexts/LoadingContext";
 import getUserLikesCount from "../api/getUserLikesCount";
@@ -15,80 +16,77 @@ import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 import "../styles/Likes.scss";
 
 function Likes() {
-    const { startLoading, finishLoading } = useLoadingContext();
+  const { startLoading, finishLoading } = useLoadingContext();
 
-    const [page, setPage] = useState(1);
-    const limit = 8;
+  const [page, setPage] = useState(1);
+  const limit = 8;
 
-    const [userLikesCount, setUserLikesCount] = useState(0);
-    const [wallpapers, setWallpapers] = useState([]);
-    const [wallpapersFinished, setWallpapersFinished] = useState(false);
+  const [userLikesCount, setUserLikesCount] = useState(0);
+  const [wallpapers, setWallpapers] = useState([]);
+  const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
-    useEffect(() => {
-        (async () => {
-            startLoading();
+  useEffect(() => {
+    (async () => {
+      startLoading();
 
-            await addUserLikesCount();
-            await addLikedWallpapers();
+      await addUserLikesCount();
+      await addLikedWallpapers();
 
-            finishLoading();
-        })();
-    }, []);
+      finishLoading();
+    })();
+  }, []);
 
-    useEffect(() => {
-        if (page !== 1) addLikedWallpapers();
-    }, [page]);
+  useEffect(() => {
+    if (page !== 1) addLikedWallpapers();
+  }, [page]);
 
-    async function addUserLikesCount() {
-        const count = await getUserLikesCount();
-        setUserLikesCount(count);
+  async function addUserLikesCount() {
+    const count = await getUserLikesCount();
+    setUserLikesCount(count);
+  }
+
+  async function addLikedWallpapers() {
+    const wallpapers = await getLikedWallpapers(page, limit);
+    setWallpapers((prevState) => [...prevState, ...(wallpapers as never[])]);
+
+    if (wallpapers.length < limit) {
+      setWallpapersFinished(true);
     }
+  }
 
-    async function addLikedWallpapers() {
-        const wallpapers = await getLikedWallpapers(page, limit);
-        setWallpapers((prevState) => [
-            ...prevState,
-            ...(wallpapers as never[]),
-        ]);
+  return (
+    <ContentWidthContainer>
+      <div className="likes">
+        <HeaderContainer>
+          <StandardNavbar />
+        </HeaderContainer>
 
-        if (wallpapers.length < limit) {
-            setWallpapersFinished(true);
-        }
-    }
+        <div className="likes__container">
+          <MainContainer>
+            <SectionGrid>
+              <SectionInfoContainer>
+                <SectionTitle>
+                  {userLikesCount} <br />
+                  LIKED <br />
+                  WALLPAPERS
+                </SectionTitle>
+              </SectionInfoContainer>
 
-    return (
-        <ContentWidthContainer>
-            <div className="likes">
-                <HeaderContainer>
-                    <StandardNavbar />
-                </HeaderContainer>
+              <WallpapersInfiniteScroll
+                wallpapers={wallpapers}
+                wallpapersFinished={wallpapersFinished}
+                setPage={setPage}
+              />
+            </SectionGrid>
+          </MainContainer>
 
-                <div className="likes__container">
-                    <MainContainer>
-                        <SectionGrid>
-                            <SectionInfoContainer>
-                                <SectionTitle>
-                                    {userLikesCount} <br />
-                                    LIKED <br />
-                                    WALLPAPERS
-                                </SectionTitle>
-                            </SectionInfoContainer>
-
-                            <WallpapersInfiniteScroll
-                                wallpapers={wallpapers}
-                                wallpapersFinished={wallpapersFinished}
-                                setPage={setPage}
-                            />
-                        </SectionGrid>
-                    </MainContainer>
-
-                    <FooterContainer>
-                        <CopyRight />
-                    </FooterContainer>
-                </div>
-            </div>
-        </ContentWidthContainer>
-    );
+          <FooterContainer>
+            <CopyRight />
+          </FooterContainer>
+        </div>
+      </div>
+    </ContentWidthContainer>
+  );
 }
 
 export default Likes;

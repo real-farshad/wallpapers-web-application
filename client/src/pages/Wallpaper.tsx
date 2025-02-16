@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useLoadingContext } from "../contexts/LoadingContext";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
@@ -8,36 +9,36 @@ import WallpaperContent from "../components/WallpaperContent";
 import "../styles/Wallpaper.scss";
 
 function Wallpaper() {
-    const { startLoading, finishLoading } = useLoadingContext();
+  const { startLoading, finishLoading } = useLoadingContext();
 
-    const { id } = useParams();
-    const { wallpaper, setWallpaper, addWallpaper } = useWallpaperContext();
+  const { id } = useParams();
+  const { wallpaper, setWallpaper, addWallpaper } = useWallpaperContext();
 
-    useEffect(() => {
-        (async () => {
-            startLoading();
-            await addWallpaper(id);
-            finishLoading();
-        })();
+  useEffect(() => {
+    (async () => {
+      startLoading();
+      await addWallpaper(id);
+      finishLoading();
+    })();
 
-        return () => setWallpaper(null);
-    }, []);
+    return () => setWallpaper(null);
+  }, []);
 
-    if (!wallpaper) return null;
+  if (!wallpaper) return null;
 
-    return (
-        <WallpaperLayout backgroundImage={wallpaper.imageUrl.large}>
-            <header>
-                <div className="wallpaper__navbar">
-                    <StandardNavbar />
-                </div>
-            </header>
+  return (
+    <WallpaperLayout backgroundImage={wallpaper.imageUrl.large}>
+      <header>
+        <div className="wallpaper__navbar">
+          <StandardNavbar />
+        </div>
+      </header>
 
-            <main>
-                <WallpaperContent />
-            </main>
-        </WallpaperLayout>
-    );
+      <main>
+        <WallpaperContent />
+      </main>
+    </WallpaperLayout>
+  );
 }
 
 export default Wallpaper;

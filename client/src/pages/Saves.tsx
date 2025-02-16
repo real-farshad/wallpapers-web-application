@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useLoadingContext } from "../contexts/LoadingContext";
 import getUserSavesCount from "../api/getUserSavesCount";
@@ -15,80 +16,77 @@ import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 import "../styles/Saves.scss";
 
 function Saves() {
-    const { startLoading, finishLoading } = useLoadingContext();
+  const { startLoading, finishLoading } = useLoadingContext();
 
-    const [page, setPage] = useState(1);
-    const limit = 8;
+  const [page, setPage] = useState(1);
+  const limit = 8;
 
-    const [userSavesCount, setUserSavesCount] = useState(0);
-    const [wallpapers, setWallpapers] = useState([]);
-    const [wallpapersFinished, setWallpapersFinished] = useState(false);
+  const [userSavesCount, setUserSavesCount] = useState(0);
+  const [wallpapers, setWallpapers] = useState([]);
+  const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
-    useEffect(() => {
-        (async () => {
-            startLoading();
+  useEffect(() => {
+    (async () => {
+      startLoading();
 
-            await addUserSavesCount();
-            await addSavedWallpapers();
+      await addUserSavesCount();
+      await addSavedWallpapers();
 
-            finishLoading();
-        })();
-    }, []);
+      finishLoading();
+    })();
+  }, []);
 
-    useEffect(() => {
-        if (page !== 1) addSavedWallpapers();
-    }, [page]);
+  useEffect(() => {
+    if (page !== 1) addSavedWallpapers();
+  }, [page]);
 
-    async function addUserSavesCount() {
-        const count = await getUserSavesCount();
-        setUserSavesCount(count);
+  async function addUserSavesCount() {
+    const count = await getUserSavesCount();
+    setUserSavesCount(count);
+  }
+
+  async function addSavedWallpapers() {
+    const wallpapers = await getSavedWallpapers(page, limit);
+    setWallpapers((prevState) => [...prevState, ...(wallpapers as never[])]);
+
+    if (wallpapers.length < limit) {
+      setWallpapersFinished(true);
     }
+  }
 
-    async function addSavedWallpapers() {
-        const wallpapers = await getSavedWallpapers(page, limit);
-        setWallpapers((prevState) => [
-            ...prevState,
-            ...(wallpapers as never[]),
-        ]);
+  return (
+    <ContentWidthContainer>
+      <div className="saves">
+        <HeaderContainer>
+          <StandardNavbar />
+        </HeaderContainer>
 
-        if (wallpapers.length < limit) {
-            setWallpapersFinished(true);
-        }
-    }
+        <div className="saves__container">
+          <MainContainer>
+            <SectionGrid>
+              <SectionInfoContainer>
+                <SectionTitle>
+                  {userSavesCount} <br />
+                  Saved <br />
+                  WALLPAPERS
+                </SectionTitle>
+              </SectionInfoContainer>
 
-    return (
-        <ContentWidthContainer>
-            <div className="saves">
-                <HeaderContainer>
-                    <StandardNavbar />
-                </HeaderContainer>
+              <WallpapersInfiniteScroll
+                wallpapers={wallpapers}
+                wallpapersFinished={wallpapersFinished}
+                setPage={setPage}
+              />
+            </SectionGrid>
+          </MainContainer>
 
-                <div className="saves__container">
-                    <MainContainer>
-                        <SectionGrid>
-                            <SectionInfoContainer>
-                                <SectionTitle>
-                                    {userSavesCount} <br />
-                                    Saved <br />
-                                    WALLPAPERS
-                                </SectionTitle>
-                            </SectionInfoContainer>
-
-                            <WallpapersInfiniteScroll
-                                wallpapers={wallpapers}
-                                wallpapersFinished={wallpapersFinished}
-                                setPage={setPage}
-                            />
-                        </SectionGrid>
-                    </MainContainer>
-
-                    <FooterContainer>
-                        <CopyRight />
-                    </FooterContainer>
-                </div>
-            </div>
-        </ContentWidthContainer>
-    );
+          <FooterContainer>
+            <CopyRight />
+          </FooterContainer>
+        </div>
+      </div>
+    </ContentWidthContainer>
+  );
 }
 
 export default Saves;

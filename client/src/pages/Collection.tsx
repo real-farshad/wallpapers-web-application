@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLoadingContext } from "../contexts/LoadingContext";
@@ -16,77 +17,75 @@ import SectionTitle from "../components/SectionTitle";
 import "../styles/Collection.scss";
 
 function Collection() {
-    const { id } = useParams();
+  const { id } = useParams();
 
-    const { startLoading, finishLoading } = useLoadingContext();
+  const { startLoading, finishLoading } = useLoadingContext();
 
-    const [page, setPage] = useState(1);
-    const limit = 8;
+  const [page, setPage] = useState(1);
+  const limit = 8;
 
-    const [collectionInfo, setCollectionInfo] = useState(null as any);
-    const [collectionWallpapers, setCollectionWallpapers] = useState([]);
-    const [wallpapersFinished, setWallpapersFinished] = useState(false);
+  const [collectionInfo, setCollectionInfo] = useState(null as any);
+  const [collectionWallpapers, setCollectionWallpapers] = useState([]);
+  const [wallpapersFinished, setWallpapersFinished] = useState(false);
 
-    useEffect(() => {
-        (async () => {
-            startLoading();
-            await addCollectionInfo();
-            finishLoading();
-        })();
-    }, []);
+  useEffect(() => {
+    (async () => {
+      startLoading();
+      await addCollectionInfo();
+      finishLoading();
+    })();
+  }, []);
 
-    useEffect(() => {
-        addCollectionWallpapers();
-    }, [page]);
+  useEffect(() => {
+    addCollectionWallpapers();
+  }, [page]);
 
-    async function addCollectionInfo() {
-        const collection = await getCollectionInfo(id as string);
-        setCollectionInfo(collection);
-    }
+  async function addCollectionInfo() {
+    const collection = await getCollectionInfo(id as string);
+    setCollectionInfo(collection);
+  }
 
-    async function addCollectionWallpapers() {
-        const wallpapers = await getCollectionWallpapers({ id, page, limit });
-        setCollectionWallpapers((prevCollectionWallpapers) => [
-            ...prevCollectionWallpapers,
-            ...(wallpapers as never[]),
-        ]);
+  async function addCollectionWallpapers() {
+    const wallpapers = await getCollectionWallpapers({ id, page, limit });
+    setCollectionWallpapers((prevCollectionWallpapers) => [
+      ...prevCollectionWallpapers,
+      ...(wallpapers as never[]),
+    ]);
 
-        if (wallpapers.length < 8) setWallpapersFinished(true);
-    }
+    if (wallpapers.length < 8) setWallpapersFinished(true);
+  }
 
-    if (!collectionInfo || collectionWallpapers.length === 0) return null;
+  if (!collectionInfo || collectionWallpapers.length === 0) return null;
 
-    return (
-        <ContentWidthContainer>
-            <div className="collection">
-                <HeaderContainer>
-                    <StandardNavbar />
-                </HeaderContainer>
+  return (
+    <ContentWidthContainer>
+      <div className="collection">
+        <HeaderContainer>
+          <StandardNavbar />
+        </HeaderContainer>
 
-                <div className="collection__container">
-                    <MainContainer>
-                        <SectionGrid>
-                            <SectionInfoContainer>
-                                <SectionTitle>
-                                    {collectionInfo.title}
-                                </SectionTitle>
-                            </SectionInfoContainer>
+        <div className="collection__container">
+          <MainContainer>
+            <SectionGrid>
+              <SectionInfoContainer>
+                <SectionTitle>{collectionInfo.title}</SectionTitle>
+              </SectionInfoContainer>
 
-                            <WallpapersInfiniteScroll
-                                wallpapers={collectionWallpapers}
-                                wallpapersFinished={wallpapersFinished}
-                                setPage={setPage}
-                            />
-                        </SectionGrid>
-                    </MainContainer>
+              <WallpapersInfiniteScroll
+                wallpapers={collectionWallpapers}
+                wallpapersFinished={wallpapersFinished}
+                setPage={setPage}
+              />
+            </SectionGrid>
+          </MainContainer>
 
-                    <FooterContainer>
-                        <CopyRight />
-                    </FooterContainer>
-                </div>
-            </div>
-        </ContentWidthContainer>
-    );
+          <FooterContainer>
+            <CopyRight />
+          </FooterContainer>
+        </div>
+      </div>
+    </ContentWidthContainer>
+  );
 }
 
 export default Collection;

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useLoadingContext } from "../contexts/LoadingContext";
 import searchCollections from "../api/searchCollections";
@@ -13,67 +14,64 @@ import FooterContainer from "../components/FooterContainer";
 import CopyRight from "../components/CopyRight";
 
 function Collections() {
-    const { startLoading, finishLoading } = useLoadingContext();
+  const { startLoading, finishLoading } = useLoadingContext();
 
-    const [page, setPage] = useState(1);
-    const limit = 8;
+  const [page, setPage] = useState(1);
+  const limit = 8;
 
-    const [collections, setCollections] = useState([]);
-    const [collectionsFinished, setCollectionsFinished] = useState(false);
+  const [collections, setCollections] = useState([]);
+  const [collectionsFinished, setCollectionsFinished] = useState(false);
 
-    useEffect(() => {
-        (async () => {
-            startLoading();
-            await addNewCollections();
-            finishLoading();
-        })();
-    }, []);
+  useEffect(() => {
+    (async () => {
+      startLoading();
+      await addNewCollections();
+      finishLoading();
+    })();
+  }, []);
 
-    useEffect(() => {
-        if (page !== 1) addNewCollections();
-    }, [page]);
+  useEffect(() => {
+    if (page !== 1) addNewCollections();
+  }, [page]);
 
-    async function addNewCollections() {
-        const collections = await searchCollections({ page, limit });
-        setCollections((prevState) => [
-            ...prevState,
-            ...(collections as never[]),
-        ]);
+  async function addNewCollections() {
+    const collections = await searchCollections({ page, limit });
+    setCollections((prevState) => [...prevState, ...(collections as never[])]);
 
-        if (collections.length < limit) {
-            setCollectionsFinished(true);
-        }
+    if (collections.length < limit) {
+      setCollectionsFinished(true);
     }
+  }
 
-    return (
-        <ContentWidthContainer>
-            <HeaderContainer>
-                <StandardNavbar />
-            </HeaderContainer>
+  return (
+    <ContentWidthContainer>
+      <HeaderContainer>
+        <StandardNavbar />
+      </HeaderContainer>
 
-            <MainContainer>
-                <SectionGrid>
-                    <SectionInfoContainer>
-                        <SectionTitle>
-                            MOST <br />
-                            RECENT <br />
-                            COLLECTIONS
-                        </SectionTitle>
-                    </SectionInfoContainer>
+      <MainContainer>
+        <SectionGrid>
+          <SectionInfoContainer>
+            <SectionTitle>
+              MOST <br />
+              RECENT <br />
+              COLLECTIONS
+            </SectionTitle>
+          </SectionInfoContainer>
 
-                    <CollectionsInfiniteScroll
-                        collections={collections}
-                        collectionsFinished={collectionsFinished}
-                        setPage={setPage}
-                    />
-                </SectionGrid>
-            </MainContainer>
+          <CollectionsInfiniteScroll
+            collections={collections}
+            collectionsFinished={collectionsFinished}
+            setPage={setPage}
+          />
+        </SectionGrid>
+      </MainContainer>
 
-            <FooterContainer>
-                <CopyRight />
-            </FooterContainer>
-        </ContentWidthContainer>
-    );
+      <FooterContainer>
+        <CopyRight />
+      </FooterContainer>
+    </ContentWidthContainer>
+  );
 }
 
 export default Collections;
