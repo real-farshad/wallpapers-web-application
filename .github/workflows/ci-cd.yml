@@ -7,7 +7,52 @@ on:
     branches: [main]
 
 jobs:
-  Build:
+  populate-database:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install server dependencies
+        run: npm install
+
+      - name: Populate database
+        run: npm run populate-database
+        env:
+          MONGODB_URI: "mongodb://127.0.0.1:27017"
+          DB_NAME: "query_app"
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install server dependencies
+        run: npm install
+
+      - name: test application
+        run: npm run test
+
+  build:
     runs-on: ubuntu-latest
 
     steps:
