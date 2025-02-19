@@ -1,16 +1,21 @@
 # Wallpapers Web Application
 
-A full-stack wallpaper web application with user authentication and advanced search capabilities. Features multi-page navigation and comprehensive testing.
+[Live Demo](https://wallpapers-1fug.onrender.com) • A full-stack web application that's a collection of some of my favorite desktop wallpapers. Users can easily lookup wallpapers in full screen and download, like and save them and even leave comments on their favorite wallpaper’s page.
 
 ## Key Features
 
 - User authentication (Local + Google OAuth)
+- Like, save, download and comment on wallpaper
+- State mangaement with react context api
 - Multi-page navigation with React Router
 - Wallpaper search and filtering system
-- User collections/favorites
+- Wallpaper Collections
+- Clean architecture in backend
 - Session management
-- Backend unit & integration testing
-- Responsive image gallery
+- Backend unit & integration testing(Test Driven Development)
+- Responsive mobile friendly design
+- MongoDB aggrigation pipeline
+- CRUD operations in the backend
 
 ## Technologies
 
@@ -38,6 +43,10 @@ A full-stack wallpaper web application with user authentication and advanced sea
 - Jest
 - Supertest
 
+**DevOps:**
+
+- GitHub Actions (CI/CD)
+
 ## Installation
 
 1. Clone repository
@@ -52,6 +61,13 @@ A full-stack wallpaper web application with user authentication and advanced sea
 - `npm run test-server`: Run backend tests
 - `npm run build`: Create production build
 - `npm start`: Launch production server
+
+## Deployment
+
+The CI/CD pipeline is configured through GitHub Actions (`.github/workflows/main.yml`), implementing:
+
+- Automated testing on push
+- Build verification
 
 Access via:
 
