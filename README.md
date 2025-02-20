@@ -21,7 +21,7 @@
 
 **Frontend:**
 
-- React 19
+- React
 - React Router
 - TypeScript
 - Sass
