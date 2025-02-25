@@ -1,20 +1,22 @@
 # Wallpapers Web Application
 
-[Live Demo](https://wallpapers-1fug.onrender.com) • A full-stack web application that's a collection of some of my favorite desktop wallpapers. Users can easily lookup wallpapers in full screen and download, like and save them and even leave comments on their favorite wallpaper’s page.
+[Live Demo](https://wallpapers-web-application.onrender.com) • A full-stack web application about desktop wallpapers. Users can browse latest wallpapers or look through popular ones to find their favorites. There are also categories and collections for similar wallpapers. I made this application using modern technologies, with user experience on top of the list of priorities while writing clean code and following clean architecture principles.
 
 ## Key Features
 
 - User authentication (Local + Google OAuth)
-- Like, save, download and comment on wallpaper
-- State mangaement with react context api
-- Multi-page navigation with React Router
-- Wallpaper search and filtering system
+- Social interaction features(Like, save, download and comment)
+- Infinite scroll with Intersection Observer API and custom React hooks
+- Dynamic URL routing for overlay-to-page transitions
+- Unit & integration testing(Test Driven Development) in the backend
+- State management with react context API
 - Wallpaper Collections
 - Clean architecture in backend
+- Multi-page navigation with React Router
+- Wallpaper search and filtering system
 - Session management
-- Backend unit & integration testing(Test Driven Development)
 - Responsive mobile friendly design
-- MongoDB aggrigation pipeline
+- MongoDB aggregation pipeline
 - CRUD operations in the backend
 
 ## Technologies
