@@ -3,50 +3,51 @@ const express = require("express");
 const session = require("express-session");
 const { passportConfig } = require("./config/passport");
 const errorHandler = require("./middleware/errorHandler");
-
 const routes = require("./routes/_index");
 
 function makeApp(database) {
-    const app = express();
+  const app = express();
 
-    app.use(
-        session({
-            secret: process.env.SESSION_SECRET,
-            resave: false,
-            saveUninitialized: true,
-        })
-    );
+  // Session configuration (single instance)
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: true,
+      // Add this for production:
+      cookie: { secure: process.env.NODE_ENV === "production" },
+    })
+  );
 
-    passportConfig(app, database);
+  passportConfig(app, database);
+  app.use(express.json());
 
-    app.use(express.json());
+  // Database context
+  app.use((req, res, next) => {
+    req.database = database;
+    next();
+  });
 
-    app.use(
-        session({
-            secret: process.env.SESSION_SECRET,
-            resave: false,
-            saveUninitialized: true,
-        })
-    );
+  // API routes
+  app.use("/api", routes);
 
-    app.use(express.static(path.resolve(__dirname, "./public")));
+  // Static files handling
+  if (process.env.NODE_ENV === "production") {
+    // Serve React build files
+    app.use(express.static(path.join(__dirname, "client/build")));
 
-    app.use((req, res, next) => {
-        req.database = database;
-        next();
-    });
-
-    app.use("/api", routes);
-    app.use(errorHandler);
-
-    app.use(express.static(path.resolve(__dirname, "./client/build")));
+    // Handle client-side routing
     app.get("*", (req, res) => {
-        return res.sendFile(
-            path.resolve(__dirname, "./client/build/index.html")
-        );
+      res.sendFile(path.join(__dirname, "client/build", "index.html"));
     });
+  } else {
+    // Development static files (public folder)
+    app.use(express.static(path.join(__dirname, "public")));
+  }
 
-    return app;
+  app.use(errorHandler);
+
+  return app;
 }
 
 module.exports = makeApp;
