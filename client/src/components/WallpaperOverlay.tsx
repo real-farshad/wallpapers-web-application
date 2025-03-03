@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useWallpaperContext } from "../contexts/WallpaperContext";
+import { usePopState } from "../hooks/usePopState";
 import WallpaperLayout from "../components/WallpaperLayout";
 import WallpaperContent from "../components/WallpaperContent";
 import "../styles/WallpaperOverlay.scss";
@@ -15,6 +16,10 @@ function WallpaperOverlay() {
       window.history.pushState("", "", "/wallpaper/" + wallpaperId);
     }
   }, [wallpaperId]);
+
+  usePopState(() => {
+    handleClickOnGoBackBtn();
+  });
 
   function handleClickOnGoBackBtn() {
     window.history.pushState("", "", lastUrl);
