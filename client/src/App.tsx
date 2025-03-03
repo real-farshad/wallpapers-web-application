@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useUserContext } from "./contexts/UserContext";
 import { useWallpaperContext } from "./contexts/WallpaperContext";
 import { useLoadingContext } from "./contexts/LoadingContext";
 import Home from "./pages/Home";
@@ -18,7 +17,6 @@ import LoadingOverlay from "./components/LoadingOverlay";
 import "./styles/App.scss";
 
 function App() {
-  const { hasCheckedAuth, isSignedIn } = useUserContext();
   const { wallpaperId } = useWallpaperContext();
   const { loading } = useLoadingContext();
 
@@ -31,32 +29,11 @@ function App() {
         <Route path="/collections" element={<Collections />} />
         <Route path="/search/:contentType" element={<Search />} />
         <Route path="/auth" element={<Navigate to="/auth/sign-up" />} />
-        <Route
-          path="/auth/:authOption"
-          element={isSignedIn ? <Navigate to="/" /> : <Auth />}
-        />
+        <Route path="/auth/:authOption" element={<Auth />} />
         <Route path="/wallpaper/:id" element={<Wallpaper />} />
         <Route path="/collections/:id" element={<Collection />} />
-        <Route
-          path="/user/likes"
-          element={
-            hasCheckedAuth && isSignedIn ? (
-              <Likes />
-            ) : (
-              <Navigate to="/auth/sign-in" />
-            )
-          }
-        />
-        <Route
-          path="/user/saves"
-          element={
-            hasCheckedAuth && isSignedIn ? (
-              <Saves />
-            ) : (
-              <Navigate to="/auth/sign-in" />
-            )
-          }
-        />
+        <Route path="/user/likes" element={<Likes />} />
+        <Route path="/user/saves" element={<Saves />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
 

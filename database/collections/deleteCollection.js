@@ -3,19 +3,19 @@ const { getDatabase } = require("../../config/mongodb");
 const getCollectionsCollection = () => getDatabase().collection("collections");
 
 async function deleteCollection(collectionId) {
-    let error;
+  let error;
 
-    try {
-        await getCollectionsCollection().deleteOne({
-            _id: new ObjectId(collectionId),
-        });
+  try {
+    await getCollectionsCollection().deleteOne({
+      _id: ObjectId.createFromHexString(collectionId),
+    });
 
-        error = null;
-    } catch (err) {
-        error = err;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+  }
 
-    return error;
+  return error;
 }
 
 module.exports = deleteCollection;

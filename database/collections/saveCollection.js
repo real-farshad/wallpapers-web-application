@@ -1,22 +1,17 @@
-const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getCollectionsCollection = () => getDatabase().collection("collections");
 
 async function saveCollection(collection) {
-    let error;
+  let error;
 
-    try {
-        await getCollectionsCollection().insertOne({
-            ...collection,
-            userId: new ObjectId(collection.userId),
-        });
+  try {
+    await getCollectionsCollection().insertOne(collection);
+    error = null;
+  } catch (err) {
+    error = err;
+  }
 
-        error = null;
-    } catch (err) {
-        error = err;
-    }
-
-    return error;
+  return error;
 }
 
 module.exports = saveCollection;

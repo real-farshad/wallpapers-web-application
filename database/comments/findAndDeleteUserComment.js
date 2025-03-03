@@ -3,24 +3,24 @@ const { getDatabase } = require("../../config/mongodb");
 const getCommentsCollection = () => getDatabase().collection("comments");
 
 async function findAndDeleteUserComment(commentId, userId) {
-    let error, success;
+  let error, success;
 
-    try {
-        const result = await getCommentsCollection().deleteOne({
-            _id: new ObjectId(commentId),
-            userId: new ObjectId(userId),
-        });
+  try {
+    const result = await getCommentsCollection().deleteOne({
+      _id: ObjectId.createFromHexString(commentId),
+      userId,
+    });
 
-        if (result.deletedCount !== 1) success = false;
-        else success = true;
+    if (result.deletedCount !== 1) success = false;
+    else success = true;
 
-        error = null;
-    } catch (err) {
-        error = err;
-        success = false;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+    success = false;
+  }
 
-    return [error, success];
+  return [error, success];
 }
 
 module.exports = findAndDeleteUserComment;

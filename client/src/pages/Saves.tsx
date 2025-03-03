@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useUserContext } from "../contexts/UserContext";
 import { useLoadingContext } from "../contexts/LoadingContext";
 import getUserSavesCount from "../api/getUserSavesCount";
 import getSavedWallpapers from "../api/getSavedWallpapers";
@@ -16,6 +18,7 @@ import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 import "../styles/Saves.scss";
 
 function Saves() {
+  const { hasCheckedAuth, isSignedIn } = useUserContext();
   const { startLoading, finishLoading } = useLoadingContext();
 
   const [page, setPage] = useState(1);
@@ -53,6 +56,8 @@ function Saves() {
       setWallpapersFinished(true);
     }
   }
+
+  if (!hasCheckedAuth || !isSignedIn) return <Navigate to="/auth/sign-in" />;
 
   return (
     <ContentWidthContainer>

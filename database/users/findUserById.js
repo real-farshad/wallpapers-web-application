@@ -3,19 +3,19 @@ const { getDatabase } = require("../../config/mongodb");
 const getUsersCollection = () => getDatabase().collection("users");
 
 async function findUserById(userId) {
-    let error, user;
+  let error, user;
 
-    try {
-        user = await getUsersCollection().findOne({
-            _id: new ObjectId(userId),
-        });
-        error = null;
-    } catch (err) {
-        error = err;
-        user = null;
-    }
+  try {
+    user = await getUsersCollection().findOne({
+      _id: ObjectId.createFromHexString(userId),
+    });
+    error = null;
+  } catch (err) {
+    error = err;
+    user = null;
+  }
 
-    return [error, user];
+  return [error, user];
 }
 
 module.exports = findUserById;

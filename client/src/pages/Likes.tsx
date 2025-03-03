@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useUserContext } from "../contexts/UserContext";
 import { useLoadingContext } from "../contexts/LoadingContext";
 import getUserLikesCount from "../api/getUserLikesCount";
 import getLikedWallpapers from "../api/getLikedWallpapers";
@@ -16,6 +18,7 @@ import WallpapersInfiniteScroll from "../components/WallpapersInfiniteScroll";
 import "../styles/Likes.scss";
 
 function Likes() {
+  const { hasCheckedAuth, isSignedIn } = useUserContext();
   const { startLoading, finishLoading } = useLoadingContext();
 
   const [page, setPage] = useState(1);
@@ -53,6 +56,8 @@ function Likes() {
       setWallpapersFinished(true);
     }
   }
+
+  if (!hasCheckedAuth || !isSignedIn) return <Navigate to="/auth/sign-in" />;
 
   return (
     <ContentWidthContainer>

@@ -1,10 +1,10 @@
 const express = require("express");
-const authenticateUser = require("../middleware/authenticateUser");
-const createCollection = require("../usecases/collections/createCollection");
+// const authenticateUser = require("../middleware/authenticateUser");
+// const createCollection = require("../usecases/collections/createCollection");
 const getCollectionsCount = require("../usecases/collections/getCollectionsCount");
 const queryCollections = require("../usecases/collections/queryCollections");
 const findCollectionInfo = require("../usecases/collections/findCollectionInfo");
-const deleteCollection = require("../usecases/collections/deleteCollection");
+// const deleteCollection = require("../usecases/collections/deleteCollection");
 
 const router = express.Router();
 
@@ -20,33 +20,33 @@ const router = express.Router();
 // });
 
 router.get("/count", async (req, res, next) => {
-    const query = req.query;
-    const db = req.database;
+  const query = req.query;
+  const db = req.database;
 
-    const [err, collectionsCount] = await getCollectionsCount(query, db);
-    if (err) return next(err);
+  const [err, collectionsCount] = await getCollectionsCount(query, db);
+  if (err) return next(err);
 
-    return res.json({ count: collectionsCount });
+  return res.json({ count: collectionsCount });
 });
 
 router.get("/", async (req, res, next) => {
-    const query = req.query;
-    const db = req.database;
+  const query = req.query;
+  const db = req.database;
 
-    const [err, collections] = await queryCollections(query, db);
-    if (err) return next(err);
+  const [err, collections] = await queryCollections(query, db);
+  if (err) return next(err);
 
-    return res.json(collections);
+  return res.json(collections);
 });
 
 router.get("/:id", async (req, res, next) => {
-    const collectionId = req.params.id;
-    const db = req.database;
+  const collectionId = req.params.id;
+  const db = req.database;
 
-    const [err, collection] = await findCollectionInfo(collectionId, db);
-    if (err) return next(err);
+  const [err, collection] = await findCollectionInfo(collectionId, db);
+  if (err) return next(err);
 
-    return res.json(collection);
+  return res.json(collection);
 });
 
 // router.delete("/:id", authenticateUser, async (req, res, next) => {

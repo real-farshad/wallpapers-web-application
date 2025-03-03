@@ -3,24 +3,24 @@ const { getDatabase } = require("../../config/mongodb");
 const getLikesCollection = () => getDatabase().collection("likes");
 
 async function findAndDeleteUserLike(wallpaperId, userId) {
-    let error, success;
+  let error, success;
 
-    try {
-        const result = await getLikesCollection().deleteOne({
-            wallpaperId: new ObjectId(wallpaperId),
-            userId: new ObjectId(userId),
-        });
+  try {
+    const result = await getLikesCollection().deleteOne({
+      wallpaperId: ObjectId.createFromHexString(wallpaperId),
+      userId,
+    });
 
-        if (result.deletedCount !== 1) success = false;
-        else success = true;
+    if (result.deletedCount !== 1) success = false;
+    else success = true;
 
-        error = null;
-    } catch (err) {
-        error = err;
-        success = false;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+    success = false;
+  }
 
-    return [error, success];
+  return [error, success];
 }
 
 module.exports = findAndDeleteUserLike;

@@ -1,22 +1,22 @@
 const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getCollectionsRecordsCollection = () =>
-    getDatabase().collection("collections-records");
+  getDatabase().collection("collections-records");
 
 async function deleteManyCollectionRecords(collectionId) {
-    let error;
+  let error;
 
-    try {
-        await getCollectionsRecordsCollection().deleteMany({
-            collectionId: new ObjectId(collectionId),
-        });
+  try {
+    await getCollectionsRecordsCollection().deleteMany({
+      collectionId: ObjectId.createFromHexString(collectionId),
+    });
 
-        error = null;
-    } catch (err) {
-        error = err;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+  }
 
-    return error;
+  return error;
 }
 
 module.exports = deleteManyCollectionRecords;

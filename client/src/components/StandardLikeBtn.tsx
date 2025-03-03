@@ -13,13 +13,13 @@ interface StandardLikeBtnTypes {
 
 function StandardLikeBtn(props: StandardLikeBtnTypes) {
   const { wallpaperId, initialState, likeCount } = props;
-  const { isLoggedIn } = useUserContext();
+  const { isSignedIn } = useUserContext();
 
   const [loading, setLoading] = useState(false);
   const [liked, setLiked] = useState(initialState);
 
   function handleClickOnLikeBtn() {
-    if (!isLoggedIn) return (window.location.href = "/auth/sign-up");
+    if (!isSignedIn) return (window.location.href = "/auth/sign-up");
     if (loading) return;
 
     (async () => {

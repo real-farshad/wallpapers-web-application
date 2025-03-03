@@ -3,21 +3,20 @@ const { getDatabase } = require("../../config/mongodb");
 const getSavesCollection = () => getDatabase().collection("saves");
 
 async function saveWallpaperSave(save) {
-    let error;
+  let error;
 
-    try {
-        await getSavesCollection().insertOne({
-            ...save,
-            wallpaperId: new ObjectId(save.wallpaperId),
-            userId: new ObjectId(save.userId),
-        });
+  try {
+    await getSavesCollection().insertOne({
+      ...save,
+      wallpaperId: ObjectId.createFromHexString(save.wallpaperId),
+    });
 
-        error = null;
-    } catch (err) {
-        error = err;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+  }
 
-    return error;
+  return error;
 }
 
 module.exports = saveWallpaperSave;

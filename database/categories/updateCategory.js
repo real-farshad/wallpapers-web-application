@@ -3,20 +3,20 @@ const { getDatabase } = require("../../config/mongodb");
 const getCategoriesCollection = () => getDatabase().collection("categories");
 
 async function updateCategory(id, categoryUpdate) {
-    let error;
+  let error;
 
-    try {
-        await getCategoriesCollection().updateOne(
-            { _id: new ObjectId(id) },
-            { $set: categoryUpdate }
-        );
+  try {
+    await getCategoriesCollection().updateOne(
+      { _id: ObjectId.createFromHexString(id) },
+      { $set: categoryUpdate }
+    );
 
-        error = null;
-    } catch (err) {
-        error = err;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+  }
 
-    return error;
+  return error;
 }
 
 module.exports = updateCategory;

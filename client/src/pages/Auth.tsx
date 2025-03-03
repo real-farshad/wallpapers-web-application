@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
+import { useUserContext } from "../contexts/UserContext";
 import { useLoadingContext } from "../contexts/LoadingContext";
 import ContentWidthContainer from "../components/ContentWidthContainer";
 import AuthNavbar from "../components/AuthNavbar";
@@ -11,6 +12,7 @@ import "../styles/Auth.scss";
 function Auth() {
   const params = useParams();
 
+  const { isSignedIn } = useUserContext();
   const { startLoading, finishLoading } = useLoadingContext();
 
   const [animating, setAnimating] = useState(false);
@@ -34,6 +36,8 @@ function Auth() {
     setAuthOption("sign-in");
     window.history.pushState("", "", "/auth/sign-in");
   }
+
+  if (isSignedIn) return <Navigate to="/" />;
 
   return (
     <div className="auth">

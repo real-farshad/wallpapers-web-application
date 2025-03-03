@@ -6,10 +6,10 @@ const updateUser = require("./updateUser");
 const deleteUser = require("./deleteUser");
 
 module.exports = {
-    saveUser,
-    insertOrUpdateUser,
-    findUserById,
-    findUserByEmail,
-    updateUser,
-    deleteUser,
+  saveUser,
+  insertOrUpdateUser,
+  findUserById,
+  findUserByEmail,
+  updateUser,
+  deleteUser,
 };

@@ -3,18 +3,18 @@ const { getDatabase } = require("../../config/mongodb");
 const getCollectionsCollection = () => getDatabase().collection("collections");
 
 async function decrementCollectionWallpaperCount(collectionId) {
-    let error;
+  let error;
 
-    try {
-        await getCollectionsCollection().updateOne(
-            { _id: new ObjectId(collectionId) },
-            { $inc: { wallpaperCount: -1 } }
-        );
-    } catch (err) {
-        error = err;
-    }
+  try {
+    await getCollectionsCollection().updateOne(
+      { _id: ObjectId.createFromHexString(collectionId) },
+      { $inc: { wallpaperCount: -1 } }
+    );
+  } catch (err) {
+    error = err;
+  }
 
-    return error;
+  return error;
 }
 
 module.exports = decrementCollectionWallpaperCount;

@@ -1,22 +1,21 @@
-const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getLikesCollection = () => getDatabase().collection("likes");
 
 async function getUserLikesCount(userId) {
-    let error, userLikesCount;
+  let error, userLikesCount;
 
-    try {
-        userLikesCount = await getLikesCollection().countDocuments({
-            userId: new ObjectId(userId),
-        });
+  try {
+    userLikesCount = await getLikesCollection().countDocuments({
+      userId,
+    });
 
-        error = null;
-    } catch (err) {
-        error = err;
-        userLikesCount = null;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+    userLikesCount = null;
+  }
 
-    return [error, userLikesCount];
+  return [error, userLikesCount];
 }
 
 module.exports = getUserLikesCount;

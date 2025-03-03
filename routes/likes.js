@@ -9,57 +9,57 @@ const deleteLike = require("../usecases/likes/deleteLike");
 const router = express.Router();
 
 router.post("/:id", authenticateUser, async (req, res, next) => {
-    const wallpaperId = req.params.id;
-    const userId = req.user._id;
-    const db = req.database;
+  const wallpaperId = req.params.id;
+  const userId = req.user._id;
+  const db = req.database;
 
-    const err = await createLike(wallpaperId, userId, db);
-    if (err) return next(err);
+  const err = await createLike(wallpaperId, userId, db);
+  if (err) return next(err);
 
-    return res.json({ success: true });
+  return res.json({ success: true });
 });
 
 router.get("/count", authenticateUser, async (req, res, next) => {
-    const userId = req.user._id;
-    const db = req.database;
+  const userId = req.user._id;
+  const db = req.database;
 
-    const [err, userLikesCount] = await getUserLikesCount(userId, db);
-    if (err) return next(err);
+  const [err, userLikesCount] = await getUserLikesCount(userId, db);
+  if (err) return next(err);
 
-    return res.json({ count: userLikesCount });
+  return res.json({ count: userLikesCount });
 });
 
 router.get("/", authenticateUser, async (req, res, next) => {
-    const query = req.query;
-    const userId = req.user._id;
-    const db = req.database;
+  const query = req.query;
+  const userId = req.user._id;
+  const db = req.database;
 
-    const [err, likes] = await queryUserLikes(query, userId, db);
-    if (err) return next(err);
+  const [err, likes] = await queryUserLikes(query, userId, db);
+  if (err) return next(err);
 
-    return res.json(likes);
+  return res.json(likes);
 });
 
 router.get("/check/:id", authenticateUser, async (req, res, next) => {
-    const wallpaperId = req.params.id;
-    const userId = req.user._id;
-    const db = req.database;
+  const wallpaperId = req.params.id;
+  const userId = req.user._id;
+  const db = req.database;
 
-    const [err, liked] = await checkLike(wallpaperId, userId, db);
-    if (err) return next(err);
+  const [err, liked] = await checkLike(wallpaperId, userId, db);
+  if (err) return next(err);
 
-    return res.json({ liked });
+  return res.json({ liked });
 });
 
 router.delete("/:id", authenticateUser, async (req, res, next) => {
-    const wallpaperId = req.params.id;
-    const userId = req.user._id;
-    const db = req.database;
+  const wallpaperId = req.params.id;
+  const userId = req.user._id;
+  const db = req.database;
 
-    const err = await deleteLike(wallpaperId, userId, db);
-    if (err) return next(err);
+  const err = await deleteLike(wallpaperId, userId, db);
+  if (err) return next(err);
 
-    return res.json({ success: true });
+  return res.json({ success: true });
 });
 
 module.exports = router;

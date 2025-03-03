@@ -11,13 +11,13 @@ interface StandardSaveBtnTypes {
 
 function StandardSaveBtn(props: StandardSaveBtnTypes) {
   const { wallpaperId, initialState } = props;
-  const { isLoggedIn } = useUserContext();
+  const { isSignedIn } = useUserContext();
 
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(initialState);
 
   function handleClickOnSaveBtn() {
-    if (!isLoggedIn) return (window.location.href = "/auth/sign-up");
+    if (!isSignedIn) return (window.location.href = "/auth/sign-up");
     if (loading) return;
 
     (async () => {

@@ -3,24 +3,24 @@ const { getDatabase } = require("../../config/mongodb");
 const getSavesCollection = () => getDatabase().collection("saves");
 
 async function findAndDeleteUserSave(wallpaperId, userId) {
-    let error, success;
+  let error, success;
 
-    try {
-        const result = await getSavesCollection().deleteOne({
-            wallpaperId: new ObjectId(wallpaperId),
-            userId: new ObjectId(userId),
-        });
+  try {
+    const result = await getSavesCollection().deleteOne({
+      wallpaperId: ObjectId.createFromHexString(wallpaperId),
+      userId,
+    });
 
-        if (result.deletedCount !== 1) success = false;
-        else success = true;
+    if (result.deletedCount !== 1) success = false;
+    else success = true;
 
-        error = null;
-    } catch (err) {
-        error = err;
-        success = false;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+    success = false;
+  }
 
-    return [error, success];
+  return [error, success];
 }
 
 module.exports = findAndDeleteUserSave;

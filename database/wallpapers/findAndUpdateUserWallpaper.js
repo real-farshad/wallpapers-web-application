@@ -3,36 +3,36 @@ const { getDatabase } = require("../../config/mongodb");
 const getWallpapersCollection = () => getDatabase().collection("wallpapers");
 
 async function findAndUpdateUserWallpaper(
-    wallpaperId,
-    wallpaperUpdate,
-    userId
+  wallpaperId,
+  wallpaperUpdate,
+  userId
 ) {
-    let error, success;
+  let error, success;
 
-    try {
-        const result = await getWallpapersCollection().updateOne(
-            {
-                _id: new ObjectId(wallpaperId),
-                publisherId: new ObjectId(userId),
-            },
-            {
-                $set: {
-                    ...wallpaperUpdate,
-                    categoryId: new ObjectId(wallpaperUpdate.categoryId),
-                },
-            }
-        );
+  try {
+    const result = await getWallpapersCollection().updateOne(
+      {
+        _id: ObjectId.createFromHexString(wallpaperId),
+        publisherId: userId,
+      },
+      {
+        $set: {
+          ...wallpaperUpdate,
+          categoryId: ObjectId.createFromHexString(wallpaperUpdate.categoryId),
+        },
+      }
+    );
 
-        if (result.matchedCount === 1) success = true;
-        else success = false;
+    if (result.matchedCount === 1) success = true;
+    else success = false;
 
-        error = null;
-    } catch (err) {
-        error = err;
-        success = false;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+    success = false;
+  }
 
-    return [error, success];
+  return [error, success];
 }
 
 module.exports = findAndUpdateUserWallpaper;

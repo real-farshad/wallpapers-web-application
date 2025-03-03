@@ -1,11 +1,11 @@
 const express = require("express");
-const authenticateUser = require("../middleware/authenticateUser");
-const createWallpaper = require("../usecases/wallpapers/createWallpaper");
+// const authenticateUser = require("../middleware/authenticateUser");
+// const createWallpaper = require("../usecases/wallpapers/createWallpaper");
 const getWallpapersCount = require("../usecases/wallpapers/getWallpapersCount");
 const queryWallpapers = require("../usecases/wallpapers/queryWallpapers");
 const findSingleWallpaper = require("../usecases/wallpapers/findSingleWallpaper");
-const updateWallpaper = require("../usecases/wallpapers/updateWallpaper");
-const deleteWallpaper = require("../usecases/wallpapers/deleteWallpaper");
+// const updateWallpaper = require("../usecases/wallpapers/updateWallpaper");
+// const deleteWallpaper = require("../usecases/wallpapers/deleteWallpaper");
 
 const router = express.Router();
 
@@ -21,35 +21,35 @@ const router = express.Router();
 // });
 
 router.get("/count", async (req, res, next) => {
-    const query = req.query;
-    const db = req.database;
+  const query = req.query;
+  const db = req.database;
 
-    const [err, wallpapersCount] = await getWallpapersCount(query, db);
-    if (err) return next(err);
+  const [err, wallpapersCount] = await getWallpapersCount(query, db);
+  if (err) return next(err);
 
-    return res.json({ count: wallpapersCount });
+  return res.json({ count: wallpapersCount });
 });
 
 router.get("/", async (req, res, next) => {
-    const query = req.query;
-    const userId = req.user ? req.user._id : null;
-    const db = req.database;
+  const query = req.query;
+  const userId = req.user ? req.user._id : null;
+  const db = req.database;
 
-    const [err, wallpapers] = await queryWallpapers(query, userId, db);
-    if (err) return next(err);
+  const [err, wallpapers] = await queryWallpapers(query, userId, db);
+  if (err) return next(err);
 
-    return res.json(wallpapers);
+  return res.json(wallpapers);
 });
 
 router.get("/:id", async (req, res, next) => {
-    const wallpaperId = req.params.id;
-    const userId = req.user ? req.user._id : null;
-    const db = req.database;
+  const wallpaperId = req.params.id;
+  const userId = req.user ? req.user._id : null;
+  const db = req.database;
 
-    const [err, wallpaper] = await findSingleWallpaper(wallpaperId, userId, db);
-    if (err) return next(err);
+  const [err, wallpaper] = await findSingleWallpaper(wallpaperId, userId, db);
+  if (err) return next(err);
 
-    return res.json(wallpaper);
+  return res.json(wallpaper);
 });
 
 // router.put("/:id", authenticateUser, async (req, res, next) => {

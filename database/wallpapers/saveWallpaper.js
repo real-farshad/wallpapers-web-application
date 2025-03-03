@@ -3,21 +3,21 @@ const { getDatabase } = require("../../config/mongodb");
 const getWallpapersCollection = () => getDatabase().collection("wallpapers");
 
 async function saveWallpaper(wallpaper) {
-    let error;
+  let error;
 
-    try {
-        await getWallpapersCollection().insertOne({
-            ...wallpaper,
-            categoryId: new ObjectId(wallpaper.categoryId),
-            publisherId: new ObjectId(wallpaper.publisherId),
-        });
+  try {
+    await getWallpapersCollection().insertOne({
+      ...wallpaper,
+      categoryId: ObjectId.createFromHexString(wallpaper.categoryId),
+      publisherId: ObjectId.createFromHexString(wallpaper.publisherId),
+    });
 
-        error = null;
-    } catch (err) {
-        error = err;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+  }
 
-    return error;
+  return error;
 }
 
 module.exports = saveWallpaper;

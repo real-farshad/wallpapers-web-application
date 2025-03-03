@@ -3,23 +3,23 @@ const { getDatabase } = require("../../config/mongodb");
 const getCategoriesCollection = () => getDatabase().collection("categories");
 
 async function findCategoryById(categoryId) {
-    let error, category;
+  let error, category;
 
-    try {
-        const result = await getCategoriesCollection().findOne({
-            _id: new ObjectId(categoryId),
-        });
+  try {
+    const result = await getCategoriesCollection().findOne({
+      _id: ObjectId.createFromHexString(categoryId),
+    });
 
-        if (!result) category = null;
-        else category = result;
+    if (!result) category = null;
+    else category = result;
 
-        error = null;
-    } catch (err) {
-        error = err;
-        category = null;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+    category = null;
+  }
 
-    return [error, category];
+  return [error, category];
 }
 
 module.exports = findCategoryById;

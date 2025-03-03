@@ -6,7 +6,7 @@ import Comment from "./Comment";
 import "../styles/WallpaperComments.scss";
 
 function WallpaperComments() {
-  const { isLoggedIn } = useUserContext();
+  const { isSignedIn } = useUserContext();
   const { wallpaper } = useWallpaperContext();
 
   const comments = wallpaper.comments;
@@ -14,7 +14,7 @@ function WallpaperComments() {
   return (
     <div className="wallpaper-comments">
       <div className="wallpaper-comments__user-comment">
-        {isLoggedIn ? (
+        {isSignedIn ? (
           <CommentForm wallpaperId={wallpaper._id} />
         ) : (
           <div className="wallpaper-comments__auth">
@@ -28,7 +28,7 @@ function WallpaperComments() {
         )}
       </div>
 
-      <div className="commments-container__comments-container">
+      <div className="comments-container__comments-container">
         {comments.map((comment: any) => (
           <Comment comment={comment} key={comment._id} />
         ))}

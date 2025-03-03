@@ -3,21 +3,21 @@ const { getDatabase } = require("../../config/mongodb");
 const getSavesCollection = () => getDatabase().collection("saves");
 
 async function findUserSave(wallpaperId, userId) {
-    let error, save;
+  let error, save;
 
-    try {
-        save = await getSavesCollection().findOne({
-            wallpaperId: new ObjectId(wallpaperId),
-            userId: new ObjectId(userId),
-        });
+  try {
+    save = await getSavesCollection().findOne({
+      wallpaperId: ObjectId.createFromHexString(wallpaperId),
+      userId,
+    });
 
-        error = null;
-    } catch (err) {
-        error = err;
-        save = null;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+    save = null;
+  }
 
-    return [error, save];
+  return [error, save];
 }
 
 module.exports = findUserSave;

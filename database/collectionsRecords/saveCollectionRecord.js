@@ -1,24 +1,24 @@
 const { ObjectId } = require("mongodb");
 const { getDatabase } = require("../../config/mongodb");
 const getCollectionsRecordsCollection = () =>
-    getDatabase().collection("collections-records");
+  getDatabase().collection("collections-records");
 
 async function saveCollectionRecord(collectionRecord) {
-    let error;
+  let error;
 
-    try {
-        await getCollectionsRecordsCollection().insertOne({
-            ...collectionRecord,
-            collectionId: new ObjectId(collectionRecord.collectionId),
-            wallpaperId: new ObjectId(collectionRecord.wallpaperId),
-        });
+  try {
+    await getCollectionsRecordsCollection().insertOne({
+      ...collectionRecord,
+      collectionId: ObjectId.createFromHexString(collectionRecord.collectionId),
+      wallpaperId: ObjectId.createFromHexString(collectionRecord.wallpaperId),
+    });
 
-        error = null;
-    } catch (err) {
-        error = err;
-    }
+    error = null;
+  } catch (err) {
+    error = err;
+  }
 
-    return error;
+  return error;
 }
 
 module.exports = saveCollectionRecord;

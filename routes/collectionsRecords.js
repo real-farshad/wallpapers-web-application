@@ -1,8 +1,8 @@
 const express = require("express");
-const authenticateUser = require("../middleware/authenticateUser");
-const createCollectionRecord = require("../usecases/collectionsRecords/createCollectionRecord");
+// const authenticateUser = require("../middleware/authenticateUser");
+// const createCollectionRecord = require("../usecases/collectionsRecords/createCollectionRecord");
 const queryCollectionWallpapers = require("../usecases/collectionsRecords/queryCollectionWallpapers");
-const deleteCollectionRecord = require("../usecases/collectionsRecords/deleteCollectionRecord");
+// const deleteCollectionRecord = require("../usecases/collectionsRecords/deleteCollectionRecord");
 
 const router = express.Router();
 
@@ -18,20 +18,20 @@ const router = express.Router();
 // });
 
 router.get("/:id", async (req, res, next) => {
-    const collectionId = req.params.id;
-    const userId = req.user ? req.user._id : null;
-    const query = req.query;
-    const db = req.database;
+  const collectionId = req.params.id;
+  const userId = req.user ? req.user._id : null;
+  const query = req.query;
+  const db = req.database;
 
-    const [err, collectionWallpapers] = await queryCollectionWallpapers(
-        collectionId,
-        userId,
-        query,
-        db
-    );
-    if (err) return next(err);
+  const [err, collectionWallpapers] = await queryCollectionWallpapers(
+    collectionId,
+    userId,
+    query,
+    db
+  );
+  if (err) return next(err);
 
-    return res.json(collectionWallpapers);
+  return res.json(collectionWallpapers);
 });
 
 // router.delete("/:id", authenticateUser, async (req, res, next) => {

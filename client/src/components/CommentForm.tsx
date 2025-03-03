@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { useUserContext } from "../contexts/UserContext";
+import { useWallpaperContext } from "../contexts/WallpaperContext";
 import addNewComment from "../api/addNewComment";
 import UserInfo from "./UserInfo";
 import "../styles/CommentForm.scss";
@@ -9,15 +11,22 @@ interface CommentFormTypes {
 }
 
 function CommentForm(props: CommentFormTypes) {
+  const { id } = useParams();
   const { wallpaperId } = props;
 
   const { user } = useUserContext();
   const { avatar, username } = user;
 
+  const { addWallpaper } = useWallpaperContext();
+
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleFormSubmit(e: any) {
     e.preventDefault();
+
+    if (loading) return;
+    setLoading(true);
 
     const hasValidMessage = message !== "" || message.length > 3;
     if (!hasValidMessage) return;
@@ -28,6 +37,10 @@ function CommentForm(props: CommentFormTypes) {
     };
 
     await addNewComment(comment);
+    await addWallpaper(id);
+
+    setMessage("");
+    setLoading(false);
   }
 
   return (
