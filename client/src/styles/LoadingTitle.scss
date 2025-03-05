@@ -1,0 +1,48 @@
+.loading-title {
+  font-size: 20px;
+  font-weight: var(--semi-bold-font-weight);
+  opacity: var(--primary-opacity);
+}
+
+.loading-title__dot {
+  opacity: 0;
+  animation: blink-dot 1.5s linear infinite;
+}
+
+.loading-title__dot--first {
+  animation-delay: 0;
+}
+
+.loading-title__dot--second {
+  animation-delay: 0.25s;
+}
+
+.loading-title__dot--third {
+  animation-delay: 0.5s;
+}
+
+@keyframes blink-dot {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

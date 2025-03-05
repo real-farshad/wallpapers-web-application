@@ -3,53 +3,38 @@ import { createContext, useContext, useState } from "react";
 const LoadingContext = createContext(null as any);
 
 function LoadingProvider({ children }: any) {
-    const [loading, setLoading] = useState(true);
-    const [animation, setAnimation] = useState({
-        firstStep: false,
-        secondStep: false,
-    });
+  const [loading, setLoading] = useState(true);
+  const [startCloseAnimation, setStartCloseAnimation] = useState(false);
 
-    function startLoading() {
-        setLoading(true);
-    }
+  function startLoading() {
+    setLoading(true);
+  }
 
-    function finishLoading() {
-        setAnimation((prevState) => ({
-            ...prevState,
-            firstStep: true,
-        }));
+  function finishLoading() {
+    setStartCloseAnimation(true);
 
-        setTimeout(
-            () =>
-                setAnimation((prevState) => ({
-                    ...prevState,
-                    secondStep: true,
-                })),
-            300
-        );
+    setTimeout(() => {
+      setLoading(false);
+      setStartCloseAnimation(false);
+    }, 500);
+  }
 
-        setTimeout(() => {
-            setLoading(false);
-            setAnimation({ firstStep: false, secondStep: false });
-        }, 1000);
-    }
-
-    return (
-        <LoadingContext.Provider
-            value={{
-                loading,
-                animation,
-                startLoading,
-                finishLoading,
-            }}
-        >
-            {children}
-        </LoadingContext.Provider>
-    );
+  return (
+    <LoadingContext.Provider
+      value={{
+        loading,
+        startCloseAnimation,
+        startLoading,
+        finishLoading,
+      }}
+    >
+      {children}
+    </LoadingContext.Provider>
+  );
 }
 
 function useLoadingContext() {
-    return useContext(LoadingContext);
+  return useContext(LoadingContext);
 }
 
 export default LoadingProvider;
