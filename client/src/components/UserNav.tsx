@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../contexts/UserContext";
+import defaultAvatar from "../assets/default-avatar.jpg";
 import signOutUser from "../api/signOutUser";
 import CoverImage from "./CoverImage";
 import "../styles/UserNav.scss";
@@ -91,7 +92,7 @@ function UserNav() {
         <div className="user-nav__avatar-container">
           <div className="user-nav__avatar">
             <div className="user-nav__avatar-image">
-              <CoverImage src={avatar} />
+              <CoverImage src={avatar ? avatar : defaultAvatar} />
             </div>
           </div>
 

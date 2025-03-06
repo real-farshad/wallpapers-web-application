@@ -22,7 +22,7 @@ router.post("/sign-in", (req, res, next) => {
       return next({
         known: true,
         status: 401,
-        error: info.message,
+        message: info.message,
       });
     }
 
