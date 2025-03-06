@@ -22,7 +22,7 @@ interface WallpaperCardTypes {
 function WallpaperCard(props: WallpaperCardTypes | any) {
   const { _id, publisher, createdAt, imageUrl, title, likeCount } = props.data;
 
-  const { wallpaper, setWallpaperId } = useWallpaperContext();
+  const { wallpaper, wallpaperId, setWallpaperId } = useWallpaperContext();
 
   const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState(null as null | string);
@@ -32,6 +32,8 @@ function WallpaperCard(props: WallpaperCardTypes | any) {
   }, [wallpaper]);
 
   function handleClickOnWallpaperCard() {
+    if (wallpaperId) return;
+
     setLoading(true);
     setWallpaperId(_id);
   }
