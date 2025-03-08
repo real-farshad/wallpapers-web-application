@@ -31,23 +31,22 @@
 
 .loading-overlay__info-container {
   position: relative;
-  width: 100%;
+  max-width: var(--max-content-width-xl);
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @include min-width-md {
-    align-items: flex-end;
-  }
+  margin: auto;
 }
 
 .loading-overlay__info {
-  max-width: 600px;
-  padding: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: var(--content-space);
 
   @include min-width-md {
-    padding: 0 25px 100px 25px;
+    align-items: flex-end;
+    padding: 100px var(--content-space) 100px var(--content-space);
   }
 }
 
