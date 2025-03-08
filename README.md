@@ -1,6 +1,6 @@
 # Wallpapers Web Application
 
-[Live Demo](https://wallpapers-web-application.onrender.com) • A full-stack web application about desktop wallpapers. Users can browse latest wallpapers or look through popular ones to find their favorites. There are also categories and collections for similar wallpapers. I made this application using modern technologies, with user experience on top of the list of priorities while writing clean code and following clean architecture principles.
+[Live Demo](https://wallpapers-web-application.onrender.com) • A full-stack web application about desktop wallpapers. Users can browse latest wallpapers or look through popular ones to find their favorites. There are also categories and collections for similar wallpapers. This project was a fun experience and I made it using modern technologies, with user experience on top of the list of priorities while writing clean code and following clean architecture principles.
 
 ## Key Features
 
@@ -53,7 +53,7 @@
 
 1. Clone repository
 2. Install dependencies: `npm run install-all`
-3. Use `.env` to create a `.env` file
+3. Use `.env.example` to create a `.env` files in root and client directories
 4. Populate database: `npm run populate-database`
 5. Start development: `npm run dev`
 
