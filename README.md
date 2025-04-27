@@ -2,7 +2,7 @@
 
 Live demo: [wallpapers-web-application.vercel.app](https://wallpapers-web-application.vercel.app)
 
-A full-stack web application about desktop wallpapers. Users can browse latest wallpapers or look through popular ones to find their favorites. There are also categories and collections for similar wallpapers. This project was a fun experience and I made it using modern technologies, with user experience on top of the list of priorities while writing clean code and following clean architecture principles.
+A full-stack web application about desktop wallpapers. Users can browse the latest wallpapers or look through popular ones to find their favorites. There are also categories and collections for similar wallpapers. This project was a fun experience and I made it using modern technologies, with user experience on top of the list of priorities while writing clean code and following clean architecture principles.
 
 ## Key Features
 
